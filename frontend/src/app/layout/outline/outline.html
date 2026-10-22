@@ -1,0 +1,19 @@
+@if (items().length) {
+  <nav class="outline" aria-labelledby="outline-heading">
+    <h2 class="outline__heading" id="outline-heading">{{ 'outline.title' | translate }}</h2>
+    <ul class="outline__list" role="list">
+      @for (item of items(); track item.id) {
+        <li>
+          <a
+            class="outline__link"
+            [routerLink]="[]"
+            [fragment]="item.id"
+            [attr.aria-current]="item.id === currentId() ? 'location' : null"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+}

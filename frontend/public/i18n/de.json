@@ -45,5 +45,21 @@
     "language": "Sprache",
     "languageDe": "Deutsch",
     "languageEn": "English"
+  },
+  "commands": {
+    "chooseTopic": "Wähle ein Thema aus der Liste.",
+    "empty": "Zu diesem Thema gibt es noch keine Einträge.",
+    "entryCount": "{{count}} Einträge",
+    "entryCountOne": "1 Eintrag",
+    "expandAll": "Alle aufklappen",
+    "collapseAll": "Alle zuklappen"
+  },
+  "code": {
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "copiedStatus": "In die Zwischenablage kopiert"
+  },
+  "outline": {
+    "title": "Auf dieser Seite"
   }
 }

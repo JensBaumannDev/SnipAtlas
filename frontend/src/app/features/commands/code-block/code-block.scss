@@ -1,0 +1,123 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: $radius-md;
+}
+
+// Head
+.code-block__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-md;
+  align-items: center;
+  min-height: rem(44);
+  padding: $space-xs $space-xs $space-xs $space-md;
+  border-bottom: 1px solid var(--line);
+}
+
+.code-block__language {
+  font-family: $font-mono;
+  color: var(--code-dim);
+}
+
+.code-block__os {
+  font-family: $font-mono;
+  color: var(--accent);
+}
+
+.code-block__copy {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  min-height: rem(36);
+  padding: 0 $space-sm;
+  margin-left: auto;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: var(--code-dim);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: $radius-sm;
+  transition:
+    color var(--duration-fast),
+    background var(--duration-fast);
+
+  &:hover {
+    color: var(--ink);
+    background: var(--hover);
+  }
+
+  &--done,
+  &--done:hover {
+    color: var(--ink);
+  }
+}
+
+// Code
+.code-block__scroll {
+  padding: $space-md;
+  overflow-x: auto;
+  border-radius: 0 0 $radius-md $radius-md;
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+.code-block__code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  font-family: $font-mono;
+  font-size: $font-size-base;
+  line-height: $line-height-code;
+  color: var(--code-ink);
+  tab-size: 4;
+  white-space: pre;
+}
+
+.code-block__line {
+  display: block;
+  min-height: 1lh;
+}
+
+.code-block__prompt {
+  margin-right: 1ch;
+  color: var(--code-dim);
+  user-select: none;
+}
+
+// Syntax colors
+.code-block__token {
+  &--command,
+  &--function {
+    color: var(--sx-cmd);
+  }
+
+  &--keyword,
+  &--tag {
+    color: var(--sx-kw);
+  }
+
+  &--string {
+    color: var(--sx-str);
+  }
+
+  &--flag,
+  &--property {
+    color: var(--sx-flag);
+  }
+
+  &--number {
+    color: var(--sx-num);
+  }
+
+  &--comment {
+    font-style: italic;
+    color: var(--code-dim);
+  }
+}

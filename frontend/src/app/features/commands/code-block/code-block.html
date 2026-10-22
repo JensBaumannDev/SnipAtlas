@@ -1,0 +1,41 @@
+<div class="code-block__head">
+  <span class="code-block__language">{{ languageLabel() }}</span>
+  @if (os(); as os) {
+    <span class="code-block__os">{{ (os === 'win' ? 'settings.osWin' : 'settings.osUnix') | translate }}</span>
+  }
+  <button
+    class="code-block__copy"
+    type="button"
+    [class.code-block__copy--done]="copied()"
+    (click)="copy()"
+  >
+    @if (copied()) {
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
+    } @else {
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="12" height="12" rx="2" />
+        <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+      </svg>
+    }
+    <span>{{ (copied() ? 'code.copied' : 'code.copy') | translate }}</span>
+  </button>
+</div>
+
+<div class="code-block__scroll" tabindex="0">
+  <code class="code-block__code">
+    @for (line of lines(); track $index) {
+      <span class="code-block__line">
+        @if (line.prompt) {
+          <span class="code-block__prompt" aria-hidden="true">$</span>
+        }
+        @for (token of line.tokens; track $index) {
+          <span [class]="tokenClass(token)">{{ token.text }}</span>
+        }
+      </span>
+    }
+  </code>
+</div>
+
+<span class="visually-hidden" role="status">{{ copied() ? ('code.copiedStatus' | translate) : '' }}</span>

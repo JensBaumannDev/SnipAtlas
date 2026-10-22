@@ -1,1 +1,60 @@
-<h1>{{ 'pages.commands' | translate }}</h1>
+@if (currentTopic(); as topic) {
+  @let subtopic = currentSubtopic();
+  @let count = visibleEntries().length;
+
+  <header class="commands__header">
+    <svg class="commands__logo" viewBox="0 0 24 24" aria-hidden="true" [style.color]="topic.color">
+      @if (logos[topic.slug]; as logo) {
+        <path [attr.d]="logo" fill="currentColor" />
+      } @else {
+        <path [attr.d]="icons[topic.slug] ?? defaultIcon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      }
+    </svg>
+    <div class="commands__heading">
+      @if (subtopic) {
+        <a class="commands__parent" [routerLink]="['/befehle', topic.slug]">{{ topic.name }}</a>
+        <h1>{{ subtopic.name }}</h1>
+      } @else {
+        <h1>{{ topic.name }}</h1>
+      }
+      <p class="commands__meta">
+        {{ (count === 1 ? 'commands.entryCountOne' : 'commands.entryCount') | translate: { count: count } }}
+        @if (hasOsVariants()) {
+          <span aria-hidden="true">·</span>
+          {{ 'settings.os' | translate }} {{ (os() === 'win' ? 'settings.osWin' : 'settings.osUnix') | translate }}
+        }
+      </p>
+    </div>
+    @if (count) {
+      <button class="btn btn--ghost" type="button" (click)="toggleAll()">
+        {{ (allExpanded() ? 'commands.collapseAll' : 'commands.expandAll') | translate }}
+      </button>
+    }
+  </header>
+
+  @for (section of sections(); track section.subtopic.slug) {
+    <section class="commands__section">
+      @if (!subtopic) {
+        <h2 class="commands__section-title" [id]="section.subtopic.slug">
+          <a class="commands__section-link" [routerLink]="['/befehle', topic.slug, section.subtopic.slug]">
+            {{ section.subtopic.name }}
+          </a>
+          <span class="commands__count">{{ section.entries.length }}</span>
+        </h2>
+      }
+      @for (entry of section.entries; track entry.slug) {
+        <app-entry-card
+          [entry]="entry"
+          [level]="subtopic ? 2 : 3"
+          [expanded]="isExpanded(entry.slug)"
+          (expandedChange)="setExpanded(entry.slug, $event)"
+        />
+      }
+    </section>
+  } @empty {
+    <p class="commands__empty">{{ 'commands.empty' | translate }}</p>
+  }
+} @else {
+  <h1>{{ 'pages.commands' | translate }}</h1>
+  <p class="commands__empty">{{ 'commands.chooseTopic' | translate }}</p>
+}
