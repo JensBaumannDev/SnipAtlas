@@ -1,0 +1,27 @@
+{
+  "extends": ["stylelint-config-standard-scss", "stylelint-config-recess-order"],
+  "rules": {
+    "declaration-no-important": true,
+    "declaration-property-value-disallowed-list": {
+      "overflow": ["hidden"],
+      "overflow-x": ["hidden"],
+      "overflow-y": ["hidden"]
+    },
+    "selector-class-pattern": [
+      "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      { "message": "Class names follow BEM: block__element--modifier" }
+    ],
+    "order/order": [
+      "dollar-variables",
+      "custom-properties",
+      { "type": "at-rule", "name": "include", "hasBlock": false },
+      "declarations",
+      { "type": "rule", "selector": "^&:" },
+      { "type": "rule", "selector": "^&\\[" },
+      { "type": "rule", "selector": "^&--" },
+      "rules",
+      { "type": "at-rule", "name": "include", "hasBlock": true },
+      "at-rules"
+    ]
+  }
+}

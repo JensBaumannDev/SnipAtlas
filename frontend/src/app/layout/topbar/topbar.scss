@@ -1,1 +1,139 @@
 @use 'abstracts' as *;
+
+:host {
+  position: sticky;
+  top: 0;
+  z-index: $z-topbar;
+  display: block;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm $space-lg;
+  align-items: center;
+  min-height: $topbar-height;
+  padding: $space-md $space-xl;
+}
+
+// Brand
+.brand {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  height: $control-height;
+  font-size: $font-size-brand;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-none;
+  color: var(--ink);
+  letter-spacing: $letter-spacing-tight;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.brand__mark {
+  display: none;
+  place-items: center;
+  width: $control-height;
+  height: $control-height;
+  color: var(--on-accent);
+  background: var(--accent);
+  border-radius: $radius-lg;
+}
+
+.brand__accent {
+  color: var(--accent);
+}
+
+// Search
+.search {
+  position: relative;
+  flex: 1 1 $search-min-width;
+  max-width: $search-max-width;
+  margin-inline: auto;
+}
+
+.search__icon {
+  position: absolute;
+  top: 50%;
+  left: $control-padding-x;
+  color: var(--muted);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.search__input {
+  padding-right: $search-shortcut-space;
+  padding-left: $control-height;
+}
+
+.search__shortcut {
+  position: absolute;
+  top: 50%;
+  right: $space-sm;
+  display: flex;
+  gap: $space-xs;
+  pointer-events: none;
+  transform: translateY(-50%);
+
+  span {
+    padding: 0 $space-sm;
+    font-family: $font-sans;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: $radius-xs;
+  }
+}
+
+// Tools
+.topbar__tools {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .topbar {
+    gap: $space-sm;
+    padding-inline: $space-md;
+  }
+
+  .brand__mark {
+    display: grid;
+  }
+
+  .search {
+    flex-basis: 100%;
+    order: 1;
+    max-width: none;
+  }
+
+  .search__input {
+    padding-right: $control-padding-x;
+  }
+
+  .search__shortcut {
+    display: none;
+  }
+
+  .topbar__tools {
+    margin-left: auto;
+  }
+}
+
+@include small {
+  .brand {
+    font-size: $font-size-xl;
+  }
+
+  .brand__mark {
+    display: none;
+  }
+}
+
+/* #endregion */

@@ -1,0 +1,29 @@
+@use 'abstracts' as *;
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  padding: $space-md;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-xl;
+}
+
+.settings__group {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+.settings__legend {
+  padding: 0;
+  margin-bottom: $space-sm;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: var(--muted);
+}

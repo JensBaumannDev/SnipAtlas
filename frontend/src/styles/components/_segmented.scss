@@ -1,0 +1,55 @@
+@use 'abstracts' as *;
+
+.segmented {
+  display: inline-flex;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-lg;
+}
+
+.segmented__option {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(#{$control-height} - 2px);
+  padding: 0 $control-padding-x;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  transition:
+    background-color var(--duration-fast),
+    color var(--duration-fast);
+
+  &:first-child {
+    border-radius: $radius-lg 0 0 $radius-lg;
+  }
+
+  &:last-child {
+    border-radius: 0 $radius-lg $radius-lg 0;
+  }
+
+  &:hover {
+    color: var(--ink);
+  }
+
+  &:has(:focus-visible) {
+    @include focus-ring;
+  }
+
+  &[aria-pressed='true'],
+  &:has(:checked) {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  & + & {
+    border-left: 1px solid var(--line);
+  }
+}

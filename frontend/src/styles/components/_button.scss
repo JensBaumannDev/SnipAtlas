@@ -2,32 +2,32 @@
 
 .btn {
   display: inline-flex;
+  gap: $space-sm;
   align-items: center;
   justify-content: center;
-  gap: $space-sm;
   min-height: $control-height;
   padding: 0 $space-md;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+  background: none;
   border: 1px solid transparent;
   border-radius: $radius-lg;
-  background: none;
-  font-size: $font-size-base;
-  font-weight: 500;
-  white-space: nowrap;
   transition:
     background-color var(--duration-fast),
     border-color var(--duration-fast),
     color var(--duration-fast);
 
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: $opacity-disabled;
   }
 }
 
 .btn--primary {
-  background: var(--accent);
+  font-weight: $font-weight-semibold;
   color: var(--on-accent);
-  font-weight: 600;
+  background: var(--accent);
 
   &:hover:not(:disabled) {
     filter: brightness(1.08);
@@ -35,9 +35,9 @@
 }
 
 .btn--ghost {
+  color: var(--ink);
   background: var(--surface);
   border-color: var(--line);
-  color: var(--ink);
 
   &:hover:not(:disabled) {
     border-color: var(--muted);
@@ -45,8 +45,8 @@
 }
 
 .btn--danger {
-  border-color: var(--danger);
   color: var(--danger);
+  border-color: var(--danger);
 
   &:hover:not(:disabled) {
     background: var(--danger-soft);
@@ -56,9 +56,9 @@
 .btn--icon {
   width: $control-height;
   padding: 0;
+  color: var(--muted);
   background: var(--surface);
   border-color: var(--line);
-  color: var(--muted);
 
   &:hover:not(:disabled) {
     color: var(--ink);

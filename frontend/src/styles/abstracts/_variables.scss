@@ -2,13 +2,27 @@
 
 // Fonts
 $font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-$font-mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', Consolas, monospace;
+$font-mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', consolas, monospace;
 
 // Font sizes
 $font-size-base: rem(16);
 $font-size-lg: rem(18);
 $font-size-xl: rem(20);
 $font-size-xxl: rem(26);
+$font-size-brand: rem(32);
+
+// Font weights
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 650;
+
+// Line heights
+$line-height-none: 1;
+$line-height-tight: 1.2;
+$line-height-base: 1.55;
+
+// Letter spacing
+$letter-spacing-tight: -0.02em;
 
 // Spacing
 $space-xs: rem(4);
@@ -19,12 +33,17 @@ $space-xl: rem(32);
 $space-xxl: rem(48);
 
 // Radii
+$radius-xs: rem(4);
 $radius-sm: rem(6);
 $radius-md: rem(8);
 $radius-lg: rem(10);
 $radius-xl: rem(12);
 
+// Opacity
+$opacity-disabled: 0.5;
+
 // Breakpoints
+$bp-small: 480px;
 $bp-mobile: 820px;
 $bp-wide: 1600px;
 
@@ -33,7 +52,15 @@ $rail-width: rem(92);
 $topbar-height: rem(76);
 $sidebar-width: rem(230);
 $content-max-width: rem(900);
+$bottom-nav-height: rem(64);
+
+// Controls
 $control-height: rem(44);
+$control-padding-x: rem(14);
+$search-min-width: rem(280);
+$search-max-width: rem(540);
+$search-shortcut-space: rem(112);
+$textarea-min-height: rem(110);
 
 // Z-index layers
 $z-sidebar: 10;
