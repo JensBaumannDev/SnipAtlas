@@ -1,6 +1,4 @@
 @mixin dark-tokens {
-  color-scheme: dark;
-
   // Surfaces and text
   --bg: #111315;
   --surface: #17191c;
@@ -29,6 +27,8 @@
   --sx-str: #6ee7b7;
   --sx-flag: #67e8f9;
   --sx-num: #fdba74;
+
+  color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {

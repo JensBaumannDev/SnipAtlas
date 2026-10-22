@@ -3,12 +3,12 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: rem(6);
+  gap: $space-sm;
 }
 
 .field__label {
   font-size: $font-size-base;
-  font-weight: 500;
+  font-weight: $font-weight-medium;
 }
 
 .field__hint {
@@ -19,11 +19,11 @@
 .input {
   width: 100%;
   min-height: $control-height;
-  padding: rem(9) rem(12);
-  border: 1px solid var(--line);
-  border-radius: $radius-md;
-  background: var(--surface);
+  padding: $space-sm $control-padding-x;
   font-size: $font-size-base;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-lg;
 
   &::placeholder {
     color: var(--muted);
@@ -37,6 +37,6 @@
 }
 
 textarea.input {
-  min-height: rem(110);
+  min-height: $textarea-min-height;
   resize: vertical;
 }

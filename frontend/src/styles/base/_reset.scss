@@ -9,7 +9,6 @@
 }
 
 html {
-  -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
@@ -50,6 +49,6 @@ h6 {
 
 ul[role='list'],
 ol[role='list'] {
-  list-style: none;
   padding: 0;
+  list-style: none;
 }

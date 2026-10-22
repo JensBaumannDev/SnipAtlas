@@ -6,6 +6,12 @@
   }
 }
 
+@mixin small {
+  @media (max-width: $bp-small) {
+    @content;
+  }
+}
+
 @mixin desktop {
   @media (min-width: $bp-mobile + 1) {
     @content;
@@ -25,8 +31,8 @@
 
 @mixin visually-hidden {
   position: absolute;
+  left: -10000px;
   width: 1px;
   height: 1px;
-  clip-path: inset(50%);
   white-space: nowrap;
 }
