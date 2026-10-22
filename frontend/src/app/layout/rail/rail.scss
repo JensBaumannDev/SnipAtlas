@@ -1,1 +1,159 @@
 @use 'abstracts' as *;
+
+:host {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $z-rail;
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  align-items: center;
+  width: $rail-width;
+  padding: $space-md 0;
+  background: var(--bg);
+  border-right: 1px solid var(--line);
+}
+
+// Logo
+.rail__logo {
+  display: block;
+  width: $logo-size;
+  height: $logo-size;
+  padding: $space-xs;
+  margin-bottom: $space-sm;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-xl;
+}
+
+.rail__logo-image {
+  width: 100%;
+  height: 100%;
+}
+
+// Navigation
+.rail__nav {
+  flex: 1;
+  width: 100%;
+}
+
+.rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  height: 100%;
+}
+
+.rail__item--end {
+  margin-top: auto;
+}
+
+.rail__link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: $rail-item-height;
+  padding: $space-sm $space-xs;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-tight;
+  color: var(--muted);
+  text-align: center;
+  text-decoration: none;
+  transition:
+    color var(--duration-fast),
+    background var(--duration-fast);
+
+  &::before {
+    position: absolute;
+    top: $space-md;
+    bottom: $space-md;
+    left: 0;
+    width: 3px;
+    content: '';
+    background: transparent;
+    border-radius: 0 3px 3px 0;
+  }
+
+  &:hover {
+    color: var(--ink);
+    background: var(--hover);
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+
+  &[aria-current='page'] {
+    font-weight: $font-weight-semibold;
+    color: var(--ink);
+
+    &::before {
+      background: var(--accent);
+    }
+
+    svg {
+      color: var(--accent);
+    }
+  }
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  :host {
+    top: auto;
+    right: 0;
+    flex-direction: row;
+    width: auto;
+    height: $bottom-nav-height;
+    padding: 0 $space-sm;
+    border-top: 1px solid var(--line);
+    border-right: 0;
+  }
+
+  .rail__logo {
+    display: none;
+  }
+
+  .rail__list {
+    flex-direction: row;
+    gap: 0;
+  }
+
+  .rail__item {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .rail__item--end {
+    margin-top: 0;
+  }
+
+  .rail__link {
+    gap: $space-xs;
+    height: 100%;
+    min-height: 0;
+    padding: $space-xs;
+
+    &::before {
+      inset: 0 30% auto;
+      width: auto;
+      height: 3px;
+      border-radius: 0 0 3px 3px;
+    }
+  }
+}
+
+@include small {
+  .rail__label {
+    @include visually-hidden;
+  }
+}
+
+/* #endregion */
