@@ -35,12 +35,17 @@
 
 .brand__mark {
   display: none;
-  place-items: center;
   width: $control-height;
   height: $control-height;
-  color: var(--on-accent);
-  background: var(--accent);
+  padding: $space-xs;
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: $radius-lg;
+}
+
+.brand__mark-image {
+  width: 100%;
+  height: 100%;
 }
 
 .brand__accent {
@@ -104,7 +109,7 @@
   }
 
   .brand__mark {
-    display: grid;
+    display: block;
   }
 
   .search {

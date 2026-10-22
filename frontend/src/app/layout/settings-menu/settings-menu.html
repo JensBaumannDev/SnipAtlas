@@ -4,7 +4,7 @@
   class="btn btn--icon"
   cdkOverlayOrigin
   #origin="cdkOverlayOrigin"
-  aria-label="Einstellungen"
+  [attr.aria-label]="'settings.title' | translate"
   aria-controls="settings-panel"
   [attr.aria-expanded]="isOpen()"
   (click)="toggle()"
@@ -32,11 +32,11 @@
     id="settings-panel"
     class="settings"
     role="dialog"
-    aria-label="Einstellungen"
+    [attr.aria-label]="'settings.title' | translate"
     (focusout)="onFocusOut($event)"
   >
     <fieldset class="settings__group">
-      <legend class="settings__legend">Darstellung</legend>
+      <legend class="settings__legend">{{ 'settings.theme' | translate }}</legend>
       <div class="segmented">
         @for (option of themeOptions; track option.value) {
           <label class="segmented__option">
@@ -48,14 +48,14 @@
               [checked]="preferences.theme() === option.value"
               (change)="preferences.setTheme(option.value)"
             />
-            <span>{{ option.label }}</span>
+            <span>{{ option.label | translate }}</span>
           </label>
         }
       </div>
     </fieldset>
 
     <fieldset class="settings__group">
-      <legend class="settings__legend">Befehle für</legend>
+      <legend class="settings__legend">{{ 'settings.os' | translate }}</legend>
       <div class="segmented">
         @for (option of osOptions; track option.value) {
           <label class="segmented__option">
@@ -67,7 +67,26 @@
               [checked]="preferences.os() === option.value"
               (change)="preferences.setOs(option.value)"
             />
-            <span>{{ option.label }}</span>
+            <span>{{ option.label | translate }}</span>
+          </label>
+        }
+      </div>
+    </fieldset>
+
+    <fieldset class="settings__group">
+      <legend class="settings__legend">{{ 'settings.language' | translate }}</legend>
+      <div class="segmented">
+        @for (option of languageOptions; track option.value) {
+          <label class="segmented__option">
+            <input
+              class="visually-hidden"
+              type="radio"
+              name="language"
+              [value]="option.value"
+              [checked]="preferences.language() === option.value"
+              (change)="preferences.setLanguage(option.value)"
+            />
+            <span [attr.lang]="option.value">{{ option.label | translate }}</span>
           </label>
         }
       </div>

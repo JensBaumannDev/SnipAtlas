@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideTranslateService } from '@ngx-translate/core';
 import { SettingsMenu } from './settings-menu';
 
 describe('SettingsMenu', () => {
@@ -8,6 +9,7 @@ describe('SettingsMenu', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SettingsMenu],
+      providers: [provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsMenu);

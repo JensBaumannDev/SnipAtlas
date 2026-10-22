@@ -1,0 +1,60 @@
+<a class="rail__logo" routerLink="/" [attr.aria-label]="'app.home' | translate">
+  <svg class="rail__logo-image" viewBox="0 0 64 64" aria-hidden="true">
+    <g transform="rotate(-5 32 32)">
+      <rect x="15" y="9" width="42" height="50" rx="7" fill="var(--logo-back)" />
+      <rect x="8" y="6" width="42" height="50" rx="7" fill="var(--accent)" />
+      <path d="M13 50.5h32" stroke="var(--logo-ink)" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M21 23.5l-6.5 6.5 6.5 6.5M37 23.5l6.5 6.5-6.5 6.5M32 21.5l-6 17" fill="none" stroke="var(--logo-ink)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </svg>
+</a>
+
+<nav class="rail__nav" [attr.aria-label]="'nav.label' | translate">
+  <ul class="rail__list" role="list">
+    <li class="rail__item">
+      <a class="rail__link" routerLink="/befehle" routerLinkActive ariaCurrentWhenActive="page">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m4 17 6-5-6-5M12 19h8" />
+        </svg>
+        <span class="rail__label">{{ 'nav.commands' | translate }}</span>
+      </a>
+    </li>
+    <li class="rail__item">
+      <a class="rail__link" routerLink="/konzepte" routerLinkActive ariaCurrentWhenActive="page">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5" />
+          <path d="M8 7h8M8 11h6" />
+        </svg>
+        <span class="rail__label">{{ 'nav.concepts' | translate }}</span>
+      </a>
+    </li>
+    <li class="rail__item">
+      <a class="rail__link" routerLink="/bauplaene" routerLinkActive ariaCurrentWhenActive="page">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="6" cy="19" r="2" />
+          <circle cx="18" cy="5" r="2" />
+          <path d="M8 19h8.5a3.5 3.5 0 0 0 0-7h-9a3.5 3.5 0 0 1 0-7H16" />
+        </svg>
+        <span class="rail__label">{{ 'nav.blueprints' | translate }}</span>
+      </a>
+    </li>
+    <li class="rail__item">
+      <a class="rail__link" routerLink="/debugging" routerLinkActive ariaCurrentWhenActive="page">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+          <path d="M12 9v4M12 17h.01" />
+        </svg>
+        <span class="rail__label">{{ 'nav.debugging' | translate }}</span>
+      </a>
+    </li>
+    <li class="rail__item rail__item--end">
+      <a class="rail__link" routerLink="/anfrage" routerLinkActive ariaCurrentWhenActive="page">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          <path d="M12 7v6M9 10h6" />
+        </svg>
+        <span class="rail__label">{{ 'nav.request' | translate }}</span>
+      </a>
+    </li>
+  </ul>
+</nav>

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideTranslateService } from '@ngx-translate/core';
 import { Glossary } from './glossary';
 
 describe('Glossary', () => {
@@ -8,6 +9,7 @@ describe('Glossary', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Glossary],
+      providers: [provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Glossary);

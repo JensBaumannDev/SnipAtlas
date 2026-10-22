@@ -1,9 +1,10 @@
 import { Component, ElementRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { SettingsMenu } from '../settings-menu/settings-menu';
 
 @Component({
-  imports: [RouterLink, SettingsMenu],
+  imports: [RouterLink, SettingsMenu, TranslatePipe],
   selector: 'app-topbar',
   styleUrl: './topbar.scss',
   templateUrl: './topbar.html',

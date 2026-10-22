@@ -1,10 +1,13 @@
 <header class="topbar">
-  <a class="brand" routerLink="/" aria-label="SnipAtlas, zur Startseite">
+  <a class="brand" routerLink="/" [attr.aria-label]="'app.home' | translate">
     <span class="brand__mark" aria-hidden="true">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9" />
-        <ellipse cx="12" cy="12" rx="4" ry="9" />
-        <path d="M3.5 9h17M3.5 15h17" />
+      <svg class="brand__mark-image" viewBox="0 0 64 64">
+        <g transform="rotate(-5 32 32)">
+          <rect x="15" y="9" width="42" height="50" rx="7" fill="var(--logo-back)" />
+          <rect x="8" y="6" width="42" height="50" rx="7" fill="var(--accent)" />
+          <path d="M13 50.5h32" stroke="var(--logo-ink)" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M21 23.5l-6.5 6.5 6.5 6.5M37 23.5l6.5 6.5-6.5 6.5M32 21.5l-6 17" fill="none" stroke="var(--logo-ink)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
       </svg>
     </span>
     <span class="brand__name">Snip<span class="brand__accent">Atlas</span></span>
@@ -15,21 +18,21 @@
       <circle cx="11" cy="11" r="7" />
       <path d="m20 20-3.5-3.5" />
     </svg>
-    <label class="visually-hidden" for="search">Befehle, Fehlermeldungen und Begriffe durchsuchen</label>
+    <label class="visually-hidden" for="search">{{ 'search.label' | translate }}</label>
     <input
       #searchInput
       id="search"
       class="input search__input"
       type="search"
-      placeholder="Suchen …"
+      [placeholder]="'search.placeholder' | translate"
       autocomplete="off"
     />
-    <kbd class="search__shortcut" aria-hidden="true"><span>Strg</span><span>K</span></kbd>
+    <kbd class="search__shortcut" aria-hidden="true"><span>{{ 'search.ctrl' | translate }}</span><span>K</span></kbd>
   </div>
 
   <div class="topbar__tools">
     <app-settings-menu />
 
-    <button type="button" class="btn btn--primary">Anmelden</button>
+    <button type="button" class="btn btn--primary">{{ 'auth.login' | translate }}</button>
   </div>
 </header>

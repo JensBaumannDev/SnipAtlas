@@ -1,0 +1,42 @@
+{
+  "app": {
+    "skipLink": "Skip to content",
+    "home": "SnipAtlas, go to home page"
+  },
+  "nav": {
+    "label": "Sections",
+    "commands": "Commands",
+    "concepts": "Concepts",
+    "blueprints": "Blueprints",
+    "debugging": "Debugging",
+    "request": "Request"
+  },
+  "pages": {
+    "commands": "Commands",
+    "concepts": "Concepts",
+    "blueprints": "Blueprints",
+    "debugging": "Debugging",
+    "request": "Request"
+  },
+  "search": {
+    "label": "Search commands, concepts and error messages",
+    "placeholder": "Search …",
+    "ctrl": "Ctrl"
+  },
+  "auth": {
+    "login": "Sign in"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Appearance",
+    "themeLight": "Light",
+    "themeSystem": "System",
+    "themeDark": "Dark",
+    "os": "Commands for",
+    "osWin": "Windows",
+    "osUnix": "Linux / Mac",
+    "language": "Language",
+    "languageDe": "Deutsch",
+    "languageEn": "English"
+  }
+}

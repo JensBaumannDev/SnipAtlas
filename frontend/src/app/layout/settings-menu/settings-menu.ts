@@ -1,6 +1,7 @@
 import { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedPosition } from '@angular/cdk/overlay';
 import { Component, ElementRef, Injector, afterNextRender, inject, signal, viewChild } from '@angular/core';
-import { OperatingSystem, Preferences, ThemeMode } from '../../core/preferences';
+import { TranslatePipe } from '@ngx-translate/core';
+import { Language, OperatingSystem, Preferences, ThemeMode } from '../../core/preferences';
 
 interface Option<T> {
   value: T;
@@ -8,7 +9,7 @@ interface Option<T> {
 }
 
 @Component({
-  imports: [CdkOverlayOrigin, CdkConnectedOverlay],
+  imports: [CdkOverlayOrigin, CdkConnectedOverlay, TranslatePipe],
   selector: 'app-settings-menu',
   styleUrl: './settings-menu.scss',
   templateUrl: './settings-menu.html',
@@ -26,14 +27,19 @@ export class SettingsMenu {
   ];
 
   protected readonly themeOptions: Option<ThemeMode>[] = [
-    { value: 'light', label: 'Hell' },
-    { value: 'system', label: 'System' },
-    { value: 'dark', label: 'Dunkel' },
+    { value: 'light', label: 'settings.themeLight' },
+    { value: 'system', label: 'settings.themeSystem' },
+    { value: 'dark', label: 'settings.themeDark' },
   ];
 
   protected readonly osOptions: Option<OperatingSystem>[] = [
-    { value: 'win', label: 'Windows' },
-    { value: 'unix', label: 'Linux / Mac' },
+    { value: 'win', label: 'settings.osWin' },
+    { value: 'unix', label: 'settings.osUnix' },
+  ];
+
+  protected readonly languageOptions: Option<Language>[] = [
+    { value: 'de', label: 'settings.languageDe' },
+    { value: 'en', label: 'settings.languageEn' },
   ];
 
   protected toggle(): void {

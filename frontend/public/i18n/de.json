@@ -1,0 +1,42 @@
+{
+  "app": {
+    "skipLink": "Zum Inhalt springen",
+    "home": "SnipAtlas, zur Startseite"
+  },
+  "nav": {
+    "label": "Bereiche",
+    "commands": "Befehle",
+    "concepts": "Konzepte",
+    "blueprints": "Baupläne",
+    "debugging": "Debugging",
+    "request": "Anfrage"
+  },
+  "pages": {
+    "commands": "Befehle",
+    "concepts": "Konzepte",
+    "blueprints": "Baupläne",
+    "debugging": "Debugging",
+    "request": "Anfrage"
+  },
+  "search": {
+    "label": "Befehle, Konzepte und Fehlermeldungen durchsuchen",
+    "placeholder": "Suchen …",
+    "ctrl": "Strg"
+  },
+  "auth": {
+    "login": "Anmelden"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "theme": "Darstellung",
+    "themeLight": "Hell",
+    "themeSystem": "System",
+    "themeDark": "Dunkel",
+    "os": "Befehle für",
+    "osWin": "Windows",
+    "osUnix": "Linux / Mac",
+    "language": "Sprache",
+    "languageDe": "Deutsch",
+    "languageEn": "English"
+  }
+}
