@@ -1,0 +1,35 @@
+@use 'abstracts' as *;
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+a {
+  color: var(--accent);
+}
+
+:focus-visible {
+  @include focus-ring;
+  border-radius: $radius-sm;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+:root {
+  --duration-fast: 0.15s;
+  --duration: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0s;
+    --duration: 0s;
+  }
+}

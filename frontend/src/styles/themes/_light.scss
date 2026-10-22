@@ -1,0 +1,32 @@
+:root {
+  color-scheme: light;
+
+  // Surfaces and text
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --ink: #16191d;
+  --muted: #5e6772;
+  --line: #e3e6ea;
+  --hover: rgb(22 25 29 / 4.5%);
+
+  // Accent
+  --accent: #2f5bea;
+  --accent-soft: rgb(47 91 234 / 9%);
+  --on-accent: #ffffff;
+
+  // Status
+  --ok: #0e8a55;
+  --star: #c98306;
+  --danger: #c2352b;
+  --danger-soft: rgb(194 53 43 / 8%);
+
+  // Code blocks and syntax colors
+  --code-bg: #f2f4f6;
+  --code-ink: #1f2933;
+  --code-dim: #7a8794;
+  --sx-cmd: #2f5bea;
+  --sx-kw: #7c3aed;
+  --sx-str: #0e7a54;
+  --sx-flag: #0e7490;
+  --sx-num: #b4530c;
+}

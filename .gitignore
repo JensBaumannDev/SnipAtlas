@@ -1,0 +1,39 @@
+# SnipAtlas – gilt für das ganze Repository (backend/ und frontend/)
+# Angular legt in frontend/ zusätzlich eine eigene .gitignore an.
+
+# --- Geheimnisse und lokale Einstellungen ---
+# .env enthält Passwörter und Schlüssel, nie committen.
+# .env.example (ohne echte Werte) gehört dagegen ins Repo.
+.env
+.env.*
+!.env.example
+
+# --- Python / Django (backend/) ---
+env/
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Node / Angular (frontend/) ---
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+
+# --- Editor ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# --- Betriebssystem ---
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,66 @@
+@use 'abstracts' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+  min-height: $control-height;
+  padding: 0 $space-md;
+  border: 1px solid transparent;
+  border-radius: $radius-lg;
+  background: none;
+  font-size: $font-size-base;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-fast),
+    border-color var(--duration-fast),
+    color var(--duration-fast);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+}
+
+.btn--ghost {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+
+  &:hover:not(:disabled) {
+    border-color: var(--muted);
+  }
+}
+
+.btn--danger {
+  border-color: var(--danger);
+  color: var(--danger);
+
+  &:hover:not(:disabled) {
+    background: var(--danger-soft);
+  }
+}
+
+.btn--icon {
+  width: $control-height;
+  padding: 0;
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--muted);
+
+  &:hover:not(:disabled) {
+    color: var(--ink);
+  }
+}

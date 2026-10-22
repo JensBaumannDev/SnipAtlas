@@ -1,0 +1,44 @@
+@use 'functions' as *;
+
+// Fonts
+$font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', Consolas, monospace;
+
+// Font sizes
+$font-size-base: rem(16);
+$font-size-lg: rem(18);
+$font-size-xl: rem(20);
+$font-size-xxl: rem(26);
+
+// Spacing
+$space-xs: rem(4);
+$space-sm: rem(8);
+$space-md: rem(16);
+$space-lg: rem(24);
+$space-xl: rem(32);
+$space-xxl: rem(48);
+
+// Radii
+$radius-sm: rem(6);
+$radius-md: rem(8);
+$radius-lg: rem(10);
+$radius-xl: rem(12);
+
+// Breakpoints
+$bp-mobile: 820px;
+$bp-wide: 1600px;
+
+// Layout
+$rail-width: rem(92);
+$topbar-height: rem(76);
+$sidebar-width: rem(230);
+$content-max-width: rem(900);
+$control-height: rem(44);
+
+// Z-index layers
+$z-sidebar: 10;
+$z-topbar: 20;
+$z-rail: 25;
+$z-menu: 30;
+$z-toast: 40;
+$z-dialog: 50;

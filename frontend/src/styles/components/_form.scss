@@ -1,0 +1,42 @@
+@use 'abstracts' as *;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: rem(6);
+}
+
+.field__label {
+  font-size: $font-size-base;
+  font-weight: 500;
+}
+
+.field__hint {
+  font-size: $font-size-base;
+  color: var(--muted);
+}
+
+.input {
+  width: 100%;
+  min-height: $control-height;
+  padding: rem(9) rem(12);
+  border: 1px solid var(--line);
+  border-radius: $radius-md;
+  background: var(--surface);
+  font-size: $font-size-base;
+
+  &::placeholder {
+    color: var(--muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+}
+
+textarea.input {
+  min-height: rem(110);
+  resize: vertical;
+}
