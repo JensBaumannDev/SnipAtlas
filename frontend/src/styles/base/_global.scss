@@ -1,5 +1,9 @@
 @use 'abstracts' as *;
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   color: var(--ink);
   background: var(--bg);

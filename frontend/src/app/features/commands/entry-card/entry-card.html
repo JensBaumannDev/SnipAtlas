@@ -1,0 +1,26 @@
+<article class="entry-card" [id]="entry().slug">
+  <div class="entry-card__heading" role="heading" [attr.aria-level]="level()">
+    <button
+      class="entry-card__toggle"
+      type="button"
+      [attr.aria-expanded]="expanded()"
+      [attr.aria-controls]="bodyId()"
+      (click)="toggle()"
+    >
+      <span class="entry-card__text">
+        <span class="entry-card__title">{{ entry().title }}</span>
+        @if (!expanded()) {
+          <code class="entry-card__peek">{{ peek() }}</code>
+        }
+      </span>
+      <svg class="entry-card__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="entry-card__body" [id]="bodyId()" [hidden]="!expanded()">
+    <p class="entry-card__description">{{ entry().description }}</p>
+    <app-code-block [code]="code()" [language]="entry().language" [os]="codeOs()" />
+  </div>
+</article>

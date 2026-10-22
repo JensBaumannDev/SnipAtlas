@@ -1,0 +1,62 @@
+@use 'abstracts' as *;
+
+:host {
+  display: none;
+}
+
+// Heading
+.outline__heading {
+  padding-inline: $space-md;
+  margin-bottom: $space-sm;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: var(--muted);
+}
+
+// Links
+.outline__list {
+  border-left: 1px solid var(--line);
+}
+
+.outline__link {
+  display: block;
+  padding: $space-xs $space-md;
+  margin-left: -1px;
+  line-height: $line-height-tight;
+  color: var(--muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition:
+    color var(--duration-fast),
+    border-color var(--duration-fast);
+
+  &:hover {
+    color: var(--ink);
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+
+  &[aria-current='location'] {
+    font-weight: $font-weight-medium;
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+}
+
+/* #region RESPONSIVE */
+@include wide {
+  :host {
+    position: sticky;
+    top: calc($topbar-height + 1px);
+    display: block;
+    flex: none;
+    width: $sidebar-width;
+    max-height: calc(100dvh - $topbar-height - 1px);
+    padding-block: $space-xl;
+    overflow-y: auto;
+  }
+}
+
+/* #endregion */
