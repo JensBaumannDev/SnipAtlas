@@ -110,6 +110,7 @@
     top: auto;
     right: 0;
     flex-direction: row;
+    align-items: stretch;
     width: auto;
     height: $bottom-nav-height;
     padding: 0 $space-sm;

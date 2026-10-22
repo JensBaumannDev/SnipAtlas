@@ -28,14 +28,15 @@
   display: flex;
   gap: $space-xxl;
   align-items: flex-start;
-  padding: $space-xl;
+  justify-content: center;
+  padding-inline: $space-xl;
 }
 
 .shell__content {
   flex: 1;
   min-width: 0;
   max-width: $content-max-width;
-  margin-inline: auto;
+  padding-block: $space-xl;
 
   &:focus {
     outline: none;
@@ -57,6 +58,7 @@
 
   .shell__content {
     width: 100%;
+    padding-block: 0;
   }
 }
 

@@ -18,6 +18,13 @@
     "debugging": "Debugging",
     "request": "Anfrage"
   },
+  "sidebar": {
+    "label": "Themen",
+    "topics": "Themen",
+    "toggleSubtopics": "Unterordner von {{topic}} ein- oder ausklappen",
+    "collection": "Meine Sammlung",
+    "collectionHint": "Melde dich an, um Befehle als Favoriten zu speichern und hier wiederzufinden."
+  },
   "search": {
     "label": "Befehle, Konzepte und Fehlermeldungen durchsuchen",
     "placeholder": "Suchen …",

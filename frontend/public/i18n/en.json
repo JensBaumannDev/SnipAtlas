@@ -18,6 +18,13 @@
     "debugging": "Debugging",
     "request": "Request"
   },
+  "sidebar": {
+    "label": "Topics",
+    "topics": "Topics",
+    "toggleSubtopics": "Expand or collapse subfolders of {{topic}}",
+    "collection": "My collection",
+    "collectionHint": "Sign in to save commands as favourites and find them here again."
+  },
   "search": {
     "label": "Search commands, concepts and error messages",
     "placeholder": "Search …",

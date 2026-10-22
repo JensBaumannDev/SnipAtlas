@@ -1,1 +1,237 @@
 @use 'abstracts' as *;
+
+:host {
+  position: sticky;
+  top: calc($topbar-height + 1px);
+  flex: none;
+  width: $sidebar-width;
+  max-height: calc(100dvh - $topbar-height - 1px);
+  padding-block: $space-xl;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+  transition: scrollbar-color var(--duration);
+
+  &:hover,
+  &:focus-within {
+    scrollbar-color: var(--line) transparent;
+  }
+}
+
+// Toggle
+.sidebar__toggle {
+  display: none;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: $control-height;
+  padding: $space-xs $control-padding-x;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-tight;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-lg;
+
+  &[aria-expanded='true'] .sidebar__toggle-icon {
+    transform: rotate(180deg);
+  }
+}
+
+.sidebar__toggle-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.sidebar__toggle-icon {
+  flex: none;
+  color: var(--muted);
+  transition: transform var(--duration);
+}
+
+// Groups
+.sidebar__panel {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+.sidebar__heading {
+  padding-inline: $space-sm;
+  margin-bottom: $space-xs;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: var(--muted);
+}
+
+// Topics
+.sidebar__row {
+  display: flex;
+  gap: $space-xs;
+  align-items: center;
+}
+
+.sidebar__link {
+  display: flex;
+  flex: 1;
+  gap: $space-sm;
+  align-items: center;
+  min-width: 0;
+  min-height: $control-height;
+  padding: $space-xs $space-sm;
+  font-size: $font-size-base;
+  line-height: $line-height-tight;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: $radius-sm;
+  transition:
+    color var(--duration-fast),
+    background var(--duration-fast);
+
+  &:hover {
+    color: var(--ink);
+    background: var(--hover);
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+
+  &[aria-current='page'] {
+    font-weight: $font-weight-semibold;
+    color: var(--ink);
+    background: var(--hover);
+  }
+}
+
+.sidebar__logo {
+  flex: none;
+  width: rem(18);
+  height: rem(18);
+  color: var(--topic-color);
+}
+
+.sidebar__name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.sidebar__expand {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: rem(32);
+  height: rem(32);
+  padding: 0;
+  color: var(--muted);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: $radius-sm;
+  transition:
+    color var(--duration-fast),
+    background var(--duration-fast);
+
+  &:hover {
+    color: var(--ink);
+    background: var(--hover);
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+
+  &[aria-expanded='true'] .sidebar__chevron {
+    transform: rotate(90deg);
+  }
+}
+
+.sidebar__chevron {
+  transition: transform var(--duration);
+}
+
+// Subtopics
+.sidebar__subtopics {
+  display: flex;
+  flex-direction: column;
+  padding-left: $space-md;
+  margin: $space-xs 0 $space-sm rem(17);
+  border-left: 1px solid var(--line);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.sidebar__sublink {
+  display: flex;
+  align-items: center;
+  min-height: rem(36);
+  padding: $space-xs $space-sm;
+  font-size: $font-size-base;
+  line-height: $line-height-tight;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: $radius-sm;
+  transition:
+    color var(--duration-fast),
+    background var(--duration-fast);
+
+  &:hover {
+    color: var(--ink);
+    background: var(--hover);
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+
+  &[aria-current='page'] {
+    font-weight: $font-weight-semibold;
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+}
+
+// Collection
+.sidebar__hint {
+  padding-inline: $space-sm;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: var(--muted);
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  :host {
+    position: static;
+    width: 100%;
+    max-height: none;
+    padding-block: 0;
+    overflow-y: visible;
+  }
+
+  .sidebar__toggle {
+    display: flex;
+  }
+
+  .sidebar__panel {
+    display: none;
+    padding: $space-md $space-sm;
+    margin-top: $space-sm;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: $radius-lg;
+  }
+
+  .sidebar__panel--open {
+    display: flex;
+  }
+}
+
+/* #endregion */
