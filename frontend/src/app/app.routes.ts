@@ -5,12 +5,16 @@ export const routes: Routes = [
   {
     path: 'befehle',
     title: 'pages.commands',
-    loadComponent: () => import('./features/commands/commands').then((m) => m.Commands),
+    data: { sidebar: 'subtopics' },
+    loadChildren: () =>
+      import('./features/commands/commands.routes').then((m) => m.COMMANDS_ROUTES),
   },
   {
     path: 'konzepte',
     title: 'pages.concepts',
-    loadComponent: () => import('./features/glossary/glossary').then((m) => m.Glossary),
+    data: { sidebar: 'subtopics' },
+    loadChildren: () =>
+      import('./features/glossary/glossary.routes').then((m) => m.GLOSSARY_ROUTES),
   },
   {
     path: 'bauplaene',
@@ -20,7 +24,8 @@ export const routes: Routes = [
   {
     path: 'debugging',
     title: 'pages.debugging',
-    loadComponent: () => import('./features/errors/errors').then((m) => m.Errors),
+    data: { sidebar: 'topics' },
+    loadChildren: () => import('./features/errors/errors.routes').then((m) => m.ERRORS_ROUTES),
   },
   {
     path: 'anfrage',
