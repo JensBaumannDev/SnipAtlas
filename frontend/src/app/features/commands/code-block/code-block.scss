@@ -57,6 +57,11 @@
   }
 }
 
+.code-block__icon {
+  width: rem(18);
+  height: rem(18);
+}
+
 // Code
 .code-block__scroll {
   padding: $space-md;

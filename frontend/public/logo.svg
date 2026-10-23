@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <g transform="rotate(-5 32 32)">
-    <rect x="15" y="9" width="42" height="50" rx="7" fill="#1d3fb8" />
-    <rect x="8" y="6" width="42" height="50" rx="7" fill="#2f5bea" />
-    <path d="M13 50.5h32" stroke="#111315" stroke-width="2.5" stroke-linecap="round" />
-    <path d="M21 23.5l-6.5 6.5 6.5 6.5M37 23.5l6.5 6.5-6.5 6.5M32 21.5l-6 17" fill="none" stroke="#111315" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <style>
+    path { fill: #16191d; }
+    @media (prefers-color-scheme: dark) {
+      path { fill: #e8eaed; }
+    }
+  </style>
+  <path fill-rule="evenodd" d="M24 2a22 22 0 1 0 0 44a22 22 0 1 0 0-44zM13 13h14a2 2 0 0 1 0 4H13a2 2 0 0 1 0-4zM17 20h18a2 2 0 0 1 0 4H17a2 2 0 0 1 0-4zM17 27h12a2 2 0 0 1 0 4H17a2 2 0 0 1 0-4zM13 34h8a2 2 0 0 1 0 4h-8a2 2 0 0 1 0-4z"/>
 </svg>

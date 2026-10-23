@@ -2,8 +2,9 @@
 
 .segmented {
   display: inline-flex;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  gap: $space-xs;
+  padding: $space-xs;
+  background: var(--hover);
   border-radius: $radius-lg;
 }
 
@@ -14,7 +15,7 @@
   gap: $space-sm;
   align-items: center;
   justify-content: center;
-  min-height: calc(#{$control-height} - 2px);
+  min-height: calc(#{$control-height} - 2 * #{$space-xs});
   padding: 0 $control-padding-x;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
@@ -22,18 +23,12 @@
   white-space: nowrap;
   cursor: pointer;
   background: transparent;
-  border: 0;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
   transition:
     background-color var(--duration-fast),
+    border-color var(--duration-fast),
     color var(--duration-fast);
-
-  &:first-child {
-    border-radius: $radius-lg 0 0 $radius-lg;
-  }
-
-  &:last-child {
-    border-radius: 0 $radius-lg $radius-lg 0;
-  }
 
   &:hover {
     color: var(--ink);
@@ -46,10 +41,7 @@
   &[aria-pressed='true'],
   &:has(:checked) {
     color: var(--accent);
-    background: var(--accent-soft);
-  }
-
-  & + & {
-    border-left: 1px solid var(--line);
+    background: var(--raised);
+    border-color: var(--line);
   }
 }

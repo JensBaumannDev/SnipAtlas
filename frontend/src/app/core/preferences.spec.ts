@@ -24,4 +24,13 @@ describe('Preferences', () => {
     expect(TestBed.inject(TranslateService).getCurrentLang()).toBe('en');
     expect(localStorage.getItem('snipatlas-language')).toBe('en');
   });
+
+  it('should follow the browser language in automatic mode', () => {
+    service.setLanguage('auto');
+    TestBed.tick();
+
+    const expected = navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en';
+    expect(service.language()).toBe(expected);
+    expect(localStorage.getItem('snipatlas-language')).toBe('auto');
+  });
 });

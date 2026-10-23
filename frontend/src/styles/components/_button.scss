@@ -16,7 +16,8 @@
   transition:
     background-color var(--duration-fast),
     border-color var(--duration-fast),
-    color var(--duration-fast);
+    color var(--duration-fast),
+    opacity var(--duration-fast);
 
   &:disabled {
     cursor: not-allowed;
@@ -26,11 +27,11 @@
 
 .btn--primary {
   font-weight: $font-weight-semibold;
-  color: var(--on-accent);
-  background: var(--accent);
+  color: var(--bg);
+  background: var(--ink);
 
   &:hover:not(:disabled) {
-    filter: brightness(1.08);
+    opacity: 0.85;
   }
 }
 
@@ -62,5 +63,11 @@
 
   &:hover:not(:disabled) {
     color: var(--ink);
+  }
+
+  &[aria-current='page'] {
+    color: var(--ink);
+    background: var(--hover);
+    border-color: var(--muted);
   }
 }

@@ -2,11 +2,22 @@
 
 html {
   scrollbar-gutter: stable;
+  scrollbar-color: var(--scrollbar) transparent;
+  scrollbar-width: thin;
 }
 
 body {
   color: var(--ink);
   background: var(--bg);
+
+  &::before {
+    position: fixed;
+    inset: 0;
+    z-index: $z-background;
+    pointer-events: none;
+    content: '';
+    background: radial-gradient(ellipse 70% 60% at 0 0, var(--glow), transparent);
+  }
 }
 
 a {
@@ -28,6 +39,7 @@ a {
 :root {
   --duration-fast: 0.15s;
   --duration: 0.3s;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
-import { TOPIC_ICONS, TOPIC_LOGOS } from './topic-logos';
+import { TOPIC_ICONS, topicLogo } from './topic-logos';
 import { TopicApi } from './topic-api';
 
 describe('TopicApi', () => {
@@ -15,11 +15,11 @@ describe('TopicApi', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it('has a logo or an icon for every topic', async () => {
+  it('has a brand logo or an icon for every topic', async () => {
     const groups = await firstValueFrom(TestBed.inject(TopicApi).getGroups());
     const missing = groups
       .flatMap((group) => group.topics)
-      .filter((topic) => !TOPIC_LOGOS[topic.slug] && !TOPIC_ICONS[topic.slug])
+      .filter((topic) => !topicLogo(topic.slug) && !TOPIC_ICONS[topic.slug])
       .map((topic) => topic.slug);
     expect(missing).toEqual([]);
   });

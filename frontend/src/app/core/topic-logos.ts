@@ -1,36 +1,30 @@
-import {
-  siAngular,
-  siCss,
-  siDjango,
-  siDocker,
-  siGit,
-  siHtml5,
-  siJavascript,
-  siLinux,
-  siNpm,
-  siPostgresql,
-  siPython,
-  siTypescript,
-} from 'simple-icons';
+import { LucideArrowRightLeft, LucideFolder, LucideIcon, LucideTerminal } from '@lucide/angular';
 
-export const TOPIC_LOGOS: Readonly<Partial<Record<string, string>>> = {
-  angular: siAngular.path,
-  css: siCss.path,
-  django: siDjango.path,
-  docker: siDocker.path,
-  git: siGit.path,
-  html: siHtml5.path,
-  javascript: siJavascript.path,
-  npm: siNpm.path,
-  postgresql: siPostgresql.path,
-  python: siPython.path,
-  server: siLinux.path,
-  typescript: siTypescript.path,
+const BRAND_LOGOS: Readonly<Partial<Record<string, string>>> = {
+  angular: 'angular',
+  css: 'css',
+  django: 'django',
+  docker: 'docker',
+  git: 'git',
+  html: 'html5',
+  javascript: 'javascript',
+  npm: 'npm',
+  postgresql: 'postgresql',
+  python: 'python',
+  server: 'linux',
+  typescript: 'typescript',
 };
 
-export const TOPIC_ICONS: Readonly<Partial<Record<string, string>>> = {
-  'django-rest-framework': 'M4 8h13l-3-3M20 16H7l3 3',
-  terminal: 'm4 17 6-5-6-5M12 19h8',
+export const TOPIC_ICONS: Readonly<Partial<Record<string, LucideIcon>>> = {
+  'django-rest-framework': LucideArrowRightLeft,
+  terminal: LucideTerminal,
 };
 
-export const DEFAULT_TOPIC_ICON = 'M4 6h16M4 12h16M4 18h10';
+export function topicLogo(slug: string): string | undefined {
+  const file = BRAND_LOGOS[slug];
+  return file ? `url('/img/topics/${file}.svg')` : undefined;
+}
+
+export function topicIcon(slug: string): LucideIcon {
+  return TOPIC_ICONS[slug] ?? LucideFolder;
+}

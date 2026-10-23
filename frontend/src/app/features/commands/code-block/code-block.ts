@@ -1,5 +1,6 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
+import { LucideCheck, LucideCopy } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CodeToken, highlight } from '../../../core/code-highlight';
 import { CodeLanguage } from '../../../core/entry';
@@ -18,7 +19,7 @@ const LANGUAGE_LABELS: Record<CodeLanguage, string> = {
 };
 
 @Component({
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, LucideCheck, LucideCopy],
   selector: 'app-code-block',
   styleUrl: './code-block.scss',
   templateUrl: './code-block.html',

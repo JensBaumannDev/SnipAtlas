@@ -60,6 +60,8 @@
 
 .entry-card__chevron {
   flex: none;
+  width: rem(20);
+  height: rem(20);
   color: var(--muted);
   transition: transform var(--duration);
 }

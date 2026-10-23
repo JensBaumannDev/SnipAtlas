@@ -1,0 +1,159 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  padding-top: $space-xxl - $space-xl;
+}
+
+// Intro
+.home__intro {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.home__lead {
+  max-width: rem(720);
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
+
+// Areas
+.home__area-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: $space-md;
+}
+
+.home__area {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  height: 100%;
+  padding: $space-md;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--hover);
+  border: 1px solid var(--line);
+  border-radius: $radius-xl;
+  transition:
+    background-color var(--duration-fast),
+    border-color var(--duration-fast);
+
+  &:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+}
+
+.home__area-icon {
+  margin-bottom: $space-sm;
+  color: var(--accent);
+}
+
+.home__area-label {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+}
+
+.home__area-text {
+  color: var(--muted);
+}
+
+// Columns
+.home__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: $space-xl;
+  align-items: start;
+}
+
+.home__side {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+}
+
+.home__heading {
+  padding-bottom: $space-sm;
+  font-size: $font-size-xl;
+  border-bottom: 1px solid var(--line);
+}
+
+// News
+.home__news-item {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  padding-block: $space-md;
+  border-bottom: 1px solid var(--line);
+}
+
+.home__date {
+  font-family: $font-mono;
+  color: var(--muted);
+}
+
+.home__link {
+  font-weight: $font-weight-medium;
+  color: var(--ink);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+}
+
+// Collection and guide
+.home__hint {
+  margin-top: $space-md;
+  color: var(--muted);
+}
+
+.home__guide-name {
+  margin-top: $space-md;
+  font-weight: $font-weight-medium;
+}
+
+.home__guide-name + .home__hint {
+  margin-top: $space-xs;
+}
+
+.home__more {
+  display: inline-block;
+  margin-top: $space-md;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  :host {
+    gap: $space-lg;
+    padding-top: 0;
+  }
+
+  .home__area-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home__columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@include small {
+  .home__area-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: $space-sm;
+  }
+}
+
+/* #endregion */

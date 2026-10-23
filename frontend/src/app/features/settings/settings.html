@@ -1,0 +1,87 @@
+<header class="settings__intro">
+  <h1>{{ 'settings.title' | translate }}</h1>
+  <p class="settings__lead">{{ 'settings.lead' | translate }}</p>
+</header>
+
+<section class="settings__section" aria-labelledby="settings-theme">
+  <h2 class="settings__heading" id="settings-theme">{{ 'settings.theme' | translate }}</h2>
+  <div class="settings__themes" role="radiogroup" aria-labelledby="settings-theme">
+    @for (option of themeOptions; track option.value) {
+      <label class="settings__theme">
+        <input
+          class="visually-hidden"
+          type="radio"
+          name="theme"
+          [value]="option.value"
+          [checked]="preferences.theme() === option.value"
+          (change)="preferences.setTheme(option.value)"
+        />
+        <span class="settings__preview" aria-hidden="true">
+          @if (option.value === 'system') {
+            <span class="settings__preview-half" data-theme="light">
+              <span class="settings__preview-line"></span>
+              <span class="settings__preview-line settings__preview-line--accent"></span>
+            </span>
+            <span class="settings__preview-half" data-theme="dark">
+              <span class="settings__preview-line"></span>
+              <span class="settings__preview-line settings__preview-line--accent"></span>
+            </span>
+          } @else {
+            <span class="settings__preview-half" [attr.data-theme]="option.value">
+              <span class="settings__preview-line"></span>
+              <span class="settings__preview-line settings__preview-line--accent"></span>
+              <span class="settings__preview-line settings__preview-line--muted"></span>
+            </span>
+          }
+        </span>
+        <span class="settings__theme-name">{{ option.label | translate }}</span>
+      </label>
+    }
+  </div>
+</section>
+
+<section class="settings__section">
+  <div class="settings__row">
+    <div class="settings__text">
+      <h2 class="settings__heading" id="settings-os">{{ 'settings.os' | translate }}</h2>
+      <p class="settings__hint">{{ 'settings.osHint' | translate }}</p>
+    </div>
+    <div class="segmented" role="radiogroup" aria-labelledby="settings-os">
+      @for (option of osOptions; track option.value) {
+        <label class="segmented__option">
+          <input
+            class="visually-hidden"
+            type="radio"
+            name="os"
+            [value]="option.value"
+            [checked]="preferences.os() === option.value"
+            (change)="preferences.setOs(option.value)"
+          />
+          <span>{{ option.label | translate }}</span>
+        </label>
+      }
+    </div>
+  </div>
+
+  <div class="settings__row">
+    <div class="settings__text">
+      <h2 class="settings__heading" id="settings-language">{{ 'settings.language' | translate }}</h2>
+      <p class="settings__hint">{{ 'settings.languageHint' | translate }}</p>
+    </div>
+    <div class="segmented" role="radiogroup" aria-labelledby="settings-language">
+      @for (option of languageOptions; track option.value) {
+        <label class="segmented__option">
+          <input
+            class="visually-hidden"
+            type="radio"
+            name="language"
+            [value]="option.value"
+            [checked]="preferences.languageMode() === option.value"
+            (change)="preferences.setLanguage(option.value)"
+          />
+          <span [attr.lang]="option.value === 'auto' ? null : option.value">{{ option.label | translate }}</span>
+        </label>
+      }
+    </div>
+  </div>
+</section>

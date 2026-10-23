@@ -16,6 +16,14 @@ describe('Sidebar', () => {
     await fixture.whenStable();
   }
 
+  function isCollapsed(topic: string): boolean | undefined {
+    return element.querySelector<HTMLElement>(`#sidebar-topic-${topic}`)?.closest<HTMLElement>('.sidebar__collapse')?.inert;
+  }
+
+  function isGroupCollapsed(group: string): boolean | undefined {
+    return element.querySelector<HTMLElement>(`#sidebar-group-list-${group}`)?.inert;
+  }
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Sidebar],
@@ -66,14 +74,13 @@ describe('Sidebar', () => {
 
   it('expands subtopics on click', async () => {
     const toggle = element.querySelector<HTMLButtonElement>('[aria-controls="sidebar-topic-git"]');
-    const list = element.querySelector<HTMLUListElement>('#sidebar-topic-git');
-    expect(list?.hidden).toBe(true);
+    expect(isCollapsed('git')).toBe(true);
 
     toggle?.click();
     await fixture.whenStable();
 
     expect(toggle?.getAttribute('aria-expanded')).toBe('true');
-    expect(list?.hidden).toBe(false);
+    expect(isCollapsed('git')).toBe(false);
   });
 
   it('keeps only one topic expanded', async () => {
@@ -82,14 +89,32 @@ describe('Sidebar', () => {
     element.querySelector<HTMLButtonElement>('[aria-controls="sidebar-topic-docker"]')?.click();
     await fixture.whenStable();
 
-    expect(element.querySelector<HTMLUListElement>('#sidebar-topic-git')?.hidden).toBe(true);
-    expect(element.querySelector<HTMLUListElement>('#sidebar-topic-docker')?.hidden).toBe(false);
+    expect(isCollapsed('git')).toBe(true);
+    expect(isCollapsed('docker')).toBe(false);
   });
 
   it('expands the active topic after navigation', async () => {
     await navigate('/befehle/python/schleifen');
 
-    expect(element.querySelector<HTMLUListElement>('#sidebar-topic-python')?.hidden).toBe(false);
+    expect(isCollapsed('python')).toBe(false);
     expect(element.querySelector('.sidebar__toggle-label')?.textContent).toContain('Python');
+  });
+
+  it('collapses a group on click', async () => {
+    expect(isGroupCollapsed('tools')).toBe(false);
+
+    element.querySelector<HTMLButtonElement>('[aria-controls="sidebar-group-list-tools"]')?.click();
+    await fixture.whenStable();
+
+    expect(isGroupCollapsed('tools')).toBe(true);
+  });
+
+  it('opens only the group of the active topic when entering an area', async () => {
+    await navigate('/anfrage');
+    await navigate('/befehle/python');
+
+    expect(isGroupCollapsed('backend')).toBe(false);
+    expect(isGroupCollapsed('frontend')).toBe(true);
+    expect(isGroupCollapsed('tools')).toBe(true);
   });
 });
