@@ -1,0 +1,14 @@
+@use 'abstracts' as *;
+
+.icon {
+  flex: none;
+  width: rem(24);
+  max-width: none;
+  height: rem(24);
+}
+
+.icon--mask {
+  display: inline-block;
+  background: currentcolor;
+  mask: var(--icon) center / contain no-repeat;
+}

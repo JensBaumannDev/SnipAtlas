@@ -1,16 +1,21 @@
 @mixin dark-tokens {
   // Surfaces and text
-  --bg: #111315;
+  --bg: #08090a;
+  --chrome: rgb(17 19 21 / 55%);
+  --glow: rgb(255 92 171 / 10%);
   --surface: #17191c;
+  --popover: rgb(23 25 28 / 75%);
+  --raised: #2a2e35;
   --ink: #e8eaed;
   --muted: #959da6;
   --line: #25282d;
   --hover: rgb(255 255 255 / 4.5%);
+  --scrollbar: rgb(255 255 255 / 20%);
 
   // Accent
-  --accent: #7c9bff;
-  --accent-soft: rgb(124 155 255 / 12%);
-  --on-accent: #0b1020;
+  --accent: #ff5cab;
+  --accent-soft: rgb(255 92 171 / 12%);
+  --on-accent: #2b0718;
 
   // Logo
   --logo-back: #4a6ae0;
@@ -41,6 +46,6 @@
   }
 }
 
-:root[data-theme='dark'] {
+[data-theme='dark'] {
   @include dark-tokens;
 }

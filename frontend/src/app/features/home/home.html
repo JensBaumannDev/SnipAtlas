@@ -1,0 +1,46 @@
+<header class="home__intro">
+  <h1>{{ 'home.title' | translate }}</h1>
+  <p class="home__lead">{{ 'home.lead' | translate }}</p>
+</header>
+
+<nav class="home__areas" [attr.aria-label]="'nav.label' | translate">
+  <ul class="home__area-list" role="list">
+    @for (area of areas; track area.path) {
+      <li>
+        <a class="home__area" [routerLink]="area.path">
+          <svg [lucideIcon]="area.icon" class="icon home__area-icon"></svg>
+          <span class="home__area-label">{{ area.label | translate }}</span>
+          <span class="home__area-text">{{ area.description | translate }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>
+
+<div class="home__columns">
+  <section class="home__section" aria-labelledby="home-news">
+    <h2 class="home__heading" id="home-news">{{ 'home.news.title' | translate }}</h2>
+    <ul class="home__list" role="list">
+      @for (item of news(); track item.date + item.title) {
+        <li class="home__news-item">
+          <time class="home__date" [attr.datetime]="item.date">{{ item.date | date: 'dd.MM.yyyy' }}</time>
+          <a class="home__link" [routerLink]="item.link">{{ item.title }}</a>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <div class="home__side">
+    <section class="home__section" aria-labelledby="home-collection">
+      <h2 class="home__heading" id="home-collection">{{ 'sidebar.collection' | translate }}</h2>
+      <p class="home__hint">{{ 'home.collection.hint' | translate }}</p>
+    </section>
+
+    <section class="home__section" aria-labelledby="home-guide">
+      <h2 class="home__heading" id="home-guide">{{ 'home.guide.title' | translate }}</h2>
+      <p class="home__guide-name">{{ 'home.guide.name' | translate }}</p>
+      <p class="home__hint">{{ 'home.guide.meta' | translate }}</p>
+      <a class="home__more" routerLink="/bauplaene">{{ 'home.guide.open' | translate }}</a>
+    </section>
+  </div>
+</div>

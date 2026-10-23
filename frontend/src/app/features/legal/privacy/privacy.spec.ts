@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideTranslateService } from '@ngx-translate/core';
-import { SettingsMenu } from './settings-menu';
+import { Privacy } from './privacy';
 
-describe('SettingsMenu', () => {
-  let component: SettingsMenu;
-  let fixture: ComponentFixture<SettingsMenu>;
+describe('Privacy', () => {
+  let component: Privacy;
+  let fixture: ComponentFixture<Privacy>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SettingsMenu],
+      imports: [Privacy],
       providers: [provideTranslateService()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SettingsMenu);
+    fixture = TestBed.createComponent(Privacy);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

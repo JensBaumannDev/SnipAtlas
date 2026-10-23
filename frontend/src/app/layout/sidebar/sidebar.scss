@@ -9,14 +9,11 @@
   padding-block: $space-xl;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-color: transparent transparent;
-  scrollbar-width: thin;
-  transition: scrollbar-color var(--duration);
+  scrollbar-width: none;
+}
 
-  &:hover,
-  &:focus-within {
-    scrollbar-color: var(--line) transparent;
-  }
+:host(.sidebar--more) {
+  mask-image: linear-gradient(to bottom, var(--ink) calc(100% - #{$space-xxl}), transparent);
 }
 
 // Toggle
@@ -50,6 +47,8 @@
 
 .sidebar__toggle-icon {
   flex: none;
+  width: rem(20);
+  height: rem(20);
   color: var(--muted);
   transition: transform var(--duration);
 }
@@ -62,11 +61,35 @@
 }
 
 .sidebar__heading {
-  padding-inline: $space-sm;
   margin-bottom: $space-xs;
   font-size: $font-size-base;
-  font-weight: $font-weight-semibold;
-  color: var(--muted);
+  font-weight: $font-weight-bold;
+  color: var(--ink);
+
+  &--text {
+    padding: $space-xs $space-sm 0;
+  }
+}
+
+.sidebar__group-toggle {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: rem(36);
+  padding: $space-xs $space-sm;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: $radius-md;
+  transition: background var(--duration-fast);
+
+  &:hover {
+    background: var(--hover);
+  }
 }
 
 // Topics
@@ -88,24 +111,22 @@
   line-height: $line-height-tight;
   color: var(--muted);
   text-decoration: none;
-  border-radius: $radius-sm;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
   transition:
     color var(--duration-fast),
-    background var(--duration-fast);
+    background var(--duration-fast),
+    border-color var(--duration-fast);
 
   &:hover {
     color: var(--ink);
     background: var(--hover);
   }
 
-  &:focus-visible {
-    outline-offset: -2px;
-  }
-
   &[aria-current='page'] {
     font-weight: $font-weight-semibold;
     color: var(--ink);
-    background: var(--hover);
+    background: var(--accent-soft);
   }
 }
 
@@ -141,31 +162,41 @@
     color: var(--ink);
     background: var(--hover);
   }
+}
 
-  &:focus-visible {
-    outline-offset: -2px;
-  }
+.sidebar__chevron {
+  width: rem(16);
+  height: rem(16);
+  transition: transform var(--duration) var(--ease);
 
-  &[aria-expanded='true'] .sidebar__chevron {
+  [aria-expanded='true'] > & {
     transform: rotate(90deg);
   }
 }
 
-.sidebar__chevron {
-  transition: transform var(--duration);
+// Subtopics
+.sidebar__collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration) var(--ease);
+
+  &--open {
+    grid-template-rows: 1fr;
+  }
 }
 
-// Subtopics
+.sidebar__collapse-inner {
+  min-height: 0;
+  overflow: clip;
+}
+
 .sidebar__subtopics {
   display: flex;
   flex-direction: column;
+  gap: $space-xs;
   padding-left: $space-md;
   margin: $space-xs 0 $space-sm rem(17);
   border-left: 1px solid var(--line);
-
-  &[hidden] {
-    display: none;
-  }
 }
 
 .sidebar__sublink {
@@ -177,18 +208,16 @@
   line-height: $line-height-tight;
   color: var(--muted);
   text-decoration: none;
-  border-radius: $radius-sm;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
   transition:
     color var(--duration-fast),
-    background var(--duration-fast);
+    background var(--duration-fast),
+    border-color var(--duration-fast);
 
   &:hover {
     color: var(--ink);
     background: var(--hover);
-  }
-
-  &:focus-visible {
-    outline-offset: -2px;
   }
 
   &[aria-current='page'] {
@@ -204,6 +233,11 @@
   font-size: $font-size-base;
   line-height: $line-height-base;
   color: var(--muted);
+}
+
+// Focus
+:is(.sidebar__group-toggle, .sidebar__link, .sidebar__expand, .sidebar__sublink):focus-visible {
+  outline-offset: -2px;
 }
 
 /* #region RESPONSIVE */

@@ -52,10 +52,15 @@
     top: calc($topbar-height + 1px);
     display: block;
     flex: none;
-    width: $sidebar-width;
+    width: max-content;
+    max-width: $sidebar-width;
     max-height: calc(100dvh - $topbar-height - 1px);
     padding-block: $space-xl;
     overflow-y: auto;
+
+    &[hidden] {
+      display: none;
+    }
   }
 }
 

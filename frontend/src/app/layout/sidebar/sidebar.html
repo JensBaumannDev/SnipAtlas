@@ -8,19 +8,18 @@
   <span class="sidebar__toggle-label">
     {{ 'sidebar.topics' | translate }}@if (activeTopic(); as topic) {: {{ topic.name }}}
   </span>
-  <svg class="sidebar__toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="m6 9 6 6 6-6" />
-  </svg>
+  <svg lucideChevronDown class="icon sidebar__toggle-icon"></svg>
 </button>
 
 <nav
+  #panel
   class="sidebar__panel"
   id="sidebar-panel"
   [class.sidebar__panel--open]="menuOpen()"
   [attr.aria-label]="'sidebar.label' | translate"
 >
   <section class="sidebar__group" aria-labelledby="sidebar-group-collection">
-    <h2 class="sidebar__heading" id="sidebar-group-collection">{{ 'sidebar.collection' | translate }}</h2>
+    <h2 class="sidebar__heading sidebar__heading--text" id="sidebar-group-collection">{{ 'sidebar.collection' | translate }}</h2>
     <p class="sidebar__hint">{{ 'sidebar.collectionHint' | translate }}</p>
   </section>
 
@@ -28,64 +27,85 @@
   @let showSubtopics = mode() === 'subtopics';
 
   @for (group of groups(); track group.slug) {
+    @let groupOpen = openGroups().has(group.slug);
     <section class="sidebar__group" [attr.aria-labelledby]="'sidebar-group-' + group.slug">
-      <h2 class="sidebar__heading" [id]="'sidebar-group-' + group.slug">{{ group.name }}</h2>
-      <ul class="sidebar__list" role="list">
-        @for (topic of group.topics; track topic.slug) {
-          @let isOpen = expanded === topic.slug;
-          <li>
-            <div class="sidebar__row">
-              <a
-                class="sidebar__link"
-                [routerLink]="[basePath(), topic.slug]"
-                routerLinkActive
-                [routerLinkActiveOptions]="{ exact: true }"
-                ariaCurrentWhenActive="page"
-                [style.--topic-color]="topic.color"
-              >
-                <svg class="sidebar__logo" viewBox="0 0 24 24" aria-hidden="true">
-                  @if (logos[topic.slug]; as logo) {
-                    <path [attr.d]="logo" fill="currentColor" />
-                  } @else {
-                    <path [attr.d]="icons[topic.slug] ?? defaultIcon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  }
-                </svg>
-                <span class="sidebar__name">{{ topic.name }}</span>
-              </a>
-              @if (showSubtopics && topic.subtopics.length) {
-                <button
-                  class="sidebar__expand"
-                  type="button"
-                  [attr.aria-controls]="'sidebar-topic-' + topic.slug"
-                  [attr.aria-expanded]="isOpen"
-                  [attr.aria-label]="'sidebar.toggleSubtopics' | translate: { topic: topic.name }"
-                  (click)="toggleTopic(topic.slug)"
-                >
-                  <svg class="sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="m9 6 6 6-6 6" />
-                  </svg>
-                </button>
-              }
-            </div>
-            @if (showSubtopics && topic.subtopics.length) {
-              <ul class="sidebar__subtopics" role="list" [id]="'sidebar-topic-' + topic.slug" [hidden]="!isOpen">
-                @for (subtopic of topic.subtopics; track subtopic.slug) {
-                  <li>
-                    <a
-                      class="sidebar__sublink"
-                      [routerLink]="[basePath(), topic.slug, subtopic.slug]"
-                      routerLinkActive
-                      ariaCurrentWhenActive="page"
+      <h2 class="sidebar__heading" [id]="'sidebar-group-' + group.slug">
+        <button
+          class="sidebar__group-toggle"
+          type="button"
+          [attr.aria-expanded]="groupOpen"
+          [attr.aria-controls]="'sidebar-group-list-' + group.slug"
+          (click)="toggleGroup(group.slug)"
+        >
+          {{ group.name }}
+          <svg lucideChevronRight class="icon sidebar__chevron"></svg>
+        </button>
+      </h2>
+      <div
+        class="sidebar__collapse"
+        [class.sidebar__collapse--open]="groupOpen"
+        [inert]="!groupOpen"
+        [id]="'sidebar-group-list-' + group.slug"
+      >
+        <div class="sidebar__collapse-inner">
+          <ul class="sidebar__list" role="list">
+            @for (topic of group.topics; track topic.slug) {
+              @let isOpen = expanded === topic.slug;
+              <li>
+                <div class="sidebar__row">
+                  <a
+                    class="sidebar__link"
+                    [routerLink]="[basePath(), topic.slug]"
+                    routerLinkActive
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    ariaCurrentWhenActive="page"
+                    [style.--topic-color]="topic.color"
+                  >
+                    @if (topicLogo(topic.slug); as logo) {
+                      <span class="icon icon--mask sidebar__logo" [style.--icon]="logo" aria-hidden="true"></span>
+                    } @else {
+                      <svg [lucideIcon]="topicIcon(topic.slug)" class="icon sidebar__logo"></svg>
+                    }
+                    <span class="sidebar__name">{{ topic.name }}</span>
+                  </a>
+                  @if (showSubtopics && topic.subtopics.length) {
+                    <button
+                      class="sidebar__expand"
+                      type="button"
+                      [attr.aria-controls]="'sidebar-topic-' + topic.slug"
+                      [attr.aria-expanded]="isOpen"
+                      [attr.aria-label]="'sidebar.toggleSubtopics' | translate: { topic: topic.name }"
+                      (click)="toggleTopic(topic.slug)"
                     >
-                      {{ subtopic.name }}
-                    </a>
-                  </li>
+                      <svg lucideChevronRight class="icon sidebar__chevron"></svg>
+                    </button>
+                  }
+                </div>
+                @if (showSubtopics && topic.subtopics.length) {
+                  <div class="sidebar__collapse" [class.sidebar__collapse--open]="isOpen" [inert]="!isOpen">
+                    <div class="sidebar__collapse-inner">
+                      <ul class="sidebar__subtopics" role="list" [id]="'sidebar-topic-' + topic.slug">
+                        @for (subtopic of topic.subtopics; track subtopic.slug) {
+                          <li>
+                            <a
+                              class="sidebar__sublink"
+                              [routerLink]="[basePath(), topic.slug, subtopic.slug]"
+                              routerLinkActive
+                              ariaCurrentWhenActive="page"
+                            >
+                              {{ subtopic.name }}
+                            </a>
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  </div>
                 }
-              </ul>
+              </li>
             }
-          </li>
-        }
-      </ul>
+          </ul>
+        </div>
+      </div>
     </section>
   }
 </nav>

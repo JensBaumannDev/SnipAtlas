@@ -5,18 +5,23 @@
   },
   "nav": {
     "label": "Sections",
+    "home": "Dashboard",
     "commands": "Commands",
     "concepts": "Concepts",
     "blueprints": "Blueprints",
     "debugging": "Debugging",
-    "request": "Request"
+    "request": "Request",
+    "settings": "Settings"
   },
   "pages": {
     "commands": "Commands",
     "concepts": "Concepts",
     "blueprints": "Blueprints",
     "debugging": "Debugging",
-    "request": "Request"
+    "request": "Request",
+    "imprint": "Legal notice",
+    "privacy": "Privacy policy",
+    "settings": "Settings"
   },
   "sidebar": {
     "label": "Topics",
@@ -43,8 +48,12 @@
     "osWin": "Windows",
     "osUnix": "Linux / Mac",
     "language": "Language",
+    "languageAuto": "Automatic",
     "languageDe": "Deutsch",
-    "languageEn": "English"
+    "languageEn": "English",
+    "lead": "Apply to this browser and are saved here.",
+    "osHint": "Which variant is shown for terminal commands.",
+    "languageHint": "Language of the interface. Automatic follows your browser, otherwise English."
   },
   "commands": {
     "chooseTopic": "Choose a topic from the list.",
@@ -61,5 +70,33 @@
   },
   "outline": {
     "title": "On this page"
+  },
+  "home": {
+    "title": "Welcome to SnipAtlas",
+    "lead": "SnipAtlas takes you from your first command to your own project online. Made for junior developers, but just as handy if you have been coding for a while and only want to look something up quickly. Completely free and regularly updated with new content.",
+    "areas": {
+      "commands": "Terminal, Git, npm and Docker to copy",
+      "concepts": "Terms explained in plain words",
+      "blueprints": "Build projects step by step",
+      "debugging": "Understand and fix error messages"
+    },
+    "news": {
+      "title": "New on SnipAtlas"
+    },
+    "collection": {
+      "hint": "Sign in to save commands with the star. Your favourites will then appear here."
+    },
+    "guide": {
+      "title": "Roadmap",
+      "name": "Full-stack project: Angular + Django REST",
+      "meta": "12 steps to tick off",
+      "open": "Open roadmap"
+    }
+  },
+  "footer": {
+    "label": "Legal and contact"
+  },
+  "legal": {
+    "pending": "The text will follow shortly."
   }
 }

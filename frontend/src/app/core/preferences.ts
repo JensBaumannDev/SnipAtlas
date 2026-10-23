@@ -1,9 +1,10 @@
-import { DOCUMENT, Service, effect, inject, signal } from '@angular/core';
+import { DOCUMENT, Service, computed, effect, inject, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 export type OperatingSystem = 'win' | 'unix';
 export type ThemeMode = 'light' | 'dark' | 'system';
 export type Language = 'de' | 'en';
+export type LanguageMode = Language | 'auto';
 
 const OS_KEY = 'snipatlas-os';
 const THEME_KEY = 'snipatlas-theme';
@@ -17,16 +18,23 @@ export class Preferences {
 
   readonly os = signal<OperatingSystem>(this.read(OS_KEY, ['win', 'unix'], 'win'));
   readonly theme = signal<ThemeMode>(this.read(THEME_KEY, ['light', 'dark', 'system'], 'system'));
-  readonly language = signal<Language>(this.read(LANGUAGE_KEY, ['de', 'en'], 'de'));
+  readonly languageMode = signal<LanguageMode>(
+    this.read(LANGUAGE_KEY, ['auto', 'de', 'en'], 'auto'),
+  );
+  readonly language = computed<Language>(() => {
+    const mode = this.languageMode();
+    return mode === 'auto' ? this.browserLanguage() : mode;
+  });
 
   constructor() {
     effect(() => this.applyTheme(this.theme()));
     effect(() => this.write(OS_KEY, this.os()));
     effect(() => this.applyLanguage(this.language()));
+    effect(() => this.write(LANGUAGE_KEY, this.languageMode()));
   }
 
-  setLanguage(language: Language): void {
-    this.language.set(language);
+  setLanguage(mode: LanguageMode): void {
+    this.languageMode.set(mode);
   }
 
   setOs(os: OperatingSystem): void {
@@ -50,7 +58,11 @@ export class Preferences {
   private applyLanguage(language: Language): void {
     this.document.documentElement.lang = language;
     this.translate.use(language);
-    this.write(LANGUAGE_KEY, language);
+  }
+
+  private browserLanguage(): Language {
+    const language = this.window?.navigator.language.toLowerCase() ?? '';
+    return language.startsWith('de') ? 'de' : 'en';
   }
 
   private read<T extends string>(key: string, allowed: readonly T[], fallback: T): T {

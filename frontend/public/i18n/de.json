@@ -5,18 +5,23 @@
   },
   "nav": {
     "label": "Bereiche",
+    "home": "Dashboard",
     "commands": "Befehle",
     "concepts": "Konzepte",
     "blueprints": "Baupläne",
     "debugging": "Debugging",
-    "request": "Anfrage"
+    "request": "Anfrage",
+    "settings": "Einstellungen"
   },
   "pages": {
     "commands": "Befehle",
     "concepts": "Konzepte",
     "blueprints": "Baupläne",
     "debugging": "Debugging",
-    "request": "Anfrage"
+    "request": "Anfrage",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz",
+    "settings": "Einstellungen"
   },
   "sidebar": {
     "label": "Themen",
@@ -43,8 +48,12 @@
     "osWin": "Windows",
     "osUnix": "Linux / Mac",
     "language": "Sprache",
+    "languageAuto": "Automatisch",
     "languageDe": "Deutsch",
-    "languageEn": "English"
+    "languageEn": "English",
+    "lead": "Gelten für diesen Browser und werden hier gespeichert.",
+    "osHint": "Welche Variante bei Terminal-Befehlen angezeigt wird.",
+    "languageHint": "Sprache der Oberfläche. Automatisch folgt deinem Browser, sonst Englisch."
   },
   "commands": {
     "chooseTopic": "Wähle ein Thema aus der Liste.",
@@ -61,5 +70,33 @@
   },
   "outline": {
     "title": "Auf dieser Seite"
+  },
+  "home": {
+    "title": "Willkommen bei SnipAtlas",
+    "lead": "SnipAtlas begleitet dich vom ersten Befehl bis zum eigenen Projekt online. Gemacht für Junior-Entwickler, aber genauso praktisch, wenn du schon länger dabei bist und nur schnell etwas nachschlagen willst. Komplett kostenlos und regelmäßig um neue Inhalte ergänzt.",
+    "areas": {
+      "commands": "Terminal, Git, npm und Docker zum Kopieren",
+      "concepts": "Begriffe in einfachen Worten erklärt",
+      "blueprints": "Projekte Schritt für Schritt bauen",
+      "debugging": "Fehlermeldungen verstehen und lösen"
+    },
+    "news": {
+      "title": "Neu auf SnipAtlas"
+    },
+    "collection": {
+      "hint": "Melde dich an, um Befehle mit dem Stern zu speichern. Deine Favoriten erscheinen dann hier."
+    },
+    "guide": {
+      "title": "Fahrplan",
+      "name": "Fullstack-Projekt: Angular + Django REST",
+      "meta": "12 Schritte zum Abhaken",
+      "open": "Zum Fahrplan"
+    }
+  },
+  "footer": {
+    "label": "Rechtliches und Kontakt"
+  },
+  "legal": {
+    "pending": "Der Text folgt in Kürze."
   }
 }

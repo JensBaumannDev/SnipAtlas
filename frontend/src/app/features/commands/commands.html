@@ -3,13 +3,16 @@
   @let count = visibleEntries().length;
 
   <header class="commands__header">
-    <svg class="commands__logo" viewBox="0 0 24 24" aria-hidden="true" [style.color]="topic.color">
-      @if (logos[topic.slug]; as logo) {
-        <path [attr.d]="logo" fill="currentColor" />
-      } @else {
-        <path [attr.d]="icons[topic.slug] ?? defaultIcon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-      }
-    </svg>
+    @if (topicLogo(topic.slug); as logo) {
+      <span
+        class="icon icon--mask commands__logo"
+        [style.color]="topic.color"
+        [style.--icon]="logo"
+        aria-hidden="true"
+      ></span>
+    } @else {
+      <svg [lucideIcon]="topicIcon(topic.slug)" class="icon commands__logo" [style.color]="topic.color"></svg>
+    }
     <div class="commands__heading">
       @if (subtopic) {
         <a class="commands__parent" [routerLink]="['/befehle', topic.slug]">{{ topic.name }}</a>

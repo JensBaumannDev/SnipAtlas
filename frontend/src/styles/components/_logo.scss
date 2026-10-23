@@ -1,0 +1,8 @@
+@use 'abstracts' as *;
+
+.logo {
+  display: block;
+  flex: none;
+  background: currentcolor;
+  mask: url('/img/logo.svg') center / contain no-repeat;
+}

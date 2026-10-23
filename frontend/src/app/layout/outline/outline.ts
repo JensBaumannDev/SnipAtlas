@@ -11,6 +11,7 @@ const ACTIVE_OFFSET = 160;
   styleUrl: './outline.scss',
   templateUrl: './outline.html',
   host: {
+    '[hidden]': '!items().length',
     '(window:scroll)': 'updateActive()',
   },
 })

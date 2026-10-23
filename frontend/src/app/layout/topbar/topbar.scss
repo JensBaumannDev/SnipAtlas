@@ -5,17 +5,19 @@
   top: 0;
   z-index: $z-topbar;
   display: block;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
 }
 
 .topbar {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: $space-sm $space-lg;
   align-items: center;
-  min-height: $topbar-height;
-  padding: $space-md $space-xl;
+  min-height: calc($topbar-height + 1px);
+  padding: $space-sm $layout-side $space-sm calc($rail-width + $layout-side);
+  background: var(--chrome);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
 }
 
 // Brand
@@ -33,19 +35,10 @@
   text-decoration: none;
 }
 
-.brand__mark {
-  display: none;
-  width: $control-height;
-  height: $control-height;
-  padding: $space-xs;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: $radius-lg;
-}
-
-.brand__mark-image {
-  width: 100%;
-  height: 100%;
+.brand__logo {
+  width: $font-size-brand;
+  height: $font-size-brand;
+  color: var(--ink);
 }
 
 .brand__accent {
@@ -64,6 +57,8 @@
   position: absolute;
   top: 50%;
   left: $control-padding-x;
+  width: rem(18);
+  height: rem(18);
   color: var(--muted);
   pointer-events: none;
   transform: translateY(-50%);
@@ -101,6 +96,15 @@
   align-items: center;
 }
 
+.topbar__settings {
+  display: none;
+}
+
+.topbar__icon {
+  width: rem(20);
+  height: rem(20);
+}
+
 /* #region RESPONSIVE */
 @include mobile {
   .topbar {
@@ -108,8 +112,8 @@
     padding-inline: $space-md;
   }
 
-  .brand__mark {
-    display: block;
+  .topbar__settings {
+    display: inline-flex;
   }
 
   .search {
@@ -136,7 +140,7 @@
     font-size: $font-size-xl;
   }
 
-  .brand__mark {
+  .brand__logo {
     display: none;
   }
 }

@@ -1,9 +1,9 @@
 @use 'abstracts' as *;
 
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  padding-left: $rail-width;
 }
 
 .skip-link {
@@ -26,16 +26,17 @@
 
 .shell {
   display: flex;
+  flex: 1;
   gap: $space-xxl;
   align-items: flex-start;
-  justify-content: center;
-  padding-inline: $space-xl;
+  padding-right: $layout-side;
+  padding-left: calc($rail-width + $layout-side);
+  transition: padding-left var(--duration) var(--ease);
 }
 
 .shell__content {
   flex: 1;
   min-width: 0;
-  max-width: $content-max-width;
   padding-block: $space-xl;
 
   &:focus {
@@ -44,10 +45,15 @@
 }
 
 /* #region RESPONSIVE */
+@include desktop {
+  :host:has(app-rail:hover, app-rail :focus-visible) :is(.shell, app-footer) {
+    padding-left: calc($rail-width-expanded + $layout-side);
+  }
+}
+
 @include mobile {
   :host {
     padding-bottom: $bottom-nav-height;
-    padding-left: 0;
   }
 
   .shell {

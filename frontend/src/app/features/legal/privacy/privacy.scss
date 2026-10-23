@@ -1,0 +1,6 @@
+@use 'abstracts' as *;
+
+.legal__pending {
+  margin-top: $space-md;
+  color: var(--muted);
+}

@@ -1,11 +1,12 @@
 import { Component, computed, inject, input, model } from '@angular/core';
+import { LucideChevronDown } from '@lucide/angular';
 import { firstCodeLine } from '../../../core/code-highlight';
 import { Entry } from '../../../core/entry';
 import { Preferences } from '../../../core/preferences';
 import { CodeBlock } from '../code-block/code-block';
 
 @Component({
-  imports: [CodeBlock],
+  imports: [CodeBlock, LucideChevronDown],
   selector: 'app-entry-card',
   styleUrl: './entry-card.scss',
   templateUrl: './entry-card.html',

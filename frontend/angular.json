@@ -27,12 +27,16 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "{angular,css,django,docker,git,html5,javascript,linux,npm,postgresql,python,typescript}.svg",
+                "input": "node_modules/simple-icons/icons",
+                "output": "img/topics"
               }
             ],
             "styles": [
               "node_modules/@fontsource-variable/geist/index.css",
               "node_modules/@fontsource-variable/geist-mono/index.css",
-              "node_modules/@angular/cdk/overlay-prebuilt.css",
               "src/styles.scss"
             ],
             "stylePreprocessorOptions": {

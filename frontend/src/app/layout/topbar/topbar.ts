@@ -1,13 +1,13 @@
 import { ViewportScroller } from '@angular/common';
 import { Component, ElementRef, inject, viewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { LucideSearch, LucideSettings } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { SettingsMenu } from '../settings-menu/settings-menu';
 
 const SCROLL_GAP = 16;
 
 @Component({
-  imports: [RouterLink, SettingsMenu, TranslatePipe],
+  imports: [RouterLink, RouterLinkActive, TranslatePipe, LucideSearch, LucideSettings],
   selector: 'app-topbar',
   styleUrl: './topbar.scss',
   templateUrl: './topbar.html',
