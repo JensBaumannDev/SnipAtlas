@@ -56,7 +56,7 @@
     "languageHint": "Sprache der Oberfläche. Automatisch folgt deinem Browser, sonst Englisch."
   },
   "commands": {
-    "lead": "Befehle und Code-Schnipsel zum Kopieren, sortiert nach Themen. Jeder Eintrag sagt kurz, wofür du ihn brauchst.",
+    "lead": "Befehle fürs Terminal zum Kopieren, von Git und npm über Angular und Django bis Docker. Jeder Eintrag sagt kurz, wofür du ihn brauchst.",
     "summary": "{{entries}} Einträge in {{topics}} Themen",
     "hints": {
       "choose": {
