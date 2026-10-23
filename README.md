@@ -60,7 +60,6 @@ Planned tech stack. It is not final and may change during development.
 * **Database:** PostgreSQL
 * **Fonts:** Geist and Geist Mono, self-hosted
 * **Deployment:** Docker & Docker Compose, nginx, gunicorn, HTTPS via Let's Encrypt
-* **Testing:** Vitest (frontend)
 
 ---
 
