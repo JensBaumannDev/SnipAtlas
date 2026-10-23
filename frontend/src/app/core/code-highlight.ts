@@ -91,7 +91,7 @@ function highlightLine(line: string, language: CodeLanguage): CodeLine {
   if (language === 'terminal' || COMMAND.test(trimmed)) {
     return { prompt: true, tokens: terminalTokens(line) };
   }
-  if (language === 'gitignore') {
+  if (language === 'gitignore' || language === 'env') {
     return { prompt: false, tokens: [{ text: line, kind: 'plain' }] };
   }
 

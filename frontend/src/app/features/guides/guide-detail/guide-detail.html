@@ -1,0 +1,42 @@
+@if (blueprint(); as blueprint) {
+  <header class="guide-detail__header">
+    <a class="guide-detail__parent" [routerLink]="['/bauplaene', blueprint.topic]">
+      {{ currentTopic()?.name ?? ('pages.blueprints' | translate) }}
+    </a>
+    <h1>{{ blueprint.title }}</h1>
+    <p class="guide-detail__lead">{{ blueprint.summary }}</p>
+  </header>
+
+  <div class="guide-detail__progress">
+    <app-progress-bar
+      class="guide-detail__bar"
+      [done]="doneCount()"
+      [total]="blueprint.steps.length"
+      [label]="'guides.progressLabel' | translate"
+    />
+    @if (doneCount()) {
+      <button class="btn btn--ghost" type="button" (click)="reset()">
+        {{ 'guides.reset' | translate }}
+      </button>
+    }
+  </div>
+
+  <ol class="guide-detail__steps" role="list">
+    @for (step of blueprint.steps; track step.slug) {
+      <li>
+        <app-guide-step
+          [step]="step"
+          [number]="$index + 1"
+          [done]="isDone(step.slug)"
+          (toggled)="toggle(step.slug)"
+        />
+      </li>
+    }
+  </ol>
+} @else if (!loading()) {
+  <h1>{{ 'pages.blueprints' | translate }}</h1>
+  <p class="guide-detail__empty">
+    {{ 'guides.notFound' | translate }}
+    <a routerLink="/bauplaene">{{ 'guides.backToList' | translate }}</a>
+  </p>
+}

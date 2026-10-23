@@ -16,6 +16,7 @@ const LANGUAGE_LABELS: Record<CodeLanguage, string> = {
   html: 'HTML',
   css: 'CSS',
   gitignore: '.gitignore',
+  env: '.env',
 };
 
 @Component({

@@ -7,7 +7,8 @@ export type CodeLanguage =
   | 'typescript'
   | 'html'
   | 'css'
-  | 'gitignore';
+  | 'gitignore'
+  | 'env';
 
 export type OsCode = Record<OperatingSystem, string>;
 

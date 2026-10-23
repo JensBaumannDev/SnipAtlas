@@ -72,6 +72,19 @@
     "collapseAll": "Collapse all",
     "note": "Remember"
   },
+  "guides": {
+    "lead": "Step-by-step workflows: what to do, why, and the code to copy. Tick off each step, your progress is saved in this browser.",
+    "progress": "{{done}} of {{total}} steps done",
+    "progressComplete": "All {{total}} steps done",
+    "progressLabel": "Progress",
+    "progressOf": "Progress: {{title}}",
+    "markDone": "Step {{number}} done: {{title}}",
+    "reset": "Reset",
+    "note": "Note",
+    "empty": "There are no blueprints for this topic yet.",
+    "notFound": "This blueprint does not exist.",
+    "backToList": "Back to all blueprints"
+  },
   "code": {
     "copy": "Copy",
     "copied": "Copied",

@@ -1,0 +1,27 @@
+<article class="guide-step" [class.guide-step--done]="done()" [id]="step().slug">
+  <input
+    class="guide-step__check"
+    type="checkbox"
+    [id]="checkId()"
+    [checked]="done()"
+    [attr.aria-label]="'guides.markDone' | translate: { number: number(), title: step().title }"
+    (change)="toggled.emit()"
+  />
+
+  <div class="guide-step__body">
+    <h2 class="guide-step__title">
+      <span class="guide-step__number">{{ label() }}</span>
+      {{ step().title }}
+    </h2>
+    <p class="guide-step__why">{{ step().why }}</p>
+    @for (block of blocks(); track $index) {
+      <app-code-block [code]="block.code" [language]="block.language" [os]="block.os" />
+    }
+    @if (step().note; as note) {
+      <p class="guide-step__note">
+        <strong class="guide-step__note-label">{{ 'guides.note' | translate }}</strong>
+        {{ note }}
+      </p>
+    }
+  </div>
+</article>

@@ -23,7 +23,8 @@ export const routes: Routes = [
   {
     path: 'bauplaene',
     title: 'pages.blueprints',
-    loadComponent: () => import('./features/guides/guides').then((m) => m.Guides),
+    data: { sidebar: 'topics', sidebarGroups: ['frontend', 'backend'] },
+    loadChildren: () => import('./features/guides/guides.routes').then((m) => m.GUIDES_ROUTES),
   },
   {
     path: 'debugging',

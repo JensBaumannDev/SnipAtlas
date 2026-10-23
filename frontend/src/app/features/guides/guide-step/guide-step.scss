@@ -1,0 +1,73 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Step
+.guide-step {
+  display: grid;
+  grid-template-columns: rem(40) minmax(0, 1fr);
+  gap: $space-sm;
+  padding: $space-lg $space-xs;
+  scroll-margin-top: $topbar-height + rem(80);
+  border-bottom: 1px solid var(--line);
+
+  &--done .guide-step__title {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+}
+
+.guide-step__check {
+  width: rem(24);
+  height: rem(24);
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+// Body
+.guide-step__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  min-width: 0;
+}
+
+.guide-step__title {
+  display: flex;
+  gap: $space-sm;
+  align-items: baseline;
+  min-height: rem(24);
+  font-size: $font-size-lg;
+  overflow-wrap: anywhere;
+  transition: color var(--duration-fast);
+}
+
+.guide-step__number {
+  flex: none;
+  font-family: $font-mono;
+  font-size: $font-size-base;
+  font-weight: normal;
+  color: var(--muted);
+}
+
+.guide-step__why {
+  max-width: 70ch;
+  margin-top: -$space-xs;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.guide-step__note {
+  max-width: 70ch;
+  padding: $space-xs $space-md;
+  overflow-wrap: anywhere;
+  border-left: 2px solid var(--accent);
+}
+
+.guide-step__note-label {
+  display: block;
+  font-weight: $font-weight-semibold;
+}

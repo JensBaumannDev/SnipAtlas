@@ -1,0 +1,18 @@
+@let text =
+  (complete() ? 'guides.progressComplete' : 'guides.progress')
+    | translate: { done: done(), total: total() };
+
+<div
+  class="progress-bar__track"
+  role="progressbar"
+  aria-valuemin="0"
+  [attr.aria-label]="label()"
+  [attr.aria-valuemax]="total()"
+  [attr.aria-valuenow]="done()"
+  [attr.aria-valuetext]="text"
+>
+  <span class="progress-bar__fill" [style.width.%]="percent()"></span>
+</div>
+<span class="progress-bar__text" [class.progress-bar__text--complete]="complete()" aria-hidden="true">
+  {{ text }}
+</span>

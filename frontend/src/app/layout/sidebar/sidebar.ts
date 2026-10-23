@@ -23,7 +23,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { TopicApi } from '../../core/topic-api';
 import { topicIcon, topicLogo } from '../../core/topic-logos';
-import { SidebarMode, isSidebarMode } from './sidebar-mode';
+import { SidebarMode, isGroupList, isSidebarMode } from './sidebar-mode';
 
 @Component({
   imports: [
@@ -59,6 +59,12 @@ export class Sidebar {
   protected readonly hasMore = signal(false);
 
   private readonly activeSlug = signal<string | undefined>(undefined);
+  private readonly groupSlugs = signal<readonly string[] | undefined>(undefined);
+
+  protected readonly visibleGroups = computed(() => {
+    const slugs = this.groupSlugs();
+    return slugs ? this.groups().filter((group) => slugs.includes(group.slug)) : this.groups();
+  });
 
   protected readonly activeTopic = computed(() =>
     this.groups()
@@ -115,12 +121,16 @@ export class Sidebar {
   private onNavigation(): void {
     const segments =
       this.router.parseUrl(this.router.url).root.children[PRIMARY_OUTLET]?.segments ?? [];
-    const mode = this.modeFromRoute(this.router.routerState.snapshot.root);
+    const root = this.router.routerState.snapshot.root;
+    const mode = this.modeFromRoute(root);
     const slug = mode ? segments[1]?.path : undefined;
     const entering = !this.mode();
-    const group = this.groups().find((item) => item.topics.some((topic) => topic.slug === slug));
 
     this.mode.set(mode);
+    this.groupSlugs.set(this.groupsFromRoute(root));
+    const group = this.visibleGroups().find((item) =>
+      item.topics.some((topic) => topic.slug === slug),
+    );
     this.basePath.set(`/${segments[0]?.path ?? ''}`);
     this.activeSlug.set(slug);
     this.menuOpen.set(false);
@@ -129,7 +139,7 @@ export class Sidebar {
     }
     if (entering) {
       this.openGroups.set(
-        new Set(group ? [group.slug] : this.groups().map((item) => item.slug)),
+        new Set(group ? [group.slug] : this.visibleGroups().map((item) => item.slug)),
       );
     } else if (group) {
       this.openGroups.update((open) => new Set(open).add(group.slug));
@@ -145,5 +155,16 @@ export class Sidebar {
       }
     }
     return mode;
+  }
+
+  private groupsFromRoute(root: ActivatedRouteSnapshot): readonly string[] | undefined {
+    let groups: readonly string[] | undefined;
+    for (let route: ActivatedRouteSnapshot | null = root; route; route = route.firstChild) {
+      const value: unknown = route.data['sidebarGroups'];
+      if (isGroupList(value)) {
+        groups = value;
+      }
+    }
+    return groups;
   }
 }

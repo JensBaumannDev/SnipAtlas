@@ -1,0 +1,72 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Header
+.guide-detail__header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.guide-detail__parent {
+  align-self: flex-start;
+  font-weight: $font-weight-medium;
+  color: var(--muted);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+}
+
+.guide-detail__lead {
+  max-width: rem(720);
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
+
+// Progress
+.guide-detail__progress {
+  position: sticky;
+  top: calc($topbar-height + 1px);
+  z-index: $z-sticky;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm $space-md;
+  align-items: center;
+  min-height: calc($control-height + 2 * $space-sm);
+  padding: $space-sm $space-xs;
+  margin-top: $space-lg;
+  background: var(--chrome);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+
+.guide-detail__bar {
+  flex: 1 1 rem(240);
+}
+
+// Steps
+.guide-detail__steps {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.guide-detail__empty {
+  padding-block: $space-lg;
+  color: var(--muted);
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .guide-detail__progress {
+    position: static;
+  }
+}
+
+/* #endregion */
