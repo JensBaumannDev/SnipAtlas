@@ -54,6 +54,10 @@
     <p class="concepts__empty">{{ 'concepts.empty' | translate }}</p>
   }
 } @else {
-  <h1>{{ 'pages.concepts' | translate }}</h1>
-  <p class="concepts__empty">{{ 'concepts.chooseTopic' | translate }}</p>
+  <app-area-intro
+    title="pages.concepts"
+    lead="concepts.lead"
+    [summary]="'concepts.summary' | translate: summary()"
+    [hints]="hints"
+  />
 }

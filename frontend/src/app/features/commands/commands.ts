@@ -10,7 +10,23 @@ import { Preferences } from '../../core/preferences';
 import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
 import { topicIcon, topicLogo } from '../../core/topic-logos';
+import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
 import { EntryCard } from './entry-card/entry-card';
+
+const HINTS: AreaHint[] = [
+  {
+    icon: LucideListTree,
+    title: 'commands.hints.choose.title',
+    text: 'commands.hints.choose.text',
+  },
+  { icon: LucideCopy, title: 'commands.hints.copy.title', text: 'commands.hints.copy.text' },
+  {
+    icon: LucideSettings,
+    title: 'commands.hints.os.title',
+    text: 'commands.hints.os.text',
+    link: { label: 'commands.hints.osLink', path: '/einstellungen' },
+  },
+];
 
 interface EntrySection {
   subtopic: Subtopic;
@@ -18,15 +34,7 @@ interface EntrySection {
 }
 
 @Component({
-  imports: [
-    EntryCard,
-    RouterLink,
-    TranslatePipe,
-    LucideCopy,
-    LucideDynamicIcon,
-    LucideListTree,
-    LucideSettings,
-  ],
+  imports: [AreaIntro, EntryCard, RouterLink, TranslatePipe, LucideDynamicIcon],
   selector: 'app-commands',
   styleUrl: './commands.scss',
   templateUrl: './commands.html',
@@ -42,6 +50,7 @@ export class Commands {
   protected readonly topicLogo = topicLogo;
   protected readonly topicIcon = topicIcon;
 
+  protected readonly hints = HINTS;
   protected readonly summary = toSignal(this.entryApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });

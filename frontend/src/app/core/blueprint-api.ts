@@ -226,4 +226,11 @@ export class BlueprintApi {
   getBySlug(slug: string): Observable<Blueprint | undefined> {
     return of(BLUEPRINTS.find((blueprint) => blueprint.slug === slug));
   }
+
+  getSummary(): Observable<{ blueprints: number; steps: number }> {
+    return of({
+      blueprints: BLUEPRINTS.length,
+      steps: BLUEPRINTS.reduce((sum, blueprint) => sum + blueprint.steps.length, 0),
+    });
+  }
 }

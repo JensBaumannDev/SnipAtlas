@@ -1,1 +1,5 @@
-<h1>{{ 'pages.debugging' | translate }}</h1>
+@if (topic()) {
+  <h1>{{ 'pages.debugging' | translate }}</h1>
+} @else {
+  <app-area-intro title="pages.debugging" lead="debugging.lead" [hints]="hints" />
+}

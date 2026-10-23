@@ -239,4 +239,11 @@ export class ConceptApi {
   getByTopic(topic: string): Observable<Concept[]> {
     return of(CONCEPTS.filter((concept) => concept.topic === topic));
   }
+
+  getSummary(): Observable<{ entries: number; topics: number }> {
+    return of({
+      entries: CONCEPTS.length,
+      topics: new Set(CONCEPTS.map((concept) => concept.topic)).size,
+    });
+  }
 }

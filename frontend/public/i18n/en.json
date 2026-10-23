@@ -59,9 +59,18 @@
     "lead": "Commands and code snippets to copy, sorted by topic. Each entry briefly says what you need it for.",
     "summary": "{{entries}} entries in {{topics}} topics",
     "hints": {
-      "choose": "Choose a topic from the list. Click an entry to expand it.",
-      "copy": "The copy button takes the code without the $ at the start of the line.",
-      "os": "Terminal commands match your system, Windows or Linux/Mac.",
+      "choose": {
+        "title": "Choose a topic",
+        "text": "Choose a topic from the list. Click an entry to expand it."
+      },
+      "copy": {
+        "title": "Copy",
+        "text": "The button takes the code without the $ at the start of the line."
+      },
+      "os": {
+        "title": "Your system",
+        "text": "Terminal commands match Windows or Linux/Mac."
+      },
       "osLink": "Change it in the settings"
     },
     "empty": "There are no entries for this topic yet.",
@@ -71,7 +80,23 @@
     "collapseAll": "Collapse all"
   },
   "concepts": {
-    "chooseTopic": "Choose a topic from the list.",
+    "lead": "Terms and basics explained in plain words, each with a short example and what to remember.",
+    "summary": "{{entries}} concepts in {{topics}} topics",
+    "hints": {
+      "choose": {
+        "title": "Choose a topic",
+        "text": "Choose a topic from the list. Click a concept to see the explanation and example."
+      },
+      "copy": {
+        "title": "Try it out",
+        "text": "Copy the examples and try them out yourself."
+      },
+      "request": {
+        "title": "Missing a term?",
+        "text": "Missing a term that puzzles you?"
+      },
+      "requestLink": "Send me a request"
+    },
     "empty": "There are no concepts for this topic yet.",
     "conceptCount": "{{count}} concepts",
     "conceptCountOne": "1 concept",
@@ -80,7 +105,22 @@
     "note": "Remember"
   },
   "guides": {
-    "lead": "Step-by-step workflows: what to do, why, and the code to copy. Tick off each step, your progress is saved in this browser.",
+    "lead": "Step-by-step workflows: what to do, why, and the code to copy. From an empty folder to a finished project.",
+    "summary": "{{blueprints}} blueprints with {{steps}} steps",
+    "hints": {
+      "choose": {
+        "title": "Open a blueprint",
+        "text": "Choose a topic from the list and open a blueprint."
+      },
+      "copy": {
+        "title": "Step by step",
+        "text": "Each step explains why it is needed and has the code to copy."
+      },
+      "progress": {
+        "title": "Tick off",
+        "text": "Tick off finished steps. The bar shows how far you are."
+      }
+    },
     "progress": "{{done}} of {{total}} steps done",
     "progressComplete": "All {{total}} steps done",
     "progressLabel": "Progress",
@@ -91,6 +131,24 @@
     "empty": "There are no blueprints for this topic yet.",
     "notFound": "This blueprint does not exist.",
     "backToList": "Back to all blueprints"
+  },
+  "debugging": {
+    "lead": "Understand and fix common error messages: what the message means, where it comes from and how to fix it.",
+    "hints": {
+      "choose": {
+        "title": "Choose a topic",
+        "text": "Choose a topic from the list."
+      },
+      "solve": {
+        "title": "Understand the cause",
+        "text": "Each message comes with its meaning, cause and the steps to fix it."
+      },
+      "request": {
+        "title": "Message missing?",
+        "text": "Stuck on a message that is missing here?"
+      },
+      "requestLink": "Send me a request"
+    }
   },
   "code": {
     "copy": "Copy",
