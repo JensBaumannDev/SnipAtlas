@@ -26,7 +26,7 @@
   @let expanded = expandedSlug();
   @let showSubtopics = mode() === 'subtopics';
 
-  @for (group of groups(); track group.slug) {
+  @for (group of visibleGroups(); track group.slug) {
     @let groupOpen = openGroups().has(group.slug);
     <section class="sidebar__group" [attr.aria-labelledby]="'sidebar-group-' + group.slug">
       <h2 class="sidebar__heading" [id]="'sidebar-group-' + group.slug">

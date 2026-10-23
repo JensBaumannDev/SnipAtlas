@@ -32,6 +32,11 @@ describe('Sidebar', () => {
           { path: 'befehle', data: { sidebar: 'subtopics' }, children: [{ path: '**', component: Blank }] },
           { path: 'konzepte', data: { sidebar: 'subtopics' }, children: [{ path: '**', component: Blank }] },
           { path: 'debugging', data: { sidebar: 'topics' }, children: [{ path: '**', component: Blank }] },
+          {
+            path: 'bauplaene',
+            data: { sidebar: 'topics', sidebarGroups: ['frontend', 'backend'] },
+            children: [{ path: '**', component: Blank }],
+          },
           { path: '**', component: Blank },
         ]),
         provideTranslateService(),
@@ -65,6 +70,16 @@ describe('Sidebar', () => {
     expect(element.querySelector('a[href="/debugging/django"]')).toBeTruthy();
     expect(element.querySelector('.sidebar__subtopics')).toBeNull();
     expect(element.querySelector('.sidebar__expand')).toBeNull();
+  });
+
+  it('shows only the groups chosen by the route', async () => {
+    await navigate('/bauplaene');
+    const groups = [...element.querySelectorAll('.sidebar__heading')].map((heading) => heading.id);
+
+    expect(groups).toEqual(['sidebar-group-collection', 'sidebar-group-frontend', 'sidebar-group-backend']);
+    expect(element.querySelector('a[href="/bauplaene/django"]')).toBeTruthy();
+    expect(element.querySelector('a[href="/bauplaene/git"]')).toBeNull();
+    expect(element.querySelector('.sidebar__subtopics')).toBeNull();
   });
 
   it('is hidden in areas without topics', async () => {

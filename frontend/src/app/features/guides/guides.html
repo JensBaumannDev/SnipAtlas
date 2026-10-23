@@ -1,1 +1,52 @@
-<h1>{{ 'pages.blueprints' | translate }}</h1>
+@let topic = currentTopic();
+
+<header class="guides__intro">
+  @if (topic) {
+    <div class="guides__topic">
+      @if (topicLogo(topic.slug); as logo) {
+        <span
+          class="icon icon--mask guides__logo"
+          [style.color]="topic.color"
+          [style.--icon]="logo"
+          aria-hidden="true"
+        ></span>
+      } @else {
+        <svg [lucideIcon]="topicIcon(topic.slug)" class="icon guides__logo" [style.color]="topic.color"></svg>
+      }
+      <div class="guides__heading">
+        <a class="guides__parent" routerLink="/bauplaene">{{ 'pages.blueprints' | translate }}</a>
+        <h1>{{ topic.name }}</h1>
+      </div>
+    </div>
+  } @else {
+    <h1>{{ 'pages.blueprints' | translate }}</h1>
+    <p class="guides__lead">{{ 'guides.lead' | translate }}</p>
+  }
+</header>
+
+@for (section of sections(); track section.topic.slug) {
+  <section class="guides__section">
+    @if (!topic) {
+      <h2 class="guides__section-title" [id]="section.topic.slug">
+        <a class="guides__section-link" [routerLink]="['/bauplaene', section.topic.slug]">{{ section.topic.name }}</a>
+      </h2>
+    }
+    <ul class="guides__list" role="list">
+      @for (blueprint of section.blueprints; track blueprint.slug) {
+        <li class="guides__item">
+          <div class="guides__title" role="heading" [attr.aria-level]="topic ? 2 : 3">
+            <a class="guides__link" [routerLink]="['/bauplaene', blueprint.topic, blueprint.slug]">{{ blueprint.title }}</a>
+          </div>
+          <p class="guides__summary">{{ blueprint.summary }}</p>
+          <app-progress-bar
+            [done]="doneCount(blueprint)"
+            [total]="blueprint.steps.length"
+            [label]="'guides.progressOf' | translate: { title: blueprint.title }"
+          />
+        </li>
+      }
+    </ul>
+  </section>
+} @empty {
+  <p class="guides__empty">{{ 'guides.empty' | translate }}</p>
+}

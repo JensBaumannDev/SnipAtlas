@@ -1,0 +1,30 @@
+import { Component, computed, inject, input, output } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { BlueprintStep } from '../../../core/blueprint';
+import { Preferences } from '../../../core/preferences';
+import { CodeBlock } from '../../commands/code-block/code-block';
+
+@Component({
+  imports: [CodeBlock, TranslatePipe],
+  selector: 'app-guide-step',
+  styleUrl: './guide-step.scss',
+  templateUrl: './guide-step.html',
+})
+export class GuideStep {
+  private readonly os = inject(Preferences).os;
+
+  readonly step = input.required<BlueprintStep>();
+  readonly number = input.required<number>();
+  readonly done = input(false);
+  readonly toggled = output<void>();
+
+  protected readonly label = computed(() => String(this.number()).padStart(2, '0'));
+  protected readonly checkId = computed(() => `${this.step().slug}-done`);
+  protected readonly blocks = computed(() =>
+    this.step().code.map(({ language, code }) =>
+      typeof code === 'string'
+        ? { language, code, os: undefined }
+        : { language, code: code[this.os()], os: this.os() },
+    ),
+  );
+}

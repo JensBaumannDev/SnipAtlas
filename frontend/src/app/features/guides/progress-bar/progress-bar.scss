@@ -1,0 +1,36 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-md;
+  align-items: center;
+}
+
+// Track
+.progress-bar__track {
+  flex: 1 1 rem(160);
+  max-width: rem(360);
+  height: rem(8);
+  background: var(--line);
+  border-radius: $radius-xs;
+}
+
+.progress-bar__fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: $radius-xs;
+  transition: width var(--duration) var(--ease);
+}
+
+// Text
+.progress-bar__text {
+  color: var(--muted);
+  white-space: nowrap;
+
+  &--complete {
+    font-weight: $font-weight-medium;
+    color: var(--accent);
+  }
+}

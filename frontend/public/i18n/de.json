@@ -72,6 +72,19 @@
     "collapseAll": "Alle zuklappen",
     "note": "Merke"
   },
+  "guides": {
+    "lead": "Abläufe Schritt für Schritt: Was du tust, warum, und den Code zum Kopieren. Hake jeden Schritt ab, dein Fortschritt bleibt in diesem Browser gespeichert.",
+    "progress": "{{done}} von {{total}} Schritten erledigt",
+    "progressComplete": "Alle {{total}} Schritte erledigt",
+    "progressLabel": "Fortschritt",
+    "progressOf": "Fortschritt: {{title}}",
+    "markDone": "Schritt {{number}} erledigt: {{title}}",
+    "reset": "Zurücksetzen",
+    "note": "Hinweis",
+    "empty": "Zu diesem Thema gibt es noch keine Baupläne.",
+    "notFound": "Diesen Bauplan gibt es nicht.",
+    "backToList": "Zu allen Bauplänen"
+  },
   "code": {
     "copy": "Kopieren",
     "copied": "Kopiert",
