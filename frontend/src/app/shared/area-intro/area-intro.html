@@ -1,0 +1,24 @@
+<header class="area-intro__header">
+  <h1>{{ title() | translate }}</h1>
+  <p class="area-intro__lead">{{ lead() | translate }}</p>
+  @if (summary(); as summary) {
+    <p class="area-intro__meta">{{ summary }}</p>
+  }
+</header>
+
+<ul class="area-intro__hints" role="list">
+  @for (hint of hints(); track hint.title) {
+    <li class="area-intro__hint">
+      <svg [lucideIcon]="hint.icon" class="icon area-intro__icon"></svg>
+      <div class="area-intro__body">
+        <h2 class="area-intro__title">{{ hint.title | translate }}</h2>
+        <p class="area-intro__text">
+          {{ hint.text | translate }}
+          @if (hint.link; as link) {
+            <a [routerLink]="link.path">{{ link.label | translate }}</a>
+          }
+        </p>
+      </div>
+    </li>
+  }
+</ul>

@@ -1,0 +1,75 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xxl;
+  width: 100%;
+  max-width: rem(760);
+  padding-block: $space-xxl;
+  margin-inline: auto;
+}
+
+// Header
+.area-intro__header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+.area-intro__lead {
+  max-width: rem(560);
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
+
+.area-intro__meta {
+  color: var(--muted);
+}
+
+// Hints
+.area-intro__hints {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.area-intro__hint {
+  display: flex;
+  gap: $space-md;
+  align-items: flex-start;
+  padding: $space-md $space-xs;
+  border-bottom: 1px solid var(--line);
+}
+
+.area-intro__icon {
+  flex: none;
+  color: var(--accent);
+}
+
+.area-intro__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.area-intro__title {
+  font-size: $font-size-base;
+}
+
+.area-intro__text {
+  color: var(--muted);
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  :host {
+    gap: $space-xl;
+    padding-block: $space-md $space-xl;
+  }
+}
+
+/* #endregion */

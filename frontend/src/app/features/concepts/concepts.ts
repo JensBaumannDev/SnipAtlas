@@ -1,7 +1,12 @@
 import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideDynamicIcon } from '@lucide/angular';
+import {
+  LucideCopy,
+  LucideDynamicIcon,
+  LucideListTree,
+  LucideMessageSquarePlus,
+} from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Concept } from '../../core/concept';
 import { ConceptApi } from '../../core/concept-api';
@@ -9,7 +14,23 @@ import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
 import { topicIcon, topicLogo } from '../../core/topic-logos';
+import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
 import { ConceptCard } from './concept-card/concept-card';
+
+const HINTS: AreaHint[] = [
+  {
+    icon: LucideListTree,
+    title: 'concepts.hints.choose.title',
+    text: 'concepts.hints.choose.text',
+  },
+  { icon: LucideCopy, title: 'concepts.hints.copy.title', text: 'concepts.hints.copy.text' },
+  {
+    icon: LucideMessageSquarePlus,
+    title: 'concepts.hints.request.title',
+    text: 'concepts.hints.request.text',
+    link: { label: 'concepts.hints.requestLink', path: '/anfrage' },
+  },
+];
 
 interface ConceptSection {
   subtopic: Subtopic;
@@ -17,7 +38,7 @@ interface ConceptSection {
 }
 
 @Component({
-  imports: [ConceptCard, RouterLink, TranslatePipe, LucideDynamicIcon],
+  imports: [AreaIntro, ConceptCard, RouterLink, TranslatePipe, LucideDynamicIcon],
   selector: 'app-concepts',
   styleUrl: './concepts.scss',
   templateUrl: './concepts.html',
@@ -31,6 +52,11 @@ export class Concepts {
 
   protected readonly topicLogo = topicLogo;
   protected readonly topicIcon = topicIcon;
+
+  protected readonly hints = HINTS;
+  protected readonly summary = toSignal(this.conceptApi.getSummary(), {
+    initialValue: { entries: 0, topics: 0 },
+  });
 
   private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
   private readonly concepts = rxResource({
