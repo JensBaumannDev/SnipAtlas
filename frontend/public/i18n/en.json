@@ -63,6 +63,15 @@
     "expandAll": "Expand all",
     "collapseAll": "Collapse all"
   },
+  "concepts": {
+    "chooseTopic": "Choose a topic from the list.",
+    "empty": "There are no concepts for this topic yet.",
+    "conceptCount": "{{count}} concepts",
+    "conceptCountOne": "1 concept",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "note": "Remember"
+  },
   "code": {
     "copy": "Copy",
     "copied": "Copied",

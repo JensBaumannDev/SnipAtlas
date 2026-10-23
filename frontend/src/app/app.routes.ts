@@ -18,7 +18,7 @@ export const routes: Routes = [
     title: 'pages.concepts',
     data: { sidebar: 'subtopics' },
     loadChildren: () =>
-      import('./features/glossary/glossary.routes').then((m) => m.GLOSSARY_ROUTES),
+      import('./features/concepts/concepts.routes').then((m) => m.CONCEPTS_ROUTES),
   },
   {
     path: 'bauplaene',

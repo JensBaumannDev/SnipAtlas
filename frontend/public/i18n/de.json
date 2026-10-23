@@ -63,6 +63,15 @@
     "expandAll": "Alle aufklappen",
     "collapseAll": "Alle zuklappen"
   },
+  "concepts": {
+    "chooseTopic": "Wähle ein Thema aus der Liste.",
+    "empty": "Zu diesem Thema gibt es noch keine Konzepte.",
+    "conceptCount": "{{count}} Konzepte",
+    "conceptCountOne": "1 Konzept",
+    "expandAll": "Alle aufklappen",
+    "collapseAll": "Alle zuklappen",
+    "note": "Merke"
+  },
   "code": {
     "copy": "Kopieren",
     "copied": "Kopiert",

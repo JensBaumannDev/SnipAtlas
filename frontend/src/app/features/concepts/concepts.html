@@ -1,0 +1,59 @@
+@if (currentTopic(); as topic) {
+  @let subtopic = currentSubtopic();
+  @let count = visibleConcepts().length;
+
+  <header class="concepts__header">
+    @if (topicLogo(topic.slug); as logo) {
+      <span
+        class="icon icon--mask concepts__logo"
+        [style.color]="topic.color"
+        [style.--icon]="logo"
+        aria-hidden="true"
+      ></span>
+    } @else {
+      <svg [lucideIcon]="topicIcon(topic.slug)" class="icon concepts__logo" [style.color]="topic.color"></svg>
+    }
+    <div class="concepts__heading">
+      @if (subtopic) {
+        <a class="concepts__parent" [routerLink]="['/konzepte', topic.slug]">{{ topic.name }}</a>
+        <h1>{{ subtopic.name }}</h1>
+      } @else {
+        <h1>{{ topic.name }}</h1>
+      }
+      <p class="concepts__meta">
+        {{ (count === 1 ? 'concepts.conceptCountOne' : 'concepts.conceptCount') | translate: { count: count } }}
+      </p>
+    </div>
+    @if (count) {
+      <button class="btn btn--ghost" type="button" (click)="toggleAll()">
+        {{ (allExpanded() ? 'concepts.collapseAll' : 'concepts.expandAll') | translate }}
+      </button>
+    }
+  </header>
+
+  @for (section of sections(); track section.subtopic.slug) {
+    <section class="concepts__section">
+      @if (!subtopic) {
+        <h2 class="concepts__section-title" [id]="section.subtopic.slug">
+          <a class="concepts__section-link" [routerLink]="['/konzepte', topic.slug, section.subtopic.slug]">
+            {{ section.subtopic.name }}
+          </a>
+          <span class="concepts__count">{{ section.concepts.length }}</span>
+        </h2>
+      }
+      @for (concept of section.concepts; track concept.slug) {
+        <app-concept-card
+          [concept]="concept"
+          [level]="subtopic ? 2 : 3"
+          [expanded]="isExpanded(concept.slug)"
+          (expandedChange)="setExpanded(concept.slug, $event)"
+        />
+      }
+    </section>
+  } @empty {
+    <p class="concepts__empty">{{ 'concepts.empty' | translate }}</p>
+  }
+} @else {
+  <h1>{{ 'pages.concepts' | translate }}</h1>
+  <p class="concepts__empty">{{ 'concepts.chooseTopic' | translate }}</p>
+}
