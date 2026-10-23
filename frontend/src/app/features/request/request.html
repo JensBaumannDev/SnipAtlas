@@ -1,1 +1,142 @@
-<h1>{{ 'pages.request' | translate }}</h1>
+<header class="request__intro">
+  <h1>{{ 'pages.request' | translate }}</h1>
+  <p class="request__lead">{{ 'request.lead' | translate }}</p>
+</header>
+
+<div class="request__layout">
+  @if (status() === 'sent') {
+    <section class="request__done" role="status">
+      <svg lucideCircleCheck class="icon request__done-icon"></svg>
+      <h2 class="request__heading">{{ 'request.done.title' | translate }}</h2>
+      <p class="request__hint">{{ 'request.done.text' | translate }}</p>
+      <button class="btn btn--ghost" type="button" (click)="startOver()">
+        {{ 'request.done.again' | translate }}
+      </button>
+    </section>
+  } @else {
+    @let kindError = error('kind');
+    @let emailError = error('email');
+    @let privacyError = error('privacy');
+
+    <form class="request__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <fieldset class="request__fieldset">
+        <legend class="field__label">
+          {{ 'request.kindLabel' | translate }} <span aria-hidden="true">*</span>
+        </legend>
+        <div class="request__kinds" [class.request__kinds--invalid]="!!kindError">
+          @for (option of kinds; track option.value) {
+            <label class="request__kind">
+              <input
+                class="visually-hidden"
+                type="radio"
+                name="kind"
+                formControlName="kind"
+                [value]="option.value"
+                [attr.aria-describedby]="kindError ? 'request-kind-error' : null"
+              />
+              <svg [lucideIcon]="option.icon" class="icon request__kind-icon"></svg>
+              <span class="request__kind-label">{{ option.label | translate }}</span>
+              <span class="request__kind-text">{{ option.description | translate }}</span>
+            </label>
+          }
+        </div>
+        @if (kindError) {
+          <p class="field__error" id="request-kind-error">{{ 'request.errors.kind' | translate }}</p>
+        }
+      </fieldset>
+
+      @switch (kind()) {
+        @case ('entry') {
+          <app-entry-fields
+            class="request__fields"
+            animate.enter="request-fields-enter"
+            [group]="form.controls.entry"
+            [submitted]="submitted()"
+          />
+        }
+        @case ('improvement') {
+          <app-improvement-fields
+            class="request__fields"
+            animate.enter="request-fields-enter"
+            [group]="form.controls.improvement"
+            [submitted]="submitted()"
+          />
+        }
+        @case ('bug') {
+          <app-bug-fields
+            class="request__fields"
+            animate.enter="request-fields-enter"
+            [group]="form.controls.bug"
+            [submitted]="submitted()"
+          />
+        }
+      }
+
+      <div class="field">
+        <label class="field__label" for="request-email">
+          {{ 'request.emailLabel' | translate }} <span aria-hidden="true">*</span>
+        </label>
+        <input
+          id="request-email"
+          class="input"
+          type="email"
+          name="email"
+          autocomplete="email"
+          formControlName="email"
+          [placeholder]="'request.emailPlaceholder' | translate"
+          aria-required="true"
+          [attr.aria-invalid]="!!emailError"
+          [attr.aria-describedby]="emailError ? 'request-email-error' : 'request-email-hint'"
+        />
+        @if (emailError) {
+          <p class="field__error" id="request-email-error">{{ emailError.key | translate: emailError.params }}</p>
+        } @else {
+          <p class="field__hint" id="request-email-hint">{{ 'request.emailHint' | translate }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label class="request__privacy">
+          <input
+            class="request__checkbox"
+            type="checkbox"
+            name="privacy"
+            formControlName="privacy"
+            aria-required="true"
+            [attr.aria-invalid]="!!privacyError"
+            [attr.aria-describedby]="privacyError ? 'request-privacy-error' : null"
+          />
+          <span>
+            {{ 'request.privacyBefore' | translate }}
+            <a routerLink="/datenschutz">{{ 'request.privacyLink' | translate }}</a>
+            {{ 'request.privacyAfter' | translate }}
+            <span aria-hidden="true">*</span>
+          </span>
+        </label>
+        @if (privacyError) {
+          <p class="field__error" id="request-privacy-error">{{ 'request.errors.privacy' | translate }}</p>
+        }
+      </div>
+
+      @if (status() === 'error') {
+        <p class="field__error" role="alert">{{ 'request.errors.send' | translate }}</p>
+      }
+
+      <div class="request__actions">
+        <button class="btn btn--primary" type="submit" [disabled]="status() === 'sending'">
+          {{ (status() === 'sending' ? 'request.sending' : 'request.submit') | translate }}
+        </button>
+        <p class="field__hint">{{ 'request.required' | translate }}</p>
+      </div>
+    </form>
+  }
+
+  <aside class="request__info" aria-labelledby="request-info">
+    <h2 class="request__heading" id="request-info">{{ 'request.info.title' | translate }}</h2>
+    <ol class="request__steps" role="list">
+      <li class="request__step">{{ 'request.info.read' | translate }}</li>
+      <li class="request__step">{{ 'request.info.answer' | translate }}</li>
+      <li class="request__step">{{ 'request.info.publish' | translate }}</li>
+    </ol>
+  </aside>
+</div>

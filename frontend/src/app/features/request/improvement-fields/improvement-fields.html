@@ -1,0 +1,66 @@
+@let controls = group().controls;
+@let areaError = error(controls.area);
+@let ideaError = error(controls.idea);
+@let benefitError = error(controls.benefit);
+
+<div class="form-grid" [formGroup]="group()">
+  <div class="field">
+    <label class="field__label" for="improvement-area">
+      {{ 'request.improvement.areaLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <select
+      id="improvement-area"
+      class="input"
+      name="area"
+      formControlName="area"
+      aria-required="true"
+      [attr.aria-invalid]="!!areaError"
+      [attr.aria-describedby]="areaError ? 'improvement-area-error' : null"
+    >
+      <option value="" disabled>{{ 'request.choose' | translate }}</option>
+      @for (area of areas; track area) {
+        <option [value]="area">{{ 'request.improvement.areas.' + area | translate }}</option>
+      }
+    </select>
+    @if (areaError) {
+      <p class="field__error" id="improvement-area-error">{{ areaError.key | translate: areaError.params }}</p>
+    }
+  </div>
+
+  <div class="field form-grid__wide">
+    <label class="field__label" for="improvement-idea">
+      {{ 'request.improvement.ideaLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <textarea
+      id="improvement-idea"
+      class="input"
+      name="idea"
+      rows="5"
+      formControlName="idea"
+      [placeholder]="'request.improvement.ideaPlaceholder' | translate"
+      aria-required="true"
+      [attr.aria-invalid]="!!ideaError"
+      [attr.aria-describedby]="ideaError ? 'improvement-idea-error' : null"
+    ></textarea>
+    @if (ideaError) {
+      <p class="field__error" id="improvement-idea-error">{{ ideaError.key | translate: ideaError.params }}</p>
+    }
+  </div>
+
+  <div class="field form-grid__wide">
+    <label class="field__label" for="improvement-benefit">{{ 'request.improvement.benefitLabel' | translate }}</label>
+    <textarea
+      id="improvement-benefit"
+      class="input"
+      name="benefit"
+      rows="3"
+      formControlName="benefit"
+      [placeholder]="'request.improvement.benefitPlaceholder' | translate"
+      [attr.aria-invalid]="!!benefitError"
+      [attr.aria-describedby]="benefitError ? 'improvement-benefit-error' : null"
+    ></textarea>
+    @if (benefitError) {
+      <p class="field__error" id="improvement-benefit-error">{{ benefitError.key | translate: benefitError.params }}</p>
+    }
+  </div>
+</div>

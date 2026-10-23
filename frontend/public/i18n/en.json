@@ -98,5 +98,97 @@
   },
   "legal": {
     "pending": "The text will follow shortly."
+  },
+  "request": {
+    "lead": "Is a command missing, something wrong or do you have an idea? Write to me, I read every message myself.",
+    "kindLabel": "What is it about?",
+    "kinds": {
+      "entry": "Suggest an entry",
+      "entryText": "A command, term or error message is missing.",
+      "improvement": "Improvement",
+      "improvementText": "An idea to make the site better.",
+      "bug": "Report a bug",
+      "bugText": "Something is wrong, outdated or broken."
+    },
+    "emailLabel": "Email for the reply",
+    "emailPlaceholder": "name@example.com",
+    "emailHint": "Only for the reply, no advertising.",
+    "privacyBefore": "I have read the",
+    "privacyLink": "privacy policy",
+    "privacyAfter": "and agree that my details are used to handle this request.",
+    "submit": "Send request",
+    "sending": "Sending …",
+    "required": "* Required field",
+    "errors": {
+      "kind": "Please choose what it is about.",
+      "emailFormat": "This email address does not look right.",
+      "privacy": "Please confirm the privacy policy.",
+      "send": "The request could not be sent. Please try again later.",
+      "required": "Please fill in this field.",
+      "minLength": "Please write at least {{min}} characters.",
+      "maxLength": "Please use at most {{max}} characters.",
+      "url": "Please enter a link starting with http:// or https://.",
+      "invalid": "This input is invalid."
+    },
+    "done": {
+      "title": "Thanks for your request!",
+      "text": "It has arrived. You will get a reply at your email address.",
+      "again": "Write another request"
+    },
+    "info": {
+      "title": "What happens next",
+      "read": "I handle every request myself.",
+      "answer": "You get a reply by email within 24 hours.",
+      "publish": "New entries appear on the dashboard under “New on SnipAtlas”."
+    },
+    "choose": "Please choose …",
+    "entry": {
+      "areaLabel": "What is missing?",
+      "areas": {
+        "command": "Command",
+        "concept": "Term (concept)",
+        "error": "Error message"
+      },
+      "topicLabel": "Topic",
+      "titleLabel": "Command, term or error message",
+      "titlePlaceholder": "e.g. git rebase -i",
+      "reasonLabel": "Why is it important?",
+      "reasonPlaceholder": "When do you need it, and why should it be on SnipAtlas?",
+      "exampleLabel": "Example or code (optional)",
+      "examplePlaceholder": "git rebase -i HEAD~3",
+      "sourceLabel": "Source or docs link (optional)",
+      "sourceHint": "For example the official documentation."
+    },
+    "improvement": {
+      "areaLabel": "What does it concern?",
+      "areas": {
+        "content": "Content",
+        "usability": "Usability",
+        "design": "Design",
+        "feature": "New feature",
+        "other": "Other"
+      },
+      "ideaLabel": "Your idea",
+      "ideaPlaceholder": "What should change or be added?",
+      "benefitLabel": "Why does it help? (optional)",
+      "benefitPlaceholder": "Who does it help, and in which situation?"
+    },
+    "bug": {
+      "typeLabel": "Type of bug",
+      "types": {
+        "wrong": "Content is wrong",
+        "outdated": "Content is outdated",
+        "broken": "Page does not work",
+        "typo": "Typo"
+      },
+      "locationLabel": "Where?",
+      "locationPlaceholder": "Command, term or page",
+      "problemLabel": "What is wrong?",
+      "problemPlaceholder": "Briefly describe what is wrong or what happens.",
+      "correctionLabel": "How would it be correct? (optional)",
+      "correctionPlaceholder": "If you know the solution.",
+      "environmentLabel": "Browser and device",
+      "environmentHint": "Detected automatically, you can change or remove it."
+    }
   }
 }

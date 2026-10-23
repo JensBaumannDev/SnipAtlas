@@ -1,0 +1,137 @@
+@let controls = group().controls;
+@let areaError = error(controls.area);
+@let topicError = error(controls.topic);
+@let titleError = error(controls.title);
+@let reasonError = error(controls.reason);
+@let exampleError = error(controls.example);
+@let sourceError = error(controls.source);
+
+<div class="form-grid" [formGroup]="group()">
+  <div class="field">
+    <label class="field__label" for="entry-area">
+      {{ 'request.entry.areaLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <select
+      id="entry-area"
+      class="input"
+      name="area"
+      formControlName="area"
+      aria-required="true"
+      [attr.aria-invalid]="!!areaError"
+      [attr.aria-describedby]="areaError ? 'entry-area-error' : null"
+    >
+      <option value="" disabled>{{ 'request.choose' | translate }}</option>
+      @for (area of areas; track area) {
+        <option [value]="area">{{ 'request.entry.areas.' + area | translate }}</option>
+      }
+    </select>
+    @if (areaError) {
+      <p class="field__error" id="entry-area-error">{{ areaError.key | translate: areaError.params }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label class="field__label" for="entry-topic">
+      {{ 'request.entry.topicLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <select
+      id="entry-topic"
+      class="input"
+      name="topic"
+      formControlName="topic"
+      aria-required="true"
+      [attr.aria-invalid]="!!topicError"
+      [attr.aria-describedby]="topicError ? 'entry-topic-error' : null"
+    >
+      <option value="" disabled>{{ 'request.choose' | translate }}</option>
+      @for (item of groups(); track item.slug) {
+        <optgroup [label]="item.name">
+          @for (topic of item.topics; track topic.slug) {
+            <option [value]="topic.slug">{{ topic.name }}</option>
+          }
+        </optgroup>
+      }
+    </select>
+    @if (topicError) {
+      <p class="field__error" id="entry-topic-error">{{ topicError.key | translate: topicError.params }}</p>
+    }
+  </div>
+
+  <div class="field form-grid__wide">
+    <label class="field__label" for="entry-title">
+      {{ 'request.entry.titleLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <input
+      id="entry-title"
+      class="input"
+      type="text"
+      name="title"
+      formControlName="title"
+      [maxlength]="limits.title"
+      [placeholder]="'request.entry.titlePlaceholder' | translate"
+      aria-required="true"
+      [attr.aria-invalid]="!!titleError"
+      [attr.aria-describedby]="titleError ? 'entry-title-error' : null"
+    />
+    @if (titleError) {
+      <p class="field__error" id="entry-title-error">{{ titleError.key | translate: titleError.params }}</p>
+    }
+  </div>
+
+  <div class="field form-grid__wide">
+    <label class="field__label" for="entry-reason">
+      {{ 'request.entry.reasonLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <textarea
+      id="entry-reason"
+      class="input"
+      name="reason"
+      rows="4"
+      formControlName="reason"
+      [placeholder]="'request.entry.reasonPlaceholder' | translate"
+      aria-required="true"
+      [attr.aria-invalid]="!!reasonError"
+      [attr.aria-describedby]="reasonError ? 'entry-reason-error' : null"
+    ></textarea>
+    @if (reasonError) {
+      <p class="field__error" id="entry-reason-error">{{ reasonError.key | translate: reasonError.params }}</p>
+    }
+  </div>
+
+  <div class="field form-grid__wide">
+    <label class="field__label" for="entry-example">{{ 'request.entry.exampleLabel' | translate }}</label>
+    <textarea
+      id="entry-example"
+      class="input input--code"
+      name="example"
+      rows="4"
+      formControlName="example"
+      spellcheck="false"
+      [placeholder]="'request.entry.examplePlaceholder' | translate"
+      [attr.aria-invalid]="!!exampleError"
+      [attr.aria-describedby]="exampleError ? 'entry-example-error' : null"
+    ></textarea>
+    @if (exampleError) {
+      <p class="field__error" id="entry-example-error">{{ exampleError.key | translate: exampleError.params }}</p>
+    }
+  </div>
+
+  <div class="field form-grid__wide">
+    <label class="field__label" for="entry-source">{{ 'request.entry.sourceLabel' | translate }}</label>
+    <input
+      id="entry-source"
+      class="input"
+      type="url"
+      name="source"
+      formControlName="source"
+      placeholder="https://"
+      [attr.aria-invalid]="!!sourceError"
+      [attr.aria-describedby]="sourceError ? 'entry-source-error' : 'entry-source-hint'"
+    />
+    @if (sourceError) {
+      <p class="field__error" id="entry-source-error">{{ sourceError.key | translate: sourceError.params }}</p>
+    } @else {
+      <p class="field__hint" id="entry-source-hint">{{ 'request.entry.sourceHint' | translate }}</p>
+    }
+  </div>
+</div>
