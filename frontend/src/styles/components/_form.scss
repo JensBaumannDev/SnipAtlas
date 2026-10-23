@@ -16,6 +16,12 @@
   color: var(--muted);
 }
 
+.field__error {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: var(--danger);
+}
+
 .input {
   width: 100%;
   min-height: $control-height;
@@ -34,9 +40,37 @@
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
+
+  &[aria-invalid='true'] {
+    border-color: var(--danger);
+  }
 }
 
 textarea.input {
   min-height: $textarea-min-height;
   resize: vertical;
 }
+
+.input--code {
+  font-family: $font-mono;
+  line-height: $line-height-code;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-lg;
+}
+
+.form-grid__wide {
+  grid-column: 1 / -1;
+}
+
+/* #region RESPONSIVE */
+@include small {
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* #endregion */

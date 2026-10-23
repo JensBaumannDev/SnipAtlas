@@ -1,0 +1,110 @@
+@let controls = group().controls;
+@let typeError = error(controls.type);
+@let locationError = error(controls.location);
+@let problemError = error(controls.problem);
+@let correctionError = error(controls.correction);
+@let environmentError = error(controls.environment);
+
+<div class="form-grid" [formGroup]="group()">
+  <div class="field">
+    <label class="field__label" for="bug-type">
+      {{ 'request.bug.typeLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <select
+      id="bug-type"
+      class="input"
+      name="type"
+      formControlName="type"
+      aria-required="true"
+      [attr.aria-invalid]="!!typeError"
+      [attr.aria-describedby]="typeError ? 'bug-type-error' : null"
+    >
+      <option value="" disabled>{{ 'request.choose' | translate }}</option>
+      @for (type of types; track type) {
+        <option [value]="type">{{ 'request.bug.types.' + type | translate }}</option>
+      }
+    </select>
+    @if (typeError) {
+      <p class="field__error" id="bug-type-error">{{ typeError.key | translate: typeError.params }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label class="field__label" for="bug-location">
+      {{ 'request.bug.locationLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <input
+      id="bug-location"
+      class="input"
+      type="text"
+      name="location"
+      formControlName="location"
+      [maxlength]="limits.location"
+      [placeholder]="'request.bug.locationPlaceholder' | translate"
+      aria-required="true"
+      [attr.aria-invalid]="!!locationError"
+      [attr.aria-describedby]="locationError ? 'bug-location-error' : null"
+    />
+    @if (locationError) {
+      <p class="field__error" id="bug-location-error">{{ locationError.key | translate: locationError.params }}</p>
+    }
+  </div>
+
+  <div class="field form-grid__wide">
+    <label class="field__label" for="bug-problem">
+      {{ 'request.bug.problemLabel' | translate }} <span aria-hidden="true">*</span>
+    </label>
+    <textarea
+      id="bug-problem"
+      class="input"
+      name="problem"
+      rows="5"
+      formControlName="problem"
+      [placeholder]="'request.bug.problemPlaceholder' | translate"
+      aria-required="true"
+      [attr.aria-invalid]="!!problemError"
+      [attr.aria-describedby]="problemError ? 'bug-problem-error' : null"
+    ></textarea>
+    @if (problemError) {
+      <p class="field__error" id="bug-problem-error">{{ problemError.key | translate: problemError.params }}</p>
+    }
+  </div>
+
+  <div class="field form-grid__wide">
+    <label class="field__label" for="bug-correction">{{ 'request.bug.correctionLabel' | translate }}</label>
+    <textarea
+      id="bug-correction"
+      class="input"
+      name="correction"
+      rows="3"
+      formControlName="correction"
+      [placeholder]="'request.bug.correctionPlaceholder' | translate"
+      [attr.aria-invalid]="!!correctionError"
+      [attr.aria-describedby]="correctionError ? 'bug-correction-error' : null"
+    ></textarea>
+    @if (correctionError) {
+      <p class="field__error" id="bug-correction-error">{{ correctionError.key | translate: correctionError.params }}</p>
+    }
+  </div>
+
+  @if (controls.type.value === 'broken') {
+    <div class="field form-grid__wide">
+      <label class="field__label" for="bug-environment">{{ 'request.bug.environmentLabel' | translate }}</label>
+      <input
+        id="bug-environment"
+        class="input"
+        type="text"
+        name="environment"
+        formControlName="environment"
+        [maxlength]="limits.location"
+        [attr.aria-invalid]="!!environmentError"
+        [attr.aria-describedby]="environmentError ? 'bug-environment-error' : 'bug-environment-hint'"
+      />
+      @if (environmentError) {
+        <p class="field__error" id="bug-environment-error">{{ environmentError.key | translate: environmentError.params }}</p>
+      } @else {
+        <p class="field__hint" id="bug-environment-hint">{{ 'request.bug.environmentHint' | translate }}</p>
+      }
+    </div>
+  }
+</div>

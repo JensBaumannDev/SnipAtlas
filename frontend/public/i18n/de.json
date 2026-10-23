@@ -98,5 +98,97 @@
   },
   "legal": {
     "pending": "Der Text folgt in Kürze."
+  },
+  "request": {
+    "lead": "Fehlt ein Befehl, stimmt etwas nicht oder hast du eine Idee? Schreib mir, ich lese jede Nachricht selbst.",
+    "kindLabel": "Worum geht es?",
+    "kinds": {
+      "entry": "Eintrag vorschlagen",
+      "entryText": "Ein Befehl, Begriff oder eine Fehlermeldung fehlt.",
+      "improvement": "Verbesserung",
+      "improvementText": "Eine Idee, wie die Seite besser wird.",
+      "bug": "Fehler melden",
+      "bugText": "Etwas ist falsch, veraltet oder funktioniert nicht."
+    },
+    "emailLabel": "E-Mail für die Antwort",
+    "emailPlaceholder": "name@beispiel.de",
+    "emailHint": "Nur für die Antwort, keine Werbung.",
+    "privacyBefore": "Ich habe die",
+    "privacyLink": "Datenschutzerklärung",
+    "privacyAfter": "gelesen und bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden.",
+    "submit": "Anfrage senden",
+    "sending": "Wird gesendet …",
+    "required": "* Pflichtfeld",
+    "errors": {
+      "kind": "Bitte wähle aus, worum es geht.",
+      "emailFormat": "Diese E-Mail-Adresse sieht nicht richtig aus.",
+      "privacy": "Bitte bestätige die Datenschutzerklärung.",
+      "send": "Die Anfrage konnte nicht gesendet werden. Bitte versuch es später noch einmal.",
+      "required": "Bitte füll dieses Feld aus.",
+      "minLength": "Bitte schreib mindestens {{min}} Zeichen.",
+      "maxLength": "Bitte höchstens {{max}} Zeichen.",
+      "url": "Bitte gib einen Link mit http:// oder https:// an.",
+      "invalid": "Diese Eingabe ist ungültig."
+    },
+    "done": {
+      "title": "Danke für deine Anfrage!",
+      "text": "Sie ist angekommen. Du bekommst eine Antwort an deine E-Mail-Adresse.",
+      "again": "Weitere Anfrage schreiben"
+    },
+    "info": {
+      "title": "So geht es weiter",
+      "read": "Ich bearbeite jede Anfrage selbst.",
+      "answer": "Du bekommst innerhalb von 24 Stunden eine Antwort per E-Mail.",
+      "publish": "Neue Einträge erscheinen auf dem Dashboard unter „Neu auf SnipAtlas“."
+    },
+    "choose": "Bitte wählen …",
+    "entry": {
+      "areaLabel": "Was fehlt?",
+      "areas": {
+        "command": "Befehl",
+        "concept": "Begriff (Konzept)",
+        "error": "Fehlermeldung"
+      },
+      "topicLabel": "Thema",
+      "titleLabel": "Befehl, Begriff oder Fehlermeldung",
+      "titlePlaceholder": "z. B. git rebase -i",
+      "reasonLabel": "Warum ist es wichtig?",
+      "reasonPlaceholder": "Wann braucht man das, und warum sollte es auf SnipAtlas stehen?",
+      "exampleLabel": "Beispiel oder Code (optional)",
+      "examplePlaceholder": "git rebase -i HEAD~3",
+      "sourceLabel": "Quelle oder Doku-Link (optional)",
+      "sourceHint": "Zum Beispiel die offizielle Dokumentation."
+    },
+    "improvement": {
+      "areaLabel": "Was betrifft es?",
+      "areas": {
+        "content": "Inhalte",
+        "usability": "Bedienung",
+        "design": "Design",
+        "feature": "Neue Funktion",
+        "other": "Sonstiges"
+      },
+      "ideaLabel": "Deine Idee",
+      "ideaPlaceholder": "Was soll anders oder neu werden?",
+      "benefitLabel": "Warum hilft das? (optional)",
+      "benefitPlaceholder": "Wem hilft es, und in welcher Situation?"
+    },
+    "bug": {
+      "typeLabel": "Art des Fehlers",
+      "types": {
+        "wrong": "Inhalt ist falsch",
+        "outdated": "Inhalt ist veraltet",
+        "broken": "Seite funktioniert nicht",
+        "typo": "Tippfehler"
+      },
+      "locationLabel": "Wo?",
+      "locationPlaceholder": "Befehl, Begriff oder Seite",
+      "problemLabel": "Was ist falsch?",
+      "problemPlaceholder": "Beschreib kurz, was nicht stimmt oder was passiert.",
+      "correctionLabel": "Wie wäre es richtig? (optional)",
+      "correctionPlaceholder": "Falls du die Lösung kennst.",
+      "environmentLabel": "Browser und Gerät",
+      "environmentHint": "Automatisch erkannt, du kannst es ändern oder löschen."
+    }
   }
 }
