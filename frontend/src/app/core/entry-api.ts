@@ -603,4 +603,11 @@ export class EntryApi {
   getByTopic(topic: string): Observable<Entry[]> {
     return of(ENTRIES.filter((entry) => entry.topic === topic));
   }
+
+  getSummary(): Observable<{ entries: number; topics: number }> {
+    return of({
+      entries: ENTRIES.length,
+      topics: new Set(ENTRIES.map((entry) => entry.topic)).size,
+    });
+  }
 }

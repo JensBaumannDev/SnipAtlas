@@ -56,7 +56,14 @@
     "languageHint": "Language of the interface. Automatic follows your browser, otherwise English."
   },
   "commands": {
-    "chooseTopic": "Choose a topic from the list.",
+    "lead": "Commands and code snippets to copy, sorted by topic. Each entry briefly says what you need it for.",
+    "summary": "{{entries}} entries in {{topics}} topics",
+    "hints": {
+      "choose": "Choose a topic from the list. Click an entry to expand it.",
+      "copy": "The copy button takes the code without the $ at the start of the line.",
+      "os": "Terminal commands match your system, Windows or Linux/Mac.",
+      "osLink": "Change it in the settings"
+    },
     "empty": "There are no entries for this topic yet.",
     "entryCount": "{{count}} entries",
     "entryCountOne": "1 entry",

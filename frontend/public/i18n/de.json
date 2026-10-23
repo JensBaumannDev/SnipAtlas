@@ -56,7 +56,14 @@
     "languageHint": "Sprache der Oberfläche. Automatisch folgt deinem Browser, sonst Englisch."
   },
   "commands": {
-    "chooseTopic": "Wähle ein Thema aus der Liste.",
+    "lead": "Befehle und Code-Schnipsel zum Kopieren, sortiert nach Themen. Jeder Eintrag sagt kurz, wofür du ihn brauchst.",
+    "summary": "{{entries}} Einträge in {{topics}} Themen",
+    "hints": {
+      "choose": "Wähle ein Thema aus der Liste. Ein Klick auf einen Eintrag klappt ihn auf.",
+      "copy": "Der Kopieren-Button übernimmt den Code ohne das $ am Zeilenanfang.",
+      "os": "Terminal-Befehle erscheinen passend zu deinem System, Windows oder Linux/Mac.",
+      "osLink": "In den Einstellungen umstellen"
+    },
     "empty": "Zu diesem Thema gibt es noch keine Einträge.",
     "entryCount": "{{count}} Einträge",
     "entryCountOne": "1 Eintrag",
