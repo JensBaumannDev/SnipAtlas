@@ -3,6 +3,94 @@ import { Observable, of } from 'rxjs';
 import { Concept } from './concept';
 
 const CONCEPTS: Concept[] = [
+  // HTML
+  {
+    slug: 'grundgeruest-einer-seite',
+    topic: 'html',
+    subtopic: 'grundgeruest',
+    title: 'Grundgerüst einer Seite',
+    summary: 'Der Rahmen, den jede HTML-Seite braucht.',
+    explanation:
+      'DOCTYPE sagt dem Browser, dass es sich um modernes HTML handelt. In head stehen Angaben über die Seite wie Zeichensatz, Titel und eingebundene Dateien, in body der sichtbare Inhalt. Das Script steht am Ende von body, damit zuerst die Seite geladen wird.',
+    language: 'html',
+    code: '<!DOCTYPE html>\n<html lang="de">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Meine Seite</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n  <script src="script.js"></script>\n</body>\n</html>',
+    note: 'Ohne meta viewport zeigt das Handy die Seite verkleinert an, als wäre es ein großer Bildschirm.',
+  },
+  {
+    slug: 'semantische-struktur',
+    topic: 'html',
+    subtopic: 'grundgeruest',
+    title: 'Semantische Struktur',
+    summary: 'Bereiche der Seite mit passenden Elementen auszeichnen.',
+    explanation:
+      'header, nav, main, section und footer sagen, welche Aufgabe ein Bereich hat. Screenreader und Suchmaschinen verstehen die Seite dadurch besser als bei lauter div-Elementen.',
+    language: 'html',
+    code: '<header>…</header>\n<nav>…</nav>\n<main>\n  <section>…</section>\n</main>\n<footer>…</footer>',
+    note: 'main gibt es nur einmal pro Seite.',
+  },
+  {
+    slug: 'link-und-bild',
+    topic: 'html',
+    subtopic: 'elemente',
+    title: 'Link und Bild',
+    summary: 'Auf andere Seiten verweisen und Bilder einbinden.',
+    explanation:
+      'href gibt das Ziel des Links an. Beim Bild steht die Datei in src. alt beschreibt das Bild für Screenreader und erscheint, wenn das Bild nicht lädt.',
+    language: 'html',
+    code: '<a href="https://example.com" target="_blank">Zur Seite</a>\n\n<img src="bild.jpg" alt="Beschreibung des Bildes">',
+    note: 'target="_blank" öffnet einen neuen Tab. Rein dekorative Bilder bekommen ein leeres alt="".',
+  },
+  {
+    slug: 'formular-mit-label',
+    topic: 'html',
+    subtopic: 'formulare',
+    title: 'Formular mit Label',
+    summary: 'Eingabefelder richtig beschriften.',
+    explanation:
+      'for beim label und id beim Feld gehören zusammen. Ein Klick auf das Label setzt dann den Cursor ins Feld, und Screenreader lesen die Beschriftung vor.',
+    language: 'html',
+    code: '<form>\n  <label for="email">E-Mail</label>\n  <input id="email" type="email" required>\n  <button type="submit">Senden</button>\n</form>',
+    note: 'Ein Platzhalter ersetzt kein Label. Er verschwindet, sobald man tippt.',
+  },
+
+  // CSS
+  {
+    slug: 'mittig-zentrieren',
+    topic: 'css',
+    subtopic: 'flexbox',
+    title: 'Mittig zentrieren mit Flexbox',
+    summary: 'Ein Element waagerecht und senkrecht in die Mitte setzen.',
+    explanation:
+      'display: flex macht die Box zum Flex-Container. justify-content richtet die Kinder auf der Hauptachse aus, align-items auf der Querachse.',
+    language: 'css',
+    code: '.box {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 300px;\n}',
+    note: 'Senkrecht zentrieren klappt nur, wenn der Container höher ist als sein Inhalt, zum Beispiel mit min-height.',
+  },
+  {
+    slug: 'responsives-raster',
+    topic: 'css',
+    subtopic: 'grid',
+    title: 'Responsives Raster',
+    summary: 'So viele Spalten wie passen, ohne Media Query.',
+    explanation:
+      'repeat(auto-fill, …) legt so viele Spalten an, wie in die Breite passen. minmax(250px, 1fr) sorgt dafür, dass jede Spalte mindestens 250px breit ist und sich den restlichen Platz teilt.',
+    language: 'css',
+    code: '.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));\n  gap: 16px;\n}',
+    note: 'Mit auto-fit statt auto-fill dehnen sich wenige Elemente über die ganze Breite.',
+  },
+  {
+    slug: 'media-query',
+    topic: 'css',
+    subtopic: 'responsive',
+    title: 'Media Query',
+    summary: 'Regeln nur für bestimmte Bildschirmbreiten.',
+    explanation:
+      'Was in @media (max-width: 600px) steht, gilt nur, solange das Fenster höchstens 600px breit ist. So passt du das Layout ans Handy an.',
+    language: 'css',
+    code: '.menu {\n  display: flex;\n}\n\n@media (max-width: 600px) {\n  .menu {\n    flex-direction: column;\n  }\n}',
+    note: 'Die Media Query steht unter den normalen Regeln, sonst überschreiben diese sie wieder.',
+  },
+
   // JavaScript
   {
     slug: 'for-of',
@@ -41,6 +129,54 @@ const CONCEPTS: Concept[] = [
     note: 'fetch wirft bei 404 oder 500 keinen Fehler. Prüfe deshalb immer antwort.ok.',
   },
 
+  {
+    slug: 'for-mit-zaehler',
+    topic: 'javascript',
+    subtopic: 'schleifen',
+    title: 'for-Schleife mit Zähler',
+    summary: 'Eine Schleife, bei der du den Index brauchst.',
+    explanation:
+      'Die drei Teile in der Klammer sind Start, Bedingung und Schritt. Die Schleife läuft, solange die Bedingung wahr ist, und erhöht i nach jedem Durchlauf.',
+    language: 'javascript',
+    code: 'for (let i = 0; i < 5; i++) {\n  console.log(i);\n}',
+    note: 'Brauchst du nur die Werte eines Arrays, ist for...of lesbarer.',
+  },
+  {
+    slug: 'filter-find',
+    topic: 'javascript',
+    subtopic: 'arrays',
+    title: 'filter und find',
+    summary: 'Elemente aussortieren oder das erste passende finden.',
+    explanation:
+      'filter gibt ein neues Array mit allen Elementen zurück, für die die Funktion true liefert. find gibt nur das erste passende Element zurück.',
+    language: 'javascript',
+    code: 'const preise = [10, 20, 30];\n\nconst teuer = preise.filter((preis) => preis > 15); // [20, 30]\nconst erstes = preise.find((preis) => preis > 15); // 20',
+    note: 'Findet find nichts, ist das Ergebnis undefined.',
+  },
+  {
+    slug: 'template-strings',
+    topic: 'javascript',
+    subtopic: 'strings',
+    title: 'Template-Strings',
+    summary: 'Variablen direkt in Text einsetzen.',
+    explanation:
+      'Text in Backticks darf Platzhalter mit ${…} enthalten. Darin kann jede Variable oder Rechnung stehen.',
+    language: 'javascript',
+    code: "const name = 'Jens';\nconsole.log(`Hallo ${name}, du hast ${3 + 2} Aufgaben.`);",
+    note: 'Template-Strings dürfen auch über mehrere Zeilen gehen.',
+  },
+  {
+    slug: 'objekt-durchlaufen',
+    topic: 'javascript',
+    subtopic: 'objekte',
+    title: 'Über ein Objekt laufen',
+    summary: 'Schlüssel und Wert eines Objekts gemeinsam durchgehen.',
+    explanation:
+      'Object.entries macht aus einem Objekt ein Array aus Paaren [Schlüssel, Wert]. for...of mit eckigen Klammern zerlegt jedes Paar direkt in zwei Variablen.',
+    language: 'javascript',
+    code: "const user = { name: 'Jens', role: 'dev' };\n\nfor (const [key, value] of Object.entries(user)) {\n  console.log(key, value);\n}",
+  },
+
   // TypeScript
   {
     slug: 'interface',
@@ -53,6 +189,41 @@ const CONCEPTS: Concept[] = [
     language: 'typescript',
     code: "interface Task {\n  id: number;\n  title: string;\n  done: boolean;\n  dueDate?: string;\n}\n\nconst task: Task = { id: 1, title: 'Lernen', done: false };",
     note: 'Das ? macht ein Feld optional. Im fertigen JavaScript gibt es keine Interfaces mehr, sie helfen nur beim Entwickeln.',
+  },
+
+  {
+    slug: 'typen-fuer-variablen',
+    topic: 'typescript',
+    subtopic: 'typen',
+    title: 'Typen für Variablen',
+    summary: 'Festlegen, welche Art Wert eine Variable hat.',
+    explanation:
+      'Der Typ steht nach dem Doppelpunkt. Weist du später einen falschen Wert zu, meldet der Editor das sofort.',
+    language: 'typescript',
+    code: "let title: string = 'Einkaufen';\nlet count: number = 3;\nlet done: boolean = false;\nlet tags: string[] = ['haus', 'dringend'];",
+    note: 'Ist der Typ offensichtlich, erkennt TypeScript ihn selbst: let count = 3 ist schon number.',
+  },
+  {
+    slug: 'union-typ',
+    topic: 'typescript',
+    subtopic: 'typen',
+    title: 'Union-Typ',
+    summary: 'Nur bestimmte Werte erlauben.',
+    explanation:
+      'Mit | zählst du die erlaubten Werte auf. Ein Tippfehler wie "erledig" fällt so schon im Editor auf.',
+    language: 'typescript',
+    code: "type Status = 'offen' | 'erledigt' | 'archiviert';\n\nlet status: Status = 'offen';",
+  },
+  {
+    slug: 'funktion-mit-typen',
+    topic: 'typescript',
+    subtopic: 'funktionen',
+    title: 'Funktion mit Typen',
+    summary: 'Typen für Parameter und Rückgabewert.',
+    explanation:
+      'Jeder Parameter bekommt seinen Typ, der Rückgabetyp steht nach der Klammer. Rufst du die Funktion mit falschen Werten auf, meldet der Editor den Fehler.',
+    language: 'typescript',
+    code: 'function add(a: number, b: number): number {\n  return a + b;\n}\n\nconst greet = (name: string): string => `Hallo ${name}`;',
   },
 
   // Angular
@@ -79,6 +250,42 @@ const CONCEPTS: Concept[] = [
     language: 'typescript',
     code: "import { computed, signal } from '@angular/core';\n\nconst anzahl = signal(0);\nconst doppelt = computed(() => anzahl() * 2);\n\nanzahl.set(5);\nanzahl.update((wert) => wert + 1);\nconsole.log(doppelt()); // 12",
     note: 'Ein Signal liest du mit Klammern: anzahl(). Ohne Klammern bekommst du das Signal selbst, nicht seinen Wert.',
+  },
+
+  {
+    slug: 'for-im-template',
+    topic: 'angular',
+    subtopic: 'templates',
+    title: '@for im Template',
+    summary: 'Eine Liste im Template ausgeben.',
+    explanation:
+      '@for wiederholt den Block für jedes Element. track sagt Angular, woran es ein Element wiedererkennt, damit nur geänderte Einträge neu gezeichnet werden. @empty erscheint, wenn die Liste leer ist.',
+    language: 'html',
+    code: '@for (task of tasks; track task.id) {\n  <li>{{ task.title }}</li>\n} @empty {\n  <li>Keine Aufgaben</li>\n}',
+    note: 'track ist Pflicht. Hat jedes Element eine id, nimm sie.',
+  },
+  {
+    slug: 'if-im-template',
+    topic: 'angular',
+    subtopic: 'templates',
+    title: '@if im Template',
+    summary: 'Etwas nur unter einer Bedingung anzeigen.',
+    explanation:
+      '@if zeigt den Block nur, wenn die Bedingung wahr ist, sonst den @else-Block. Es ersetzt das ältere *ngIf.',
+    language: 'html',
+    code: '@if (isLoggedIn) {\n  <app-dashboard />\n} @else {\n  <app-login />\n}',
+  },
+  {
+    slug: 'httpclient-im-service',
+    topic: 'angular',
+    subtopic: 'services-http',
+    title: 'HttpClient im Service',
+    summary: 'Daten vom Backend laden.',
+    explanation:
+      'provideHttpClient stellt den HttpClient einmal für die ganze App bereit. Ein Service holt ihn mit inject und gibt die Anfrage als Observable zurück.',
+    language: 'typescript',
+    code: "// app.config.ts\nproviders: [provideHttpClient()]\n\n// task.service.ts\n@Injectable({ providedIn: 'root' })\nexport class TaskService {\n  private http = inject(HttpClient);\n\n  getTasks() {\n    return this.http.get<Task[]>('http://127.0.0.1:8000/api/tasks/');\n  }\n}",
+    note: 'Die Anfrage startet erst, wenn jemand das Observable abonniert, zum Beispiel mit subscribe oder toSignal.',
   },
 
   // Python
@@ -191,6 +398,30 @@ const CONCEPTS: Concept[] = [
     note: 'Ohne return gibt eine Funktion None zurück.',
   },
 
+  {
+    slug: 'dictionary-durchlaufen',
+    topic: 'python',
+    subtopic: 'dictionaries',
+    title: 'Dictionary durchlaufen',
+    summary: 'Schlüssel und Wert gemeinsam durchgehen.',
+    explanation:
+      '.items() liefert bei jedem Durchlauf ein Paar aus Schlüssel und Wert. Die for-Schleife verteilt es direkt auf zwei Variablen.',
+    language: 'python',
+    code: "user = {'name': 'Jens', 'role': 'dev'}\n\nfor key, value in user.items():\n    print(key, value)",
+    note: 'Ohne .items() bekommst du nur die Schlüssel.',
+  },
+  {
+    slug: 'f-strings',
+    topic: 'python',
+    subtopic: 'strings',
+    title: 'f-Strings',
+    summary: 'Variablen in Text einsetzen.',
+    explanation:
+      'Ein f vor den Anführungszeichen macht aus dem Text einen f-String. In geschweiften Klammern kann jede Variable oder Rechnung stehen.',
+    language: 'python',
+    code: "name = 'Jens'\nprint(f'Hallo {name}, du hast {3 + 2} Aufgaben.')",
+  },
+
   // Django
   {
     slug: 'model-definieren',
@@ -205,6 +436,19 @@ const CONCEPTS: Concept[] = [
     note: 'Nach jeder Änderung am Model: python manage.py makemigrations und danach python manage.py migrate.',
   },
 
+  {
+    slug: 'gitignore-fuer-django',
+    topic: 'django',
+    subtopic: 'projekt',
+    title: '.gitignore für Django',
+    summary: 'Was nicht ins Repository gehört.',
+    explanation:
+      'Die virtuelle Umgebung, Cache-Dateien, die lokale Datenbank und die .env bleiben auf deinem Rechner. Wer das Projekt klont, erzeugt sie selbst neu.',
+    language: 'gitignore',
+    code: 'env/\n__pycache__/\n*.pyc\ndb.sqlite3\n.env',
+    note: 'Lege die .gitignore vor dem ersten Commit an. Was einmal auf GitHub liegt, bleibt in der Historie.',
+  },
+
   // Django REST Framework
   {
     slug: 'model-serializer',
@@ -217,6 +461,42 @@ const CONCEPTS: Concept[] = [
     language: 'python',
     code: "from rest_framework import serializers\n\nfrom .models import Task\n\n\nclass TaskSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Task\n        fields = ['id', 'title', 'done', 'created_at']\n        read_only_fields = ['created_at']",
     note: "fields = '__all__' gibt auch Felder heraus, die du vielleicht nicht zeigen willst. Nenne die Felder lieber einzeln.",
+  },
+
+  {
+    slug: 'viewset-und-router',
+    topic: 'django-rest-framework',
+    subtopic: 'views-viewsets',
+    title: 'ViewSet und Router',
+    summary: 'Alle Endpunkte für ein Model auf einmal.',
+    explanation:
+      'Ein ModelViewSet bringt Liste, Detail, Anlegen, Ändern und Löschen mit. Der Router erzeugt dazu die passenden URLs, zum Beispiel /tasks/ und /tasks/1/.',
+    language: 'python',
+    code: "# views.py\nfrom rest_framework import viewsets\n\nclass TaskViewSet(viewsets.ModelViewSet):\n    queryset = Task.objects.all()\n    serializer_class = TaskSerializer\n\n# urls.py\nfrom rest_framework.routers import DefaultRouter\n\nrouter = DefaultRouter()\nrouter.register('tasks', TaskViewSet)\nurlpatterns = router.urls",
+  },
+  {
+    slug: 'login-per-token',
+    topic: 'django-rest-framework',
+    subtopic: 'authentifizierung',
+    title: 'Login per Token',
+    summary: 'Benutzer über einen Token erkennen.',
+    explanation:
+      'Nach migrate kann jeder Benutzer einen Token bekommen. Das Frontend schickt ihn bei jeder Anfrage im Header mit, und Django REST Framework erkennt daran den Benutzer.',
+    language: 'python',
+    code: "# settings.py\nINSTALLED_APPS += ['rest_framework.authtoken']\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
+    note: 'Der Header sieht so aus: Authorization: Token <dein-token>',
+  },
+  {
+    slug: 'cors-erlauben',
+    topic: 'django-rest-framework',
+    subtopic: 'cors',
+    title: 'CORS für das Frontend erlauben',
+    summary: 'Anfragen vom Angular-Frontend zulassen.',
+    explanation:
+      'Der Browser blockiert Anfragen von localhost:4200 an localhost:8000, solange das Backend sie nicht ausdrücklich erlaubt. Das Paket django-cors-headers setzt dafür die nötigen Header.',
+    language: 'python',
+    code: "pip install django-cors-headers\n\n# settings.py\nINSTALLED_APPS += ['corsheaders']\nMIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE\nCORS_ALLOWED_ORIGINS = ['http://localhost:4200']",
+    note: 'Die CorsMiddleware muss möglichst weit oben in MIDDLEWARE stehen.',
   },
 
   // Git

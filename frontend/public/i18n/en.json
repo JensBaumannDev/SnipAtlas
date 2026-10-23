@@ -56,7 +56,7 @@
     "languageHint": "Language of the interface. Automatic follows your browser, otherwise English."
   },
   "commands": {
-    "lead": "Commands and code snippets to copy, sorted by topic. Each entry briefly says what you need it for.",
+    "lead": "Terminal commands to copy, from Git and npm to Angular, Django and Docker. Each entry briefly says what you need it for.",
     "summary": "{{entries}} entries in {{topics}} topics",
     "hints": {
       "choose": {
