@@ -1,0 +1,35 @@
+<article class="error-card" [id]="error().slug">
+  <div class="error-card__heading" role="heading" aria-level="2">
+    <button
+      class="error-card__toggle"
+      type="button"
+      [attr.aria-expanded]="expanded()"
+      [attr.aria-controls]="bodyId()"
+      (click)="toggle()"
+    >
+      <span class="error-card__text">
+        <code class="error-card__message">{{ error().message }}</code>
+        <span class="error-card__meaning">{{ error().meaning }}</span>
+      </span>
+      <svg lucideChevronDown class="icon error-card__chevron"></svg>
+    </button>
+  </div>
+
+  <div class="error-card__body" [id]="bodyId()" [hidden]="!expanded()">
+    <section class="error-card__section">
+      <h3 class="error-card__label">{{ 'debugging.cause' | translate }}</h3>
+      <p class="error-card__copy">{{ error().cause }}</p>
+    </section>
+    <section class="error-card__section">
+      <h3 class="error-card__label">{{ 'debugging.fix' | translate }}</h3>
+      <ol class="error-card__steps">
+        @for (step of error().steps; track $index) {
+          <li>{{ step }}</li>
+        }
+      </ol>
+    </section>
+    @if (error().solution; as solution) {
+      <app-code-block [code]="solution.code" [language]="solution.language" />
+    }
+  </div>
+</article>

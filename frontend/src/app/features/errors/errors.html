@@ -1,5 +1,42 @@
-@if (topic()) {
-  <h1>{{ 'pages.debugging' | translate }}</h1>
+@if (currentTopic(); as topic) {
+  @let count = errors.value().length;
+
+  <header class="errors__header">
+    @if (topicLogo(topic.slug); as logo) {
+      <span
+        class="icon icon--mask errors__logo"
+        [style.color]="topic.color"
+        [style.--icon]="logo"
+        aria-hidden="true"
+      ></span>
+    } @else {
+      <svg
+        [lucideIcon]="topicIcon(topic.slug)"
+        class="icon errors__logo"
+        [style.color]="topic.color"
+      ></svg>
+    }
+    <div class="errors__heading">
+      <h1>{{ topic.name }}</h1>
+      <p class="errors__meta">
+        {{
+          (count === 1 ? 'debugging.errorCountOne' : 'debugging.errorCount')
+            | translate: { count: count }
+        }}
+      </p>
+    </div>
+  </header>
+
+  @for (error of errors.value(); track error.slug) {
+    <app-error-card [error]="error" />
+  } @empty {
+    <p class="errors__empty">{{ 'debugging.empty' | translate }}</p>
+  }
 } @else {
-  <app-area-intro title="pages.debugging" lead="debugging.lead" [hints]="hints" />
+  <app-area-intro
+    title="pages.debugging"
+    lead="debugging.lead"
+    [summary]="'debugging.summary' | translate: summary()"
+    [hints]="hints"
+  />
 }

@@ -134,6 +134,12 @@
   },
   "debugging": {
     "lead": "Understand and fix common error messages: what the message means, where it comes from and how to fix it.",
+    "summary": "{{entries}} error messages in {{topics}} topics",
+    "errorCount": "{{count}} error messages",
+    "errorCountOne": "1 error message",
+    "empty": "There are no error messages for this topic yet.",
+    "cause": "Why does this happen?",
+    "fix": "How to fix it",
     "hints": {
       "choose": {
         "title": "Choose a topic",

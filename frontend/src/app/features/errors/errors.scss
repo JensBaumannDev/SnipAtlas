@@ -1,1 +1,38 @@
 @use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Header
+.errors__header {
+  display: flex;
+  gap: $space-md;
+  align-items: center;
+  padding-bottom: $space-lg;
+  border-bottom: 1px solid var(--line);
+}
+
+.errors__logo {
+  $size: $font-size-xxl * $line-height-tight + $space-xs + $font-size-base * $line-height-base;
+
+  flex: none;
+  width: $size;
+  height: $size;
+}
+
+.errors__heading {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  min-width: 0;
+}
+
+.errors__meta {
+  color: var(--muted);
+}
+
+.errors__empty {
+  padding-block: $space-lg;
+  color: var(--muted);
+}
