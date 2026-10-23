@@ -3,15 +3,15 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: $space-xl;
-  padding-top: $space-xxl - $space-xl;
+  gap: $space-xxl + $space-md;
+  padding-block: $space-xxl;
 }
 
 // Intro
 .home__intro {
   display: flex;
   flex-direction: column;
-  gap: $space-sm;
+  gap: $space-md;
 }
 
 .home__lead {
@@ -24,7 +24,7 @@
 .home__area-list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: $space-md;
+  gap: $space-lg;
 }
 
 .home__area {
@@ -32,7 +32,7 @@
   flex-direction: column;
   gap: $space-xs;
   height: 100%;
-  padding: $space-md;
+  padding: $space-lg;
   color: var(--ink);
   text-decoration: none;
   background: var(--hover);
@@ -66,18 +66,18 @@
 .home__columns {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  gap: $space-xl;
+  gap: $space-xxl;
   align-items: start;
 }
 
 .home__side {
   display: flex;
   flex-direction: column;
-  gap: $space-xl;
+  gap: $space-xxl;
 }
 
 .home__heading {
-  padding-bottom: $space-sm;
+  padding-bottom: $space-md;
   font-size: $font-size-xl;
   border-bottom: 1px solid var(--line);
 }
@@ -87,7 +87,7 @@
   display: flex;
   flex-direction: column;
   gap: $space-xs;
-  padding-block: $space-md;
+  padding-block: $space-lg;
   border-bottom: 1px solid var(--line);
 }
 
@@ -109,12 +109,12 @@
 
 // Collection and guide
 .home__hint {
-  margin-top: $space-md;
+  margin-top: $space-lg;
   color: var(--muted);
 }
 
 .home__guide-name {
-  margin-top: $space-md;
+  margin-top: $space-lg;
   font-weight: $font-weight-medium;
 }
 
@@ -124,7 +124,7 @@
 
 .home__more {
   display: inline-block;
-  margin-top: $space-md;
+  margin-top: $space-lg;
   font-weight: $font-weight-medium;
   text-decoration: none;
 
@@ -136,16 +136,22 @@
 /* #region RESPONSIVE */
 @include mobile {
   :host {
-    gap: $space-lg;
-    padding-top: 0;
+    gap: $space-xl;
+    padding-block: $space-md $space-xl;
   }
 
   .home__area-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $space-md;
   }
 
   .home__columns {
     grid-template-columns: minmax(0, 1fr);
+    gap: $space-xl;
+  }
+
+  .home__side {
+    gap: $space-xl;
   }
 }
 
