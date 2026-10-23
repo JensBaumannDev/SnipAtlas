@@ -1,7 +1,7 @@
 import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideDynamicIcon } from '@lucide/angular';
+import { LucideCopy, LucideDynamicIcon, LucideListTree, LucideSettings } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Entry } from '../../core/entry';
 import { EntryApi } from '../../core/entry-api';
@@ -18,7 +18,15 @@ interface EntrySection {
 }
 
 @Component({
-  imports: [EntryCard, RouterLink, TranslatePipe, LucideDynamicIcon],
+  imports: [
+    EntryCard,
+    RouterLink,
+    TranslatePipe,
+    LucideCopy,
+    LucideDynamicIcon,
+    LucideListTree,
+    LucideSettings,
+  ],
   selector: 'app-commands',
   styleUrl: './commands.scss',
   templateUrl: './commands.html',
@@ -33,6 +41,10 @@ export class Commands {
   protected readonly os = inject(Preferences).os;
   protected readonly topicLogo = topicLogo;
   protected readonly topicIcon = topicIcon;
+
+  protected readonly summary = toSignal(this.entryApi.getSummary(), {
+    initialValue: { entries: 0, topics: 0 },
+  });
 
   private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
   private readonly entries = rxResource({

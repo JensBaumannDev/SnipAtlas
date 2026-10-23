@@ -58,6 +58,27 @@
     <p class="commands__empty">{{ 'commands.empty' | translate }}</p>
   }
 } @else {
-  <h1>{{ 'pages.commands' | translate }}</h1>
-  <p class="commands__empty">{{ 'commands.chooseTopic' | translate }}</p>
+  <div class="commands__intro">
+    <h1>{{ 'pages.commands' | translate }}</h1>
+    <p class="commands__lead">{{ 'commands.lead' | translate }}</p>
+    <p class="commands__meta">{{ 'commands.summary' | translate: summary() }}</p>
+
+    <ul class="commands__hints" role="list">
+      <li class="commands__hint">
+        <svg lucideListTree class="icon commands__hint-icon"></svg>
+        <span>{{ 'commands.hints.choose' | translate }}</span>
+      </li>
+      <li class="commands__hint">
+        <svg lucideCopy class="icon commands__hint-icon"></svg>
+        <span>{{ 'commands.hints.copy' | translate }}</span>
+      </li>
+      <li class="commands__hint">
+        <svg lucideSettings class="icon commands__hint-icon"></svg>
+        <span>
+          {{ 'commands.hints.os' | translate }}
+          <a routerLink="/einstellungen">{{ 'commands.hints.osLink' | translate }}</a>
+        </span>
+      </li>
+    </ul>
+  </div>
 }

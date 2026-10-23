@@ -25,8 +25,8 @@ describe('Commands', () => {
     await fixture.whenStable();
   }
 
-  it('asks for a topic without one', () => {
-    expect(element.querySelector('.commands__empty')).toBeTruthy();
+  it('shows the intro without a topic', () => {
+    expect(element.querySelector('.commands__intro')).toBeTruthy();
     expect(element.querySelector('app-entry-card')).toBeNull();
   });
 
