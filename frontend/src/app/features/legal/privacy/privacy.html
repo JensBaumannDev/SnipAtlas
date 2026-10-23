@@ -1,2 +1,109 @@
 <h1>{{ 'pages.privacy' | translate }}</h1>
-<p class="legal__pending">{{ 'legal.pending' | translate }}</p>
+
+<section class="legal__section" aria-labelledby="privacy-controller">
+  <h2 class="legal__heading" id="privacy-controller">{{ 'legal.privacy.controller' | translate }}</h2>
+  <p>{{ 'legal.privacy.controllerText' | translate }}</p>
+  <address class="legal__address">
+    Jens Baumann<br />
+    Ginsterweg 15<br />
+    26725 Emden<br />
+    {{ 'legal.country' | translate }}<br />
+    {{ 'legal.email' | translate }}
+    <a class="legal__mail" href="mailto:info@jensbaumann.com">info&#64;jensbaumann.com</a>
+  </address>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-hosting">
+  <h2 class="legal__heading" id="privacy-hosting">{{ 'legal.privacy.hosting' | translate }}</h2>
+  <p>{{ 'legal.privacy.hostingText' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-logs">
+  <h2 class="legal__heading" id="privacy-logs">{{ 'legal.privacy.logs' | translate }}</h2>
+  <p>{{ 'legal.privacy.logsIntro' | translate }}</p>
+  <ul class="legal__list">
+    @for (item of logItems; track item) {
+      <li>{{ 'legal.privacy.logItems.' + item | translate }}</li>
+    }
+  </ul>
+  <p>{{ 'legal.privacy.logsText' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-resources">
+  <h2 class="legal__heading" id="privacy-resources">{{ 'legal.privacy.resources' | translate }}</h2>
+  <p>{{ 'legal.privacy.resourcesText' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-cookies">
+  <h2 class="legal__heading" id="privacy-cookies">{{ 'legal.privacy.cookies' | translate }}</h2>
+  <p>{{ 'legal.privacy.cookiesText' | translate }}</p>
+  <p>{{ 'legal.privacy.cookiesBasis' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-storage">
+  <h2 class="legal__heading" id="privacy-storage">{{ 'legal.privacy.storage' | translate }}</h2>
+  <p>{{ 'legal.privacy.storageIntro' | translate }}</p>
+  <ul class="legal__list">
+    @for (item of storageItems; track item) {
+      <li>{{ 'legal.privacy.storageItems.' + item | translate }}</li>
+    }
+  </ul>
+  <p>{{ 'legal.privacy.storageText' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-account">
+  <h2 class="legal__heading" id="privacy-account">{{ 'legal.privacy.account' | translate }}</h2>
+  <p>{{ 'legal.privacy.accountText' | translate }}</p>
+  <p>{{ 'legal.privacy.accountIntro' | translate }}</p>
+  <ul class="legal__list">
+    @for (item of accountItems; track item) {
+      <li>{{ 'legal.privacy.accountItems.' + item | translate }}</li>
+    }
+  </ul>
+  <p>{{ 'legal.privacy.accountBasis' | translate }}</p>
+  <p>{{ 'legal.privacy.accountDeletion' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-request">
+  <h2 class="legal__heading" id="privacy-request">{{ 'legal.privacy.request' | translate }}</h2>
+  <p>
+    {{ 'legal.privacy.requestBefore' | translate }}
+    <a routerLink="/anfrage">{{ 'legal.privacy.requestLink' | translate }}</a>{{ 'legal.privacy.requestAfter' | translate }}
+  </p>
+  <p>{{ 'legal.privacy.requestBasis' | translate }}</p>
+  <p>{{ 'legal.privacy.requestDeletion' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-mails">
+  <h2 class="legal__heading" id="privacy-mails">{{ 'legal.privacy.mails' | translate }}</h2>
+  <p>{{ 'legal.privacy.mailsText' | translate }}</p>
+  <p>{{ 'legal.privacy.mailsProvider' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-email">
+  <h2 class="legal__heading" id="privacy-email">{{ 'legal.privacy.email' | translate }}</h2>
+  <p>{{ 'legal.privacy.emailText' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-tls">
+  <h2 class="legal__heading" id="privacy-tls">{{ 'legal.privacy.tls' | translate }}</h2>
+  <p>{{ 'legal.privacy.tlsText' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-rights">
+  <h2 class="legal__heading" id="privacy-rights">{{ 'legal.privacy.rights' | translate }}</h2>
+  <p>{{ 'legal.privacy.rightsIntro' | translate }}</p>
+  <ul class="legal__list">
+    @for (item of rightItems; track item) {
+      <li>{{ 'legal.privacy.rightItems.' + item | translate }}</li>
+    }
+  </ul>
+  <p>{{ 'legal.privacy.rightsText' | translate }}</p>
+</section>
+
+<section class="legal__section" aria-labelledby="privacy-changes">
+  <h2 class="legal__heading" id="privacy-changes">{{ 'legal.privacy.changes' | translate }}</h2>
+  <p>{{ 'legal.privacy.changesText' | translate }}</p>
+</section>
+
+<p class="legal__updated">{{ 'legal.updated' | translate }}</p>

@@ -1,6 +1,43 @@
 @use 'abstracts' as *;
 
-.legal__pending {
-  margin-top: $space-md;
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  width: 100%;
+  max-width: rem(720);
+  margin-inline: auto;
+}
+
+// Sections
+.legal__section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  hyphens: auto;
+}
+
+.legal__heading {
+  font-size: $font-size-lg;
+  color: var(--accent);
+}
+
+.legal__address {
+  font-style: normal;
+}
+
+.legal__mail {
+  overflow-wrap: anywhere;
+}
+
+.legal__list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  padding-left: $space-lg;
+}
+
+// Updated
+.legal__updated {
   color: var(--muted);
 }

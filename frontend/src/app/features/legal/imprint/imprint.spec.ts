@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { Imprint } from './imprint';
 
@@ -9,7 +10,7 @@ describe('Imprint', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Imprint],
-      providers: [provideTranslateService()],
+      providers: [provideRouter([]), provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Imprint);
