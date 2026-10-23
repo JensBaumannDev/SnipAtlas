@@ -1,6 +1,7 @@
 import { Service } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Concept } from './concept';
+import { ContentIndex, buildIndex } from './content-index';
 
 const CONCEPTS: Concept[] = [
   // HTML
@@ -525,5 +526,9 @@ export class ConceptApi {
       entries: CONCEPTS.length,
       topics: new Set(CONCEPTS.map((concept) => concept.topic)).size,
     });
+  }
+
+  getIndex(): Observable<ContentIndex> {
+    return of(buildIndex(CONCEPTS));
   }
 }

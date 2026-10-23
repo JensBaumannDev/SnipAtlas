@@ -9,7 +9,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import {
   ActivatedRouteSnapshot,
   NavigationEnd,
@@ -21,9 +21,11 @@ import {
 import { LucideChevronDown, LucideChevronRight, LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
+import { AreaContent } from '../../core/area-content';
+import { ContentArea, isContentArea } from '../../core/content-index';
 import { TopicApi } from '../../core/topic-api';
 import { topicIcon, topicLogo } from '../../core/topic-logos';
-import { SidebarMode, isGroupList, isSidebarMode } from './sidebar-mode';
+import { SidebarMode, isSidebarMode } from './sidebar-mode';
 
 @Component({
   imports: [
@@ -59,11 +61,31 @@ export class Sidebar {
   protected readonly hasMore = signal(false);
 
   private readonly activeSlug = signal<string | undefined>(undefined);
-  private readonly groupSlugs = signal<readonly string[] | undefined>(undefined);
+  private readonly area = signal<ContentArea | undefined>(undefined);
+  private readonly areaContent = inject(AreaContent);
+  private readonly index = rxResource({
+    params: () => this.area(),
+    stream: ({ params }) => this.areaContent.getIndex(params),
+  });
 
   protected readonly visibleGroups = computed(() => {
-    const slugs = this.groupSlugs();
-    return slugs ? this.groups().filter((group) => slugs.includes(group.slug)) : this.groups();
+    const index = this.index.value();
+    if (!index) {
+      return [];
+    }
+    return this.groups()
+      .map((group) => ({
+        ...group,
+        topics: group.topics
+          .filter((topic) => index[topic.slug])
+          .map((topic) => ({
+            ...topic,
+            subtopics: topic.subtopics.filter((subtopic) =>
+              index[topic.slug]?.includes(subtopic.slug),
+            ),
+          })),
+      }))
+      .filter((group) => group.topics.length);
   });
 
   protected readonly activeTopic = computed(() =>
@@ -126,11 +148,10 @@ export class Sidebar {
     const slug = mode ? segments[1]?.path : undefined;
     const entering = !this.mode();
 
+    const group = this.groups().find((item) => item.topics.some((topic) => topic.slug === slug));
+
     this.mode.set(mode);
-    this.groupSlugs.set(this.groupsFromRoute(root));
-    const group = this.visibleGroups().find((item) =>
-      item.topics.some((topic) => topic.slug === slug),
-    );
+    this.area.set(this.areaFromRoute(root));
     this.basePath.set(`/${segments[0]?.path ?? ''}`);
     this.activeSlug.set(slug);
     this.menuOpen.set(false);
@@ -138,9 +159,7 @@ export class Sidebar {
       this.expandedSlug.set(slug);
     }
     if (entering) {
-      this.openGroups.set(
-        new Set(group ? [group.slug] : this.visibleGroups().map((item) => item.slug)),
-      );
+      this.openGroups.set(new Set(group ? [group.slug] : this.groups().map((item) => item.slug)));
     } else if (group) {
       this.openGroups.update((open) => new Set(open).add(group.slug));
     }
@@ -157,14 +176,14 @@ export class Sidebar {
     return mode;
   }
 
-  private groupsFromRoute(root: ActivatedRouteSnapshot): readonly string[] | undefined {
-    let groups: readonly string[] | undefined;
+  private areaFromRoute(root: ActivatedRouteSnapshot): ContentArea | undefined {
+    let area: ContentArea | undefined;
     for (let route: ActivatedRouteSnapshot | null = root; route; route = route.firstChild) {
-      const value: unknown = route.data['sidebarGroups'];
-      if (isGroupList(value)) {
-        groups = value;
+      const value: unknown = route.data['area'];
+      if (isContentArea(value)) {
+        area = value;
       }
     }
-    return groups;
+    return area;
   }
 }

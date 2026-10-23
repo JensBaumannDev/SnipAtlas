@@ -1,5 +1,6 @@
 import { Service } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { ContentIndex, buildIndex } from './content-index';
 import { Entry } from './entry';
 
 const ENTRIES: Entry[] = [
@@ -323,5 +324,9 @@ export class EntryApi {
       entries: ENTRIES.length,
       topics: new Set(ENTRIES.map((entry) => entry.topic)).size,
     });
+  }
+
+  getIndex(): Observable<ContentIndex> {
+    return of(buildIndex(ENTRIES));
   }
 }
