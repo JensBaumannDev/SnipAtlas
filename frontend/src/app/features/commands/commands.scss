@@ -48,12 +48,10 @@
 
 // Sections
 .commands__section-title {
-  display: flex;
-  gap: $space-sm;
-  align-items: baseline;
-  padding-inline: $space-xs;
-  margin-top: $space-xl;
+  padding: 0 $space-xs $space-sm;
+  margin-top: $space-xxl;
   font-size: $font-size-xl;
+  border-bottom: 1px solid var(--muted);
 }
 
 .commands__section-link {
@@ -66,12 +64,6 @@
   }
 }
 
-.commands__count {
-  font-family: $font-mono;
-  font-size: $font-size-base;
-  font-weight: normal;
-  color: var(--muted);
-}
 
 .commands__empty {
   padding-block: $space-lg;

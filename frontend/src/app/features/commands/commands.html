@@ -42,7 +42,6 @@
           <a class="commands__section-link" [routerLink]="['/befehle', topic.slug, section.subtopic.slug]">
             {{ section.subtopic.name }}
           </a>
-          <span class="commands__count">{{ section.entries.length }}</span>
         </h2>
       }
       @for (entry of section.entries; track entry.slug) {

@@ -41,13 +41,13 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: $space-xs;
+  gap: $space-sm;
   min-width: 0;
 }
 
 .concept-card__title {
   font-size: $font-size-base;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-medium;
   line-height: $line-height-tight;
   overflow-wrap: anywhere;
   transition: color var(--duration-fast);

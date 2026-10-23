@@ -48,12 +48,10 @@
 
 // Sections
 .concepts__section-title {
-  display: flex;
-  gap: $space-sm;
-  align-items: baseline;
-  padding-inline: $space-xs;
-  margin-top: $space-xl;
+  padding: 0 $space-xs $space-sm;
+  margin-top: $space-xxl;
   font-size: $font-size-xl;
+  border-bottom: 1px solid var(--muted);
 }
 
 .concepts__section-link {
@@ -66,12 +64,6 @@
   }
 }
 
-.concepts__count {
-  font-family: $font-mono;
-  font-size: $font-size-base;
-  font-weight: normal;
-  color: var(--muted);
-}
 
 .concepts__empty {
   padding-block: $space-lg;

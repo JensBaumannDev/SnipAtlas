@@ -38,7 +38,6 @@
           <a class="concepts__section-link" [routerLink]="['/konzepte', topic.slug, section.subtopic.slug]">
             {{ section.subtopic.name }}
           </a>
-          <span class="concepts__count">{{ section.concepts.length }}</span>
         </h2>
       }
       @for (concept of section.concepts; track concept.slug) {
