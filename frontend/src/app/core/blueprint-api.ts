@@ -1,6 +1,7 @@
 import { Service } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Blueprint } from './blueprint';
+import { ContentIndex, buildIndex } from './content-index';
 
 const VIRTUAL_ENV = {
   win: 'python -m venv env\nenv\\Scripts\\activate',
@@ -232,5 +233,9 @@ export class BlueprintApi {
       blueprints: BLUEPRINTS.length,
       steps: BLUEPRINTS.reduce((sum, blueprint) => sum + blueprint.steps.length, 0),
     });
+  }
+
+  getIndex(): Observable<ContentIndex> {
+    return of(buildIndex(BLUEPRINTS));
   }
 }

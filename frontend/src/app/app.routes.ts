@@ -9,27 +9,27 @@ export const routes: Routes = [
   {
     path: 'befehle',
     title: 'pages.commands',
-    data: { sidebar: 'subtopics' },
+    data: { sidebar: 'subtopics', area: 'commands' },
     loadChildren: () =>
       import('./features/commands/commands.routes').then((m) => m.COMMANDS_ROUTES),
   },
   {
     path: 'konzepte',
     title: 'pages.concepts',
-    data: { sidebar: 'subtopics' },
+    data: { sidebar: 'subtopics', area: 'concepts' },
     loadChildren: () =>
       import('./features/concepts/concepts.routes').then((m) => m.CONCEPTS_ROUTES),
   },
   {
     path: 'bauplaene',
     title: 'pages.blueprints',
-    data: { sidebar: 'topics', sidebarGroups: ['frontend', 'backend'] },
+    data: { sidebar: 'topics', area: 'blueprints' },
     loadChildren: () => import('./features/guides/guides.routes').then((m) => m.GUIDES_ROUTES),
   },
   {
     path: 'debugging',
     title: 'pages.debugging',
-    data: { sidebar: 'topics' },
+    data: { sidebar: 'topics', area: 'debugging' },
     loadChildren: () => import('./features/errors/errors.routes').then((m) => m.ERRORS_ROUTES),
   },
   {
