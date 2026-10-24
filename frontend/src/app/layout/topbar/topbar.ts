@@ -1,13 +1,15 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, ElementRef, Injector, inject, viewChild } from '@angular/core';
+import { Component, ElementRef, Injector, afterNextRender, inject, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideSearch, LucideSettings } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Session } from '../../core/session';
+import { UserMenu } from '../user-menu/user-menu';
 
 const SCROLL_GAP = 16;
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, TranslatePipe, LucideSearch, LucideSettings],
+  imports: [RouterLink, RouterLinkActive, TranslatePipe, UserMenu, LucideSearch, LucideSettings],
   selector: 'app-topbar',
   styleUrl: './topbar.scss',
   templateUrl: './topbar.html',
@@ -18,6 +20,10 @@ const SCROLL_GAP = 16;
 export class Topbar {
   private readonly injector = inject(Injector);
   private readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
+  private readonly loginButton = viewChild<ElementRef<HTMLButtonElement>>('loginButton');
+  private readonly userMenu = viewChild(UserMenu);
+
+  protected readonly session = inject(Session);
 
   constructor() {
     const host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
@@ -29,11 +35,20 @@ export class Topbar {
       import('@angular/cdk/dialog'),
       import('../../features/auth/auth-dialog/auth-dialog'),
     ]);
-    this.injector.get(Dialog).open(AuthDialog, {
+    const dialogRef = this.injector.get(Dialog).open(AuthDialog, {
       ariaLabelledBy: 'auth-title',
       autoFocus: '#login-email',
       backdropClass: 'dialog-backdrop',
       disableClose: true,
+    });
+    dialogRef.closed.subscribe(() =>
+      afterNextRender(() => this.userMenu()?.focus(), { injector: this.injector }),
+    );
+  }
+
+  protected onLogout(): void {
+    afterNextRender(() => this.loginButton()?.nativeElement.focus(), {
+      injector: this.injector,
     });
   }
 

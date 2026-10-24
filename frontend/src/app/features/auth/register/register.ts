@@ -17,6 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Session } from '../../../core/session';
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -35,12 +36,13 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
 export class Register {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
+  private readonly session = inject(Session);
 
+  readonly done = output<void>();
   readonly login = output<void>();
 
   protected readonly minLength = PASSWORD_MIN_LENGTH;
   protected readonly attempted = signal(false);
-  protected readonly submitted = signal(false);
   protected readonly form = inject(FormBuilder).nonNullable.group(
     {
       email: ['', [Validators.required, Validators.email]],
@@ -85,6 +87,7 @@ export class Register {
       );
       return;
     }
-    this.submitted.set(true);
+    this.session.login(this.form.controls.email.value);
+    this.done.emit();
   }
 }

@@ -1,0 +1,115 @@
+@use 'abstracts' as *;
+
+:host {
+  position: relative;
+  display: block;
+}
+
+// Avatar
+.user-menu__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $control-height;
+  height: $control-height;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: var(--ink);
+  cursor: pointer;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  transition: background var(--duration-fast);
+
+  &:hover,
+  &[aria-expanded='true'] {
+    background: var(--hover);
+  }
+}
+
+// Panel
+.user-menu__panel {
+  position: absolute;
+  top: calc(100% + $space-sm);
+  right: 0;
+  z-index: $z-menu;
+  width: rem(260);
+  padding: $space-xs;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-radius: $radius-lg;
+  animation: user-menu-in var(--duration-fast) var(--ease);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.user-menu__who {
+  display: flex;
+  flex-direction: column;
+  padding: $space-sm $space-sm $space-md;
+  margin-bottom: $space-xs;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--line);
+}
+
+.user-menu__email {
+  font-weight: $font-weight-medium;
+}
+
+.user-menu__state {
+  color: var(--muted);
+}
+
+// List
+.user-menu__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.user-menu__separator {
+  padding-top: $space-xs;
+  margin-top: $space-xs;
+  border-top: 1px solid var(--line);
+}
+
+.user-menu__item {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  width: 100%;
+  min-height: $control-height;
+  padding: 0 $space-sm;
+  font-size: $font-size-base;
+  color: var(--ink);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: $radius-md;
+
+  &:hover {
+    background: var(--hover);
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+.user-menu__icon {
+  width: rem(20);
+  height: rem(20);
+  color: var(--muted);
+}
+
+// Animation
+@keyframes user-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}

@@ -14,10 +14,10 @@
 
 @switch (view()) {
   @case ('login') {
-    <app-login (forgot)="show('forgot')" (register)="show('register')" />
+    <app-login (done)="close()" (forgot)="show('forgot')" (register)="show('register')" />
   }
   @case ('register') {
-    <app-register (login)="show('login')" />
+    <app-register (done)="close()" (login)="show('login')" />
   }
   @case ('forgot') {
     <app-forgot-password (login)="show('login')" />

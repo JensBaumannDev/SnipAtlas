@@ -11,6 +11,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Session } from '../../../core/session';
 
 @Component({
   imports: [ReactiveFormsModule, TranslatePipe],
@@ -22,12 +23,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class Login {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
+  private readonly session = inject(Session);
 
+  readonly done = output<void>();
   readonly forgot = output<void>();
   readonly register = output<void>();
 
   protected readonly attempted = signal(false);
-  protected readonly submitted = signal(false);
   protected readonly form = inject(FormBuilder).nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
@@ -56,6 +58,7 @@ export class Login {
       );
       return;
     }
-    this.submitted.set(true);
+    this.session.login(this.form.controls.email.value);
+    this.done.emit();
   }
 }

@@ -38,6 +38,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/request/request').then((m) => m.Request),
   },
   {
+    path: 'profil',
+    title: 'pages.profile',
+    loadComponent: () => import('./features/profile/profile').then((m) => m.Profile),
+  },
+  {
     path: 'einstellungen',
     title: 'pages.settings',
     loadComponent: () => import('./features/settings/settings').then((m) => m.Settings),

@@ -62,10 +62,6 @@
     }
   </div>
 
-  @if (submitted()) {
-    <p class="auth-form__note" role="status">{{ 'auth.notYet' | translate }}</p>
-  }
-
   <button class="btn btn--primary auth-form__submit" type="submit" [disabled]="!filled()">
     {{ 'auth.registerSubmit' | translate }}
   </button>
