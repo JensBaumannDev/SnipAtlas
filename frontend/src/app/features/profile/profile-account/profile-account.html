@@ -1,0 +1,130 @@
+<section class="profile-section" aria-labelledby="account-email">
+  <h2 class="profile-section__title" id="account-email">
+    {{ 'profile.account.email' | translate }}
+  </h2>
+  <form class="profile-section__block" [formGroup]="emailForm" (ngSubmit)="saveEmail()" novalidate>
+    <div class="field profile-account__field">
+      <label class="field__label" for="account-email-input">{{ 'auth.email' | translate }}</label>
+      <input
+        class="input"
+        id="account-email-input"
+        type="email"
+        autocomplete="email"
+        formControlName="email"
+        [attr.aria-invalid]="emailError()"
+        [attr.aria-describedby]="emailError() ? 'account-email-error' : null"
+      />
+      @if (emailError()) {
+        <p class="field__error" id="account-email-error">
+          {{ 'auth.errors.emailFormat' | translate }}
+        </p>
+      }
+    </div>
+    @if (emailSaved()) {
+      <p class="auth-form__note" role="status">{{ 'profile.account.emailSaved' | translate }}</p>
+    }
+    <button class="btn btn--ghost" type="submit" [disabled]="!emailChanged()">
+      {{ 'profile.account.emailSubmit' | translate }}
+    </button>
+  </form>
+</section>
+
+<section class="profile-section" aria-labelledby="account-password">
+  <h2 class="profile-section__title" id="account-password">
+    {{ 'profile.account.password' | translate }}
+  </h2>
+  <form
+    class="profile-section__block"
+    [formGroup]="passwordForm"
+    (ngSubmit)="changePassword()"
+    novalidate
+  >
+    <div class="field profile-account__field">
+      <label class="field__label" for="account-current">{{
+        'profile.account.currentPassword' | translate
+      }}</label>
+      <input
+        class="input"
+        id="account-current"
+        type="password"
+        autocomplete="current-password"
+        formControlName="current"
+      />
+    </div>
+    <div class="field profile-account__field">
+      <label class="field__label" for="account-next">{{
+        'profile.account.newPassword' | translate
+      }}</label>
+      <input
+        class="input"
+        id="account-next"
+        type="password"
+        autocomplete="new-password"
+        formControlName="next"
+        aria-describedby="account-next-message"
+        [attr.aria-invalid]="passwordError()"
+      />
+      @if (passwordError()) {
+        <p class="field__error" id="account-next-message">
+          {{ 'auth.errors.passwordLength' | translate: { min: minLength } }}
+        </p>
+      } @else {
+        <p class="field__hint" id="account-next-message">
+          {{ 'auth.passwordHint' | translate: { min: minLength } }}
+        </p>
+      }
+    </div>
+    @if (passwordSent()) {
+      <p class="auth-form__note" role="status">{{ 'auth.notYet' | translate }}</p>
+    }
+    <button class="btn btn--ghost" type="submit" [disabled]="!passwordFilled()">
+      {{ 'profile.account.passwordSubmit' | translate }}
+    </button>
+  </form>
+</section>
+
+<section class="profile-section" aria-labelledby="account-data">
+  <h2 class="profile-section__title" id="account-data">{{ 'profile.account.data' | translate }}</h2>
+  <div class="profile-section__block">
+    <p class="profile-section__text">{{ 'profile.account.dataText' | translate }}</p>
+    <button class="btn btn--ghost" type="button" (click)="download()">
+      {{ 'profile.account.dataSubmit' | translate }}
+    </button>
+  </div>
+</section>
+
+<section class="profile-section" aria-labelledby="account-logout">
+  <h2 class="profile-section__title" id="account-logout">{{ 'account.logout' | translate }}</h2>
+  <div class="profile-section__block">
+    <p class="profile-section__text">{{ 'profile.account.logoutText' | translate }}</p>
+    <button class="btn btn--ghost" type="button" (click)="logout()">
+      {{ 'account.logout' | translate }}
+    </button>
+  </div>
+</section>
+
+<section class="profile-section" aria-labelledby="account-delete">
+  <h2 class="profile-section__title profile-account__danger" id="account-delete">
+    {{ 'profile.account.delete' | translate }}
+  </h2>
+  <div class="profile-section__block">
+    <p class="profile-section__text">{{ 'profile.account.deleteText' | translate }}</p>
+    @if (confirmDelete()) {
+      <p class="profile-account__confirm" role="alert">
+        {{ 'profile.account.deleteConfirm' | translate }}
+      </p>
+      <div class="profile-account__actions">
+        <button class="btn btn--danger" type="button" (click)="deleteAccount()">
+          {{ 'profile.account.deleteSubmit' | translate }}
+        </button>
+        <button class="btn btn--ghost" type="button" (click)="confirmDelete.set(false)">
+          {{ 'profile.account.cancel' | translate }}
+        </button>
+      </div>
+    } @else {
+      <button class="btn btn--danger" type="button" (click)="confirmDelete.set(true)">
+        {{ 'profile.account.delete' | translate }}
+      </button>
+    }
+  </div>
+</section>

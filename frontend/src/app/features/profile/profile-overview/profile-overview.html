@@ -1,0 +1,50 @@
+<section class="profile-section" aria-labelledby="profile-collection">
+  <h2 class="profile-section__title" id="profile-collection">
+    {{ 'sidebar.collection' | translate }}
+  </h2>
+  <div class="profile-section__block">
+    <p class="profile-section__text">{{ 'profile.noFavorites' | translate }}</p>
+  </div>
+</section>
+
+<section class="profile-section" aria-labelledby="profile-progress">
+  <h2 class="profile-section__title" id="profile-progress">{{ 'profile.progress' | translate }}</h2>
+  @for (item of started(); track item.blueprint.slug) {
+    <div class="profile-row">
+      <a
+        class="profile-row__title profile-overview__link"
+        [routerLink]="['/bauplaene', item.blueprint.topic, item.blueprint.slug]"
+      >
+        {{ item.blueprint.title }}
+      </a>
+      <app-progress-bar
+        class="profile-overview__bar"
+        [done]="item.done"
+        [total]="item.blueprint.steps.length"
+        [label]="'guides.progressOf' | translate: { title: item.blueprint.title }"
+      />
+    </div>
+  } @empty {
+    <div class="profile-section__block">
+      <p class="profile-section__text">{{ 'profile.noProgress' | translate }}</p>
+      <a routerLink="/bauplaene">{{ 'profile.toBlueprints' | translate }}</a>
+    </div>
+  }
+</section>
+
+<section class="profile-section" aria-labelledby="profile-latest-requests">
+  <h2 class="profile-section__title" id="profile-latest-requests">
+    {{ 'profile.tabs.requests' | translate }}
+  </h2>
+  @for (request of latestRequests(); track request.id) {
+    <div class="profile-row">
+      <span class="profile-row__title">{{ request.subject }}</span>
+      <span class="status-badge" [class.status-badge--open]="request.status === 'open'">
+        {{ 'profile.status.' + request.status | translate }}
+      </span>
+    </div>
+  }
+  <div class="profile-section__block">
+    <a routerLink="/profil/anfragen">{{ 'profile.allRequests' | translate }}</a>
+  </div>
+</section>

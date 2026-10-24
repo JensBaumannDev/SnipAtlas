@@ -43,6 +43,49 @@
     "requests": "My requests",
     "logout": "Sign out"
   },
+  "profile": {
+    "since": "Member since {{date}}",
+    "tabs": {
+      "overview": "Overview",
+      "requests": "Requests",
+      "settings": "Settings",
+      "account": "Account"
+    },
+    "noFavorites": "No favourites yet. Once you mark commands with the star, they appear here.",
+    "progress": "Progress",
+    "noProgress": "You have not started a blueprint yet.",
+    "toBlueprints": "Go to blueprints",
+    "allRequests": "See all requests",
+    "requestSummary": "{{open}} open, {{done}} done",
+    "noRequests": "You have not sent any requests yet.",
+    "newRequest": "New request",
+    "answer": "Answer",
+    "status": {
+      "open": "Open",
+      "done": "Done"
+    },
+    "notify": "Email on reply",
+    "notifyHint": "Get notified when one of your requests has been answered.",
+    "notifyLabel": "Notify me",
+    "account": {
+      "email": "Email address",
+      "emailSubmit": "Change email",
+      "emailSaved": "Your email address has been changed.",
+      "password": "Change password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "passwordSubmit": "Change password",
+      "data": "Your data",
+      "dataText": "Downloads your account, your progress and your requests as a file.",
+      "dataSubmit": "Download data",
+      "logoutText": "Signs you out on this device.",
+      "delete": "Delete account",
+      "deleteText": "Deletes your account with all favourites, your progress and your requests. You can still read all SnipAtlas content without an account.",
+      "deleteConfirm": "Are you sure? This cannot be undone.",
+      "deleteSubmit": "Yes, delete account",
+      "cancel": "Cancel"
+    }
+  },
   "auth": {
     "login": "Sign in",
     "lead": "For favourites, progress and requests.",

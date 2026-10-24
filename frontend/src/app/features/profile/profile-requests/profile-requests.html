@@ -1,0 +1,33 @@
+<div class="profile-requests__head">
+  <p class="profile-section__text">
+    @if (requests().length) {
+      {{ 'profile.requestSummary' | translate: { open: openCount(), done: doneCount() } }}
+    } @else {
+      {{ 'profile.noRequests' | translate }}
+    }
+  </p>
+  <a class="btn btn--ghost" routerLink="/anfrage">{{ 'profile.newRequest' | translate }}</a>
+</div>
+
+<ul class="profile-requests__list" role="list">
+  @for (request of requests(); track request.id) {
+    <li class="profile-requests__item">
+      <div class="profile-requests__top">
+        <h2 class="profile-requests__subject">{{ request.subject }}</h2>
+        <span class="status-badge" [class.status-badge--open]="request.status === 'open'">
+          {{ 'profile.status.' + request.status | translate }}
+        </span>
+      </div>
+      <p class="profile-requests__meta">
+        {{ 'request.kinds.' + request.kind | translate }} ·
+        <time [attr.datetime]="request.date">{{ request.date | date: 'dd.MM.yyyy' }}</time>
+      </p>
+      @if (request.answer; as answer) {
+        <p class="profile-requests__answer">
+          <strong class="profile-requests__answer-label">{{ 'profile.answer' | translate }}</strong>
+          {{ answer }}
+        </p>
+      }
+    </li>
+  }
+</ul>

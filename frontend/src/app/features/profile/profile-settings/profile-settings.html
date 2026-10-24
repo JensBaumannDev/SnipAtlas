@@ -1,0 +1,22 @@
+<app-settings [embedded]="true" />
+
+<section class="profile-settings__row" aria-labelledby="profile-notify">
+  <div class="profile-settings__text">
+    <h2 class="profile-settings__heading" id="profile-notify">
+      {{ 'profile.notify' | translate }}
+    </h2>
+    <p class="profile-settings__hint" id="profile-notify-hint">
+      {{ 'profile.notifyHint' | translate }}
+    </p>
+  </div>
+  <label class="profile-settings__check">
+    <input
+      class="profile-settings__checkbox"
+      type="checkbox"
+      aria-describedby="profile-notify-hint"
+      [checked]="session.user()?.notifyByMail"
+      (change)="setNotify($event)"
+    />
+    {{ 'profile.notifyLabel' | translate }}
+  </label>
+</section>

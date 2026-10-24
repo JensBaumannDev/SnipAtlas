@@ -1,1 +1,68 @@
 @use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+// Header
+.profile__header {
+  display: flex;
+  gap: $space-md;
+  align-items: center;
+}
+
+.profile__avatar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: rem(56);
+  height: rem(56);
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-semibold;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+}
+
+.profile__heading {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  min-width: 0;
+}
+
+.profile__meta {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+// Tabs
+.profile__tabs {
+  display: flex;
+  gap: $space-lg;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile__tab {
+  flex: none;
+  padding: $space-sm 0;
+  font-weight: $font-weight-medium;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color var(--duration-fast);
+
+  &:hover {
+    color: var(--ink);
+  }
+
+  &--active {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+}
