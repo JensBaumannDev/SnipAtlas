@@ -3,7 +3,6 @@
   // Surfaces and text
   --bg: #f5f7fb;
   --chrome: rgb(255 255 255 / 60%);
-  --glow: rgb(36 87 255 / 7%);
   --surface: #fff;
   --popover: rgb(255 255 255 / 75%);
   --backdrop: rgb(22 25 29 / 25%);
@@ -15,8 +14,12 @@
   --scrollbar: rgb(22 25 29 / 22%);
 
   // Accent
-  --accent: #2457ff;
-  --accent-soft: rgb(36 87 255 / 7%);
+  --accent-blue: #2457ff;
+  --accent-teal: #007571;
+  --accent-raspberry: #c8103f;
+  --accent-fuchsia: #a8189f;
+  --accent-soft-share: 7%;
+  --glow-share: 7%;
   --on-accent: #fff;
 
   // Logo

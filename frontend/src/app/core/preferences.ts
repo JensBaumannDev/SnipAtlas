@@ -1,10 +1,14 @@
 import { DOCUMENT, Service, computed, effect, inject, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Session } from './session';
 
 export type OperatingSystem = 'win' | 'unix';
 export type ThemeMode = 'light' | 'dark' | 'system';
 export type Language = 'de' | 'en';
 export type LanguageMode = Language | 'auto';
+export type AccentTheme = 'blue' | 'teal' | 'raspberry' | 'fuchsia';
+
+const DEFAULT_ACCENT: AccentTheme = 'blue';
 
 const OS_KEY = 'snipatlas-os';
 const THEME_KEY = 'snipatlas-theme';
@@ -15,6 +19,7 @@ export class Preferences {
   private readonly document = inject(DOCUMENT);
   private readonly window = this.document.defaultView;
   private readonly translate = inject(TranslateService);
+  private readonly session = inject(Session);
 
   readonly os = signal<OperatingSystem>(this.read(OS_KEY, ['win', 'unix'], 'win'));
   readonly theme = signal<ThemeMode>(this.read(THEME_KEY, ['light', 'dark', 'system'], 'system'));
@@ -25,16 +30,22 @@ export class Preferences {
     const mode = this.languageMode();
     return mode === 'auto' ? this.browserLanguage() : mode;
   });
+  readonly accent = computed<AccentTheme>(() => this.session.user()?.accent ?? DEFAULT_ACCENT);
 
   constructor() {
     effect(() => this.applyTheme(this.theme()));
     effect(() => this.write(OS_KEY, this.os()));
     effect(() => this.applyLanguage(this.language()));
     effect(() => this.write(LANGUAGE_KEY, this.languageMode()));
+    effect(() => this.applyAccent(this.accent()));
   }
 
   setLanguage(mode: LanguageMode): void {
     this.languageMode.set(mode);
+  }
+
+  setAccent(accent: AccentTheme): void {
+    this.session.update({ accent });
   }
 
   setOs(os: OperatingSystem): void {
@@ -53,6 +64,15 @@ export class Preferences {
       root.setAttribute('data-theme', theme);
     }
     this.write(THEME_KEY, theme);
+  }
+
+  private applyAccent(accent: AccentTheme): void {
+    const root = this.document.documentElement;
+    if (accent === DEFAULT_ACCENT) {
+      root.removeAttribute('data-accent');
+    } else {
+      root.setAttribute('data-accent', accent);
+    }
   }
 
   private applyLanguage(language: Language): void {
