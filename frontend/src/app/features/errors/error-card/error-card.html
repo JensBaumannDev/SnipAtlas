@@ -31,5 +31,6 @@
     @if (error().solution; as solution) {
       <app-code-block [code]="solution.code" [language]="solution.language" />
     }
+    <app-report-link [subject]="('report.error' | translate) + ': ' + error().message" />
   </div>
 </article>

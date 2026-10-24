@@ -2,10 +2,11 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintStep } from '../../../core/blueprint';
 import { Preferences } from '../../../core/preferences';
+import { ReportLink } from '../../../shared/report-link/report-link';
 import { CodeBlock } from '../../commands/code-block/code-block';
 
 @Component({
-  imports: [CodeBlock, TranslatePipe],
+  imports: [CodeBlock, ReportLink, TranslatePipe],
   selector: 'app-guide-step',
   styleUrl: './guide-step.scss',
   templateUrl: './guide-step.html',
