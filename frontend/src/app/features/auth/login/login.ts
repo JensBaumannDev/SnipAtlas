@@ -1,4 +1,3 @@
-import { DialogRef } from '@angular/cdk/dialog';
 import {
   Component,
   ElementRef,
@@ -6,28 +5,27 @@ import {
   afterNextRender,
   computed,
   inject,
+  output,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideX } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  imports: [ReactiveFormsModule, TranslatePipe, LucideX],
+  imports: [ReactiveFormsModule, TranslatePipe],
   selector: 'app-login',
   styleUrl: './login.scss',
   templateUrl: './login.html',
-  host: {
-    '[class.login--closing]': 'closing()',
-  },
+  host: { class: 'auth-form' },
 })
 export class Login {
-  private readonly dialogRef = inject(DialogRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
 
-  protected readonly closing = signal(false);
+  readonly forgot = output<void>();
+  readonly register = output<void>();
+
   protected readonly attempted = signal(false);
   protected readonly submitted = signal(false);
   protected readonly form = inject(FormBuilder).nonNullable.group({
@@ -44,15 +42,6 @@ export class Login {
     return !!email?.trim() && !!password;
   });
 
-  constructor() {
-    this.dialogRef.backdropClick.pipe(takeUntilDestroyed()).subscribe(() => this.close());
-    this.dialogRef.keydownEvents.pipe(takeUntilDestroyed()).subscribe((event) => {
-      if (event.key === 'Escape') {
-        this.close();
-      }
-    });
-  }
-
   protected emailError(): boolean {
     const control = this.form.controls.email;
     return control.hasError('email') && (this.attempted() || control.touched);
@@ -68,19 +57,5 @@ export class Login {
       return;
     }
     this.submitted.set(true);
-  }
-
-  protected close(): void {
-    if (this.closing()) {
-      return;
-    }
-    this.closing.set(true);
-    afterNextRender(
-      async () => {
-        await Promise.all(this.host.getAnimations().map((animation) => animation.finished));
-        this.dialogRef.close();
-      },
-      { injector: this.injector },
-    );
   }
 }

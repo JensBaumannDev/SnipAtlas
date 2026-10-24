@@ -1,0 +1,25 @@
+<button
+  class="auth-dialog__close"
+  type="button"
+  [attr.aria-label]="'auth.close' | translate"
+  (click)="close()"
+>
+  <svg lucideX class="icon"></svg>
+</button>
+
+<p class="auth-dialog__brand">
+  <span class="logo auth-dialog__logo" aria-hidden="true"></span>
+  <span>Snip<span class="auth-dialog__accent">Atlas</span></span>
+</p>
+
+@switch (view()) {
+  @case ('login') {
+    <app-login (forgot)="show('forgot')" (register)="show('register')" />
+  }
+  @case ('register') {
+    <app-register (login)="show('login')" />
+  }
+  @case ('forgot') {
+    <app-forgot-password (login)="show('login')" />
+  }
+}

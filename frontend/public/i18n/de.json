@@ -44,9 +44,20 @@
     "email": "E-Mail",
     "password": "Passwort",
     "close": "Schließen",
-    "notYet": "Die Anmeldung funktioniert, sobald das Backend steht.",
+    "notYet": "Das funktioniert, sobald das Backend steht.",
+    "registerLead": "Kostenlos, nur mit E-Mail und Passwort.",
+    "registerSubmit": "Konto anlegen",
+    "hasAccount": "Schon ein Konto?",
+    "passwordRepeat": "Passwort wiederholen",
+    "passwordHint": "Mindestens {{min}} Zeichen.",
+    "forgotTitle": "Passwort vergessen",
+    "forgotLead": "Gib deine E-Mail-Adresse ein. Du bekommst einen Link, mit dem du ein neues Passwort festlegst.",
+    "forgotSubmit": "Link senden",
+    "backToLogin": "Zurück zum Anmelden",
     "errors": {
-      "emailFormat": "Diese E-Mail-Adresse sieht nicht richtig aus."
+      "emailFormat": "Diese E-Mail-Adresse sieht nicht richtig aus.",
+      "passwordLength": "Das Passwort braucht mindestens {{min}} Zeichen.",
+      "passwordMismatch": "Die Passwörter stimmen nicht überein."
     }
   },
   "settings": {

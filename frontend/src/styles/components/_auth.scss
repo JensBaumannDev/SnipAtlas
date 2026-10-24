@@ -1,0 +1,82 @@
+@use 'abstracts' as *;
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  animation: auth-form-in var(--duration) var(--ease);
+}
+
+// Header
+.auth-form__title {
+  padding-right: $control-height;
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-medium;
+}
+
+.auth-form__lead {
+  color: var(--muted);
+}
+
+// Fields
+.auth-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  margin-top: $space-md;
+}
+
+.auth-form__label-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-md;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.auth-form__link {
+  padding: 0;
+  font-size: $font-size-base;
+  color: var(--accent);
+  cursor: pointer;
+  background: none;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.auth-form__note {
+  padding: $space-sm $space-md;
+  border-left: 2px solid var(--accent);
+}
+
+.auth-form__submit {
+  width: 100%;
+}
+
+.auth-form__back {
+  display: inline-flex;
+  gap: $space-xs;
+  align-items: center;
+}
+
+.auth-form__back-icon {
+  width: rem(18);
+  height: rem(18);
+}
+
+// Footer
+.auth-form__footer {
+  margin-top: $space-md;
+  color: var(--muted);
+  text-align: center;
+}
+
+// Animation
+@keyframes auth-form-in {
+  from {
+    opacity: 0;
+  }
+}

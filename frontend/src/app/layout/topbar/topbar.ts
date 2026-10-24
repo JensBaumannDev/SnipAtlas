@@ -25,12 +25,12 @@ export class Topbar {
   }
 
   protected async openLogin(): Promise<void> {
-    const [{ Dialog }, { Login }] = await Promise.all([
+    const [{ Dialog }, { AuthDialog }] = await Promise.all([
       import('@angular/cdk/dialog'),
-      import('../../features/auth/login/login'),
+      import('../../features/auth/auth-dialog/auth-dialog'),
     ]);
-    this.injector.get(Dialog).open(Login, {
-      ariaLabelledBy: 'login-title',
+    this.injector.get(Dialog).open(AuthDialog, {
+      ariaLabelledBy: 'auth-title',
       autoFocus: '#login-email',
       backdropClass: 'dialog-backdrop',
       disableClose: true,
