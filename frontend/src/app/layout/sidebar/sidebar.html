@@ -59,13 +59,8 @@
                     routerLinkActive
                     [routerLinkActiveOptions]="{ exact: true }"
                     ariaCurrentWhenActive="page"
-                    [style.--topic-color]="topic.color"
                   >
-                    @if (topicLogo(topic.slug); as logo) {
-                      <span class="icon icon--mask sidebar__logo" [style.--icon]="logo" aria-hidden="true"></span>
-                    } @else {
-                      <svg [lucideIcon]="topicIcon(topic.slug)" class="icon sidebar__logo"></svg>
-                    }
+                    <app-topic-logo class="sidebar__logo" [topic]="topic" />
                     <span class="sidebar__name">{{ topic.name }}</span>
                   </a>
                   @if (showSubtopics && topic.subtopics.length) {

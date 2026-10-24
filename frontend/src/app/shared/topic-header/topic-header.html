@@ -1,0 +1,11 @@
+<header class="topic-header">
+  <app-topic-logo class="topic-header__logo" [topic]="topic()" />
+  <div class="topic-header__heading">
+    @if (parentLabel(); as label) {
+      <a class="topic-header__parent" [routerLink]="parentLink()">{{ label }}</a>
+    }
+    <h1>{{ heading() }}</h1>
+    <ng-content />
+  </div>
+  <ng-content select="button" />
+</header>

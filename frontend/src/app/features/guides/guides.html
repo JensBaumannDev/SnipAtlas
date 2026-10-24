@@ -1,20 +1,10 @@
 @if (currentTopic(); as topic) {
-  <header class="guides__intro">
-    @if (topicLogo(topic.slug); as logo) {
-      <span
-        class="icon icon--mask guides__logo"
-        [style.color]="topic.color"
-        [style.--icon]="logo"
-        aria-hidden="true"
-      ></span>
-    } @else {
-      <svg [lucideIcon]="topicIcon(topic.slug)" class="icon guides__logo" [style.color]="topic.color"></svg>
-    }
-    <div class="guides__heading">
-      <a class="guides__parent" routerLink="/bauplaene">{{ 'pages.blueprints' | translate }}</a>
-      <h1>{{ topic.name }}</h1>
-    </div>
-  </header>
+  <app-topic-header
+    [topic]="topic"
+    [heading]="topic.name"
+    [parentLabel]="'pages.blueprints' | translate"
+    parentLink="/bauplaene"
+  />
 
   <ul class="guides__list" role="list">
     @for (blueprint of topicBlueprints(); track blueprint.slug) {

@@ -1,31 +1,14 @@
 @if (currentTopic(); as topic) {
   @let count = errors.value().length;
 
-  <header class="errors__header">
-    @if (topicLogo(topic.slug); as logo) {
-      <span
-        class="icon icon--mask errors__logo"
-        [style.color]="topic.color"
-        [style.--icon]="logo"
-        aria-hidden="true"
-      ></span>
-    } @else {
-      <svg
-        [lucideIcon]="topicIcon(topic.slug)"
-        class="icon errors__logo"
-        [style.color]="topic.color"
-      ></svg>
-    }
-    <div class="errors__heading">
-      <h1>{{ topic.name }}</h1>
-      <p class="errors__meta">
-        {{
-          (count === 1 ? 'debugging.errorCountOne' : 'debugging.errorCount')
-            | translate: { count: count }
-        }}
-      </p>
-    </div>
-  </header>
+  <app-topic-header class="errors__header" [topic]="topic" [heading]="topic.name">
+    <p class="errors__meta">
+      {{
+        (count === 1 ? 'debugging.errorCountOne' : 'debugging.errorCount')
+          | translate: { count: count }
+      }}
+    </p>
+  </app-topic-header>
 
   @if (topicGuides.value().length) {
     <section class="errors__section" aria-labelledby="errors-guides">

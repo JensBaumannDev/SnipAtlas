@@ -18,14 +18,14 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
-import { LucideChevronDown, LucideChevronRight, LucideDynamicIcon } from '@lucide/angular';
+import { LucideChevronDown, LucideChevronRight } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { AreaContent } from '../../core/area-content';
 import { ContentArea, isContentArea } from '../../core/content-index';
 import { TopicApi } from '../../core/topic-api';
-import { topicIcon, topicLogo } from '../../core/topic-logos';
 import { Collection } from '../../shared/collection/collection';
+import { TopicLogo } from '../../shared/topic-logo/topic-logo';
 import { SidebarMode, isSidebarMode } from './sidebar-mode';
 
 @Component({
@@ -33,10 +33,10 @@ import { SidebarMode, isSidebarMode } from './sidebar-mode';
     Collection,
     RouterLink,
     RouterLinkActive,
+    TopicLogo,
     TranslatePipe,
     LucideChevronDown,
     LucideChevronRight,
-    LucideDynamicIcon,
   ],
   selector: 'app-sidebar',
   styleUrl: './sidebar.scss',
@@ -52,8 +52,6 @@ export class Sidebar {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
 
-  protected readonly topicLogo = topicLogo;
-  protected readonly topicIcon = topicIcon;
   protected readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
   protected readonly mode = signal<SidebarMode | undefined>(undefined);
   protected readonly basePath = signal('/');

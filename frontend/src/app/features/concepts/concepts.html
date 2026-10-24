@@ -2,34 +2,22 @@
   @let subtopic = currentSubtopic();
   @let count = visibleConcepts().length;
 
-  <header class="concepts__header">
-    @if (topicLogo(topic.slug); as logo) {
-      <span
-        class="icon icon--mask concepts__logo"
-        [style.color]="topic.color"
-        [style.--icon]="logo"
-        aria-hidden="true"
-      ></span>
-    } @else {
-      <svg [lucideIcon]="topicIcon(topic.slug)" class="icon concepts__logo" [style.color]="topic.color"></svg>
-    }
-    <div class="concepts__heading">
-      @if (subtopic) {
-        <a class="concepts__parent" [routerLink]="['/konzepte', topic.slug]">{{ topic.name }}</a>
-        <h1>{{ subtopic.name }}</h1>
-      } @else {
-        <h1>{{ topic.name }}</h1>
-      }
-      <p class="concepts__meta">
-        {{ (count === 1 ? 'concepts.conceptCountOne' : 'concepts.conceptCount') | translate: { count: count } }}
-      </p>
-    </div>
+  <app-topic-header
+    class="concepts__header"
+    [topic]="topic"
+    [heading]="subtopic?.name ?? topic.name"
+    [parentLabel]="subtopic ? topic.name : undefined"
+    [parentLink]="['/konzepte', topic.slug]"
+  >
+    <p class="concepts__meta">
+      {{ (count === 1 ? 'concepts.conceptCountOne' : 'concepts.conceptCount') | translate: { count: count } }}
+    </p>
     @if (count) {
       <button class="btn btn--ghost" type="button" (click)="toggleAll()">
         {{ (allExpanded() ? 'concepts.collapseAll' : 'concepts.expandAll') | translate }}
       </button>
     }
-  </header>
+  </app-topic-header>
 
   @for (section of sections(); track section.subtopic.slug) {
     <section class="concepts__section">

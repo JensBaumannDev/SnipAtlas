@@ -2,38 +2,26 @@
   @let subtopic = currentSubtopic();
   @let count = visibleEntries().length;
 
-  <header class="commands__header">
-    @if (topicLogo(topic.slug); as logo) {
-      <span
-        class="icon icon--mask commands__logo"
-        [style.color]="topic.color"
-        [style.--icon]="logo"
-        aria-hidden="true"
-      ></span>
-    } @else {
-      <svg [lucideIcon]="topicIcon(topic.slug)" class="icon commands__logo" [style.color]="topic.color"></svg>
-    }
-    <div class="commands__heading">
-      @if (subtopic) {
-        <a class="commands__parent" [routerLink]="['/befehle', topic.slug]">{{ topic.name }}</a>
-        <h1>{{ subtopic.name }}</h1>
-      } @else {
-        <h1>{{ topic.name }}</h1>
+  <app-topic-header
+    class="commands__header"
+    [topic]="topic"
+    [heading]="subtopic?.name ?? topic.name"
+    [parentLabel]="subtopic ? topic.name : undefined"
+    [parentLink]="['/befehle', topic.slug]"
+  >
+    <p class="commands__meta">
+      {{ (count === 1 ? 'commands.entryCountOne' : 'commands.entryCount') | translate: { count: count } }}
+      @if (hasOsVariants()) {
+        <span aria-hidden="true">·</span>
+        {{ 'settings.os' | translate }} {{ (os() === 'win' ? 'settings.osWin' : 'settings.osUnix') | translate }}
       }
-      <p class="commands__meta">
-        {{ (count === 1 ? 'commands.entryCountOne' : 'commands.entryCount') | translate: { count: count } }}
-        @if (hasOsVariants()) {
-          <span aria-hidden="true">·</span>
-          {{ 'settings.os' | translate }} {{ (os() === 'win' ? 'settings.osWin' : 'settings.osUnix') | translate }}
-        }
-      </p>
-    </div>
+    </p>
     @if (count) {
       <button class="btn btn--ghost" type="button" (click)="toggleAll()">
         {{ (allExpanded() ? 'commands.collapseAll' : 'commands.expandAll') | translate }}
       </button>
     }
-  </header>
+  </app-topic-header>
 
   @for (section of sections(); track section.subtopic.slug) {
     <section class="commands__section">

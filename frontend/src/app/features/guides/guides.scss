@@ -6,40 +6,6 @@
   gap: $space-xl;
 }
 
-// Intro
-.guides__intro {
-  display: flex;
-  gap: $space-md;
-  align-items: center;
-}
-
-.guides__logo {
-  $size: $font-size-xxl * $line-height-tight + $space-xs + $font-size-base * $line-height-base;
-
-  flex: none;
-  width: $size;
-  height: $size;
-}
-
-.guides__heading {
-  display: flex;
-  flex-direction: column;
-  gap: $space-xs;
-  min-width: 0;
-}
-
-.guides__parent {
-  align-self: flex-start;
-  font-weight: $font-weight-medium;
-  color: var(--muted);
-  text-decoration: none;
-
-  &:hover {
-    color: var(--accent);
-    text-decoration: underline;
-  }
-}
-
 // List
 .guides__list {
   padding: 0;
