@@ -1,18 +1,13 @@
 import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
-import {
-  LucideDynamicIcon,
-  LucideListTree,
-  LucideMessageSquarePlus,
-  LucideSearch,
-} from '@lucide/angular';
+import { LucideListTree, LucideMessageSquarePlus, LucideSearch } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DebugGuideApi } from '../../core/debug-guide-api';
 import { ErrorApi } from '../../core/error-api';
 import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { TopicApi } from '../../core/topic-api';
-import { topicIcon, topicLogo } from '../../core/topic-logos';
 import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
+import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { DebugGuideCard } from './debug-guide-card/debug-guide-card';
 import { ErrorCard } from './error-card/error-card';
 
@@ -36,7 +31,7 @@ const HINTS: AreaHint[] = [
 ];
 
 @Component({
-  imports: [AreaIntro, DebugGuideCard, ErrorCard, TranslatePipe, LucideDynamicIcon],
+  imports: [AreaIntro, DebugGuideCard, ErrorCard, TopicHeader, TranslatePipe],
   selector: 'app-errors',
   styleUrl: './errors.scss',
   templateUrl: './errors.html',
@@ -44,17 +39,14 @@ const HINTS: AreaHint[] = [
 export class Errors {
   private readonly errorApi = inject(ErrorApi);
   private readonly debugGuideApi = inject(DebugGuideApi);
+  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input<string>();
 
-  protected readonly topicLogo = topicLogo;
-  protected readonly topicIcon = topicIcon;
   protected readonly hints = HINTS;
   protected readonly summary = toSignal(this.errorApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });
-
-  private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
 
   protected readonly errors = rxResource({
     params: () => this.topic(),
@@ -72,11 +64,12 @@ export class Errors {
     defaultValue: [],
   });
 
-  protected readonly currentTopic = computed(() =>
-    this.groups()
-      .flatMap((group) => group.topics)
-      .find((topic) => topic.slug === this.topic()),
-  );
+  private readonly topicResource = rxResource({
+    params: () => this.topic(),
+    stream: ({ params }) => this.topicApi.getBySlug(params),
+  });
+
+  protected readonly currentTopic = this.topicResource.value;
 
   private readonly outlineItems = computed<OutlineItem[]>(() =>
     this.currentTopic()

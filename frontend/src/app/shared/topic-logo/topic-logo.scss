@@ -1,0 +1,13 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+  flex: none;
+}
+
+// Icon
+.topic-logo__icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

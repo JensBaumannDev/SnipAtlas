@@ -1,0 +1,5 @@
+@if (logo(); as logo) {
+  <span class="icon icon--mask topic-logo__icon" [style.--icon]="logo" aria-hidden="true"></span>
+} @else {
+  <svg [lucideIcon]="icon()" class="icon topic-logo__icon"></svg>
+}

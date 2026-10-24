@@ -1,5 +1,5 @@
 import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
-import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/blueprint-api';
@@ -19,22 +19,22 @@ export class GuideDetail {
   private readonly blueprintApi = inject(BlueprintApi);
   private readonly progress = inject(BlueprintProgress);
   private readonly outline = inject(PageOutline);
+  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input.required<string>();
   readonly slug = input.required<string>();
 
-  private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
   private readonly resource = rxResource({
     params: () => this.slug(),
     stream: ({ params }) => this.blueprintApi.getBySlug(params),
   });
+  private readonly topicResource = rxResource({
+    params: () => this.topic(),
+    stream: ({ params }) => this.topicApi.getBySlug(params),
+  });
 
   protected readonly blueprint = this.resource.value;
-  protected readonly currentTopic = computed(() =>
-    this.groups()
-      .flatMap((group) => group.topics)
-      .find((topic) => topic.slug === this.topic()),
-  );
+  protected readonly currentTopic = this.topicResource.value;
 
   private readonly doneSteps = computed(() => this.progress.doneSteps(this.slug()));
 

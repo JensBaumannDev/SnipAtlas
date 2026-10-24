@@ -1,7 +1,7 @@
 import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideCopy, LucideDynamicIcon, LucideListTree, LucideSettings } from '@lucide/angular';
+import { LucideCopy, LucideListTree, LucideSettings } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Entry } from '../../core/entry';
 import { EntryApi } from '../../core/entry-api';
@@ -9,8 +9,8 @@ import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { Preferences } from '../../core/preferences';
 import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
-import { topicIcon, topicLogo } from '../../core/topic-logos';
 import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
+import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { EntryCard } from './entry-card/entry-card';
 
 const HINTS: AreaHint[] = [
@@ -34,7 +34,7 @@ interface EntrySection {
 }
 
 @Component({
-  imports: [AreaIntro, EntryCard, RouterLink, TranslatePipe, LucideDynamicIcon],
+  imports: [AreaIntro, EntryCard, RouterLink, TopicHeader, TranslatePipe],
   selector: 'app-commands',
   styleUrl: './commands.scss',
   templateUrl: './commands.html',
@@ -42,20 +42,18 @@ interface EntrySection {
 export class Commands {
   private readonly entryApi = inject(EntryApi);
   private readonly outline = inject(PageOutline);
+  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input<string>();
   readonly subtopic = input<string>();
 
   protected readonly os = inject(Preferences).os;
-  protected readonly topicLogo = topicLogo;
-  protected readonly topicIcon = topicIcon;
 
   protected readonly hints = HINTS;
   protected readonly summary = toSignal(this.entryApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });
 
-  private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
   private readonly entries = rxResource({
     params: () => this.topic(),
     stream: ({ params }) => this.entryApi.getByTopic(params),
@@ -63,11 +61,12 @@ export class Commands {
   });
   private readonly expandedSlugs = signal<ReadonlySet<string>>(new Set());
 
-  protected readonly currentTopic = computed(() =>
-    this.groups()
-      .flatMap((group) => group.topics)
-      .find((topic) => topic.slug === this.topic()),
-  );
+  private readonly topicResource = rxResource({
+    params: () => this.topic(),
+    stream: ({ params }) => this.topicApi.getBySlug(params),
+  });
+
+  protected readonly currentTopic = this.topicResource.value;
 
   protected readonly currentSubtopic = computed(() =>
     this.currentTopic()?.subtopics.find((subtopic) => subtopic.slug === this.subtopic()),

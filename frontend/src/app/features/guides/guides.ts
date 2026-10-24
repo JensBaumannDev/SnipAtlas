@@ -1,15 +1,15 @@
 import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideCopy, LucideDynamicIcon, LucideListChecks, LucideListTree } from '@lucide/angular';
+import { LucideCopy, LucideListChecks, LucideListTree } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../core/blueprint-api';
 import { BlueprintProgress } from '../../core/blueprint-progress';
 import { PageOutline } from '../../core/page-outline';
 import { TopicApi } from '../../core/topic-api';
-import { topicIcon, topicLogo } from '../../core/topic-logos';
 import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
 import { ProgressBar } from '../../shared/progress-bar/progress-bar';
+import { TopicHeader } from '../../shared/topic-header/topic-header';
 
 const HINTS: AreaHint[] = [
   { icon: LucideListTree, title: 'guides.hints.choose.title', text: 'guides.hints.choose.text' },
@@ -22,7 +22,7 @@ const HINTS: AreaHint[] = [
 ];
 
 @Component({
-  imports: [AreaIntro, ProgressBar, RouterLink, TranslatePipe, LucideDynamicIcon],
+  imports: [AreaIntro, ProgressBar, RouterLink, TopicHeader, TranslatePipe],
   selector: 'app-guides',
   styleUrl: './guides.scss',
   templateUrl: './guides.html',
@@ -30,24 +30,23 @@ const HINTS: AreaHint[] = [
 export class Guides {
   private readonly blueprintApi = inject(BlueprintApi);
   protected readonly progress = inject(BlueprintProgress);
+  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input<string>();
 
-  protected readonly topicLogo = topicLogo;
-  protected readonly topicIcon = topicIcon;
   protected readonly hints = HINTS;
   protected readonly summary = toSignal(this.blueprintApi.getSummary(), {
     initialValue: { blueprints: 0, steps: 0 },
   });
 
-  private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
   private readonly blueprints = toSignal(this.blueprintApi.getAll(), { initialValue: [] });
 
-  protected readonly currentTopic = computed(() =>
-    this.groups()
-      .flatMap((group) => group.topics)
-      .find((topic) => topic.slug === this.topic()),
-  );
+  private readonly topicResource = rxResource({
+    params: () => this.topic(),
+    stream: ({ params }) => this.topicApi.getBySlug(params),
+  });
+
+  protected readonly currentTopic = this.topicResource.value;
 
   protected readonly topicBlueprints = computed(() =>
     this.blueprints().filter((blueprint) => blueprint.topic === this.topic()),

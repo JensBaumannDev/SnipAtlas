@@ -1,6 +1,6 @@
 import { Service } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Group } from './topic';
+import { Group, Topic } from './topic';
 
 const GROUPS: Group[] = [
   {
@@ -232,5 +232,9 @@ const GROUPS: Group[] = [
 export class TopicApi {
   getGroups(): Observable<Group[]> {
     return of(GROUPS);
+  }
+
+  getBySlug(slug: string): Observable<Topic | undefined> {
+    return of(GROUPS.flatMap((group) => group.topics).find((topic) => topic.slug === slug));
   }
 }

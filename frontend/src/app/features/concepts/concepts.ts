@@ -1,20 +1,15 @@
 import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import {
-  LucideCopy,
-  LucideDynamicIcon,
-  LucideListTree,
-  LucideMessageSquarePlus,
-} from '@lucide/angular';
+import { LucideCopy, LucideListTree, LucideMessageSquarePlus } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Concept } from '../../core/concept';
 import { ConceptApi } from '../../core/concept-api';
 import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
-import { topicIcon, topicLogo } from '../../core/topic-logos';
 import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
+import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { ConceptCard } from './concept-card/concept-card';
 
 const HINTS: AreaHint[] = [
@@ -38,7 +33,7 @@ interface ConceptSection {
 }
 
 @Component({
-  imports: [AreaIntro, ConceptCard, RouterLink, TranslatePipe, LucideDynamicIcon],
+  imports: [AreaIntro, ConceptCard, RouterLink, TopicHeader, TranslatePipe],
   selector: 'app-concepts',
   styleUrl: './concepts.scss',
   templateUrl: './concepts.html',
@@ -46,19 +41,16 @@ interface ConceptSection {
 export class Concepts {
   private readonly conceptApi = inject(ConceptApi);
   private readonly outline = inject(PageOutline);
+  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input<string>();
   readonly subtopic = input<string>();
-
-  protected readonly topicLogo = topicLogo;
-  protected readonly topicIcon = topicIcon;
 
   protected readonly hints = HINTS;
   protected readonly summary = toSignal(this.conceptApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });
 
-  private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
   private readonly concepts = rxResource({
     params: () => this.topic(),
     stream: ({ params }) => this.conceptApi.getByTopic(params),
@@ -66,11 +58,12 @@ export class Concepts {
   });
   private readonly expandedSlugs = signal<ReadonlySet<string>>(new Set());
 
-  protected readonly currentTopic = computed(() =>
-    this.groups()
-      .flatMap((group) => group.topics)
-      .find((topic) => topic.slug === this.topic()),
-  );
+  private readonly topicResource = rxResource({
+    params: () => this.topic(),
+    stream: ({ params }) => this.topicApi.getBySlug(params),
+  });
+
+  protected readonly currentTopic = this.topicResource.value;
 
   protected readonly currentSubtopic = computed(() =>
     this.currentTopic()?.subtopics.find((subtopic) => subtopic.slug === this.subtopic()),
