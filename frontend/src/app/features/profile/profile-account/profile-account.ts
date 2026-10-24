@@ -4,11 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
+import { PASSWORD_MIN_LENGTH } from '../../../core/password-rules';
 import { Session } from '../../../core/session';
 import { UserRequestApi } from '../../../core/user-request-api';
 import { PasswordField } from '../../../shared/password-field/password-field';
 
-const PASSWORD_MIN_LENGTH = 8;
 const EXPORT_FILE = 'snipatlas-daten.json';
 
 @Component({
