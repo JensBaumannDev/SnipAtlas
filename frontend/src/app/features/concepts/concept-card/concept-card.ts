@@ -2,8 +2,8 @@ import { Component, computed, input, model } from '@angular/core';
 import { LucideChevronDown } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Concept } from '../../../core/concept';
+import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
-import { CodeBlock } from '../../commands/code-block/code-block';
 
 @Component({
   imports: [CodeBlock, ReportLink, TranslatePipe, LucideChevronDown],

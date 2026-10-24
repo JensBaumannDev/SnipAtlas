@@ -8,7 +8,7 @@ import { BlueprintProgress } from '../../core/blueprint-progress';
 import { NewsApi } from '../../core/news-api';
 import { AreaLinks } from '../../shared/area-links/area-links';
 import { Collection } from '../../shared/collection/collection';
-import { ProgressBar } from '../guides/progress-bar/progress-bar';
+import { ProgressBar } from '../../shared/progress-bar/progress-bar';
 
 @Component({
   imports: [AreaLinks, Collection, DatePipe, ProgressBar, RouterLink, TranslatePipe],

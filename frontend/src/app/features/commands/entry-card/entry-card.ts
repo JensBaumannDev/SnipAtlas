@@ -17,9 +17,9 @@ import { Entry } from '../../../core/entry';
 import { Favorites } from '../../../core/favorites';
 import { Preferences } from '../../../core/preferences';
 import { Session } from '../../../core/session';
+import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { LoginDialog } from '../../auth/login-dialog';
-import { CodeBlock } from '../code-block/code-block';
 
 @Component({
   imports: [CodeBlock, ReportLink, TranslatePipe, LucideChevronDown, LucideStar],

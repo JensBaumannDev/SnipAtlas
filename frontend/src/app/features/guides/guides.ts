@@ -10,7 +10,7 @@ import { PageOutline } from '../../core/page-outline';
 import { TopicApi } from '../../core/topic-api';
 import { topicIcon, topicLogo } from '../../core/topic-logos';
 import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
-import { ProgressBar } from './progress-bar/progress-bar';
+import { ProgressBar } from '../../shared/progress-bar/progress-bar';
 
 const HINTS: AreaHint[] = [
   { icon: LucideListTree, title: 'guides.hints.choose.title', text: 'guides.hints.choose.text' },

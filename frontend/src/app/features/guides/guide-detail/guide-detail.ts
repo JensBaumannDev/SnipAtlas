@@ -6,8 +6,8 @@ import { BlueprintApi } from '../../../core/blueprint-api';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
 import { PageOutline } from '../../../core/page-outline';
 import { TopicApi } from '../../../core/topic-api';
+import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
 import { GuideStep } from '../guide-step/guide-step';
-import { ProgressBar } from '../progress-bar/progress-bar';
 
 @Component({
   imports: [GuideStep, ProgressBar, RouterLink, TranslatePipe],
