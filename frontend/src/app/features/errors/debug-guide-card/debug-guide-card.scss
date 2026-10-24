@@ -1,0 +1,108 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Card
+.debug-guide-card {
+  border-bottom: 1px solid var(--line);
+}
+
+// Toggle
+.debug-guide-card__toggle {
+  display: flex;
+  gap: $space-md;
+  align-items: center;
+  width: 100%;
+  min-height: $control-height;
+  padding: $space-md $space-xs;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: 0;
+
+  &:hover .debug-guide-card__title {
+    color: var(--accent);
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+
+  &[aria-expanded='true'] .debug-guide-card__chevron {
+    color: var(--accent);
+    transform: rotate(180deg);
+  }
+}
+
+.debug-guide-card__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: $space-sm;
+  min-width: 0;
+}
+
+.debug-guide-card__title {
+  font-weight: $font-weight-medium;
+  line-height: $line-height-tight;
+  overflow-wrap: anywhere;
+  transition: color var(--duration-fast);
+}
+
+.debug-guide-card__summary {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.debug-guide-card__chevron {
+  flex: none;
+  width: rem(20);
+  height: rem(20);
+  color: var(--muted);
+  transition: transform var(--duration);
+}
+
+// Steps
+.debug-guide-card__steps {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  padding: 0 $space-xs $space-lg;
+  margin: 0;
+  list-style: none;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.debug-guide-card__step {
+  display: grid;
+  grid-template-columns: rem(32) minmax(0, 1fr);
+  gap: $space-sm;
+}
+
+.debug-guide-card__number {
+  font-family: $font-mono;
+  color: var(--accent);
+}
+
+.debug-guide-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  min-width: 0;
+}
+
+.debug-guide-card__step-title {
+  font-size: $font-size-base;
+}
+
+.debug-guide-card__step-text {
+  max-width: 70ch;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
