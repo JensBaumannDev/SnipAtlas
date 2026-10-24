@@ -22,7 +22,8 @@
     "imprint": "Impressum",
     "privacy": "Datenschutz",
     "settings": "Einstellungen",
-    "profile": "Profil"
+    "profile": "Profil",
+    "notFound": "Seite nicht gefunden"
   },
   "sidebar": {
     "label": "Themen",
@@ -201,9 +202,7 @@
     "markDone": "Schritt {{number}} erledigt: {{title}}",
     "reset": "Zurücksetzen",
     "note": "Hinweis",
-    "empty": "Zu diesem Thema gibt es noch keine Baupläne.",
-    "notFound": "Diesen Bauplan gibt es nicht.",
-    "backToList": "Zu allen Bauplänen"
+    "empty": "Zu diesem Thema gibt es noch keine Baupläne."
   },
   "debugging": {
     "lead": "Häufige Fehlermeldungen verstehen und lösen: was die Meldung bedeutet, woher sie kommt und wie du sie behebst.",
@@ -465,5 +464,11 @@
       "environmentLabel": "Browser und Gerät",
       "environmentHint": "Automatisch erkannt, du kannst es ändern oder löschen."
     }
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "lead": "Diese Adresse gibt es auf SnipAtlas nicht. Vielleicht hilft dir einer dieser Bereiche weiter.",
+    "missing": "Fehlt hier etwas?",
+    "request": "Anfrage stellen"
   }
 }

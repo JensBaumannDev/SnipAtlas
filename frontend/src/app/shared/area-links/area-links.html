@@ -1,0 +1,13 @@
+<nav [attr.aria-label]="'home.areas.label' | translate">
+  <ul class="area-links__list" role="list">
+    @for (area of areas; track area.path) {
+      <li>
+        <a class="area-links__item" [routerLink]="area.path">
+          <svg [lucideIcon]="area.icon" class="icon area-links__icon"></svg>
+          <span class="area-links__label">{{ area.label | translate }}</span>
+          <span class="area-links__text">{{ area.description | translate }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

@@ -1,0 +1,35 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  padding-block: $space-xxl;
+}
+
+// Intro
+.not-found__intro {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+.not-found__lead {
+  max-width: rem(720);
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
+
+// Request
+.not-found__request {
+  color: var(--muted);
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  :host {
+    padding-block: $space-md $space-xl;
+  }
+}
+
+/* #endregion */

@@ -20,48 +20,6 @@
   color: var(--muted);
 }
 
-// Areas
-.home__area-list {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: $space-lg;
-}
-
-.home__area {
-  display: flex;
-  flex-direction: column;
-  gap: $space-xs;
-  height: 100%;
-  padding: $space-lg;
-  color: var(--ink);
-  text-decoration: none;
-  background: var(--hover);
-  border: 1px solid var(--line);
-  border-radius: $radius-xl;
-  transition:
-    background-color var(--duration-fast),
-    border-color var(--duration-fast);
-
-  &:hover {
-    background: var(--accent-soft);
-    border-color: var(--accent);
-  }
-}
-
-.home__area-icon {
-  margin-bottom: $space-sm;
-  color: var(--accent);
-}
-
-.home__area-label {
-  font-size: $font-size-lg;
-  font-weight: $font-weight-semibold;
-}
-
-.home__area-text {
-  color: var(--muted);
-}
-
 // Columns
 .home__columns {
   display: grid;
@@ -144,11 +102,6 @@
     padding-block: $space-md $space-xl;
   }
 
-  .home__area-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: $space-md;
-  }
-
   .home__columns {
     grid-template-columns: minmax(0, 1fr);
     gap: $space-xl;
@@ -156,13 +109,6 @@
 
   .home__side {
     gap: $space-xl;
-  }
-}
-
-@include small {
-  .home__area-list {
-    grid-template-columns: minmax(0, 1fr);
-    gap: $space-sm;
   }
 }
 

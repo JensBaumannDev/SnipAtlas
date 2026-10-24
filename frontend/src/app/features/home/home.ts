@@ -2,63 +2,21 @@ import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import {
-  LucideBookText,
-  LucideDynamicIcon,
-  LucideIcon,
-  LucideRoute,
-  LucideTerminal,
-  LucideTriangleAlert,
-} from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../core/blueprint-api';
 import { BlueprintProgress } from '../../core/blueprint-progress';
 import { NewsApi } from '../../core/news-api';
+import { AreaLinks } from '../../shared/area-links/area-links';
 import { Collection } from '../../shared/collection/collection';
 import { ProgressBar } from '../guides/progress-bar/progress-bar';
 
-interface Area {
-  path: string;
-  label: string;
-  description: string;
-  icon: LucideIcon;
-}
-
-const AREAS: Area[] = [
-  {
-    path: '/befehle',
-    label: 'nav.commands',
-    description: 'home.areas.commands',
-    icon: LucideTerminal,
-  },
-  {
-    path: '/konzepte',
-    label: 'nav.concepts',
-    description: 'home.areas.concepts',
-    icon: LucideBookText,
-  },
-  {
-    path: '/bauplaene',
-    label: 'nav.blueprints',
-    description: 'home.areas.blueprints',
-    icon: LucideRoute,
-  },
-  {
-    path: '/debugging',
-    label: 'nav.debugging',
-    description: 'home.areas.debugging',
-    icon: LucideTriangleAlert,
-  },
-];
-
 @Component({
-  imports: [Collection, DatePipe, ProgressBar, RouterLink, TranslatePipe, LucideDynamicIcon],
+  imports: [AreaLinks, Collection, DatePipe, ProgressBar, RouterLink, TranslatePipe],
   selector: 'app-home',
   styleUrl: './home.scss',
   templateUrl: './home.html',
 })
 export class Home {
-  protected readonly areas = AREAS;
   protected readonly news = toSignal(inject(NewsApi).getLatest(), { initialValue: [] });
 
   private readonly progress = inject(BlueprintProgress);

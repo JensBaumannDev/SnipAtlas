@@ -22,7 +22,8 @@
     "imprint": "Legal notice",
     "privacy": "Privacy policy",
     "settings": "Settings",
-    "profile": "Profile"
+    "profile": "Profile",
+    "notFound": "Page not found"
   },
   "sidebar": {
     "label": "Topics",
@@ -201,9 +202,7 @@
     "markDone": "Step {{number}} done: {{title}}",
     "reset": "Reset",
     "note": "Note",
-    "empty": "There are no blueprints for this topic yet.",
-    "notFound": "This blueprint does not exist.",
-    "backToList": "Back to all blueprints"
+    "empty": "There are no blueprints for this topic yet."
   },
   "debugging": {
     "lead": "Understand and fix common error messages: what the message means, where it comes from and how to fix it.",
@@ -465,5 +464,11 @@
       "environmentLabel": "Browser and device",
       "environmentHint": "Detected automatically, you can change or remove it."
     }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "lead": "This address does not exist on SnipAtlas. One of these areas might help you.",
+    "missing": "Is something missing?",
+    "request": "Send a request"
   }
 }
