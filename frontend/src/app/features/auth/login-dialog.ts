@@ -1,0 +1,21 @@
+import type { DialogRef } from '@angular/cdk/dialog';
+import { Injector, Service, inject } from '@angular/core';
+import type { AuthDialog } from './auth-dialog/auth-dialog';
+
+@Service()
+export class LoginDialog {
+  private readonly injector = inject(Injector);
+
+  async open(): Promise<DialogRef<unknown, AuthDialog>> {
+    const [{ Dialog }, { AuthDialog }] = await Promise.all([
+      import('@angular/cdk/dialog'),
+      import('./auth-dialog/auth-dialog'),
+    ]);
+    return this.injector.get(Dialog).open(AuthDialog, {
+      ariaLabelledBy: 'auth-title',
+      autoFocus: '#login-email',
+      backdropClass: 'dialog-backdrop',
+      disableClose: true,
+    });
+  }
+}
