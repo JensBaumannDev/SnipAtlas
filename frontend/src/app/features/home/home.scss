@@ -50,7 +50,7 @@
 }
 
 .home__date {
-  font-family: $font-mono;
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
 
