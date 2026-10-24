@@ -1,4 +1,5 @@
 import { Service, computed, signal } from '@angular/core';
+import type { AccentTheme } from './preferences';
 
 export interface Favorite {
   topic: string;
@@ -11,6 +12,7 @@ export interface SessionUser {
   email: string;
   since: string;
   notifyByMail: boolean;
+  accent: AccentTheme;
   favorites: Favorite[];
 }
 
@@ -24,6 +26,7 @@ export class Session {
       email: email.trim(),
       since: new Date().toISOString().slice(0, 10),
       notifyByMail: true,
+      accent: 'blue',
       favorites: [],
     });
   }

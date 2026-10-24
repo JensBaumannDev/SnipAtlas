@@ -42,6 +42,42 @@
   </div>
 </section>
 
+@if (session.user()) {
+  <section class="settings__section" aria-labelledby="settings-accent">
+    <div class="settings__text">
+      <h2 class="settings__heading" id="settings-accent">{{ 'settings.accent' | translate }}</h2>
+      <p class="settings__hint" id="settings-accent-hint">{{ 'settings.accentHint' | translate }}</p>
+    </div>
+    <div
+      class="settings__themes settings__themes--accents"
+      role="radiogroup"
+      aria-labelledby="settings-accent"
+      aria-describedby="settings-accent-hint"
+    >
+      @for (option of accentOptions; track option.value) {
+        <label class="settings__theme">
+          <input
+            class="visually-hidden"
+            type="radio"
+            name="accent"
+            [value]="option.value"
+            [checked]="preferences.accent() === option.value"
+            (change)="preferences.setAccent(option.value)"
+          />
+          <span class="settings__preview" aria-hidden="true">
+            <span class="settings__preview-half" [attr.data-accent]="option.value">
+              <span class="settings__preview-line"></span>
+              <span class="settings__preview-line settings__preview-line--accent"></span>
+              <span class="settings__preview-line settings__preview-line--muted"></span>
+            </span>
+          </span>
+          <span class="settings__theme-name">{{ option.label | translate }}</span>
+        </label>
+      }
+    </div>
+  </section>
+}
+
 <section class="settings__section">
   <div class="settings__row">
     <div class="settings__text">
