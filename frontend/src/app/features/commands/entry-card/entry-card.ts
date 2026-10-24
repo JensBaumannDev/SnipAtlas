@@ -1,4 +1,15 @@
-import { Component, computed, inject, input, model, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+  model,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { LucideChevronDown, LucideStar } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { firstCodeLine } from '../../../core/code-highlight';
@@ -21,6 +32,8 @@ export class EntryCard {
   private readonly favorites = inject(Favorites);
   private readonly session = inject(Session);
   private readonly loginDialog = inject(LoginDialog);
+  private readonly injector = inject(Injector);
+  private readonly star = viewChild.required<ElementRef<HTMLButtonElement>>('star');
 
   readonly entry = input.required<Entry>();
   readonly level = input<2 | 3>(3);
@@ -46,9 +59,15 @@ export class EntryCard {
     this.favorites.toggle(this.entry());
   }
 
-  protected login(): void {
-    this.loginHint.set(false);
-    this.loginDialog.open();
+  protected async login(): Promise<void> {
+    const dialogRef = await this.loginDialog.open();
+    dialogRef.closed.subscribe(() => {
+      if (!this.session.user()) {
+        return;
+      }
+      this.loginHint.set(false);
+      afterNextRender(() => this.star().nativeElement.focus(), { injector: this.injector });
+    });
   }
 
   protected toggle(): void {

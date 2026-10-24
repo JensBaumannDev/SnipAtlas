@@ -4,7 +4,7 @@
     {{ 'auth.login' | translate }}
   </button>
 } @else {
-  <ul class="collection__list" role="list">
+  <ul #list class="collection__list" role="list" tabindex="-1">
     @for (favorite of shown(); track favorite.topic + favorite.slug) {
       <li>
         <a
