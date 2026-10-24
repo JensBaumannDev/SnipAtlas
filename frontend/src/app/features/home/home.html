@@ -12,7 +12,7 @@
       @for (item of news(); track item.date + item.title) {
         <li class="home__news-item">
           <time class="home__date" [attr.datetime]="item.date">{{
-            item.date | date: 'dd.MM.yyyy'
+            item.date | date: 'mediumDate' : undefined : language()
           }}</time>
           <a class="home__link" [routerLink]="item.link">{{ item.title }}</a>
         </li>

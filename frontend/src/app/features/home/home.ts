@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../core/blueprint-api';
 import { BlueprintProgress } from '../../core/blueprint-progress';
 import { NewsApi } from '../../core/news-api';
+import { Preferences } from '../../core/preferences';
 import { AreaLinks } from '../../shared/area-links/area-links';
 import { Collection } from '../../shared/collection/collection';
 import { ProgressBar } from '../../shared/progress-bar/progress-bar';
@@ -17,6 +18,7 @@ import { ProgressBar } from '../../shared/progress-bar/progress-bar';
   templateUrl: './home.html',
 })
 export class Home {
+  protected readonly language = inject(Preferences).language;
   protected readonly news = toSignal(inject(NewsApi).getLatest(), { initialValue: [] });
 
   private readonly progress = inject(BlueprintProgress);

@@ -5,7 +5,10 @@
       <h1>{{ 'pages.profile' | translate }}</h1>
       <p class="profile__meta">
         {{ user.email }} ·
-        {{ 'profile.since' | translate: { date: (user.since | date: 'dd.MM.yyyy') } }}
+        {{
+          'profile.since'
+            | translate: { date: (user.since | date: 'mediumDate' : undefined : language()) }
+        }}
       </p>
     </div>
   </header>

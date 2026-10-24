@@ -3,6 +3,7 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Preferences } from '../../../core/preferences';
 import { UserRequestApi } from '../../../core/user-request-api';
 
 @Component({
@@ -12,6 +13,7 @@ import { UserRequestApi } from '../../../core/user-request-api';
   templateUrl: './profile-requests.html',
 })
 export class ProfileRequests {
+  protected readonly language = inject(Preferences).language;
   protected readonly requests = toSignal(inject(UserRequestApi).getMine(), { initialValue: [] });
 
   protected readonly openCount = computed(
