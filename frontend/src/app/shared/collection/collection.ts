@@ -1,4 +1,13 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+  viewChild,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideStar } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -14,6 +23,8 @@ import { LoginDialog } from '../../features/auth/login-dialog';
 })
 export class Collection {
   private readonly loginDialog = inject(LoginDialog);
+  private readonly injector = inject(Injector);
+  private readonly list = viewChild<ElementRef<HTMLUListElement>>('list');
 
   readonly hint = input('sidebar.collectionHint');
   readonly limit = input<number>();
@@ -26,7 +37,10 @@ export class Collection {
   });
   protected readonly hidden = computed(() => this.favorites().length - this.shown().length);
 
-  protected login(): void {
-    this.loginDialog.open();
+  protected async login(): Promise<void> {
+    const dialogRef = await this.loginDialog.open();
+    dialogRef.closed.subscribe(() =>
+      afterNextRender(() => this.list()?.nativeElement.focus(), { injector: this.injector }),
+    );
   }
 }
