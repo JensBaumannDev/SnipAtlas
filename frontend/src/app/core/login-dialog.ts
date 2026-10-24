@@ -1,6 +1,6 @@
 import type { DialogRef } from '@angular/cdk/dialog';
 import { Injector, Service, inject } from '@angular/core';
-import type { AuthDialog } from './auth-dialog/auth-dialog';
+import type { AuthDialog } from '../features/auth/auth-dialog/auth-dialog';
 
 @Service()
 export class LoginDialog {
@@ -9,7 +9,7 @@ export class LoginDialog {
   async open(): Promise<DialogRef<unknown, AuthDialog>> {
     const [{ Dialog }, { AuthDialog }] = await Promise.all([
       import('@angular/cdk/dialog'),
-      import('./auth-dialog/auth-dialog'),
+      import('../features/auth/auth-dialog/auth-dialog'),
     ]);
     return this.injector.get(Dialog).open(AuthDialog, {
       ariaLabelledBy: 'auth-title',

@@ -12,8 +12,8 @@ import { RouterLink } from '@angular/router';
 import { LucideStar } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Favorites } from '../../core/favorites';
+import { LoginDialog } from '../../core/login-dialog';
 import { Session } from '../../core/session';
-import { LoginDialog } from '../../features/auth/login-dialog';
 
 @Component({
   imports: [RouterLink, TranslatePipe, LucideStar],

@@ -3,8 +3,8 @@ import { Component, ElementRef, Injector, afterNextRender, inject, viewChild } f
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideSearch, LucideSettings } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { LoginDialog } from '../../core/login-dialog';
 import { Session } from '../../core/session';
-import { LoginDialog } from '../../features/auth/login-dialog';
 import { UserMenu } from '../user-menu/user-menu';
 
 const SCROLL_GAP = 16;
