@@ -1,0 +1,64 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// List
+.area-links__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: $space-lg;
+}
+
+.area-links__item {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  height: 100%;
+  padding: $space-lg;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--hover);
+  border: 1px solid var(--line);
+  border-radius: $radius-xl;
+  transition:
+    background-color var(--duration-fast),
+    border-color var(--duration-fast);
+
+  &:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+}
+
+.area-links__icon {
+  margin-bottom: $space-sm;
+  color: var(--accent);
+}
+
+.area-links__label {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+}
+
+.area-links__text {
+  color: var(--muted);
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .area-links__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $space-md;
+  }
+}
+
+@include small {
+  .area-links__list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: $space-sm;
+  }
+}
+
+/* #endregion */

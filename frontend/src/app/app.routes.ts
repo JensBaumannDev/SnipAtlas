@@ -58,5 +58,9 @@ export const routes: Routes = [
     title: 'pages.privacy',
     loadComponent: () => import('./features/legal/privacy/privacy').then((m) => m.Privacy),
   },
-  { path: '**', redirectTo: 'befehle' },
+  {
+    path: '**',
+    title: 'pages.notFound',
+    loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
+  },
 ];

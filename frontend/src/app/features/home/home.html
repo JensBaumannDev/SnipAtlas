@@ -3,19 +3,7 @@
   <p class="home__lead">{{ 'home.lead' | translate }}</p>
 </header>
 
-<nav class="home__areas" [attr.aria-label]="'home.areas.label' | translate">
-  <ul class="home__area-list" role="list">
-    @for (area of areas; track area.path) {
-      <li>
-        <a class="home__area" [routerLink]="area.path">
-          <svg [lucideIcon]="area.icon" class="icon home__area-icon"></svg>
-          <span class="home__area-label">{{ area.label | translate }}</span>
-          <span class="home__area-text">{{ area.description | translate }}</span>
-        </a>
-      </li>
-    }
-  </ul>
-</nav>
+<app-area-links />
 
 <div class="home__columns">
   <section class="home__section" aria-labelledby="home-news">

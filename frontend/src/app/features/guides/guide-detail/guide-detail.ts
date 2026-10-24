@@ -29,11 +29,7 @@ export class GuideDetail {
     stream: ({ params }) => this.blueprintApi.getBySlug(params),
   });
 
-  protected readonly loading = this.resource.isLoading;
-  protected readonly blueprint = computed(() => {
-    const blueprint = this.resource.value();
-    return blueprint?.topic === this.topic() ? blueprint : undefined;
-  });
+  protected readonly blueprint = this.resource.value;
   protected readonly currentTopic = computed(() =>
     this.groups()
       .flatMap((group) => group.topics)
