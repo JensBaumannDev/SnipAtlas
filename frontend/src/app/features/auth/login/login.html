@@ -1,0 +1,61 @@
+<button
+  class="login__close"
+  type="button"
+  [attr.aria-label]="'auth.close' | translate"
+  (click)="close()"
+>
+  <svg lucideX class="icon"></svg>
+</button>
+
+<p class="login__brand">
+  <span class="logo login__logo" aria-hidden="true"></span>
+  <span>Snip<span class="login__accent">Atlas</span></span>
+</p>
+
+<h2 class="login__title" id="login-title">{{ 'auth.login' | translate }}</h2>
+<p class="login__lead">{{ 'auth.lead' | translate }}</p>
+
+<form class="login__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="field">
+    <label class="field__label" for="login-email">{{ 'auth.email' | translate }}</label>
+    <input
+      class="input"
+      id="login-email"
+      type="email"
+      autocomplete="email"
+      formControlName="email"
+      [attr.aria-invalid]="emailError()"
+      [attr.aria-describedby]="emailError() ? 'login-email-error' : null"
+    />
+    @if (emailError()) {
+      <p class="field__error" id="login-email-error">{{ 'auth.errors.emailFormat' | translate }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <div class="login__label-row">
+      <label class="field__label" for="login-password">{{ 'auth.password' | translate }}</label>
+      <button class="login__link" type="button">{{ 'auth.forgot' | translate }}</button>
+    </div>
+    <input
+      class="input"
+      id="login-password"
+      type="password"
+      autocomplete="current-password"
+      formControlName="password"
+    />
+  </div>
+
+  @if (submitted()) {
+    <p class="login__note" role="status">{{ 'auth.notYet' | translate }}</p>
+  }
+
+  <button class="btn btn--primary login__submit" type="submit" [disabled]="!filled()">
+    {{ 'auth.login' | translate }}
+  </button>
+</form>
+
+<p class="login__footer">
+  {{ 'auth.noAccount' | translate }}
+  <button class="login__link" type="button">{{ 'auth.register' | translate }}</button>
+</p>

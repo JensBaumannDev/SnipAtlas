@@ -36,7 +36,18 @@
     "ctrl": "Ctrl"
   },
   "auth": {
-    "login": "Sign in"
+    "login": "Sign in",
+    "lead": "For favourites, progress and requests.",
+    "forgot": "Forgot password?",
+    "noAccount": "No account yet?",
+    "register": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "close": "Close",
+    "notYet": "Signing in will work once the backend is ready.",
+    "errors": {
+      "emailFormat": "This email address does not look right."
+    }
   },
   "settings": {
     "title": "Settings",

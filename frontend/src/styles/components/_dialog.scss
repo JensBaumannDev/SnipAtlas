@@ -1,0 +1,9 @@
+@use '@angular/cdk' as cdk;
+@use 'abstracts' as *;
+@include cdk.overlay;
+
+// Backdrop
+.dialog-backdrop {
+  background: var(--backdrop);
+  backdrop-filter: blur(8px);
+}

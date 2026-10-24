@@ -36,7 +36,18 @@
     "ctrl": "Strg"
   },
   "auth": {
-    "login": "Anmelden"
+    "login": "Anmelden",
+    "lead": "Für Favoriten, Fortschritt und Anfragen.",
+    "forgot": "Passwort vergessen?",
+    "noAccount": "Noch kein Konto?",
+    "register": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "close": "Schließen",
+    "notYet": "Die Anmeldung funktioniert, sobald das Backend steht.",
+    "errors": {
+      "emailFormat": "Diese E-Mail-Adresse sieht nicht richtig aus."
+    }
   },
   "settings": {
     "title": "Einstellungen",
