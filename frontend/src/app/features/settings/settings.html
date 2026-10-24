@@ -1,7 +1,9 @@
-<header class="settings__intro">
-  <h1>{{ 'settings.title' | translate }}</h1>
-  <p class="settings__lead">{{ 'settings.lead' | translate }}</p>
-</header>
+@if (!embedded()) {
+  <header class="settings__intro">
+    <h1>{{ 'settings.title' | translate }}</h1>
+    <p class="settings__lead">{{ 'settings.lead' | translate }}</p>
+  </header>
+}
 
 <section class="settings__section" aria-labelledby="settings-theme">
   <h2 class="settings__heading" id="settings-theme">{{ 'settings.theme' | translate }}</h2>

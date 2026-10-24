@@ -1,1 +1,28 @@
-<h1>{{ 'pages.profile' | translate }}</h1>
+@if (session.user(); as user) {
+  <header class="profile__header">
+    <span class="profile__avatar" aria-hidden="true">{{ session.initial() }}</span>
+    <div class="profile__heading">
+      <h1>{{ 'pages.profile' | translate }}</h1>
+      <p class="profile__meta">
+        {{ user.email }} ·
+        {{ 'profile.since' | translate: { date: (user.since | date: 'dd.MM.yyyy') } }}
+      </p>
+    </div>
+  </header>
+
+  <nav class="profile__tabs" [attr.aria-label]="'pages.profile' | translate">
+    @for (tab of tabs; track tab.path) {
+      <a
+        class="profile__tab"
+        [routerLink]="tab.path"
+        routerLinkActive="profile__tab--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+      >
+        {{ tab.label | translate }}
+      </a>
+    }
+  </nav>
+
+  <router-outlet />
+}

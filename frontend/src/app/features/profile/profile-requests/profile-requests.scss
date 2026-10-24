@@ -1,0 +1,63 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+// Head
+.profile-requests__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm $space-md;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $space-sm;
+}
+
+// List
+.profile-requests__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.profile-requests__item {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  padding: $space-md $space-xs;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-requests__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-md;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-requests__subject {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  overflow-wrap: anywhere;
+}
+
+.profile-requests__meta {
+  color: var(--muted);
+}
+
+.profile-requests__answer {
+  max-width: 70ch;
+  padding: $space-xs $space-md;
+  margin-top: $space-sm;
+  border-left: 2px solid var(--accent);
+}
+
+.profile-requests__answer-label {
+  display: block;
+  font-weight: $font-weight-semibold;
+}

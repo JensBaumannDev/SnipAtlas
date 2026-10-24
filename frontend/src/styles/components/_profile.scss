@@ -1,0 +1,64 @@
+@use 'abstracts' as *;
+
+// Section
+.profile-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-section__title {
+  padding: 0 $space-xs $space-sm;
+  margin-top: $space-xl;
+  font-size: $font-size-xl;
+  border-bottom: 1px solid var(--muted);
+}
+
+.profile-section__block {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  align-items: flex-start;
+  padding: $space-md $space-xs $space-lg;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-section__text {
+  max-width: 60ch;
+  color: var(--muted);
+}
+
+// Rows
+.profile-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-md;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-md $space-xs;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-row__title {
+  flex: 1 1 rem(240);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+// Status
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: rem(26);
+  padding: 0 $space-sm;
+  font-size: $font-size-base;
+  line-height: $line-height-none;
+  color: var(--muted);
+  white-space: nowrap;
+  border: 1px solid var(--line);
+  border-radius: rem(13);
+
+  &--open {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}

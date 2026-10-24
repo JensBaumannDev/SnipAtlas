@@ -43,6 +43,49 @@
     "requests": "Meine Anfragen",
     "logout": "Abmelden"
   },
+  "profile": {
+    "since": "Dabei seit {{date}}",
+    "tabs": {
+      "overview": "Übersicht",
+      "requests": "Anfragen",
+      "settings": "Einstellungen",
+      "account": "Konto"
+    },
+    "noFavorites": "Noch keine Favoriten. Sobald du Befehle mit dem Stern markierst, erscheinen sie hier.",
+    "progress": "Fortschritt",
+    "noProgress": "Du hast noch keinen Bauplan begonnen.",
+    "toBlueprints": "Zu den Bauplänen",
+    "allRequests": "Alle Anfragen ansehen",
+    "requestSummary": "{{open}} offen, {{done}} erledigt",
+    "noRequests": "Du hast noch keine Anfragen gestellt.",
+    "newRequest": "Neue Anfrage",
+    "answer": "Antwort",
+    "status": {
+      "open": "Offen",
+      "done": "Erledigt"
+    },
+    "notify": "E-Mail bei Antwort",
+    "notifyHint": "Benachrichtigung, wenn eine deiner Anfragen beantwortet wurde.",
+    "notifyLabel": "Benachrichtigen",
+    "account": {
+      "email": "E-Mail-Adresse",
+      "emailSubmit": "E-Mail ändern",
+      "emailSaved": "Deine E-Mail-Adresse ist geändert.",
+      "password": "Passwort ändern",
+      "currentPassword": "Aktuelles Passwort",
+      "newPassword": "Neues Passwort",
+      "passwordSubmit": "Passwort ändern",
+      "data": "Deine Daten",
+      "dataText": "Lädt dein Konto, deinen Fortschritt und deine Anfragen als Datei herunter.",
+      "dataSubmit": "Daten herunterladen",
+      "logoutText": "Meldet dich auf diesem Gerät ab.",
+      "delete": "Konto löschen",
+      "deleteText": "Löscht dein Konto mit allen Favoriten, deinem Fortschritt und deinen Anfragen. Die Inhalte von SnipAtlas kannst du danach weiter ohne Konto lesen.",
+      "deleteConfirm": "Bist du sicher? Das lässt sich nicht rückgängig machen.",
+      "deleteSubmit": "Ja, Konto löschen",
+      "cancel": "Abbrechen"
+    }
+  },
   "auth": {
     "login": "Anmelden",
     "lead": "Für Favoriten, Fortschritt und Anfragen.",

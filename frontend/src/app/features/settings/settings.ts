@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageMode, OperatingSystem, Preferences, ThemeMode } from '../../core/preferences';
 
@@ -14,6 +14,8 @@ interface Option<T> {
   templateUrl: './settings.html',
 })
 export class Settings {
+  readonly embedded = input(false);
+
   protected readonly preferences = inject(Preferences);
 
   protected readonly themeOptions: Option<ThemeMode>[] = [

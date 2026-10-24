@@ -1,0 +1,58 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  padding-top: $space-sm;
+}
+
+// Notification
+.profile-settings__row {
+  display: flex;
+  gap: $space-lg;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $space-md;
+  border-top: 1px solid var(--line);
+}
+
+.profile-settings__text {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  min-width: 0;
+}
+
+.profile-settings__heading {
+  font-size: $font-size-lg;
+}
+
+.profile-settings__hint {
+  color: var(--muted);
+}
+
+.profile-settings__check {
+  display: flex;
+  flex: none;
+  gap: $space-sm;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile-settings__checkbox {
+  width: rem(20);
+  height: rem(20);
+  accent-color: var(--accent);
+}
+
+/* #region RESPONSIVE */
+@include small {
+  .profile-settings__row {
+    flex-direction: column;
+    gap: $space-md;
+    align-items: stretch;
+  }
+}
+
+/* #endregion */
