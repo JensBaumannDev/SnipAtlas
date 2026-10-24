@@ -2,9 +2,9 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
 import { LucideCheck, LucideCopy } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CodeToken, highlight } from '../../../core/code-highlight';
-import { CodeLanguage } from '../../../core/entry';
-import { OperatingSystem } from '../../../core/preferences';
+import { CodeToken, highlight } from '../../core/code-highlight';
+import { CodeLanguage } from '../../core/entry';
+import { OperatingSystem } from '../../core/preferences';
 
 const COPIED_DURATION = 2000;
 

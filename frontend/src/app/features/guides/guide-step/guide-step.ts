@@ -2,8 +2,8 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintStep } from '../../../core/blueprint';
 import { Preferences } from '../../../core/preferences';
+import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
-import { CodeBlock } from '../../commands/code-block/code-block';
 
 @Component({
   imports: [CodeBlock, ReportLink, TranslatePipe],

@@ -6,7 +6,7 @@ import { BlueprintApi } from '../../../core/blueprint-api';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
 import { UserRequestApi } from '../../../core/user-request-api';
 import { Collection } from '../../../shared/collection/collection';
-import { ProgressBar } from '../../guides/progress-bar/progress-bar';
+import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
 
 const LATEST_REQUESTS = 2;
 
