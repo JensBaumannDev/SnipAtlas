@@ -44,9 +44,20 @@
     "email": "Email",
     "password": "Password",
     "close": "Close",
-    "notYet": "Signing in will work once the backend is ready.",
+    "notYet": "This will work once the backend is ready.",
+    "registerLead": "Free, just email and password.",
+    "registerSubmit": "Create account",
+    "hasAccount": "Already have an account?",
+    "passwordRepeat": "Repeat password",
+    "passwordHint": "At least {{min}} characters.",
+    "forgotTitle": "Forgot password",
+    "forgotLead": "Enter your email address. You will get a link to set a new password.",
+    "forgotSubmit": "Send link",
+    "backToLogin": "Back to sign in",
     "errors": {
-      "emailFormat": "This email address does not look right."
+      "emailFormat": "This email address does not look right.",
+      "passwordLength": "The password needs at least {{min}} characters.",
+      "passwordMismatch": "The passwords do not match."
     }
   },
   "settings": {

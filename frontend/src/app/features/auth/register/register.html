@@ -1,0 +1,79 @@
+<h2 class="auth-form__title" id="auth-title">{{ 'auth.register' | translate }}</h2>
+<p class="auth-form__lead">{{ 'auth.registerLead' | translate }}</p>
+
+<form class="auth-form__fields" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="field">
+    <label class="field__label" for="register-email">{{ 'auth.email' | translate }}</label>
+    <input
+      class="input"
+      id="register-email"
+      type="email"
+      autocomplete="email"
+      formControlName="email"
+      [attr.aria-invalid]="emailError()"
+      [attr.aria-describedby]="emailError() ? 'register-email-error' : null"
+    />
+    @if (emailError()) {
+      <p class="field__error" id="register-email-error">
+        {{ 'auth.errors.emailFormat' | translate }}
+      </p>
+    }
+  </div>
+
+  <div class="field">
+    <label class="field__label" for="register-password">{{ 'auth.password' | translate }}</label>
+    <input
+      class="input"
+      id="register-password"
+      type="password"
+      autocomplete="new-password"
+      formControlName="password"
+      aria-describedby="register-password-message"
+      [attr.aria-invalid]="passwordError()"
+    />
+    @if (passwordError()) {
+      <p class="field__error" id="register-password-message">
+        {{ 'auth.errors.passwordLength' | translate: { min: minLength } }}
+      </p>
+    } @else {
+      <p class="field__hint" id="register-password-message">
+        {{ 'auth.passwordHint' | translate: { min: minLength } }}
+      </p>
+    }
+  </div>
+
+  <div class="field">
+    <label class="field__label" for="register-repeat">{{
+      'auth.passwordRepeat' | translate
+    }}</label>
+    <input
+      class="input"
+      id="register-repeat"
+      type="password"
+      autocomplete="new-password"
+      formControlName="repeat"
+      [attr.aria-invalid]="repeatError()"
+      [attr.aria-describedby]="repeatError() ? 'register-repeat-error' : null"
+    />
+    @if (repeatError()) {
+      <p class="field__error" id="register-repeat-error">
+        {{ 'auth.errors.passwordMismatch' | translate }}
+      </p>
+    }
+  </div>
+
+  @if (submitted()) {
+    <p class="auth-form__note" role="status">{{ 'auth.notYet' | translate }}</p>
+  }
+
+  <button class="btn btn--primary auth-form__submit" type="submit" [disabled]="!filled()">
+    {{ 'auth.registerSubmit' | translate }}
+  </button>
+</form>
+
+<p class="auth-form__footer">
+  {{ 'auth.hasAccount' | translate }}
+  <button class="auth-form__link" type="button" (click)="login.emit()">
+    {{ 'auth.login' | translate }}
+  </button>
+</p>

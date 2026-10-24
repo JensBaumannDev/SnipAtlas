@@ -1,0 +1,92 @@
+@use 'abstracts' as *;
+
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: rem(400);
+  max-width: calc(100vw - 2 * $space-md);
+  padding: $space-lg;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-xl;
+  animation: auth-dialog-in var(--duration) var(--ease);
+}
+
+:host(.auth-dialog--closing) {
+  animation: auth-dialog-out var(--duration-fast) ease-in forwards;
+}
+
+// Close
+.auth-dialog__close {
+  position: absolute;
+  top: $space-sm;
+  right: $space-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $control-height;
+  height: $control-height;
+  color: var(--muted);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: $radius-md;
+  transition: color var(--duration-fast);
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+// Brand
+.auth-dialog__brand {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  margin-bottom: $space-md;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-none;
+  letter-spacing: $letter-spacing-tight;
+}
+
+.auth-dialog__logo {
+  width: $font-size-xl;
+  height: $font-size-xl;
+  color: var(--ink);
+}
+
+.auth-dialog__accent {
+  color: var(--accent);
+}
+
+// Animation
+@keyframes auth-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes auth-dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  :host {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    padding: $space-lg $space-md;
+    overflow-y: auto;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+/* #endregion */
