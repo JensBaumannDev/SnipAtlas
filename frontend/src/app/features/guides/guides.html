@@ -24,7 +24,7 @@
         </h2>
         <p class="guides__summary">{{ blueprint.summary }}</p>
         <app-progress-bar
-          [done]="doneCount(blueprint)"
+          [done]="progress.doneCount(blueprint)"
           [total]="blueprint.steps.length"
           [label]="'guides.progressOf' | translate: { title: blueprint.title }"
         />

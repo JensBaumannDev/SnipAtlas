@@ -24,13 +24,7 @@ export class Home {
 
   protected readonly current = computed(() =>
     this.blueprints()
-      .map((blueprint) => {
-        const done = this.progress.doneSteps(blueprint.slug);
-        return {
-          blueprint,
-          done: blueprint.steps.filter((step) => done.includes(step.slug)).length,
-        };
-      })
+      .map((blueprint) => ({ blueprint, done: this.progress.doneCount(blueprint) }))
       .find((item) => item.done > 0 && item.done < item.blueprint.steps.length),
   );
 }
