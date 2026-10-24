@@ -1,4 +1,4 @@
-<article class="concept-card" [id]="concept().slug">
+<article class="concept-card" [id]="concept().slug" [class.concept-card--open]="expanded()">
   <div class="concept-card__heading" role="heading" [attr.aria-level]="level()">
     <button
       class="concept-card__toggle"

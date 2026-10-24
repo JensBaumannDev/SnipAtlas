@@ -36,3 +36,27 @@
   height: 1px;
   white-space: nowrap;
 }
+
+// Cards
+@mixin card-surface($radius: $radius-card, $shadow: true) {
+  background: linear-gradient(145deg, var(--card-from), var(--card-to));
+  border: 2px solid var(--card-edge);
+  border-radius: $radius;
+
+  @if $shadow {
+    box-shadow: var(--card-shadow);
+  }
+}
+
+@mixin card-title {
+  font-size: $font-size-lg;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-caps;
+}
+
+@mixin card-line {
+  height: 2px;
+  content: '';
+  background: linear-gradient(90deg, var(--accent), var(--accent-pair));
+  border-radius: 1px;
+}
