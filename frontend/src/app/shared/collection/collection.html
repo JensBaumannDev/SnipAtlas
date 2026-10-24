@@ -1,0 +1,28 @@
+@if (!session.user()) {
+  <p class="collection__hint">{{ hint() | translate }}</p>
+  <button class="collection__login" type="button" (click)="login()">
+    {{ 'auth.login' | translate }}
+  </button>
+} @else {
+  <ul class="collection__list" role="list">
+    @for (favorite of shown(); track favorite.topic + favorite.slug) {
+      <li>
+        <a
+          class="collection__link"
+          [routerLink]="['/befehle', favorite.topic, favorite.subtopic]"
+          [fragment]="favorite.slug"
+        >
+          <svg lucideStar class="icon collection__icon"></svg>
+          <span class="collection__title">{{ favorite.title }}</span>
+        </a>
+      </li>
+    } @empty {
+      <li class="collection__hint">{{ 'favorites.empty' | translate }}</li>
+    }
+  </ul>
+  @if (hidden()) {
+    <a class="collection__more" routerLink="/profil">
+      {{ 'favorites.all' | translate: { count: favorites().length } }}
+    </a>
+  }
+}

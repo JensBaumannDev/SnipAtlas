@@ -25,10 +25,12 @@ import { AreaContent } from '../../core/area-content';
 import { ContentArea, isContentArea } from '../../core/content-index';
 import { TopicApi } from '../../core/topic-api';
 import { topicIcon, topicLogo } from '../../core/topic-logos';
+import { Collection } from '../../shared/collection/collection';
 import { SidebarMode, isSidebarMode } from './sidebar-mode';
 
 @Component({
   imports: [
+    Collection,
     RouterLink,
     RouterLinkActive,
     TranslatePipe,

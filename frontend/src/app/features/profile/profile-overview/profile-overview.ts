@@ -5,12 +5,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/blueprint-api';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
 import { UserRequestApi } from '../../../core/user-request-api';
+import { Collection } from '../../../shared/collection/collection';
 import { ProgressBar } from '../../guides/progress-bar/progress-bar';
 
 const LATEST_REQUESTS = 2;
 
 @Component({
-  imports: [ProgressBar, RouterLink, TranslatePipe],
+  imports: [Collection, ProgressBar, RouterLink, TranslatePipe],
   selector: 'app-profile-overview',
   styleUrl: './profile-overview.scss',
   templateUrl: './profile-overview.html',

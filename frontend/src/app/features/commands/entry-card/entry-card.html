@@ -1,4 +1,5 @@
 <article class="entry-card" [id]="entry().slug">
+  <div class="entry-card__head">
   <div class="entry-card__heading" role="heading" [attr.aria-level]="level()">
     <button
       class="entry-card__toggle"
@@ -16,9 +17,30 @@
       <svg lucideChevronDown class="icon entry-card__chevron"></svg>
     </button>
   </div>
+  <button
+    class="entry-card__star"
+    type="button"
+    [class.entry-card__star--active]="favorite()"
+    [attr.aria-pressed]="favorite()"
+    [attr.aria-label]="'favorites.toggle' | translate: { title: entry().title }"
+    (click)="toggleFavorite()"
+  >
+    <svg lucideStar class="icon entry-card__star-icon"></svg>
+  </button>
+  </div>
+
+  @if (loginHint()) {
+    <p class="entry-card__login-hint" role="status">
+      {{ 'favorites.loginHint' | translate }}
+      <button class="entry-card__login" type="button" (click)="login()">
+        {{ 'auth.login' | translate }}
+      </button>
+    </p>
+  }
 
   <div class="entry-card__body" [id]="bodyId()" [hidden]="!expanded()">
     <p class="entry-card__description">{{ entry().description }}</p>
     <app-code-block [code]="code()" [language]="entry().language" [os]="codeOs()" />
+    <app-report-link [subject]="('report.command' | translate) + ': ' + entry().title" />
   </div>
 </article>

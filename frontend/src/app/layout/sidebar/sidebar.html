@@ -20,7 +20,7 @@
 >
   <section class="sidebar__group" aria-labelledby="sidebar-group-collection">
     <h2 class="sidebar__heading sidebar__heading--text" id="sidebar-group-collection">{{ 'sidebar.collection' | translate }}</h2>
-    <p class="sidebar__hint">{{ 'sidebar.collectionHint' | translate }}</p>
+    <app-collection class="sidebar__collection" [limit]="5" />
   </section>
 
   @let expanded = expandedSlug();
