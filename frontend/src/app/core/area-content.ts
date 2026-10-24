@@ -1,28 +1,32 @@
-import { Service, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { BlueprintApi } from './blueprint-api';
-import { ConceptApi } from './concept-api';
-import { ContentArea, ContentIndex } from './content-index';
-import { EntryApi } from './entry-api';
-import { ErrorApi } from './error-api';
+import { Injector, Service, Type, inject } from '@angular/core';
+import { Observable, combineLatest, from, map, switchMap } from 'rxjs';
+import { ContentArea, ContentIndex, mergeIndex } from './content-index';
+
+interface IndexSource {
+  getIndex(): Observable<ContentIndex>;
+}
 
 @Service()
 export class AreaContent {
-  private readonly entryApi = inject(EntryApi);
-  private readonly conceptApi = inject(ConceptApi);
-  private readonly blueprintApi = inject(BlueprintApi);
-  private readonly errorApi = inject(ErrorApi);
+  private readonly injector = inject(Injector);
 
   getIndex(area: ContentArea): Observable<ContentIndex> {
     switch (area) {
       case 'commands':
-        return this.entryApi.getIndex();
+        return this.load(() => import('./entry-api').then((m) => m.EntryApi));
       case 'concepts':
-        return this.conceptApi.getIndex();
+        return this.load(() => import('./concept-api').then((m) => m.ConceptApi));
       case 'blueprints':
-        return this.blueprintApi.getIndex();
+        return this.load(() => import('./blueprint-api').then((m) => m.BlueprintApi));
       case 'debugging':
-        return this.errorApi.getIndex();
+        return combineLatest([
+          this.load(() => import('./error-api').then((m) => m.ErrorApi)),
+          this.load(() => import('./debug-guide-api').then((m) => m.DebugGuideApi)),
+        ]).pipe(map((indexes) => mergeIndex(...indexes)));
     }
+  }
+
+  private load(source: () => Promise<Type<IndexSource>>): Observable<ContentIndex> {
+    return from(source()).pipe(switchMap((type) => this.injector.get(type).getIndex()));
   }
 }

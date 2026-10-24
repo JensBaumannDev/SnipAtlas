@@ -18,7 +18,7 @@
 
   <ul class="guides__list" role="list">
     @for (blueprint of topicBlueprints(); track blueprint.slug) {
-      <li class="guides__item">
+      <li class="guides__item" [id]="blueprint.slug">
         <h2 class="guides__title">
           <a class="guides__link" [routerLink]="['/bauplaene', blueprint.topic, blueprint.slug]">{{ blueprint.title }}</a>
         </h2>

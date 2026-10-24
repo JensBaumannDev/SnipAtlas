@@ -32,6 +32,18 @@
   color: var(--muted);
 }
 
+// Sections
+.errors__section-title {
+  padding: 0 $space-xs $space-sm;
+  margin-top: $space-xxl;
+  font-size: $font-size-xl;
+  border-bottom: 1px solid var(--muted);
+}
+
+.errors__section--intro .errors__section-title {
+  margin-top: 0;
+}
+
 .errors__empty {
   padding-block: $space-lg;
   color: var(--muted);

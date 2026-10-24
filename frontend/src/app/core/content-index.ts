@@ -18,3 +18,13 @@ export function buildIndex(items: readonly { topic: string; subtopic?: string }[
   }
   return index;
 }
+
+export function mergeIndex(...indexes: ContentIndex[]): ContentIndex {
+  const merged: Record<string, string[]> = {};
+  for (const index of indexes) {
+    for (const [topic, subtopics] of Object.entries(index)) {
+      merged[topic] = [...new Set([...(merged[topic] ?? []), ...subtopics])];
+    }
+  }
+  return merged;
+}

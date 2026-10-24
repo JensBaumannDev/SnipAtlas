@@ -138,6 +138,9 @@
     "errorCount": "{{count}} Fehlermeldungen",
     "errorCountOne": "1 Fehlermeldung",
     "empty": "Zu diesem Thema gibt es noch keine Fehlermeldungen.",
+    "basics": "Grundlagen: So gehst du vor",
+    "topicGuides": "So debuggst du {{topic}}",
+    "commonErrors": "Häufige Fehlermeldungen",
     "cause": "Warum passiert das?",
     "fix": "So behebst du es",
     "hints": {

@@ -27,16 +27,39 @@
     </div>
   </header>
 
-  @for (error of errors.value(); track error.slug) {
-    <app-error-card [error]="error" />
-  } @empty {
-    <p class="errors__empty">{{ 'debugging.empty' | translate }}</p>
+  @if (topicGuides.value().length) {
+    <section class="errors__section" aria-labelledby="errors-guides">
+      <h2 class="errors__section-title" id="errors-guides">
+        {{ 'debugging.topicGuides' | translate: { topic: topic.name } }}
+      </h2>
+      @for (guide of topicGuides.value(); track guide.slug) {
+        <app-debug-guide-card [guide]="guide" />
+      }
+    </section>
   }
+
+  <section class="errors__section" aria-labelledby="errors-list">
+    <h2 class="errors__section-title" id="errors-list">
+      {{ 'debugging.commonErrors' | translate }}
+    </h2>
+    @for (error of errors.value(); track error.slug) {
+      <app-error-card [error]="error" />
+    } @empty {
+      <p class="errors__empty">{{ 'debugging.empty' | translate }}</p>
+    }
+  </section>
 } @else {
   <app-area-intro
     title="pages.debugging"
     lead="debugging.lead"
     [summary]="'debugging.summary' | translate: summary()"
     [hints]="hints"
-  />
+  >
+    <section class="errors__section errors__section--intro" aria-labelledby="errors-basics">
+      <h2 class="errors__section-title" id="errors-basics">{{ 'debugging.basics' | translate }}</h2>
+      @for (guide of generalGuides(); track guide.slug) {
+        <app-debug-guide-card [guide]="guide" />
+      }
+    </section>
+  </app-area-intro>
 }

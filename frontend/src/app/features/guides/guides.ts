@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { LucideCopy, LucideDynamicIcon, LucideListChecks, LucideListTree } from '@lucide/angular';
@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Blueprint } from '../../core/blueprint';
 import { BlueprintApi } from '../../core/blueprint-api';
 import { BlueprintProgress } from '../../core/blueprint-progress';
+import { PageOutline } from '../../core/page-outline';
 import { TopicApi } from '../../core/topic-api';
 import { topicIcon, topicLogo } from '../../core/topic-logos';
 import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
@@ -52,6 +53,21 @@ export class Guides {
   protected readonly topicBlueprints = computed(() =>
     this.blueprints().filter((blueprint) => blueprint.topic === this.topic()),
   );
+
+  constructor() {
+    const outline = inject(PageOutline);
+    effect(() =>
+      outline.set(
+        this.currentTopic()
+          ? this.topicBlueprints().map((blueprint) => ({
+              id: blueprint.slug,
+              label: blueprint.title,
+            }))
+          : [],
+      ),
+    );
+    inject(DestroyRef).onDestroy(() => outline.clear());
+  }
 
   protected doneCount(blueprint: Blueprint): number {
     const done = this.progress.doneSteps(blueprint.slug);

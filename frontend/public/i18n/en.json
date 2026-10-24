@@ -138,6 +138,9 @@
     "errorCount": "{{count}} error messages",
     "errorCountOne": "1 error message",
     "empty": "There are no error messages for this topic yet.",
+    "basics": "Basics: how to approach it",
+    "topicGuides": "How to debug {{topic}}",
+    "commonErrors": "Common error messages",
     "cause": "Why does this happen?",
     "fix": "How to fix it",
     "hints": {

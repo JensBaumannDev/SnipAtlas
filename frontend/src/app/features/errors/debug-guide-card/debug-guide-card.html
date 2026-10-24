@@ -1,0 +1,32 @@
+<article class="debug-guide-card" [id]="guide().slug">
+  <div class="debug-guide-card__heading" role="heading" aria-level="3">
+    <button
+      class="debug-guide-card__toggle"
+      type="button"
+      [attr.aria-expanded]="expanded()"
+      [attr.aria-controls]="bodyId()"
+      (click)="toggle()"
+    >
+      <span class="debug-guide-card__text">
+        <span class="debug-guide-card__title">{{ guide().title }}</span>
+        <span class="debug-guide-card__summary">{{ guide().summary }}</span>
+      </span>
+      <svg lucideChevronDown class="icon debug-guide-card__chevron"></svg>
+    </button>
+  </div>
+
+  <ol class="debug-guide-card__steps" [id]="bodyId()" [hidden]="!expanded()">
+    @for (step of steps(); track $index) {
+      <li class="debug-guide-card__step">
+        <span class="debug-guide-card__number" aria-hidden="true">{{ $index + 1 }}</span>
+        <div class="debug-guide-card__body">
+          <h4 class="debug-guide-card__step-title">{{ step.title }}</h4>
+          <p class="debug-guide-card__step-text">{{ step.text }}</p>
+          @if (step.resolved; as code) {
+            <app-code-block [code]="code.code" [language]="code.language" [os]="code.os" />
+          }
+        </div>
+      </li>
+    }
+  </ol>
+</article>
