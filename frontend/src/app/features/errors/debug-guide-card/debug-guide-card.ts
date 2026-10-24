@@ -2,6 +2,7 @@ import { Component, computed, inject, input, model } from '@angular/core';
 import { LucideChevronDown } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DebugGuide } from '../../../core/debug-guide';
+import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
@@ -24,9 +25,7 @@ export class DebugGuideCard {
       ...step,
       resolved: step.code && {
         language: step.code.language,
-        ...(typeof step.code.code === 'string'
-          ? { code: step.code.code, os: undefined }
-          : { code: step.code.code[this.os()], os: this.os() }),
+        ...resolveOsCode(step.code.code, this.os()),
       },
     })),
   );

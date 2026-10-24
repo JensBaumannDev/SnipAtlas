@@ -15,6 +15,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { firstCodeLine } from '../../../core/code-highlight';
 import { Entry } from '../../../core/entry';
 import { Favorites } from '../../../core/favorites';
+import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
 import { Session } from '../../../core/session';
 import { CodeBlock } from '../../../shared/code-block/code-block';
@@ -39,14 +40,8 @@ export class EntryCard {
   readonly level = input<2 | 3>(3);
   readonly expanded = model(false);
 
-  private readonly hasOsVariants = computed(() => typeof this.entry().code !== 'string');
-
-  protected readonly code = computed(() => {
-    const code = this.entry().code;
-    return typeof code === 'string' ? code : code[this.os()];
-  });
-  protected readonly codeOs = computed(() => (this.hasOsVariants() ? this.os() : undefined));
-  protected readonly peek = computed(() => firstCodeLine(this.code()));
+  protected readonly resolved = computed(() => resolveOsCode(this.entry().code, this.os()));
+  protected readonly peek = computed(() => firstCodeLine(this.resolved().code));
   protected readonly bodyId = computed(() => `${this.entry().slug}-body`);
   protected readonly favorite = computed(() => this.favorites.has(this.entry()));
   protected readonly loginHint = signal(false);
