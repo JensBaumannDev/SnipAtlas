@@ -101,7 +101,7 @@ export class ProfileAccount {
     link.href = url;
     link.download = EXPORT_FILE;
     link.click();
-    window.URL.revokeObjectURL(url);
+    window.setTimeout(() => window.URL.revokeObjectURL(url));
   }
 
   protected logout(): void {
