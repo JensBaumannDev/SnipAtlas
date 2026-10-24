@@ -108,6 +108,10 @@
 }
 
 // Collection and guide
+.home__collection {
+  margin-top: $space-lg;
+}
+
 .home__hint {
   margin-top: $space-lg;
   color: var(--muted);
@@ -118,8 +122,8 @@
   font-weight: $font-weight-medium;
 }
 
-.home__guide-name + .home__hint {
-  margin-top: $space-xs;
+.home__progress {
+  margin-top: $space-sm;
 }
 
 .home__more {
