@@ -134,6 +134,12 @@
   },
   "debugging": {
     "lead": "Häufige Fehlermeldungen verstehen und lösen: was die Meldung bedeutet, woher sie kommt und wie du sie behebst.",
+    "summary": "{{entries}} Fehlermeldungen in {{topics}} Themen",
+    "errorCount": "{{count}} Fehlermeldungen",
+    "errorCountOne": "1 Fehlermeldung",
+    "empty": "Zu diesem Thema gibt es noch keine Fehlermeldungen.",
+    "cause": "Warum passiert das?",
+    "fix": "So behebst du es",
     "hints": {
       "choose": {
         "title": "Thema wählen",
