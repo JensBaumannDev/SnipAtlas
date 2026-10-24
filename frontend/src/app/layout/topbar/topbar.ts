@@ -1,16 +1,17 @@
 import { ViewportScroller } from '@angular/common';
 import { Component, ElementRef, Injector, afterNextRender, inject, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideSearch, LucideSettings } from '@lucide/angular';
+import { LucideSettings } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LoginDialog } from '../../core/login-dialog';
 import { Session } from '../../core/session';
+import { SearchBox } from '../../shared/search-box/search-box';
 import { UserMenu } from '../user-menu/user-menu';
 
 const SCROLL_GAP = 16;
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, TranslatePipe, UserMenu, LucideSearch, LucideSettings],
+  imports: [RouterLink, RouterLinkActive, SearchBox, TranslatePipe, UserMenu, LucideSettings],
   selector: 'app-topbar',
   styleUrl: './topbar.scss',
   templateUrl: './topbar.html',
@@ -21,7 +22,7 @@ const SCROLL_GAP = 16;
 export class Topbar {
   private readonly injector = inject(Injector);
   private readonly loginDialog = inject(LoginDialog);
-  private readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
+  private readonly searchBox = viewChild.required(SearchBox);
   private readonly loginButton = viewChild<ElementRef<HTMLButtonElement>>('loginButton');
   private readonly userMenu = viewChild(UserMenu);
 
@@ -48,7 +49,7 @@ export class Topbar {
   protected onKeydown(event: KeyboardEvent): void {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
       event.preventDefault();
-      this.searchInput().nativeElement.focus();
+      this.searchBox().focus();
     }
   }
 }

@@ -266,6 +266,10 @@ const GUIDES: DebugGuide[] = [
 
 @Service()
 export class DebugGuideApi {
+  getAll(): Observable<DebugGuide[]> {
+    return of(GUIDES);
+  }
+
   getGeneral(): Observable<DebugGuide[]> {
     return of(GUIDES.filter((guide) => !guide.topic));
   }

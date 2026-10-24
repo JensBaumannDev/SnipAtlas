@@ -298,6 +298,10 @@ const ERRORS: ErrorMessage[] = [
 
 @Service()
 export class ErrorApi {
+  getAll(): Observable<ErrorMessage[]> {
+    return of(ERRORS);
+  }
+
   getByTopic(topic: string): Observable<ErrorMessage[]> {
     return of(ERRORS.filter((error) => error.topic === topic));
   }
