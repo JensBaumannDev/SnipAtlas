@@ -258,6 +258,7 @@
     "title": "Willkommen bei SnipAtlas",
     "lead": "SnipAtlas begleitet dich vom ersten Befehl bis zum eigenen Projekt online. Gemacht für Junior-Entwickler, aber genauso praktisch, wenn du schon länger dabei bist und nur schnell etwas nachschlagen willst. Komplett kostenlos und regelmäßig um neue Inhalte ergänzt.",
     "areas": {
+      "label": "Bereiche im Überblick",
       "commands": "Terminal, Git, npm und Docker zum Kopieren",
       "concepts": "Begriffe in einfachen Worten erklärt",
       "blueprints": "Projekte Schritt für Schritt bauen",
