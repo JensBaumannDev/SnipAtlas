@@ -35,7 +35,17 @@
   "search": {
     "label": "Search commands, concepts and error messages",
     "placeholder": "Search …",
-    "ctrl": "Ctrl"
+    "ctrl": "Ctrl",
+    "heroPlaceholder": "What are you looking for? For example git stash",
+    "resultsLabel": "Search results",
+    "empty": "No results. Try a different term.",
+    "count": "{{count}} results",
+    "areas": {
+      "commands": "Command",
+      "concepts": "Concept",
+      "blueprints": "Blueprint",
+      "debugging": "Debugging"
+    }
   },
   "account": {
     "menu": "Account menu",
@@ -260,26 +270,38 @@
     "title": "On this page"
   },
   "home": {
-    "title": "Welcome to SnipAtlas",
-    "lead": "SnipAtlas takes you from your first command to your own project online. Made for junior developers, but just as handy if you have been coding for a while and only want to look something up quickly. Completely free and regularly updated with new content.",
+    "title": "Reference for web development",
+    "lead": "Commands to copy, concepts with examples, blueprints for whole projects and solutions for common error messages. Free and updated regularly.",
     "areas": {
       "label": "Areas at a glance",
       "commands": "Terminal, Git, npm and Docker to copy",
       "concepts": "Terms explained in plain words",
       "blueprints": "Build projects step by step",
-      "debugging": "Understand and fix error messages"
+      "debugging": "Understand and fix error messages",
+      "title": "Areas",
+      "count": "{{count}} entries"
     },
     "news": {
-      "title": "New on SnipAtlas"
+      "title": "New on SnipAtlas",
+      "new": "New",
+      "text": "Recently added commands and explanations."
     },
     "collection": {
-      "hint": "Sign in to save commands with the star. Your favourites will then appear here."
+      "hint": "Sign in to save commands with the star. Your favourites will then appear here.",
+      "text": "Commands you saved with the star."
     },
     "guide": {
       "title": "Your blueprint",
       "empty": "Build a project step by step and tick off what you have done.",
       "open": "Go to blueprints",
-      "continue": "Continue"
+      "continue": "Continue blueprint",
+      "next": "Next step: {{step}}",
+      "text": "Your progress in the blueprint you started."
+    },
+    "errors": {
+      "title": "Error messages",
+      "text": "Common error messages with cause and solution.",
+      "open": "Go to debugging"
     }
   },
   "footer": {

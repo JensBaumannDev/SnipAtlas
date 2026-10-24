@@ -517,6 +517,10 @@ const CONCEPTS: Concept[] = [
 
 @Service()
 export class ConceptApi {
+  getAll(): Observable<Concept[]> {
+    return of(CONCEPTS);
+  }
+
   getByTopic(topic: string): Observable<Concept[]> {
     return of(CONCEPTS.filter((concept) => concept.topic === topic));
   }

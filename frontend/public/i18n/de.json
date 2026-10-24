@@ -35,7 +35,17 @@
   "search": {
     "label": "Befehle, Konzepte und Fehlermeldungen durchsuchen",
     "placeholder": "Suchen …",
-    "ctrl": "Strg"
+    "ctrl": "Strg",
+    "heroPlaceholder": "Wonach suchst du? Zum Beispiel git stash",
+    "resultsLabel": "Suchergebnisse",
+    "empty": "Keine Treffer. Versuch es mit einem anderen Begriff.",
+    "count": "{{count}} Treffer",
+    "areas": {
+      "commands": "Befehl",
+      "concepts": "Konzept",
+      "blueprints": "Bauplan",
+      "debugging": "Debugging"
+    }
   },
   "account": {
     "menu": "Konto-Menü",
@@ -260,26 +270,38 @@
     "title": "Auf dieser Seite"
   },
   "home": {
-    "title": "Willkommen bei SnipAtlas",
-    "lead": "SnipAtlas begleitet dich vom ersten Befehl bis zum eigenen Projekt online. Gemacht für Junior-Entwickler, aber genauso praktisch, wenn du schon länger dabei bist und nur schnell etwas nachschlagen willst. Komplett kostenlos und regelmäßig um neue Inhalte ergänzt.",
+    "title": "Nachschlagewerk für Webentwicklung",
+    "lead": "Befehle zum Kopieren, Konzepte mit Beispielen, Baupläne für ganze Projekte und Lösungen für häufige Fehlermeldungen. Kostenlos und laufend ergänzt.",
     "areas": {
       "label": "Bereiche im Überblick",
       "commands": "Terminal, Git, npm und Docker zum Kopieren",
       "concepts": "Begriffe in einfachen Worten erklärt",
       "blueprints": "Projekte Schritt für Schritt bauen",
-      "debugging": "Fehlermeldungen verstehen und lösen"
+      "debugging": "Fehlermeldungen verstehen und lösen",
+      "title": "Bereiche",
+      "count": "{{count}} Einträge"
     },
     "news": {
-      "title": "Neu auf SnipAtlas"
+      "title": "Neu auf SnipAtlas",
+      "new": "Neu",
+      "text": "Zuletzt hinzugefügte Befehle und Erklärungen."
     },
     "collection": {
-      "hint": "Melde dich an, um Befehle mit dem Stern zu speichern. Deine Favoriten erscheinen dann hier."
+      "hint": "Melde dich an, um Befehle mit dem Stern zu speichern. Deine Favoriten erscheinen dann hier.",
+      "text": "Befehle, die du mit dem Stern gespeichert hast."
     },
     "guide": {
       "title": "Dein Bauplan",
       "empty": "Bau ein Projekt Schritt für Schritt und hake dabei ab, was du erledigt hast.",
       "open": "Zu den Bauplänen",
-      "continue": "Weitermachen"
+      "continue": "Weiter im Bauplan",
+      "next": "Nächster Schritt: {{step}}",
+      "text": "Dein Fortschritt im angefangenen Bauplan."
+    },
+    "errors": {
+      "title": "Fehlermeldungen",
+      "text": "Häufige Fehlermeldungen mit Ursache und Lösung.",
+      "open": "Zum Debugging"
     }
   },
   "footer": {

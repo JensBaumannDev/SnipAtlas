@@ -4,22 +4,7 @@
     <span class="brand__name">Snip<span class="brand__accent">Atlas</span></span>
   </a>
 
-  <div class="search" role="search">
-    <svg lucideSearch class="icon search__icon"></svg>
-    <label class="visually-hidden" for="search">{{ 'search.label' | translate }}</label>
-    <input
-      #searchInput
-      id="search"
-      class="input search__input"
-      type="search"
-      [placeholder]="'search.placeholder' | translate"
-      autocomplete="off"
-    />
-    <kbd class="search__shortcut" aria-hidden="true"
-      ><span>{{ 'search.ctrl' | translate }}</span
-      ><span>K</span></kbd
-    >
-  </div>
+  <app-search-box class="topbar__search" inputId="search" [shortcut]="true" />
 
   <div class="topbar__tools">
     <a

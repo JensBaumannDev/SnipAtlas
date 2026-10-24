@@ -5,21 +5,25 @@ import { NewsItem } from './news';
 const NEWS: NewsItem[] = [
   {
     date: '2026-10-20',
+    topic: 'docker',
     title: 'Docker: Container steuern und Fehler finden',
     link: ['/befehle', 'docker', 'fehlersuche'],
   },
   {
     date: '2026-10-14',
+    topic: 'git',
     title: 'Git: Branches anlegen und Änderungen rückgängig machen',
     link: ['/befehle', 'git', 'branches'],
   },
   {
     date: '2026-10-08',
+    topic: 'django-rest-framework',
     title: 'Django REST Framework: Login per Token einrichten',
     link: ['/konzepte', 'django-rest-framework', 'authentifizierung'],
   },
   {
     date: '2026-10-01',
+    topic: 'python',
     title: 'Python: Umgebung und Pakete mit venv und pip',
     link: ['/befehle', 'python', 'umgebung-pakete'],
   },

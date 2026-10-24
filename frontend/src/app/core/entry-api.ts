@@ -315,6 +315,10 @@ const ENTRIES: Entry[] = [
 
 @Service()
 export class EntryApi {
+  getAll(): Observable<Entry[]> {
+    return of(ENTRIES);
+  }
+
   getByTopic(topic: string): Observable<Entry[]> {
     return of(ENTRIES.filter((entry) => entry.topic === topic));
   }

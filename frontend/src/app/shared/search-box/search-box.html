@@ -1,0 +1,61 @@
+<div class="search-box" role="search" [class.search-box--hero]="variant() === 'hero'">
+  <svg lucideSearch class="icon search-box__icon"></svg>
+  <label class="visually-hidden" [for]="inputId()">{{ 'search.label' | translate }}</label>
+  <input
+    #input
+    class="input search-box__input"
+    type="search"
+    role="combobox"
+    autocomplete="off"
+    aria-autocomplete="list"
+    [id]="inputId()"
+    [value]="query()"
+    [placeholder]="placeholder() | translate"
+    [attr.aria-expanded]="expanded()"
+    [attr.aria-controls]="listId()"
+    [attr.aria-activedescendant]="activeId()"
+    (focus)="onFocus()"
+    (blur)="close()"
+    (input)="onInput($event)"
+    (keydown)="onKeydown($event)"
+  />
+  @if (shortcut()) {
+    <kbd class="search-box__shortcut" aria-hidden="true"
+      ><span>{{ 'search.ctrl' | translate }}</span
+      ><span>K</span></kbd
+    >
+  }
+
+  <ul
+    class="search-box__results"
+    role="listbox"
+    [id]="listId()"
+    [attr.aria-label]="'search.resultsLabel' | translate"
+    [hidden]="!expanded()"
+  >
+    @for (result of results(); track result.link.join('/') + result.fragment; let index = $index) {
+      <li
+        class="search-box__result"
+        role="option"
+        [id]="optionId(index)"
+        [attr.aria-selected]="index === active()"
+        (mousedown)="$event.preventDefault()"
+        (click)="go(result)"
+      >
+        <span class="search-box__area">{{ 'search.areas.' + result.area | translate }}</span>
+        <span class="search-box__title">{{ result.title }}</span>
+        <span class="search-box__text">{{ result.text }}</span>
+      </li>
+    }
+  </ul>
+
+  @if (open() && hasQuery() && !results().length) {
+    <p class="search-box__empty">{{ 'search.empty' | translate }}</p>
+  }
+
+  <p class="visually-hidden" role="status">
+    @if (open() && hasQuery()) {
+      {{ 'search.count' | translate: { count: results().length } }}
+    }
+  </p>
+</div>
