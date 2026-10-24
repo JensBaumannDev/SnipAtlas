@@ -16,10 +16,18 @@
 
 // Sections
 .commands__section-title {
-  padding: 0 $space-xs $space-sm;
-  margin-top: $space-xxl;
-  font-size: $font-size-xl;
-  border-bottom: 1px solid var(--muted);
+  @include card-title;
+
+  padding: 0 $space-xs;
+  margin: $space-xxl 0 $space-sm;
+
+  &::after {
+    @include card-line;
+
+    display: block;
+    width: rem(48);
+    margin-top: $space-sm;
+  }
 }
 
 .commands__section-link {

@@ -1,4 +1,4 @@
-<article class="error-card" [id]="error().slug">
+<article class="error-card" [id]="error().slug" [class.error-card--open]="expanded()">
   <div class="error-card__heading" role="heading" aria-level="3">
     <button
       class="error-card__toggle"

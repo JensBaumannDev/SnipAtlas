@@ -7,6 +7,13 @@
 // Card
 .error-card {
   border-bottom: 1px solid var(--line);
+
+  &--open {
+    @include card-surface($radius-card-sm, false);
+
+    padding-inline: calc($space-sm - 2px);
+    margin: $space-sm (-$space-sm);
+  }
 }
 
 // Toggle

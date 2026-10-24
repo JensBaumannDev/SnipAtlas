@@ -9,16 +9,16 @@
 <ul class="area-intro__hints" role="list">
   @for (hint of hints(); track hint.title) {
     <li class="area-intro__hint">
-      <svg [lucideIcon]="hint.icon" class="icon area-intro__icon"></svg>
-      <div class="area-intro__body">
+      <div class="area-intro__head">
         <h2 class="area-intro__title">{{ hint.title | translate }}</h2>
-        <p class="area-intro__text">
-          {{ hint.text | translate }}
-          @if (hint.link; as link) {
-            <a [routerLink]="link.path">{{ link.label | translate }}</a>
-          }
-        </p>
+        <svg [lucideIcon]="hint.icon" class="icon area-intro__icon"></svg>
       </div>
+      <p class="area-intro__text">
+        {{ hint.text | translate }}
+        @if (hint.link; as link) {
+          <a [routerLink]="link.path">{{ link.label | translate }}</a>
+        }
+      </p>
     </li>
   }
 </ul>

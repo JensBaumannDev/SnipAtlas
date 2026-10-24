@@ -1,4 +1,4 @@
-<article class="entry-card" [id]="entry().slug">
+<article class="entry-card" [id]="entry().slug" [class.entry-card--open]="expanded()">
   <div class="entry-card__head">
   <div class="entry-card__heading" role="heading" [attr.aria-level]="level()">
     <button

@@ -24,6 +24,7 @@ $line-height-code: 1.7;
 
 // Letter spacing
 $letter-spacing-tight: -0.02em;
+$letter-spacing-caps: 0.02em;
 
 // Spacing
 $space-xs: rem(4);
@@ -39,6 +40,8 @@ $radius-sm: rem(6);
 $radius-md: rem(8);
 $radius-lg: rem(10);
 $radius-xl: rem(12);
+$radius-card-sm: rem(20);
+$radius-card: rem(28);
 
 // Opacity
 $opacity-disabled: 0.5;

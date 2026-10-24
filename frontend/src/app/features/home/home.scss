@@ -1,8 +1,6 @@
 @use 'abstracts' as *;
 
 :host {
-  --card-radius: #{rem(28)};
-
   display: flex;
   flex-direction: column;
   gap: rem(88);
@@ -87,21 +85,17 @@
 
 // Cards
 .home__card {
+  @include card-surface;
+
   display: flex;
   flex-direction: column;
   gap: $space-md;
   padding: $space-xl;
-  background: linear-gradient(145deg, var(--card-from), var(--card-to));
-  border: 2px solid var(--card-edge);
-  border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow);
 
   &::after {
-    height: 2px;
+    @include card-line;
+
     margin-top: auto;
-    content: '';
-    background: linear-gradient(90deg, var(--accent), var(--accent-pair));
-    border-radius: 1px;
   }
 }
 
@@ -119,9 +113,7 @@
 }
 
 .home__card-title {
-  font-size: $font-size-lg;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  @include card-title;
 }
 
 .home__card-text {

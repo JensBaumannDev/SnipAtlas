@@ -8,6 +8,7 @@
   max-width: rem(760);
   padding-block: $space-xxl;
   margin-inline: auto;
+  container-type: inline-size;
 }
 
 // Header
@@ -29,18 +30,40 @@
 
 // Hints
 .area-intro__hints {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-md;
   padding: 0;
   margin: 0;
   list-style: none;
-  border-top: 1px solid var(--line);
 }
 
 .area-intro__hint {
+  @include card-surface;
+
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  min-width: 0;
+  padding: $space-lg;
+  overflow-wrap: anywhere;
+
+  &::after {
+    @include card-line;
+
+    margin-top: auto;
+  }
+}
+
+.area-intro__head {
   display: flex;
   gap: $space-md;
   align-items: flex-start;
-  padding: $space-md $space-xs;
-  border-bottom: 1px solid var(--line);
+  justify-content: space-between;
+}
+
+.area-intro__title {
+  @include card-title;
 }
 
 .area-intro__icon {
@@ -48,19 +71,8 @@
   color: var(--accent);
 }
 
-.area-intro__body {
-  display: flex;
-  flex-direction: column;
-  gap: $space-xs;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.area-intro__title {
-  font-size: $font-size-base;
-}
-
 .area-intro__text {
+  margin-bottom: $space-sm;
   color: var(--muted);
 }
 
@@ -69,6 +81,12 @@
   :host {
     gap: $space-xl;
     padding-block: $space-md $space-xl;
+  }
+}
+
+@container (max-width: 640px) {
+  .area-intro__hints {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
