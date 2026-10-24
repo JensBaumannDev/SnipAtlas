@@ -15,12 +15,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { firstCodeLine } from '../../../core/code-highlight';
 import { Entry } from '../../../core/entry';
 import { Favorites } from '../../../core/favorites';
+import { LoginDialog } from '../../../core/login-dialog';
 import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
 import { Session } from '../../../core/session';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
-import { LoginDialog } from '../../auth/login-dialog';
 
 @Component({
   imports: [CodeBlock, ReportLink, TranslatePipe, LucideChevronDown, LucideStar],
