@@ -51,7 +51,6 @@
       "settings": "Settings",
       "account": "Account"
     },
-    "noFavorites": "No favourites yet. Once you mark commands with the star, they appear here.",
     "progress": "Progress",
     "noProgress": "You have not started a blueprint yet.",
     "toBlueprints": "Go to blueprints",
@@ -87,6 +86,7 @@
     }
   },
   "auth": {
+    "showPassword": "Show password",
     "login": "Sign in",
     "lead": "For favourites, progress and requests.",
     "forgot": "Forgot password?",
@@ -232,6 +232,20 @@
       "requestLink": "Send me a request"
     }
   },
+  "favorites": {
+    "toggle": "Save as favourite: {{title}}",
+    "loginHint": "Sign in to save commands as favourites.",
+    "empty": "No favourites yet. Click the star on a command.",
+    "all": "See all {{count}} favourites"
+  },
+  "report": {
+    "link": "Report a mistake",
+    "command": "Command",
+    "concept": "Concept",
+    "error": "Error message",
+    "step": "Blueprint step",
+    "guide": "Debugging guide"
+  },
   "code": {
     "copy": "Copy",
     "copied": "Copied",
@@ -256,10 +270,10 @@
       "hint": "Sign in to save commands with the star. Your favourites will then appear here."
     },
     "guide": {
-      "title": "Roadmap",
-      "name": "Full-stack project: Angular + Django REST",
-      "meta": "12 steps to tick off",
-      "open": "Open roadmap"
+      "title": "Your blueprint",
+      "empty": "Build a project step by step and tick off what you have done.",
+      "open": "Go to blueprints",
+      "continue": "Continue"
     }
   },
   "footer": {

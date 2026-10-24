@@ -12,9 +12,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Session } from '../../../core/session';
+import { PasswordField } from '../../../shared/password-field/password-field';
 
 @Component({
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
   selector: 'app-login',
   styleUrl: './login.scss',
   templateUrl: './login.html',

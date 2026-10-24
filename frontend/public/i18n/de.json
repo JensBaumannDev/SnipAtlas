@@ -51,7 +51,6 @@
       "settings": "Einstellungen",
       "account": "Konto"
     },
-    "noFavorites": "Noch keine Favoriten. Sobald du Befehle mit dem Stern markierst, erscheinen sie hier.",
     "progress": "Fortschritt",
     "noProgress": "Du hast noch keinen Bauplan begonnen.",
     "toBlueprints": "Zu den Bauplänen",
@@ -87,6 +86,7 @@
     }
   },
   "auth": {
+    "showPassword": "Passwort anzeigen",
     "login": "Anmelden",
     "lead": "Für Favoriten, Fortschritt und Anfragen.",
     "forgot": "Passwort vergessen?",
@@ -232,6 +232,20 @@
       "requestLink": "Schreib mir eine Anfrage"
     }
   },
+  "favorites": {
+    "toggle": "Als Favorit merken: {{title}}",
+    "loginHint": "Melde dich an, um Befehle als Favoriten zu speichern.",
+    "empty": "Noch keine Favoriten. Klick bei einem Befehl auf den Stern.",
+    "all": "Alle {{count}} Favoriten ansehen"
+  },
+  "report": {
+    "link": "Fehler melden",
+    "command": "Befehl",
+    "concept": "Konzept",
+    "error": "Fehlermeldung",
+    "step": "Bauplan-Schritt",
+    "guide": "Debugging-Anleitung"
+  },
   "code": {
     "copy": "Kopieren",
     "copied": "Kopiert",
@@ -256,10 +270,10 @@
       "hint": "Melde dich an, um Befehle mit dem Stern zu speichern. Deine Favoriten erscheinen dann hier."
     },
     "guide": {
-      "title": "Fahrplan",
-      "name": "Fullstack-Projekt: Angular + Django REST",
-      "meta": "12 Schritte zum Abhaken",
-      "open": "Zum Fahrplan"
+      "title": "Dein Bauplan",
+      "empty": "Bau ein Projekt Schritt für Schritt und hake dabei ab, was du erledigt hast.",
+      "open": "Zu den Bauplänen",
+      "continue": "Weitermachen"
     }
   },
   "footer": {

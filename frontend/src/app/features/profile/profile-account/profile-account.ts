@@ -6,12 +6,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
 import { Session } from '../../../core/session';
 import { UserRequestApi } from '../../../core/user-request-api';
+import { PasswordField } from '../../../shared/password-field/password-field';
 
 const PASSWORD_MIN_LENGTH = 8;
 const EXPORT_FILE = 'snipatlas-daten.json';
 
 @Component({
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
   selector: 'app-profile-account',
   styleUrl: './profile-account.scss',
   templateUrl: './profile-account.html',

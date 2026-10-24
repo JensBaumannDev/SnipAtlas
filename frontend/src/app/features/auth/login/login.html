@@ -25,13 +25,15 @@
         {{ 'auth.forgot' | translate }}
       </button>
     </div>
-    <input
-      class="input"
-      id="login-password"
-      type="password"
-      autocomplete="current-password"
-      formControlName="password"
-    />
+    <app-password-field>
+      <input
+        class="input input--action"
+        id="login-password"
+        type="password"
+        autocomplete="current-password"
+        formControlName="password"
+      />
+    </app-password-field>
   </div>
 
   <button class="btn btn--primary auth-form__submit" type="submit" [disabled]="!filled()">

@@ -18,6 +18,7 @@ import {
 } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Session } from '../../../core/session';
+import { PasswordField } from '../../../shared/password-field/password-field';
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -27,7 +28,7 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
 }
 
 @Component({
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
   selector: 'app-register',
   styleUrl: './register.scss',
   templateUrl: './register.html',
