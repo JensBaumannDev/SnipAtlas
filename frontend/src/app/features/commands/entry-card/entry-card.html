@@ -41,7 +41,7 @@
 
   <div class="entry-card__body" [id]="bodyId()" [hidden]="!expanded()">
     <p class="entry-card__description">{{ entry().description }}</p>
-    <app-code-block [code]="code()" [language]="entry().language" [os]="codeOs()" />
+    <app-code-block [code]="resolved().code" [language]="entry().language" [os]="resolved().os" />
     <app-report-link [subject]="('report.command' | translate) + ': ' + entry().title" />
   </div>
 </article>

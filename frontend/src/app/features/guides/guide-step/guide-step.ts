@@ -1,6 +1,7 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintStep } from '../../../core/blueprint';
+import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
@@ -22,10 +23,6 @@ export class GuideStep {
   protected readonly label = computed(() => String(this.number()).padStart(2, '0'));
   protected readonly checkId = computed(() => `${this.step().slug}-done`);
   protected readonly blocks = computed(() =>
-    this.step().code.map(({ language, code }) =>
-      typeof code === 'string'
-        ? { language, code, os: undefined }
-        : { language, code: code[this.os()], os: this.os() },
-    ),
+    this.step().code.map(({ language, code }) => ({ language, ...resolveOsCode(code, this.os()) })),
   );
 }
