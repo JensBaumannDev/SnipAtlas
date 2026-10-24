@@ -3,7 +3,7 @@
   <p class="home__lead">{{ 'home.lead' | translate }}</p>
 </header>
 
-<nav class="home__areas" [attr.aria-label]="'nav.label' | translate">
+<nav class="home__areas" [attr.aria-label]="'home.areas.label' | translate">
   <ul class="home__area-list" role="list">
     @for (area of areas; track area.path) {
       <li>
