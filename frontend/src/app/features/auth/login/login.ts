@@ -1,18 +1,10 @@
-import {
-  Component,
-  ElementRef,
-  Injector,
-  afterNextRender,
-  computed,
-  inject,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Session } from '../../../core/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
+import { hasVisibleError, injectFocusInvalid } from '../auth-form';
 
 @Component({
   imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
@@ -22,8 +14,7 @@ import { PasswordField } from '../../../shared/password-field/password-field';
   host: { class: 'auth-form' },
 })
 export class Login {
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  private readonly injector = inject(Injector);
+  private readonly focusInvalid = injectFocusInvalid();
   private readonly session = inject(Session);
 
   readonly done = output<void>();
@@ -46,17 +37,13 @@ export class Login {
   });
 
   protected emailError(): boolean {
-    const control = this.form.controls.email;
-    return control.hasError('email') && (this.attempted() || control.touched);
+    return hasVisibleError(this.form.controls.email, 'email', this.attempted());
   }
 
   protected submit(): void {
     this.attempted.set(true);
     if (this.form.invalid) {
-      afterNextRender(
-        () => this.host.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(),
-        { injector: this.injector },
-      );
+      this.focusInvalid();
       return;
     }
     this.session.login(this.form.controls.email.value);

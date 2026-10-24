@@ -1,13 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Injector,
-  afterNextRender,
-  computed,
-  inject,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
@@ -17,10 +8,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PASSWORD_MIN_LENGTH } from '../../../core/password-rules';
 import { Session } from '../../../core/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
-
-const PASSWORD_MIN_LENGTH = 8;
+import { hasVisibleError, injectFocusInvalid } from '../auth-form';
 
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const { password, repeat } = group.getRawValue() as { password: string; repeat: string };
@@ -35,8 +26,7 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   host: { class: 'auth-form' },
 })
 export class Register {
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  private readonly injector = inject(Injector);
+  private readonly focusInvalid = injectFocusInvalid();
   private readonly session = inject(Session);
 
   readonly done = output<void>();
@@ -63,13 +53,11 @@ export class Register {
   });
 
   protected emailError(): boolean {
-    const control = this.form.controls.email;
-    return control.hasError('email') && (this.attempted() || control.touched);
+    return hasVisibleError(this.form.controls.email, 'email', this.attempted());
   }
 
   protected passwordError(): boolean {
-    const control = this.form.controls.password;
-    return control.hasError('minlength') && (this.attempted() || control.touched);
+    return hasVisibleError(this.form.controls.password, 'minlength', this.attempted());
   }
 
   protected repeatError(): boolean {
@@ -82,10 +70,7 @@ export class Register {
   protected submit(): void {
     this.attempted.set(true);
     if (this.form.invalid) {
-      afterNextRender(
-        () => this.host.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(),
-        { injector: this.injector },
-      );
+      this.focusInvalid();
       return;
     }
     this.session.login(this.form.controls.email.value);
