@@ -20,7 +20,9 @@
       </div>
       <p class="profile-requests__meta">
         {{ 'request.kinds.' + request.kind | translate }} ·
-        <time [attr.datetime]="request.date">{{ request.date | date: 'dd.MM.yyyy' }}</time>
+        <time [attr.datetime]="request.date">{{
+          request.date | date: 'mediumDate' : undefined : language()
+        }}</time>
       </p>
       @if (request.answer; as answer) {
         <p class="profile-requests__answer">

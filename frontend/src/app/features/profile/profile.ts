@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Preferences } from '../../core/preferences';
 import { Session } from '../../core/session';
 
 interface ProfileTab {
@@ -24,6 +25,7 @@ const TABS: ProfileTab[] = [
 })
 export class Profile {
   protected readonly session = inject(Session);
+  protected readonly language = inject(Preferences).language;
   protected readonly tabs = TABS;
 
   constructor() {
