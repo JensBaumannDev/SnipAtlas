@@ -21,7 +21,8 @@
     "request": "Request",
     "imprint": "Legal notice",
     "privacy": "Privacy policy",
-    "settings": "Settings"
+    "settings": "Settings",
+    "profile": "Profile"
   },
   "sidebar": {
     "label": "Topics",
@@ -34,6 +35,13 @@
     "label": "Search commands, concepts and error messages",
     "placeholder": "Search …",
     "ctrl": "Ctrl"
+  },
+  "account": {
+    "menu": "Account menu",
+    "signedIn": "Signed in",
+    "profile": "Profile",
+    "requests": "My requests",
+    "logout": "Sign out"
   },
   "auth": {
     "login": "Sign in",

@@ -21,7 +21,8 @@
     "request": "Anfrage",
     "imprint": "Impressum",
     "privacy": "Datenschutz",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "profile": "Profil"
   },
   "sidebar": {
     "label": "Themen",
@@ -34,6 +35,13 @@
     "label": "Befehle, Konzepte und Fehlermeldungen durchsuchen",
     "placeholder": "Suchen …",
     "ctrl": "Strg"
+  },
+  "account": {
+    "menu": "Konto-Menü",
+    "signedIn": "Angemeldet",
+    "profile": "Profil",
+    "requests": "Meine Anfragen",
+    "logout": "Abmelden"
   },
   "auth": {
     "login": "Anmelden",

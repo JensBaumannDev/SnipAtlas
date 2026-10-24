@@ -15,7 +15,10 @@
       [placeholder]="'search.placeholder' | translate"
       autocomplete="off"
     />
-    <kbd class="search__shortcut" aria-hidden="true"><span>{{ 'search.ctrl' | translate }}</span><span>K</span></kbd>
+    <kbd class="search__shortcut" aria-hidden="true"
+      ><span>{{ 'search.ctrl' | translate }}</span
+      ><span>K</span></kbd
+    >
   </div>
 
   <div class="topbar__tools">
@@ -29,6 +32,12 @@
       <svg lucideSettings class="icon topbar__icon"></svg>
     </a>
 
-    <button type="button" class="btn btn--primary" (click)="openLogin()">{{ 'auth.login' | translate }}</button>
+    @if (session.user()) {
+      <app-user-menu (loggedOut)="onLogout()" />
+    } @else {
+      <button #loginButton type="button" class="btn btn--primary" (click)="openLogin()">
+        {{ 'auth.login' | translate }}
+      </button>
+    }
   </div>
 </header>
