@@ -17,11 +17,11 @@
 
   <div class="error-card__body" [id]="bodyId()" [hidden]="!expanded()">
     <section class="error-card__section">
-      <h3 class="error-card__label">{{ 'debugging.cause' | translate }}</h3>
+      <h4 class="error-card__label">{{ 'debugging.cause' | translate }}</h4>
       <p class="error-card__copy">{{ error().cause }}</p>
     </section>
     <section class="error-card__section">
-      <h3 class="error-card__label">{{ 'debugging.fix' | translate }}</h3>
+      <h4 class="error-card__label">{{ 'debugging.fix' | translate }}</h4>
       <ol class="error-card__steps">
         @for (step of error().steps; track $index) {
           <li>{{ step }}</li>
