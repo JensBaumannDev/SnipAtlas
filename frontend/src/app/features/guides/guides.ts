@@ -3,7 +3,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { LucideCopy, LucideDynamicIcon, LucideListChecks, LucideListTree } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Blueprint } from '../../core/blueprint';
 import { BlueprintApi } from '../../core/blueprint-api';
 import { BlueprintProgress } from '../../core/blueprint-progress';
 import { PageOutline } from '../../core/page-outline';
@@ -30,7 +29,7 @@ const HINTS: AreaHint[] = [
 })
 export class Guides {
   private readonly blueprintApi = inject(BlueprintApi);
-  private readonly progress = inject(BlueprintProgress);
+  protected readonly progress = inject(BlueprintProgress);
 
   readonly topic = input<string>();
 
@@ -67,10 +66,5 @@ export class Guides {
       ),
     );
     inject(DestroyRef).onDestroy(() => outline.clear());
-  }
-
-  protected doneCount(blueprint: Blueprint): number {
-    const done = this.progress.doneSteps(blueprint.slug);
-    return blueprint.steps.filter((step) => done.includes(step.slug)).length;
   }
 }

@@ -39,8 +39,8 @@ export class GuideDetail {
   private readonly doneSteps = computed(() => this.progress.doneSteps(this.slug()));
 
   protected readonly doneCount = computed(() => {
-    const done = this.doneSteps();
-    return this.blueprint()?.steps.filter((step) => done.includes(step.slug)).length ?? 0;
+    const blueprint = this.blueprint();
+    return blueprint ? this.progress.doneCount(blueprint) : 0;
   });
 
   constructor() {

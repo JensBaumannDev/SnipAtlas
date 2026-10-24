@@ -1,4 +1,5 @@
 import { DOCUMENT, Service, effect, inject, signal } from '@angular/core';
+import { Blueprint } from './blueprint';
 
 export type ProgressMap = Readonly<Record<string, readonly string[]>>;
 
@@ -16,6 +17,11 @@ export class BlueprintProgress {
 
   doneSteps(blueprint: string): readonly string[] {
     return this.done()[blueprint] ?? [];
+  }
+
+  doneCount(blueprint: Blueprint): number {
+    const done = this.doneSteps(blueprint.slug);
+    return blueprint.steps.filter((step) => done.includes(step.slug)).length;
   }
 
   toggle(blueprint: string, step: string): void {
