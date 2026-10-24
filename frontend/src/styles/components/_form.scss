@@ -51,6 +51,10 @@ textarea.input {
   resize: vertical;
 }
 
+.input--action {
+  padding-right: $control-height;
+}
+
 .input--code {
   font-family: $font-mono;
   line-height: $line-height-code;

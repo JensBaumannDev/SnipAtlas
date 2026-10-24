@@ -29,4 +29,10 @@
       </li>
     }
   </ol>
+  @if (expanded()) {
+    <app-report-link
+      class="debug-guide-card__report"
+      [subject]="('report.guide' | translate) + ': ' + guide().title"
+    />
+  }
 </article>

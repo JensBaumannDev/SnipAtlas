@@ -43,27 +43,31 @@
       <label class="field__label" for="account-current">{{
         'profile.account.currentPassword' | translate
       }}</label>
-      <input
-        class="input"
-        id="account-current"
-        type="password"
-        autocomplete="current-password"
-        formControlName="current"
-      />
+      <app-password-field>
+        <input
+          class="input input--action"
+          id="account-current"
+          type="password"
+          autocomplete="current-password"
+          formControlName="current"
+        />
+      </app-password-field>
     </div>
     <div class="field profile-account__field">
       <label class="field__label" for="account-next">{{
         'profile.account.newPassword' | translate
       }}</label>
-      <input
-        class="input"
-        id="account-next"
-        type="password"
-        autocomplete="new-password"
-        formControlName="next"
-        aria-describedby="account-next-message"
-        [attr.aria-invalid]="passwordError()"
-      />
+      <app-password-field>
+        <input
+          class="input input--action"
+          id="account-next"
+          type="password"
+          autocomplete="new-password"
+          formControlName="next"
+          aria-describedby="account-next-message"
+          [attr.aria-invalid]="passwordError()"
+        />
+      </app-password-field>
       @if (passwordError()) {
         <p class="field__error" id="account-next-message">
           {{ 'auth.errors.passwordLength' | translate: { min: minLength } }}

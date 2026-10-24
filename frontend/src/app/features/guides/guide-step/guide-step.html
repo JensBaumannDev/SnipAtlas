@@ -23,5 +23,6 @@
         {{ note }}
       </p>
     }
+    <app-report-link [subject]="('report.step' | translate) + ': ' + step().title" />
   </div>
 </article>

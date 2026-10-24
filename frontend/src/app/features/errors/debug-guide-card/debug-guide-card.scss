@@ -101,6 +101,10 @@
   font-size: $font-size-base;
 }
 
+.debug-guide-card__report {
+  padding: 0 $space-xs $space-lg;
+}
+
 .debug-guide-card__step-text {
   max-width: 70ch;
   color: var(--muted);

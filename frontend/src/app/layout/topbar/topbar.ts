@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideSearch, LucideSettings } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Session } from '../../core/session';
+import { LoginDialog } from '../../features/auth/login-dialog';
 import { UserMenu } from '../user-menu/user-menu';
 
 const SCROLL_GAP = 16;
@@ -19,6 +20,7 @@ const SCROLL_GAP = 16;
 })
 export class Topbar {
   private readonly injector = inject(Injector);
+  private readonly loginDialog = inject(LoginDialog);
   private readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
   private readonly loginButton = viewChild<ElementRef<HTMLButtonElement>>('loginButton');
   private readonly userMenu = viewChild(UserMenu);
@@ -31,16 +33,7 @@ export class Topbar {
   }
 
   protected async openLogin(): Promise<void> {
-    const [{ Dialog }, { AuthDialog }] = await Promise.all([
-      import('@angular/cdk/dialog'),
-      import('../../features/auth/auth-dialog/auth-dialog'),
-    ]);
-    const dialogRef = this.injector.get(Dialog).open(AuthDialog, {
-      ariaLabelledBy: 'auth-title',
-      autoFocus: '#login-email',
-      backdropClass: 'dialog-backdrop',
-      disableClose: true,
-    });
+    const dialogRef = await this.loginDialog.open();
     dialogRef.closed.subscribe(() =>
       afterNextRender(() => this.userMenu()?.focus(), { injector: this.injector }),
     );

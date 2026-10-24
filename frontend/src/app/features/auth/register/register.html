@@ -22,15 +22,17 @@
 
   <div class="field">
     <label class="field__label" for="register-password">{{ 'auth.password' | translate }}</label>
-    <input
-      class="input"
-      id="register-password"
-      type="password"
-      autocomplete="new-password"
-      formControlName="password"
-      aria-describedby="register-password-message"
-      [attr.aria-invalid]="passwordError()"
-    />
+    <app-password-field>
+      <input
+        class="input input--action"
+        id="register-password"
+        type="password"
+        autocomplete="new-password"
+        formControlName="password"
+        aria-describedby="register-password-message"
+        [attr.aria-invalid]="passwordError()"
+      />
+    </app-password-field>
     @if (passwordError()) {
       <p class="field__error" id="register-password-message">
         {{ 'auth.errors.passwordLength' | translate: { min: minLength } }}
@@ -46,15 +48,17 @@
     <label class="field__label" for="register-repeat">{{
       'auth.passwordRepeat' | translate
     }}</label>
-    <input
-      class="input"
-      id="register-repeat"
-      type="password"
-      autocomplete="new-password"
-      formControlName="repeat"
-      [attr.aria-invalid]="repeatError()"
-      [attr.aria-describedby]="repeatError() ? 'register-repeat-error' : null"
-    />
+    <app-password-field>
+      <input
+        class="input input--action"
+        id="register-repeat"
+        type="password"
+        autocomplete="new-password"
+        formControlName="repeat"
+        [attr.aria-invalid]="repeatError()"
+        [attr.aria-describedby]="repeatError() ? 'register-repeat-error' : null"
+      />
+    </app-password-field>
     @if (repeatError()) {
       <p class="field__error" id="register-repeat-error">
         {{ 'auth.errors.passwordMismatch' | translate }}

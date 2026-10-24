@@ -2,10 +2,11 @@ import { Component, computed, input, model } from '@angular/core';
 import { LucideChevronDown } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Concept } from '../../../core/concept';
+import { ReportLink } from '../../../shared/report-link/report-link';
 import { CodeBlock } from '../../commands/code-block/code-block';
 
 @Component({
-  imports: [CodeBlock, LucideChevronDown, TranslatePipe],
+  imports: [CodeBlock, ReportLink, TranslatePipe, LucideChevronDown],
   selector: 'app-concept-card',
   styleUrl: './concept-card.scss',
   templateUrl: './concept-card.html',

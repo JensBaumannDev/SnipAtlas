@@ -1,11 +1,13 @@
 import { Component, computed, inject, input, model } from '@angular/core';
 import { LucideChevronDown } from '@lucide/angular';
+import { TranslatePipe } from '@ngx-translate/core';
 import { DebugGuide } from '../../../core/debug-guide';
 import { Preferences } from '../../../core/preferences';
+import { ReportLink } from '../../../shared/report-link/report-link';
 import { CodeBlock } from '../../commands/code-block/code-block';
 
 @Component({
-  imports: [CodeBlock, LucideChevronDown],
+  imports: [CodeBlock, ReportLink, TranslatePipe, LucideChevronDown],
   selector: 'app-debug-guide-card',
   styleUrl: './debug-guide-card.scss',
   templateUrl: './debug-guide-card.html',
