@@ -1,3 +1,4 @@
+@use 'functions' as *;
 @use 'variables' as *;
 
 @mixin mobile {
@@ -59,4 +60,18 @@
   content: '';
   background: linear-gradient(90deg, var(--accent), var(--accent-pair));
   border-radius: 1px;
+}
+
+// Backgrounds
+@mixin dot-grid($shape: ellipse 60% 70% at 50% 45%) {
+  position: absolute;
+  inset: 0;
+  z-index: $z-background;
+  content: '';
+  background-image: radial-gradient(
+    light-dark(color-mix(in srgb, var(--line), var(--ink) 9%), var(--line)) 1px,
+    transparent 1px
+  );
+  background-size: rem(16) rem(16);
+  mask-image: radial-gradient($shape, #000 30%, transparent 100%);
 }

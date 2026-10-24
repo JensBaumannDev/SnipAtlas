@@ -19,13 +19,7 @@
   isolation: isolate;
 
   &::before {
-    position: absolute;
-    inset: 0;
-    z-index: $z-background;
-    content: '';
-    background-image: radial-gradient(var(--line) 1px, transparent 1px);
-    background-size: rem(16) rem(16);
-    mask-image: radial-gradient(ellipse 60% 70% at 50% 45%, #000 30%, transparent 100%);
+    @include dot-grid;
   }
 }
 
