@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
+  LucideBookA,
   LucideBookText,
   LucideHouse,
   LucideMessageSquarePlus,
@@ -17,6 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     RouterLinkActive,
     TranslatePipe,
     LucideHouse,
+    LucideBookA,
     LucideTerminal,
     LucideBookText,
     LucideRoute,

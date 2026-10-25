@@ -13,7 +13,7 @@
       <span class="guide-step__number">{{ label() }}</span>
       {{ step().title }}
     </h2>
-    <p class="guide-step__why">{{ step().why }}</p>
+    <app-term-text class="guide-step__why" [text]="step().why" />
     @for (block of blocks(); track $index) {
       <app-code-block [code]="block.code" [language]="block.language" [os]="block.os" />
     }

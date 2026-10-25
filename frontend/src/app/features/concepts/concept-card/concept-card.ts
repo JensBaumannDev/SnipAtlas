@@ -4,9 +4,10 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Concept } from '../../../core/concept';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
+import { TermText } from '../../../shared/term-text/term-text';
 
 @Component({
-  imports: [CodeBlock, ReportLink, TranslatePipe, LucideChevronDown],
+  imports: [CodeBlock, ReportLink, TermText, TranslatePipe, LucideChevronDown],
   selector: 'app-concept-card',
   styleUrl: './concept-card.scss',
   templateUrl: './concept-card.html',

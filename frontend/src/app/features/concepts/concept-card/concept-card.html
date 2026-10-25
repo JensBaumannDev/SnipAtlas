@@ -16,7 +16,7 @@
   </div>
 
   <div class="concept-card__body" [id]="bodyId()" [hidden]="!expanded()">
-    <p class="concept-card__explanation">{{ concept().explanation }}</p>
+    <app-term-text class="concept-card__explanation" [text]="concept().explanation" />
     <app-code-block [code]="concept().code" [language]="concept().language" />
     @if (concept().note; as note) {
       <p class="concept-card__note">
