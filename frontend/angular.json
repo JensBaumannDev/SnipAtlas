@@ -48,8 +48,10 @@
               }
             ],
             "styles": [
-              "node_modules/@fontsource-variable/geist/index.css",
-              "node_modules/@fontsource-variable/geist-mono/index.css",
+              "node_modules/@fontsource-variable/ibm-plex-sans/index.css",
+              "node_modules/@fontsource/ibm-plex-mono/latin-400.css",
+              "node_modules/@fontsource/ibm-plex-mono/latin-400-italic.css",
+              "node_modules/@fontsource/ibm-plex-mono/latin-500.css",
               "src/styles.scss"
             ],
             "stylePreprocessorOptions": {

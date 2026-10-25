@@ -1,8 +1,8 @@
 @use 'functions' as *;
 
 // Fonts
-$font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-$font-mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', consolas, monospace;
+$font-sans: 'IBM Plex Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', consolas, monospace;
 
 // Font sizes
 $font-size-base: rem(16);
@@ -12,7 +12,7 @@ $font-size-xxl: rem(26);
 $font-size-brand: rem(32);
 
 // Font weights
-$font-weight-light: 300;
+$font-weight-book: 350;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 650;
