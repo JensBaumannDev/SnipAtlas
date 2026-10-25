@@ -1,0 +1,35 @@
+<header class="faq__intro">
+  <h1>{{ 'pages.faq' | translate }}</h1>
+  <p class="faq__lead">{{ 'faq.lead' | translate }}</p>
+</header>
+
+@for (group of groups; track group.id) {
+  <section class="faq__group" [attr.aria-labelledby]="'faq-' + group.id">
+    <h2 class="faq__heading" [id]="'faq-' + group.id">
+      {{ 'faq.' + group.id + '.title' | translate }}
+    </h2>
+    <ul class="faq__list" role="list">
+      @for (question of group.questions; track question) {
+        <li>
+          <details class="faq__card">
+            <summary class="faq__question">
+              <span class="faq__question-text">
+                {{ 'faq.' + group.id + '.' + question + '.question' | translate }}
+              </span>
+              <svg lucideChevronDown class="icon faq__chevron"></svg>
+            </summary>
+            <p class="faq__answer">
+              {{ 'faq.' + group.id + '.' + question + '.answer' | translate }}
+            </p>
+          </details>
+        </li>
+      }
+    </ul>
+  </section>
+}
+
+<p class="faq__more">
+  {{ 'faq.moreBefore' | translate }}
+  <a routerLink="/anfrage">{{ 'faq.moreLink' | translate }}</a
+  >{{ 'faq.moreAfter' | translate }}
+</p>

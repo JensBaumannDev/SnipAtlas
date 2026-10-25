@@ -1,6 +1,10 @@
 <header class="request__intro">
   <h1>{{ 'pages.request' | translate }}</h1>
   <p class="request__lead">{{ 'request.lead' | translate }}</p>
+  <p class="request__faq">
+    {{ 'request.faqBefore' | translate }}
+    <a routerLink="/faq">{{ 'request.faqLink' | translate }}</a>{{ 'request.faqAfter' | translate }}
+  </p>
 </header>
 
 <div class="request__layout">
