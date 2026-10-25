@@ -1,50 +1,54 @@
-<header class="glossary__intro">
-  <h1>{{ 'pages.glossary' | translate }}</h1>
-  <p class="glossary__lead">{{ 'glossary.lead' | translate }}</p>
-</header>
+<app-area-intro
+  title="pages.glossary"
+  lead="glossary.lead"
+  [summary]="'glossary.summary' | translate: { count: total() }"
+  [icon]="icon"
+>
+  <div class="glossary__content">
+    <div class="glossary__search" role="search">
+      <label class="visually-hidden" for="glossary-search">{{ 'glossary.searchLabel' | translate }}</label>
+      <svg lucideSearch class="icon glossary__search-icon"></svg>
+      <input
+        class="input glossary__search-input"
+        id="glossary-search"
+        type="search"
+        autocomplete="off"
+        [placeholder]="'glossary.searchPlaceholder' | translate"
+        [formControl]="query"
+      />
+    </div>
+    <p class="glossary__count" role="status">
+      @let count = filtered().length;
+      {{ (count === 1 ? 'glossary.countOne' : 'glossary.count') | translate: { count: count } }}
+    </p>
 
-<div class="glossary__search" role="search">
-  <label class="visually-hidden" for="glossary-search">{{ 'glossary.searchLabel' | translate }}</label>
-  <svg lucideSearch class="icon glossary__search-icon"></svg>
-  <input
-    class="input glossary__search-input"
-    id="glossary-search"
-    type="search"
-    autocomplete="off"
-    [placeholder]="'glossary.searchPlaceholder' | translate"
-    [formControl]="query"
-  />
-</div>
-<p class="glossary__count" role="status">
-  @let count = filtered().length;
-  {{ (count === 1 ? 'glossary.countOne' : 'glossary.count') | translate: { count: count } }}
-</p>
-
-@for (group of groups(); track group.letter) {
-  <section class="glossary__group" [attr.aria-labelledby]="letterId(group.letter)">
-    <h2 class="glossary__letter" [id]="letterId(group.letter)">{{ group.letter }}</h2>
-    <ul class="glossary__list" role="list">
-      @for (term of group.terms; track term.slug) {
-        <li class="glossary__term" [id]="term.slug">
-          <div class="glossary__head">
-            <h3 class="glossary__name">{{ term.term }}</h3>
-            @if (term.aliases.length) {
-              <p class="glossary__aliases">
-                {{ 'glossary.aliases' | translate }} {{ term.aliases.join(', ') }}
-              </p>
-            }
-          </div>
-          <div class="glossary__body">
-            <p class="glossary__definition">{{ term.definition }}</p>
-            <app-report-link [subject]="('report.term' | translate) + ': ' + term.term" />
-          </div>
-        </li>
-      }
-    </ul>
-  </section>
-} @empty {
-  <p class="glossary__empty">
-    {{ 'glossary.empty' | translate }}
-    <a routerLink="/anfrage">{{ 'glossary.suggest' | translate }}</a>
-  </p>
-}
+    @for (group of groups(); track group.letter) {
+      <section class="glossary__group" [attr.aria-labelledby]="letterId(group.letter)">
+        <h2 class="glossary__letter" [id]="letterId(group.letter)">{{ group.letter }}</h2>
+        <ul class="glossary__list" role="list">
+          @for (term of group.terms; track term.slug) {
+            <li class="glossary__term" [id]="term.slug">
+              <div class="glossary__head">
+                <h3 class="glossary__name">{{ term.term }}</h3>
+                @if (term.aliases.length) {
+                  <p class="glossary__aliases">
+                    {{ 'glossary.aliases' | translate }} {{ term.aliases.join(', ') }}
+                  </p>
+                }
+              </div>
+              <div class="glossary__body">
+                <p class="glossary__definition">{{ term.definition }}</p>
+                <app-report-link [subject]="('report.term' | translate) + ': ' + term.term" />
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+    } @empty {
+      <p class="glossary__empty">
+        {{ 'glossary.empty' | translate }}
+        <a routerLink="/anfrage">{{ 'glossary.suggest' | translate }}</a>
+      </p>
+    }
+  </div>
+</app-area-intro>
