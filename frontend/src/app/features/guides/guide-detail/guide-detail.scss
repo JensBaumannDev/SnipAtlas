@@ -29,6 +29,28 @@
   color: var(--muted);
 }
 
+// Project
+.guide-detail__project {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  padding: $space-lg;
+  margin-top: $space-lg;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-xl;
+}
+
+.guide-detail__project-title {
+  font-size: $font-size-lg;
+}
+
+.guide-detail__project-hint {
+  max-width: rem(720);
+  margin-bottom: $space-sm;
+  color: var(--muted);
+}
+
 // Progress
 .guide-detail__progress {
   position: sticky;
