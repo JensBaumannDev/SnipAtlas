@@ -19,6 +19,9 @@ import { SearchResult } from '../../core/search-result';
   selector: 'app-search-box',
   styleUrl: './search-box.scss',
   templateUrl: './search-box.html',
+  host: {
+    '(document:keydown)': 'onShortcut($event)',
+  },
 })
 export class SearchBox {
   private readonly injector = inject(Injector);
@@ -102,6 +105,13 @@ export class SearchBox {
           this.close();
         }
         break;
+    }
+  }
+
+  protected onShortcut(event: KeyboardEvent): void {
+    if (this.shortcut() && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      this.focus();
     }
   }
 

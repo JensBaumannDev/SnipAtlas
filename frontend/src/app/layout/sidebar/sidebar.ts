@@ -28,6 +28,13 @@ import { Collection } from '../../shared/collection/collection';
 import { TopicLogo } from '../../shared/topic-logo/topic-logo';
 import { SidebarMode, isSidebarMode } from './sidebar-mode';
 
+const AREA_LABELS: Record<ContentArea, string> = {
+  commands: 'nav.commands',
+  concepts: 'nav.concepts',
+  blueprints: 'nav.blueprints',
+  debugging: 'nav.debugging',
+};
+
 @Component({
   imports: [
     Collection,
@@ -66,6 +73,11 @@ export class Sidebar {
   private readonly index = rxResource({
     params: () => this.area(),
     stream: ({ params }) => this.areaContent.getIndex(params),
+  });
+
+  protected readonly areaLabel = computed(() => {
+    const area = this.area();
+    return area ? AREA_LABELS[area] : undefined;
   });
 
   protected readonly visibleGroups = computed(() => {

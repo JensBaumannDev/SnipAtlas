@@ -23,29 +23,6 @@
   }
 }
 
-.home__pill {
-  display: inline-flex;
-  gap: $space-sm;
-  align-items: center;
-  max-width: 100%;
-  padding: $space-xs $space-md;
-  color: var(--ink);
-  text-decoration: none;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: rem(999);
-  transition: border-color var(--duration-fast);
-
-  &:hover {
-    border-color: var(--accent);
-  }
-}
-
-.home__pill-label {
-  font-weight: $font-weight-semibold;
-  color: var(--accent);
-}
-
 .home__title {
   max-width: rem(860);
   font-size: rem(56);
@@ -114,7 +91,7 @@
   color: var(--muted);
 }
 
-.home__pill {
+.home__count {
   align-self: flex-start;
   padding: 0 $space-sm;
   font-variant-numeric: tabular-nums;

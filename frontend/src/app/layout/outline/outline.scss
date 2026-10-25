@@ -52,14 +52,13 @@
     top: calc($topbar-height + 1px);
     display: block;
     flex: none;
-    width: max-content;
-    max-width: $sidebar-width;
+    width: $sidebar-width;
     max-height: calc(100dvh - $topbar-height - 1px);
     padding-block: $space-xl;
     overflow-y: auto;
 
     &[hidden] {
-      display: none;
+      visibility: hidden;
     }
   }
 }

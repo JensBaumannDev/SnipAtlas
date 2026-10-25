@@ -106,7 +106,6 @@ export class Home {
     );
     return this.latest().map((item) => ({ ...item, topicData: topics.get(item.topic) }));
   });
-  protected readonly featured = computed(() => this.news()[0]);
 
   protected readonly current = computed(() =>
     this.blueprints()

@@ -9,12 +9,11 @@
 
 .topbar {
   position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  gap: $space-sm $space-lg;
+  display: grid;
+  grid-template-columns: minmax(max-content, var(--nav-width)) minmax(0, 1fr);
   align-items: center;
   min-height: calc($topbar-height + 1px);
-  padding: $space-sm $layout-side $space-sm calc($rail-width + $layout-side);
+  padding-block: $space-sm;
   background: var(--chrome);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(12px);
@@ -26,6 +25,7 @@
   gap: $space-sm;
   align-items: center;
   height: $control-height;
+  padding-left: $space-lg;
   font-size: $font-size-brand;
   font-weight: $font-weight-bold;
   line-height: $line-height-none;
@@ -33,6 +33,7 @@
   letter-spacing: $letter-spacing-tight;
   white-space: nowrap;
   text-decoration: none;
+  transition: transform var(--duration) var(--ease);
 }
 
 .brand__logo {
@@ -45,18 +46,35 @@
   color: var(--accent);
 }
 
+// Main
+.topbar__main {
+  padding-right: max(calc($space-xl + var(--outline-space)), $topbar-tools-space);
+  padding-left: $space-xl;
+}
+
 // Search
 .topbar__search {
-  flex: 1 1 $search-min-width;
   max-width: $search-max-width;
   margin-inline: auto;
+  transition:
+    opacity var(--duration) var(--ease),
+    visibility var(--duration);
+
+  &--hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 // Tools
 .topbar__tools {
+  position: absolute;
+  top: 50%;
+  right: $space-lg;
   display: flex;
   gap: $space-sm;
   align-items: center;
+  transform: translateY(-50%);
 }
 
 .topbar__settings {
@@ -69,10 +87,26 @@
 }
 
 /* #region RESPONSIVE */
+@include desktop {
+  .brand--centered {
+    transform: translateX(calc(50vw + var(--nav-width) / 2 - 50% - #{$space-lg} / 2));
+  }
+}
+
 @include mobile {
   .topbar {
+    display: flex;
+    flex-wrap: wrap;
     gap: $space-sm;
     padding-inline: $space-md;
+  }
+
+  .brand {
+    padding-left: 0;
+  }
+
+  .topbar__main {
+    display: contents;
   }
 
   .topbar__settings {
@@ -83,10 +117,16 @@
     flex-basis: 100%;
     order: 1;
     max-width: none;
+
+    &--hidden {
+      display: none;
+    }
   }
 
   .topbar__tools {
+    position: static;
     margin-left: auto;
+    transform: none;
   }
 }
 

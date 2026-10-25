@@ -52,15 +52,12 @@ $bp-mobile: 820px;
 $bp-wide: 1600px;
 
 // Layout
-$rail-width: rem(72);
-$rail-width-expanded: rem(220);
+$rail-width: rem(128);
 $logo-size: rem(52);
-$rail-item-height: rem(52);
-$topbar-height: rem(60);
-$sidebar-width: rem(230);
+$topbar-height: rem(72);
+$sidebar-width: rem(248);
 $content-max-width: rem(900);
 $layout-max-width: rem(1440);
-$layout-side: max($space-xl, calc((100% - $rail-width - $layout-max-width) / 2));
 $bottom-nav-height: rem(64);
 
 // Controls
@@ -68,6 +65,7 @@ $control-height: rem(44);
 $control-padding-x: rem(14);
 $search-min-width: rem(280);
 $search-max-width: rem(540);
+$topbar-tools-space: rem(176);
 $search-shortcut-space: rem(112);
 $textarea-min-height: rem(110);
 

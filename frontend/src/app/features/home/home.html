@@ -1,11 +1,4 @@
 <header class="home__hero">
-  @if (featured(); as item) {
-    <a class="home__pill" [routerLink]="item.link">
-      <span class="home__pill-label">{{ 'home.news.new' | translate }}</span>
-      {{ item.title }}
-      <span aria-hidden="true">→</span>
-    </a>
-  }
   <h1 class="home__title">{{ 'home.title' | translate }}</h1>
   <p class="home__lead">{{ 'home.lead' | translate }}</p>
   <app-search-box
@@ -13,6 +6,7 @@
     inputId="home-search"
     variant="hero"
     placeholder="search.heroPlaceholder"
+    [shortcut]="true"
   />
 </header>
 
@@ -27,7 +21,7 @@
             <svg [lucideIcon]="stat.icon" class="icon home__area-icon"></svg>
           </span>
           <span class="home__area-text">{{ stat.description | translate }}</span>
-          <span class="home__pill">
+          <span class="home__count">
             {{ 'home.areas.count' | translate: { count: stat.count } }}
           </span>
         </a>

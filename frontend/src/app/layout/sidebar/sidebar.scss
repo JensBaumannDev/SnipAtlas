@@ -1,15 +1,19 @@
 @use 'abstracts' as *;
 
 :host {
-  position: sticky;
+  position: fixed;
   top: calc($topbar-height + 1px);
-  flex: none;
+  bottom: 0;
+  left: $rail-width;
+  z-index: $z-sidebar;
   width: $sidebar-width;
-  max-height: calc(100dvh - $topbar-height - 1px);
-  padding-block: $space-xl;
+  padding: $space-lg $space-md $space-xl;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
+  background: var(--chrome);
+  border-right: 1px solid var(--line);
+  backdrop-filter: blur(12px);
 }
 
 :host(.sidebar--more) {
@@ -51,6 +55,14 @@
   height: rem(20);
   color: var(--muted);
   transition: transform var(--duration);
+}
+
+// Area
+.sidebar__area {
+  padding-inline: $space-sm;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
 }
 
 // Groups
@@ -247,9 +259,15 @@
   :host {
     position: static;
     width: 100%;
-    max-height: none;
-    padding-block: 0;
+    padding: 0;
     overflow-y: visible;
+    background: none;
+    border-right: 0;
+    backdrop-filter: none;
+  }
+
+  .sidebar__area {
+    display: none;
   }
 
   .sidebar__toggle {
