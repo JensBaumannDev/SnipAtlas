@@ -56,16 +56,33 @@
   position: sticky;
   top: calc($topbar-height + 1px);
   z-index: $z-sticky;
+  margin-top: $space-lg;
+  container-type: scroll-state;
+}
+
+.guide-detail__progress-inner {
   display: flex;
   flex-wrap: wrap;
   gap: $space-sm $space-md;
   align-items: center;
   min-height: calc($control-height + 2 * $space-sm);
   padding: $space-sm $space-xs;
-  margin-top: $space-lg;
-  background: var(--chrome);
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(12px);
+  transition: background var(--duration-fast);
+}
+
+@container scroll-state(stuck: top) {
+  .guide-detail__progress-inner {
+    background: var(--chrome);
+    backdrop-filter: blur(12px);
+  }
+}
+
+@supports not (container-type: scroll-state) {
+  .guide-detail__progress-inner {
+    background: var(--chrome);
+    backdrop-filter: blur(12px);
+  }
 }
 
 .guide-detail__bar {

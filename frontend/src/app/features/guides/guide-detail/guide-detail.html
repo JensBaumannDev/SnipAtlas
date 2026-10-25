@@ -16,17 +16,19 @@
   }
 
   <div class="guide-detail__progress">
-    <app-progress-bar
-      class="guide-detail__bar"
-      [done]="doneCount()"
-      [total]="blueprint.steps.length"
-      [label]="'guides.progressLabel' | translate"
-    />
-    @if (doneCount()) {
-      <button class="btn btn--ghost" type="button" (click)="reset()">
-        {{ 'guides.reset' | translate }}
-      </button>
-    }
+    <div class="guide-detail__progress-inner">
+      <app-progress-bar
+        class="guide-detail__bar"
+        [done]="doneCount()"
+        [total]="blueprint.steps.length"
+        [label]="'guides.progressLabel' | translate"
+      />
+      @if (doneCount()) {
+        <button class="btn btn--ghost" type="button" (click)="reset()">
+          {{ 'guides.reset' | translate }}
+        </button>
+      }
+    </div>
   </div>
 
   <ol class="guide-detail__steps" role="list">
