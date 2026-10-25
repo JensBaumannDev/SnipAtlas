@@ -42,11 +42,10 @@
   width: 100%;
   padding: $space-sm 0;
   font-size: $font-size-base;
-  font-weight: $font-weight-light;
+  font-weight: $font-weight-book;
   line-height: $line-height-tight;
   color: var(--muted);
   text-align: center;
-  letter-spacing: $letter-spacing-tight;
   text-decoration: none;
   transition:
     color var(--duration-fast),
@@ -84,9 +83,6 @@
     }
   }
 
-  .icon {
-    color: var(--ink);
-  }
 }
 
 /* #region RESPONSIVE */
