@@ -6,6 +6,7 @@
   "nav": {
     "label": "Sections",
     "home": "Home",
+    "glossary": "Glossary",
     "commands": "Commands",
     "concepts": "Basics",
     "blueprints": "Guides",
@@ -22,6 +23,7 @@
     "imprint": "Legal notice",
     "privacy": "Privacy policy",
     "faq": "FAQ",
+    "glossary": "Glossary",
     "settings": "Settings",
     "profile": "Profile",
     "notFound": "Page not found",
@@ -203,7 +205,8 @@
     "concept": "Explanation",
     "error": "Error message",
     "step": "Guide step",
-    "guide": "Troubleshooting"
+    "guide": "Troubleshooting",
+    "term": "Term"
   },
   "code": {
     "copy": "Copy",
@@ -267,6 +270,17 @@
   },
   "footer": {
     "label": "Legal and contact"
+  },
+  "glossary": {
+    "searchLabel": "Search terms",
+    "searchPlaceholder": "Search a term, e.g. CORS",
+    "count": "{{count}} terms",
+    "countOne": "1 term",
+    "empty": "No term found.",
+    "suggest": "Suggest a term",
+    "lead": "Web development terms in plain words. They are marked in explanations, error messages and guides: one click shows the short definition.",
+    "all": "All terms",
+    "aliases": "Also:"
   },
   "faq": {
     "lead": "Answers to general questions about SnipAtlas: what you'll find here, what you need an account for and how to contact me.",

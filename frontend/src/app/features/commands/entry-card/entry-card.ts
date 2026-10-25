@@ -21,9 +21,10 @@ import { Preferences } from '../../../core/preferences';
 import { Session } from '../../../core/session';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
+import { TermText } from '../../../shared/term-text/term-text';
 
 @Component({
-  imports: [CodeBlock, ReportLink, TranslatePipe, LucideChevronDown, LucideStar],
+  imports: [CodeBlock, ReportLink, TermText, TranslatePipe, LucideChevronDown, LucideStar],
   selector: 'app-entry-card',
   styleUrl: './entry-card.scss',
   templateUrl: './entry-card.html',

@@ -4,9 +4,10 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ErrorMessage } from '../../../core/error-message';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
+import { TermText } from '../../../shared/term-text/term-text';
 
 @Component({
-  imports: [CodeBlock, ReportLink, TranslatePipe, LucideChevronDown],
+  imports: [CodeBlock, ReportLink, TermText, TranslatePipe, LucideChevronDown],
   selector: 'app-error-card',
   styleUrl: './error-card.scss',
   templateUrl: './error-card.html',

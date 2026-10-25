@@ -5,9 +5,10 @@ import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
+import { TermText } from '../../../shared/term-text/term-text';
 
 @Component({
-  imports: [CodeBlock, ReportLink, TranslatePipe],
+  imports: [CodeBlock, ReportLink, TermText, TranslatePipe],
   selector: 'app-guide-step',
   styleUrl: './guide-step.scss',
   templateUrl: './guide-step.html',

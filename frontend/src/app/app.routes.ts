@@ -33,6 +33,11 @@ export const routes: Routes = [
     loadChildren: () => import('./features/errors/errors.routes').then((m) => m.ERRORS_ROUTES),
   },
   {
+    path: 'begriffe',
+    title: 'pages.glossary',
+    loadComponent: () => import('./features/glossary/glossary').then((m) => m.Glossary),
+  },
+  {
     path: 'neu',
     title: 'pages.news',
     loadComponent: () => import('./features/news/news').then((m) => m.News),

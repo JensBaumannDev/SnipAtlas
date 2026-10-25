@@ -6,6 +6,7 @@
   "nav": {
     "label": "Bereiche",
     "home": "Start",
+    "glossary": "Begriffe",
     "commands": "Befehle",
     "concepts": "Grundlagen",
     "blueprints": "Anleitungen",
@@ -22,6 +23,7 @@
     "imprint": "Impressum",
     "privacy": "Datenschutz",
     "faq": "Häufige Fragen",
+    "glossary": "Begriffe",
     "settings": "Einstellungen",
     "profile": "Profil",
     "notFound": "Seite nicht gefunden",
@@ -203,7 +205,8 @@
     "concept": "Erklärung",
     "error": "Fehlermeldung",
     "step": "Schritt einer Anleitung",
-    "guide": "Vorgehen bei Fehlern"
+    "guide": "Vorgehen bei Fehlern",
+    "term": "Begriff"
   },
   "code": {
     "copy": "Kopieren",
@@ -267,6 +270,17 @@
   },
   "footer": {
     "label": "Rechtliches und Kontakt"
+  },
+  "glossary": {
+    "searchLabel": "Begriffe durchsuchen",
+    "searchPlaceholder": "Begriff suchen, z. B. CORS",
+    "count": "{{count}} Begriffe",
+    "countOne": "1 Begriff",
+    "empty": "Kein Begriff gefunden.",
+    "suggest": "Begriff vorschlagen",
+    "lead": "Fachwörter aus der Webentwicklung in einfachen Worten. In Erklärungen, Fehlermeldungen und Anleitungen sind sie markiert: ein Klick zeigt die kurze Erklärung.",
+    "all": "Alle Begriffe",
+    "aliases": "Auch:"
   },
   "faq": {
     "lead": "Antworten auf allgemeine Fragen zu SnipAtlas: was du hier findest, wofür du ein Konto brauchst und wie du mir schreibst.",

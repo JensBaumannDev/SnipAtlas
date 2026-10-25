@@ -1,0 +1,128 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+}
+
+// Intro
+.glossary__intro {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.glossary__lead {
+  max-width: rem(720);
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
+
+// Search
+.glossary__search {
+  position: relative;
+  max-width: rem(560);
+}
+
+.glossary__search-icon {
+  position: absolute;
+  top: 50%;
+  left: $control-padding-x;
+  width: rem(20);
+  height: rem(20);
+  color: var(--muted);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.glossary__search-input {
+  padding-left: calc($control-padding-x * 2 + rem(20));
+}
+
+.glossary__count,
+.glossary__empty {
+  color: var(--muted);
+}
+
+.glossary__count {
+  margin-top: -$space-md;
+}
+
+// Group
+.glossary__letter {
+  @include card-title;
+
+  padding: 0 $space-xs;
+  margin-bottom: $space-sm;
+
+  &::after {
+    @include card-line;
+
+    display: block;
+    width: rem(48);
+    margin-top: $space-sm;
+  }
+}
+
+.glossary__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+// Term
+.glossary__term {
+  display: grid;
+  grid-template-columns: rem(200) minmax(0, 1fr);
+  gap: $space-sm $space-lg;
+  padding: $space-lg $space-xs;
+  scroll-margin-top: calc($topbar-height + $space-lg);
+  border-bottom: 1px solid var(--line);
+
+  &:target {
+    background: var(--accent-soft);
+  }
+}
+
+.glossary__head {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  min-width: 0;
+}
+
+.glossary__name {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.glossary__aliases {
+  font-family: $font-mono;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.glossary__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  min-width: 0;
+}
+
+.glossary__definition {
+  max-width: 70ch;
+  overflow-wrap: anywhere;
+}
+
+/* #region RESPONSIVE */
+@include small {
+  .glossary__term {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* #endregion */

@@ -21,7 +21,7 @@
         <span class="debug-guide-card__number" aria-hidden="true">{{ $index + 1 }}</span>
         <div class="debug-guide-card__body">
           <h4 class="debug-guide-card__step-title">{{ step.title }}</h4>
-          <p class="debug-guide-card__step-text">{{ step.text }}</p>
+          <app-term-text class="debug-guide-card__step-text" [text]="step.text" />
           @if (step.resolved; as code) {
             <app-code-block [code]="code.code" [language]="code.language" [os]="code.os" />
           }
