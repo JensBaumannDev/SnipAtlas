@@ -1,0 +1,16 @@
+<div class="project-form" [formGroup]="form">
+  @for (key of keys(); track key) {
+    <div class="field">
+      <label class="field__label" [for]="idPrefix + '-' + key">{{ 'project.keys.' + key | translate }}</label>
+      <input
+        class="input input--code"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        [id]="idPrefix + '-' + key"
+        [formControlName]="key"
+        [placeholder]="'project.examples.' + key | translate"
+      />
+    </div>
+  }
+</div>

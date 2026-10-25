@@ -13,7 +13,7 @@ const ENTRIES: Entry[] = [
     description:
       'Einmal am Anfang: Ordner zum Git-Repo machen und mit einem leeren GitHub-Repo verknüpfen.',
     language: 'terminal',
-    code: 'git init\ngit add .\ngit commit -m "Erster Commit"\ngit branch -M main\ngit remote add origin https://github.com/NAME/REPO.git\ngit push -u origin main',
+    code: 'git init\ngit add .\ngit commit -m "Erster Commit"\ngit branch -M main\ngit remote add origin https://github.com/{{githubUser}}/{{repo}}.git\ngit push -u origin main',
   },
   {
     slug: 'repo-herunterladen',
@@ -22,7 +22,7 @@ const ENTRIES: Entry[] = [
     title: 'Repo herunterladen',
     description: 'Ein bestehendes Projekt von GitHub auf den Rechner holen.',
     language: 'terminal',
-    code: 'git clone https://github.com/NAME/REPO.git',
+    code: 'git clone https://github.com/{{githubUser}}/{{repo}}.git',
   },
   {
     slug: 'speichern-und-hochladen',
@@ -179,7 +179,7 @@ const ENTRIES: Entry[] = [
     title: 'Neues Projekt anlegen und starten',
     description: '-o öffnet direkt den Browser auf localhost:4200.',
     language: 'terminal',
-    code: 'ng new mein-projekt\ncd mein-projekt\nng serve -o',
+    code: 'ng new {{project}}\ncd {{project}}\nng serve -o',
   },
   {
     slug: 'komponente-und-service-erzeugen',
@@ -208,7 +208,7 @@ const ENTRIES: Entry[] = [
     title: 'Per SSH verbinden',
     description: 'Ab Windows 10 direkt im Terminal möglich.',
     language: 'terminal',
-    code: 'ssh benutzer@SERVER-IP',
+    code: 'ssh {{serverUser}}@{{serverIp}}',
   },
   {
     slug: 'datei-auf-server-kopieren',
@@ -217,7 +217,7 @@ const ENTRIES: Entry[] = [
     title: 'Datei auf den Server kopieren',
     description: 'Vom eigenen Rechner aus ausführen, nicht auf dem Server.',
     language: 'terminal',
-    code: 'scp projekt.zip benutzer@SERVER-IP:/home/benutzer/',
+    code: 'scp {{project}}.zip {{serverUser}}@{{serverIp}}:/home/{{serverUser}}/',
   },
   {
     slug: 'server-aktualisieren',
@@ -262,7 +262,7 @@ const ENTRIES: Entry[] = [
     title: 'HTTPS-Zertifikat mit Let’s Encrypt',
     description: 'Die Domain muss vorher auf den Server zeigen.',
     language: 'terminal',
-    code: 'sudo apt install certbot python3-certbot-nginx\nsudo certbot --nginx -d meine-domain.de',
+    code: 'sudo apt install certbot python3-certbot-nginx\nsudo certbot --nginx -d {{domain}}',
   },
 
   // Docker

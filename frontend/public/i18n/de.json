@@ -271,6 +271,29 @@
   "footer": {
     "label": "Rechtliches und Kontakt"
   },
+  "project": {
+    "title": "Mein Projekt",
+    "hint": "Trag die Werte deines Projekts ein. Befehle mit Platzhaltern zeigen dann deine Werte und kopieren sie mit. Die Werte bleiben in diesem Browser.",
+    "missing": "{{count}} Werte fehlen: für dein Projekt ausfüllen",
+    "missingOne": "1 Wert fehlt: für dein Projekt ausfüllen",
+    "filled": "Mit deinen Projektwerten: ändern",
+    "keys": {
+      "project": "projektname",
+      "githubUser": "github-benutzer",
+      "repo": "repository",
+      "domain": "domain",
+      "serverUser": "server-benutzer",
+      "serverIp": "server-ip"
+    },
+    "examples": {
+      "project": "taskboard",
+      "githubUser": "jensbaumann",
+      "repo": "taskboard",
+      "domain": "taskboard.de",
+      "serverUser": "deploy",
+      "serverIp": "203.0.113.10"
+    }
+  },
   "glossary": {
     "searchLabel": "Begriffe durchsuchen",
     "searchPlaceholder": "Begriff suchen, z. B. CORS",

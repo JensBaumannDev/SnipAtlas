@@ -20,7 +20,7 @@ const BLUEPRINTS: Blueprint[] = [
         slug: 'ordner-anlegen',
         title: 'Projektordner anlegen',
         why: 'Alles, was zum Projekt gehört, liegt in einem Ordner. Diesen Ordner öffnest du später in VS Code.',
-        code: [{ language: 'terminal', code: 'mkdir mein-projekt\ncd mein-projekt' }],
+        code: [{ language: 'terminal', code: 'mkdir {{project}}\ncd {{project}}' }],
       },
       {
         slug: 'virtuelle-umgebung',
@@ -120,7 +120,7 @@ const BLUEPRINTS: Blueprint[] = [
         slug: 'repo-klonen',
         title: 'Repository klonen',
         why: 'Holt das Projekt mit seiner ganzen Historie auf deinen Rechner.',
-        code: [{ language: 'terminal', code: 'git clone https://github.com/NAME/REPO.git\ncd REPO' }],
+        code: [{ language: 'terminal', code: 'git clone https://github.com/{{githubUser}}/{{repo}}.git\ncd {{repo}}' }],
       },
       {
         slug: 'virtuelle-umgebung',

@@ -1,0 +1,21 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Fields
+.project-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(rem(220), 1fr));
+  gap: $space-md;
+}
+
+/* #region RESPONSIVE */
+@include small {
+  .project-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* #endregion */

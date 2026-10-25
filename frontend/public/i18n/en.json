@@ -271,6 +271,29 @@
   "footer": {
     "label": "Legal and contact"
   },
+  "project": {
+    "title": "My project",
+    "hint": "Enter your project values. Commands with placeholders then show your values and copy them along. The values stay in this browser.",
+    "missing": "{{count}} values missing: fill in for your project",
+    "missingOne": "1 value missing: fill in for your project",
+    "filled": "Using your project values: change",
+    "keys": {
+      "project": "project-name",
+      "githubUser": "github-user",
+      "repo": "repository",
+      "domain": "domain",
+      "serverUser": "server-user",
+      "serverIp": "server-ip"
+    },
+    "examples": {
+      "project": "taskboard",
+      "githubUser": "janedoe",
+      "repo": "taskboard",
+      "domain": "taskboard.com",
+      "serverUser": "deploy",
+      "serverIp": "203.0.113.10"
+    }
+  },
   "glossary": {
     "searchLabel": "Search terms",
     "searchPlaceholder": "Search a term, e.g. CORS",
