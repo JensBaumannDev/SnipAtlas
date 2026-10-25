@@ -26,7 +26,7 @@
 // Layout
 .request__layout {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: $space-xxl;
   align-items: start;
 }
@@ -171,8 +171,8 @@
   display: flex;
   flex-direction: column;
   gap: $space-md;
-  padding-left: $space-lg;
-  border-left: 1px solid var(--line);
+  padding-top: $space-lg;
+  border-top: 1px solid var(--line);
 }
 
 .request__steps {
@@ -203,18 +203,6 @@
 }
 
 /* #region RESPONSIVE */
-@include mobile {
-  .request__layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .request__info {
-    padding: $space-lg 0 0;
-    border-top: 1px solid var(--line);
-    border-left: 0;
-  }
-}
-
 @include small {
   .request__kinds {
     grid-template-columns: minmax(0, 1fr);
