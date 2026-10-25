@@ -1,31 +1,16 @@
 import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideCopy, LucideListTree, LucideMessageSquarePlus } from '@lucide/angular';
+import { LucideBookText } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Concept } from '../../core/concept';
 import { ConceptApi } from '../../core/concept-api';
 import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
-import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
+import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { ConceptCard } from './concept-card/concept-card';
-
-const HINTS: AreaHint[] = [
-  {
-    icon: LucideListTree,
-    title: 'concepts.hints.choose.title',
-    text: 'concepts.hints.choose.text',
-  },
-  { icon: LucideCopy, title: 'concepts.hints.copy.title', text: 'concepts.hints.copy.text' },
-  {
-    icon: LucideMessageSquarePlus,
-    title: 'concepts.hints.request.title',
-    text: 'concepts.hints.request.text',
-    link: { label: 'concepts.hints.requestLink', path: '/anfrage' },
-  },
-];
 
 interface ConceptSection {
   subtopic: Subtopic;
@@ -46,7 +31,7 @@ export class Concepts {
   readonly topic = input<string>();
   readonly subtopic = input<string>();
 
-  protected readonly hints = HINTS;
+  protected readonly icon = LucideBookText;
   protected readonly summary = toSignal(this.conceptApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });

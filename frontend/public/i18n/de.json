@@ -149,21 +149,6 @@
   "commands": {
     "lead": "Befehle fürs Terminal zum Kopieren, von Git und npm über Angular und Django bis Docker. Jeder Eintrag sagt kurz, wofür du ihn brauchst.",
     "summary": "{{entries}} Einträge in {{topics}} Themen",
-    "hints": {
-      "choose": {
-        "title": "Thema wählen",
-        "text": "Wähle ein Thema aus der Liste. Ein Klick auf einen Eintrag klappt ihn auf."
-      },
-      "copy": {
-        "title": "Kopieren",
-        "text": "Der Button übernimmt den Code ohne das $ am Zeilenanfang."
-      },
-      "os": {
-        "title": "Dein System",
-        "text": "Terminal-Befehle erscheinen passend für Windows oder Linux/Mac."
-      },
-      "osLink": "In den Einstellungen umstellen"
-    },
     "empty": "Zu diesem Thema gibt es noch keine Einträge.",
     "entryCount": "{{count}} Einträge",
     "entryCountOne": "1 Eintrag",
@@ -173,21 +158,6 @@
   "concepts": {
     "lead": "Begriffe und Grundlagen in einfachen Worten erklärt, jeweils mit einem kurzen Beispiel und dem, was man sich merken sollte.",
     "summary": "{{entries}} Konzepte in {{topics}} Themen",
-    "hints": {
-      "choose": {
-        "title": "Thema wählen",
-        "text": "Wähle ein Thema aus der Liste. Ein Klick auf ein Konzept zeigt Erklärung und Beispiel."
-      },
-      "copy": {
-        "title": "Ausprobieren",
-        "text": "Kopiere die Beispiele und probiere sie direkt selbst aus."
-      },
-      "request": {
-        "title": "Begriff fehlt?",
-        "text": "Fehlt ein Begriff, der dir Kopfzerbrechen macht?"
-      },
-      "requestLink": "Schreib mir eine Anfrage"
-    },
     "empty": "Zu diesem Thema gibt es noch keine Konzepte.",
     "conceptCount": "{{count}} Konzepte",
     "conceptCountOne": "1 Konzept",
@@ -198,20 +168,6 @@
   "guides": {
     "lead": "Abläufe Schritt für Schritt: was du tust, warum, und den Code zum Kopieren. Vom leeren Ordner bis zum fertigen Projekt.",
     "summary": "{{blueprints}} Baupläne mit {{steps}} Schritten",
-    "hints": {
-      "choose": {
-        "title": "Bauplan öffnen",
-        "text": "Wähle ein Thema aus der Liste und öffne einen Bauplan."
-      },
-      "copy": {
-        "title": "Schritt für Schritt",
-        "text": "Jeder Schritt erklärt, warum er nötig ist, und hat den Code zum Kopieren."
-      },
-      "progress": {
-        "title": "Abhaken",
-        "text": "Hake erledigte Schritte ab. Der Balken zeigt, wie weit du bist."
-      }
-    },
     "progress": "{{done}} von {{total}} Schritten erledigt",
     "progressComplete": "Alle {{total}} Schritte erledigt",
     "progressLabel": "Fortschritt",
@@ -231,22 +187,7 @@
     "topicGuides": "So debuggst du {{topic}}",
     "commonErrors": "Häufige Fehlermeldungen",
     "cause": "Warum passiert das?",
-    "fix": "So behebst du es",
-    "hints": {
-      "choose": {
-        "title": "Thema wählen",
-        "text": "Wähle ein Thema aus der Liste."
-      },
-      "solve": {
-        "title": "Ursache verstehen",
-        "text": "Zu jeder Meldung gibt es Bedeutung, Ursache und die Schritte zur Lösung."
-      },
-      "request": {
-        "title": "Meldung fehlt?",
-        "text": "Hängst du an einer Meldung, die hier fehlt?"
-      },
-      "requestLink": "Schreib mir eine Anfrage"
-    }
+    "fix": "So behebst du es"
   },
   "favorites": {
     "toggle": "Als Favorit merken: {{title}}",

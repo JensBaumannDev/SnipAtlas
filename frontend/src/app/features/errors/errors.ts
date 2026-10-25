@@ -1,34 +1,15 @@
 import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
-import { LucideListTree, LucideMessageSquarePlus, LucideSearch } from '@lucide/angular';
+import { LucideTriangleAlert } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DebugGuideApi } from '../../core/debug-guide-api';
 import { ErrorApi } from '../../core/error-api';
 import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { TopicApi } from '../../core/topic-api';
-import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
+import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { DebugGuideCard } from './debug-guide-card/debug-guide-card';
 import { ErrorCard } from './error-card/error-card';
-
-const HINTS: AreaHint[] = [
-  {
-    icon: LucideListTree,
-    title: 'debugging.hints.choose.title',
-    text: 'debugging.hints.choose.text',
-  },
-  {
-    icon: LucideSearch,
-    title: 'debugging.hints.solve.title',
-    text: 'debugging.hints.solve.text',
-  },
-  {
-    icon: LucideMessageSquarePlus,
-    title: 'debugging.hints.request.title',
-    text: 'debugging.hints.request.text',
-    link: { label: 'debugging.hints.requestLink', path: '/anfrage' },
-  },
-];
 
 @Component({
   imports: [AreaIntro, DebugGuideCard, ErrorCard, TopicHeader, TranslatePipe],
@@ -43,7 +24,7 @@ export class Errors {
 
   readonly topic = input<string>();
 
-  protected readonly hints = HINTS;
+  protected readonly icon = LucideTriangleAlert;
   protected readonly summary = toSignal(this.errorApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });
