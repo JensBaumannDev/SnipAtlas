@@ -10,6 +10,7 @@ import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
+import { TopicIndex } from '../../shared/topic-index/topic-index';
 import { ConceptCard } from './concept-card/concept-card';
 
 interface ConceptSection {
@@ -18,7 +19,7 @@ interface ConceptSection {
 }
 
 @Component({
-  imports: [AreaIntro, ConceptCard, RouterLink, TopicHeader, TranslatePipe],
+  imports: [AreaIntro, ConceptCard, RouterLink, TopicHeader, TopicIndex, TranslatePipe],
   selector: 'app-concepts',
   styleUrl: './concepts.scss',
   templateUrl: './concepts.html',

@@ -5,19 +5,19 @@
   },
   "nav": {
     "label": "Sections",
-    "home": "Dashboard",
+    "home": "Home",
     "commands": "Commands",
-    "concepts": "Concepts",
-    "blueprints": "Blueprints",
-    "debugging": "Debugging",
+    "concepts": "Basics",
+    "blueprints": "Guides",
+    "debugging": "Errors",
     "request": "Request",
     "settings": "Settings"
   },
   "pages": {
     "commands": "Commands",
-    "concepts": "Concepts",
-    "blueprints": "Blueprints",
-    "debugging": "Debugging",
+    "concepts": "Basics",
+    "blueprints": "Guides",
+    "debugging": "Errors",
     "request": "Request",
     "imprint": "Legal notice",
     "privacy": "Privacy policy",
@@ -34,7 +34,7 @@
     "collectionHint": "Sign in to save commands as favourites and find them here again."
   },
   "search": {
-    "label": "Search commands, concepts and error messages",
+    "label": "Search commands, basics, guides and error messages",
     "placeholder": "Search …",
     "ctrl": "Ctrl",
     "heroPlaceholder": "What are you looking for? For example git stash",
@@ -43,9 +43,9 @@
     "count": "{{count}} results",
     "areas": {
       "commands": "Command",
-      "concepts": "Concept",
-      "blueprints": "Blueprint",
-      "debugging": "Debugging"
+      "concepts": "Basics",
+      "blueprints": "Guide",
+      "debugging": "Errors"
     }
   },
   "account": {
@@ -64,8 +64,8 @@
       "account": "Account"
     },
     "progress": "Progress",
-    "noProgress": "You have not started a blueprint yet.",
-    "toBlueprints": "Go to blueprints",
+    "noProgress": "You have not started a guide yet.",
+    "toBlueprints": "Go to guides",
     "allRequests": "See all requests",
     "requestSummary": "{{open}} open, {{done}} done",
     "noRequests": "You have not sent any requests yet.",
@@ -157,17 +157,18 @@
   },
   "concepts": {
     "lead": "Terms and basics explained in plain words, each with a short example and what to remember.",
-    "summary": "{{entries}} concepts in {{topics}} topics",
-    "empty": "There are no concepts for this topic yet.",
-    "conceptCount": "{{count}} concepts",
-    "conceptCountOne": "1 concept",
+    "summary": "{{entries}} explanations in {{topics}} topics",
+    "empty": "There are no explanations for this topic yet.",
+    "conceptCount": "{{count}} explanations",
+    "conceptCountOne": "1 explanation",
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
     "note": "Remember"
   },
   "guides": {
     "lead": "Step-by-step workflows: what to do, why, and the code to copy. From an empty folder to a finished project.",
-    "summary": "{{blueprints}} blueprints with {{steps}} steps",
+    "summary": "{{blueprints}} guides with {{steps}} steps",
+    "all": "All guides",
     "progress": "{{done}} of {{total}} steps done",
     "progressComplete": "All {{total}} steps done",
     "progressLabel": "Progress",
@@ -175,7 +176,7 @@
     "markDone": "Step {{number}} done: {{title}}",
     "reset": "Reset",
     "note": "Note",
-    "empty": "There are no blueprints for this topic yet."
+    "empty": "There are no guides for this topic yet."
   },
   "debugging": {
     "lead": "Understand and fix common error messages: what the message means, where it comes from and how to fix it.",
@@ -183,7 +184,7 @@
     "errorCount": "{{count}} error messages",
     "errorCountOne": "1 error message",
     "empty": "There are no error messages for this topic yet.",
-    "basics": "Basics: how to approach it",
+    "basics": "How to approach it",
     "topicGuides": "How to debug {{topic}}",
     "commonErrors": "Common error messages",
     "cause": "Why does this happen?",
@@ -198,10 +199,10 @@
   "report": {
     "link": "Report a mistake",
     "command": "Command",
-    "concept": "Concept",
+    "concept": "Explanation",
     "error": "Error message",
-    "step": "Blueprint step",
-    "guide": "Debugging guide"
+    "step": "Guide step",
+    "guide": "Troubleshooting"
   },
   "code": {
     "copy": "Copy",
@@ -213,7 +214,7 @@
   },
   "home": {
     "title": "Reference for web development",
-    "lead": "Commands to copy, concepts with examples, blueprints for whole projects and solutions for common error messages. Free and updated regularly.",
+    "lead": "Commands to copy, basics with examples, guides for whole projects and solutions for common error messages. Free and updated regularly.",
     "areas": {
       "label": "Areas at a glance",
       "commands": "Terminal, Git, npm and Docker to copy",
@@ -236,17 +237,17 @@
         "comment": "# Put changes aside for a moment and bring them back"
       },
       "concepts": {
-        "title": "Concepts in plain words",
+        "title": "Basics in plain words",
         "text": "What is a signal, an interceptor, a serializer? Explained briefly, with a small code example that makes sense.",
-        "count": "Concepts: {{count}}",
-        "open": "Go to concepts",
+        "count": "Explanations: {{count}}",
+        "open": "Go to basics",
         "comment": "// A signal holds a value and reports changes"
       },
       "blueprints": {
-        "title": "Blueprints to tick off",
+        "title": "Guides to tick off",
         "text": "A whole project step by step, from an empty folder to the goal. Every step explains why it is needed, and your progress is saved.",
-        "count": "Blueprints: {{count}}",
-        "open": "Go to blueprints",
+        "count": "Guides: {{count}}",
+        "open": "Go to guides",
         "step1": "Create the project folder",
         "step2": "Set up a virtual environment",
         "step3": "Install Django",
@@ -258,7 +259,7 @@
         "title": "Understand and fix errors",
         "text": "Common error messages with meaning, cause and solution, plus guides on how to find errors yourself.",
         "count": "Error guides: {{count}}",
-        "open": "Go to debugging",
+        "open": "Go to error messages",
         "comment": "# Port 8000 is already taken. Just use another one:"
       }
     }
@@ -323,7 +324,7 @@
       "accountItems": {
         "login": "email address, password hash, date of registration and of your last sign-in",
         "favorites": "your favourites",
-        "progress": "your progress in the blueprints",
+        "progress": "your progress in the guides",
         "settings": "your settings (commands for Windows or Linux/Mac, appearance, email when a request is answered)",
         "requests": "your requests with their status and my reply"
       },
@@ -400,14 +401,14 @@
       "title": "What happens next",
       "read": "I handle every request myself.",
       "answer": "You get a reply by email within 24 hours.",
-      "publish": "New entries appear on the dashboard under “New on SnipAtlas”."
+      "publish": "New entries appear on the home page under “New on SnipAtlas”."
     },
     "choose": "Please choose …",
     "entry": {
       "areaLabel": "What is missing?",
       "areas": {
         "command": "Command",
-        "concept": "Term (concept)",
+        "concept": "Term (basics)",
         "error": "Error message"
       },
       "topicLabel": "Topic",

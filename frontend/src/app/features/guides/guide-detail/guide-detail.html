@@ -1,6 +1,6 @@
 @if (blueprint(); as blueprint) {
   <header class="guide-detail__header">
-    <a class="guide-detail__parent" [routerLink]="['/bauplaene', blueprint.topic]">
+    <a class="guide-detail__parent" [routerLink]="['/anleitungen', blueprint.topic]">
       {{ currentTopic()?.name ?? ('pages.blueprints' | translate) }}
     </a>
     <h1>{{ blueprint.title }}</h1>

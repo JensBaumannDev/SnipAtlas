@@ -22,7 +22,7 @@ import { LucideChevronDown, LucideChevronRight } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { AreaContent } from '../../core/area-content';
-import { ContentArea, isContentArea } from '../../core/content-index';
+import { ContentArea, filterGroups, isContentArea } from '../../core/content-index';
 import { TopicApi } from '../../core/topic-api';
 import { Collection } from '../../shared/collection/collection';
 import { TopicLogo } from '../../shared/topic-logo/topic-logo';
@@ -82,22 +82,7 @@ export class Sidebar {
 
   protected readonly visibleGroups = computed(() => {
     const index = this.index.value();
-    if (!index) {
-      return [];
-    }
-    return this.groups()
-      .map((group) => ({
-        ...group,
-        topics: group.topics
-          .filter((topic) => index[topic.slug])
-          .map((topic) => ({
-            ...topic,
-            subtopics: topic.subtopics.filter((subtopic) =>
-              index[topic.slug]?.includes(subtopic.slug),
-            ),
-          })),
-      }))
-      .filter((group) => group.topics.length);
+    return index ? filterGroups(this.groups(), index) : [];
   });
 
   protected readonly activeTopic = computed(() =>

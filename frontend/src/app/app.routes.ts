@@ -14,20 +14,20 @@ export const routes: Routes = [
       import('./features/commands/commands.routes').then((m) => m.COMMANDS_ROUTES),
   },
   {
-    path: 'konzepte',
+    path: 'grundlagen',
     title: 'pages.concepts',
     data: { sidebar: 'subtopics', area: 'concepts' },
     loadChildren: () =>
       import('./features/concepts/concepts.routes').then((m) => m.CONCEPTS_ROUTES),
   },
   {
-    path: 'bauplaene',
+    path: 'anleitungen',
     title: 'pages.blueprints',
     data: { sidebar: 'topics', area: 'blueprints' },
     loadChildren: () => import('./features/guides/guides.routes').then((m) => m.GUIDES_ROUTES),
   },
   {
-    path: 'debugging',
+    path: 'fehler',
     title: 'pages.debugging',
     data: { sidebar: 'topics', area: 'debugging' },
     loadChildren: () => import('./features/errors/errors.routes').then((m) => m.ERRORS_ROUTES),

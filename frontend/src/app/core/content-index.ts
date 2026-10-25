@@ -1,3 +1,5 @@
+import { Group } from './topic';
+
 export type ContentArea = 'commands' | 'concepts' | 'blueprints' | 'debugging';
 
 export type ContentIndex = Readonly<Record<string, readonly string[]>>;
@@ -27,4 +29,20 @@ export function mergeIndex(...indexes: ContentIndex[]): ContentIndex {
     }
   }
   return merged;
+}
+
+export function filterGroups(groups: readonly Group[], index: ContentIndex): Group[] {
+  return groups
+    .map((group) => ({
+      ...group,
+      topics: group.topics
+        .filter((topic) => index[topic.slug])
+        .map((topic) => ({
+          ...topic,
+          subtopics: topic.subtopics.filter((subtopic) =>
+            index[topic.slug]?.includes(subtopic.slug),
+          ),
+        })),
+    }))
+    .filter((group) => group.topics.length);
 }
