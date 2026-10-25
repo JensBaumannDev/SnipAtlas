@@ -1,8 +1,8 @@
 @use 'functions' as *;
 
 // Fonts
-$font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-$font-mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', consolas, monospace;
+$font-sans: 'IBM Plex Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', consolas, monospace;
 
 // Font sizes
 $font-size-base: rem(16);
