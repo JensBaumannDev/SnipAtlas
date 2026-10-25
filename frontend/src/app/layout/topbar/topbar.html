@@ -1,28 +1,41 @@
 <header class="topbar">
-  <a class="brand" routerLink="/" [attr.aria-label]="'app.home' | translate">
+  <a
+    class="brand"
+    [class.brand--centered]="isHome()"
+    routerLink="/"
+    [attr.aria-label]="'app.home' | translate"
+  >
     <span class="logo brand__logo" aria-hidden="true"></span>
     <span class="brand__name">Snip<span class="brand__accent">Atlas</span></span>
   </a>
 
-  <app-search-box class="topbar__search" inputId="search" [shortcut]="true" />
+  <div class="topbar__main">
+    <app-search-box
+      class="topbar__search"
+      [class.topbar__search--hidden]="isHome()"
+      [inert]="isHome()"
+      inputId="search"
+      [shortcut]="!isHome()"
+    />
 
-  <div class="topbar__tools">
-    <a
-      class="btn btn--icon topbar__settings"
-      routerLink="/einstellungen"
-      routerLinkActive
-      ariaCurrentWhenActive="page"
-      [attr.aria-label]="'settings.title' | translate"
-    >
-      <svg lucideSettings class="icon topbar__icon"></svg>
-    </a>
+    <div class="topbar__tools">
+      <a
+        class="btn btn--icon topbar__settings"
+        routerLink="/einstellungen"
+        routerLinkActive
+        ariaCurrentWhenActive="page"
+        [attr.aria-label]="'settings.title' | translate"
+      >
+        <svg lucideSettings class="icon topbar__icon"></svg>
+      </a>
 
-    @if (session.user()) {
-      <app-user-menu (loggedOut)="onLogout()" />
-    } @else {
-      <button #loginButton type="button" class="btn btn--primary" (click)="openLogin()">
-        {{ 'auth.login' | translate }}
-      </button>
-    }
+      @if (session.user()) {
+        <app-user-menu (loggedOut)="onLogout()" />
+      } @else {
+        <button #loginButton type="button" class="btn btn--primary" (click)="openLogin()">
+          {{ 'auth.login' | translate }}
+        </button>
+      }
+    </div>
   </div>
 </header>

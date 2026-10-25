@@ -1,8 +1,18 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, ElementRef, Injector, afterNextRender, inject, viewChild } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  Component,
+  DOCUMENT,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  inject,
+  viewChild,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideSettings } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { filter, map } from 'rxjs';
 import { LoginDialog } from '../../core/login-dialog';
 import { Session } from '../../core/session';
 import { SearchBox } from '../../shared/search-box/search-box';
@@ -15,18 +25,22 @@ const SCROLL_GAP = 16;
   selector: 'app-topbar',
   styleUrl: './topbar.scss',
   templateUrl: './topbar.html',
-  host: {
-    '(document:keydown)': 'onKeydown($event)',
-  },
 })
 export class Topbar {
   private readonly injector = inject(Injector);
   private readonly loginDialog = inject(LoginDialog);
-  private readonly searchBox = viewChild.required(SearchBox);
+  private readonly router = inject(Router);
   private readonly loginButton = viewChild<ElementRef<HTMLButtonElement>>('loginButton');
   private readonly userMenu = viewChild(UserMenu);
 
   protected readonly session = inject(Session);
+  protected readonly isHome = toSignal(
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      map(() => this.router.url.split(/[?#]/)[0] === '/'),
+    ),
+    { initialValue: inject(DOCUMENT).defaultView?.location.pathname === '/' },
+  );
 
   constructor() {
     const host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
@@ -44,12 +58,5 @@ export class Topbar {
     afterNextRender(() => this.loginButton()?.nativeElement.focus(), {
       injector: this.injector,
     });
-  }
-
-  protected onKeydown(event: KeyboardEvent): void {
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
-      event.preventDefault();
-      this.searchBox().focus();
-    }
   }
 }

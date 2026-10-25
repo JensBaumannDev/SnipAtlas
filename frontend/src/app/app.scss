@@ -1,6 +1,10 @@
 @use 'abstracts' as *;
 
 :host {
+  --nav-width: #{$rail-width};
+  --content-max: #{$layout-max-width - $rail-width};
+  --outline-space: 0px;
+
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -29,15 +33,16 @@
   flex: 1;
   gap: $space-xxl;
   align-items: flex-start;
-  padding-right: $layout-side;
-  padding-left: calc($rail-width + $layout-side);
-  transition: padding-left var(--duration) var(--ease);
+  padding-right: $space-xl;
+  padding-left: calc(var(--nav-width) + $space-xl);
 }
 
 .shell__content {
   flex: 1;
   min-width: 0;
+  max-width: var(--content-max);
   padding-block: $space-xl;
+  margin-inline: auto;
 
   &:focus {
     outline: none;
@@ -46,8 +51,19 @@
 
 /* #region RESPONSIVE */
 @include desktop {
-  :host:has(app-rail:hover, app-rail :focus-visible) :is(.shell, app-footer) {
-    padding-left: calc($rail-width-expanded + $layout-side);
+  :host:has(app-sidebar:not([hidden])) {
+    --nav-width: #{$rail-width + $sidebar-width};
+    --content-max: #{$content-max-width};
+  }
+}
+
+@include wide {
+  :host:has(app-sidebar:not([hidden])) {
+    --outline-space: #{$sidebar-width + $space-xxl};
+  }
+
+  :host:not(:has(app-sidebar:not([hidden]))) app-outline {
+    display: none;
   }
 }
 
@@ -64,6 +80,7 @@
 
   .shell__content {
     width: 100%;
+    max-width: none;
     padding-block: 0;
   }
 }

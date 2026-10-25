@@ -2,9 +2,8 @@
 
 :host {
   display: block;
-  padding-right: $layout-side;
-  padding-left: calc($rail-width + $layout-side);
-  transition: padding-left var(--duration) var(--ease);
+  padding-right: calc($space-xl + var(--outline-space));
+  padding-left: calc(var(--nav-width) + $space-xl);
 }
 
 .footer {
