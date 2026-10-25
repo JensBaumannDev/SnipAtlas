@@ -1,7 +1,7 @@
 import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideCopy, LucideListTree, LucideSettings } from '@lucide/angular';
+import { LucideTerminal } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Entry } from '../../core/entry';
 import { EntryApi } from '../../core/entry-api';
@@ -9,24 +9,9 @@ import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { Preferences } from '../../core/preferences';
 import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
-import { AreaHint, AreaIntro } from '../../shared/area-intro/area-intro';
+import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { EntryCard } from './entry-card/entry-card';
-
-const HINTS: AreaHint[] = [
-  {
-    icon: LucideListTree,
-    title: 'commands.hints.choose.title',
-    text: 'commands.hints.choose.text',
-  },
-  { icon: LucideCopy, title: 'commands.hints.copy.title', text: 'commands.hints.copy.text' },
-  {
-    icon: LucideSettings,
-    title: 'commands.hints.os.title',
-    text: 'commands.hints.os.text',
-    link: { label: 'commands.hints.osLink', path: '/einstellungen' },
-  },
-];
 
 interface EntrySection {
   subtopic: Subtopic;
@@ -49,7 +34,7 @@ export class Commands {
 
   protected readonly os = inject(Preferences).os;
 
-  protected readonly hints = HINTS;
+  protected readonly icon = LucideTerminal;
   protected readonly summary = toSignal(this.entryApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });

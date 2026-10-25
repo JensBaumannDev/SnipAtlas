@@ -1,26 +1,12 @@
 <header class="area-intro__header">
-  <h1>{{ title() | translate }}</h1>
+  <div class="area-intro__frame">
+    <svg [lucideIcon]="icon()" class="icon area-intro__icon"></svg>
+  </div>
+  <h1 class="area-intro__title">{{ title() | translate }}</h1>
   <p class="area-intro__lead">{{ lead() | translate }}</p>
   @if (summary(); as summary) {
     <p class="area-intro__meta">{{ summary }}</p>
   }
 </header>
-
-<ul class="area-intro__hints" role="list">
-  @for (hint of hints(); track hint.title) {
-    <li class="area-intro__hint">
-      <div class="area-intro__head">
-        <h2 class="area-intro__title">{{ hint.title | translate }}</h2>
-        <svg [lucideIcon]="hint.icon" class="icon area-intro__icon"></svg>
-      </div>
-      <p class="area-intro__text">
-        {{ hint.text | translate }}
-        @if (hint.link; as link) {
-          <a [routerLink]="link.path">{{ link.label | translate }}</a>
-        }
-      </p>
-    </li>
-  }
-</ul>
 
 <ng-content />

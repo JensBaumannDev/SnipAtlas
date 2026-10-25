@@ -6,13 +6,21 @@
 
 // Card
 .error-card {
+  position: relative;
   border-bottom: 1px solid var(--line);
 
-  &--open {
-    @include card-surface($radius-card-sm, false);
+  &--open::before {
+    position: absolute;
+    top: $space-md;
+    bottom: $space-lg;
+    left: -$space-sm;
+    width: 2px;
+    content: '';
+    background: var(--accent);
+  }
 
-    padding-inline: calc($space-sm - 2px);
-    margin: $space-sm (-$space-sm);
+  &--open .error-card__message {
+    color: var(--accent);
   }
 }
 
