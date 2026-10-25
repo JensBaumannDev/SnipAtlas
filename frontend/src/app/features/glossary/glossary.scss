@@ -1,31 +1,25 @@
 @use 'abstracts' as *;
 
 :host {
-  display: flex;
-  flex-direction: column;
-  gap: $space-xl;
+  display: block;
   width: 100%;
   max-width: $content-max-width;
   margin-inline: auto;
 }
 
-// Intro
-.glossary__intro {
+// Content
+.glossary__content {
   display: flex;
   flex-direction: column;
-  gap: $space-sm;
-}
-
-.glossary__lead {
-  max-width: rem(720);
-  font-size: $font-size-lg;
-  color: var(--muted);
+  gap: $space-xl;
 }
 
 // Search
 .glossary__search {
   position: relative;
+  width: 100%;
   max-width: rem(560);
+  margin-inline: auto;
 }
 
 .glossary__search-icon {
@@ -50,6 +44,7 @@
 
 .glossary__count {
   margin-top: -$space-md;
+  text-align: center;
 }
 
 // Group

@@ -295,6 +295,7 @@
     }
   },
   "glossary": {
+    "summary": "{{count}} Begriffe von A bis Z",
     "searchLabel": "Begriffe durchsuchen",
     "searchPlaceholder": "Begriff suchen, z. B. CORS",
     "count": "{{count}} Begriffe",
