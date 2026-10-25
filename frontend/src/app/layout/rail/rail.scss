@@ -36,11 +36,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: $space-xs;
+  gap: $space-sm;
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: $space-sm 0;
+  padding: rem(14) 0;
   font-size: $font-size-base;
   font-weight: $font-weight-book;
   line-height: $line-height-tight;
