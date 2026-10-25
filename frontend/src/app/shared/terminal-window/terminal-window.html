@@ -1,0 +1,46 @@
+<div class="terminal__bar">
+  <span class="terminal__dots" aria-hidden="true">
+    <span class="terminal__dot terminal__dot--close"></span>
+    <span class="terminal__dot terminal__dot--minimize"></span>
+    <span class="terminal__dot terminal__dot--zoom"></span>
+  </span>
+  <span class="terminal__title">{{ title() }}</span>
+</div>
+
+<div class="terminal__body">
+  @for (line of rendered(); track $index) {
+    <p [class]="lineClass(line.kind)">
+      @if (line.kind === 'command') {
+        <span class="terminal__prompt" aria-hidden="true">
+          <span class="terminal__user">{{ user }}</span>
+          <span>:</span>
+          <span class="terminal__cwd">{{ cwd() }}</span>
+          <span>$ </span>
+        </span>
+      }
+      @if (line.tokens; as tokens) {
+        @for (token of tokens; track $index) {
+          <span [class]="tokenClass(token)">{{ token.text }}</span>
+        }
+      } @else {
+        @if (line.kind === 'done' || line.kind === 'todo') {
+          <span class="terminal__check" aria-hidden="true">{{
+            line.kind === 'done' ? '[✓] ' : '[ ] '
+          }}</span>
+          <span class="visually-hidden">{{ 'terminal.' + line.kind | translate }}</span>
+        }
+        <span>{{ line.translate ? (line.text | translate) : line.text }}</span>
+      }
+    </p>
+  }
+  <ng-content />
+  @if (cursor()) {
+    <p class="terminal__line" aria-hidden="true">
+      <span class="terminal__user">{{ user }}</span>
+      <span>:</span>
+      <span class="terminal__cwd">{{ cwd() }}</span>
+      <span>$ </span>
+      <span class="terminal__cursor"></span>
+    </p>
+  }
+</div>

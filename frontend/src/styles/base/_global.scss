@@ -9,15 +9,6 @@ html {
 body {
   color: var(--ink);
   background: var(--bg);
-
-  &::before {
-    position: fixed;
-    inset: 0;
-    z-index: $z-background;
-    pointer-events: none;
-    content: '';
-    background: radial-gradient(ellipse 70% 60% at 0 0, var(--glow), transparent);
-  }
 }
 
 a {
@@ -40,6 +31,11 @@ a {
   --duration-fast: 0.15s;
   --duration: 0.3s;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  // Terminal
+  --term-close: #ff5f57;
+  --term-minimize: #febc2e;
+  --term-zoom: #28c840;
 }
 
 @media (prefers-reduced-motion: reduce) {

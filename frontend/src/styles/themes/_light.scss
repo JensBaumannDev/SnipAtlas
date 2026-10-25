@@ -23,7 +23,6 @@
   --accent-raspberry-pair: #ea580c;
   --accent-fuchsia-pair: #6d28d9;
   --accent-soft-share: 7%;
-  --glow-share: 7%;
   --on-accent: #fff;
 
   // Cards
@@ -51,6 +50,11 @@
   --sx-str: #0e7a54;
   --sx-flag: #0e7490;
   --sx-num: #b4530c;
+
+  // Terminal
+  --term-bg: #fff;
+  --term-bar: #eceef2;
+  --term-edge: #d9dde4;
 
   color-scheme: light;
 }

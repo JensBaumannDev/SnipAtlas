@@ -1,0 +1,22 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  width: 100%;
+  max-width: $content-max-width;
+  margin-inline: auto;
+}
+
+// Head
+.news__head {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.news__lead {
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
