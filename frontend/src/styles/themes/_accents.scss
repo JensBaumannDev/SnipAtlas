@@ -6,6 +6,7 @@ $accent-themes: 'blue', 'teal', 'raspberry', 'fuchsia';
   --accent: var(--accent-blue);
   --accent-pair: var(--accent-blue-pair);
   --accent-soft: color-mix(in srgb, var(--accent) var(--accent-soft-share), transparent);
+  --glow: color-mix(in srgb, var(--accent) var(--glow-share), transparent);
 }
 
 // Accent themes
