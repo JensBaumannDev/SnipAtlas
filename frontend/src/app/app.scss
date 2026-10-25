@@ -65,19 +65,15 @@
 
 /* #region RESPONSIVE */
 @include desktop {
-  :host:has(app-sidebar:not([hidden])) {
+  :host {
     --nav-width: #{$rail-width + $sidebar-width};
     --content-max: #{$content-max-width};
   }
 }
 
 @include wide {
-  :host:has(app-sidebar:not([hidden])) {
+  :host {
     --outline-space: #{$sidebar-width + $space-xxl};
-  }
-
-  :host:not(:has(app-sidebar:not([hidden]))) app-outline {
-    display: none;
   }
 }
 

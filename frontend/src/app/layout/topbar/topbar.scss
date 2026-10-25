@@ -24,6 +24,7 @@
   display: flex;
   gap: $space-sm;
   align-items: center;
+  justify-self: start;
   height: $control-height;
   padding-left: $space-lg;
   font-size: $font-size-brand;
@@ -89,7 +90,7 @@
 /* #region RESPONSIVE */
 @include desktop {
   .brand--centered {
-    transform: translateX(calc(50vw + var(--nav-width) / 2 - 50% - #{$space-lg} / 2));
+    transform: translateX(calc(50vw + (var(--nav-width) - var(--outline-space)) / 2 - 50% - #{$space-lg} / 2));
   }
 }
 
