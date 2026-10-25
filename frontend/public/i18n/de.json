@@ -21,6 +21,7 @@
     "request": "Anfrage",
     "imprint": "Impressum",
     "privacy": "Datenschutz",
+    "faq": "Häufige Fragen",
     "settings": "Einstellungen",
     "profile": "Profil",
     "notFound": "Seite nicht gefunden",
@@ -267,6 +268,64 @@
   "footer": {
     "label": "Rechtliches und Kontakt"
   },
+  "faq": {
+    "lead": "Antworten auf allgemeine Fragen zu SnipAtlas: was du hier findest, wofür du ein Konto brauchst und wie du mir schreibst.",
+    "content": {
+      "title": "Inhalte",
+      "what": {
+        "question": "Was ist SnipAtlas?",
+        "answer": "Ein Nachschlagewerk für Einsteiger in die Webentwicklung. Du findest Befehle zum Kopieren, Grundlagen in einfachen Worten, Anleitungen für ganze Projekte und Hilfe bei Fehlermeldungen. Das Ziel: vom ersten Befehl bis zum fertigen Projekt online."
+      },
+      "tested": {
+        "question": "Sind die Befehle getestet?",
+        "answer": "Ja. Jeder Befehl wird selbst ausprobiert, bevor er auf die Seite kommt. Wo es auf die Version ankommt, zum Beispiel bei Angular, steht sie direkt dabei."
+      },
+      "os": {
+        "question": "Warum gibt es Befehle für Windows und für Linux/Mac?",
+        "answer": "Manche Befehle unterscheiden sich je nach System. In den Einstellungen wählst du einmal, was du nutzt. Danach zeigt SnipAtlas überall die passende Variante."
+      },
+      "wrong": {
+        "question": "Ein Befehl fehlt oder stimmt nicht. Was kann ich tun?",
+        "answer": "An jedem Befehl, jeder Fehlermeldung und jedem Begriff steht der Link „Fehler melden“. Er öffnet das Anfrage-Formular mit dem passenden Bezug. Fehlende Inhalte schlägst du über die Anfrage vor."
+      }
+    },
+    "account": {
+      "title": "Konto",
+      "needed": {
+        "question": "Brauche ich ein Konto?",
+        "answer": "Nein. Alle Inhalte kannst du ohne Konto lesen, und auch das Abhaken in den Anleitungen funktioniert ohne Konto, der Fortschritt bleibt dann in deinem Browser. Ein Konto brauchst du für Favoriten, Farbthemen und um deine Anfragen im Profil zu sehen."
+      },
+      "stored": {
+        "question": "Was wird zu meinem Konto gespeichert?",
+        "answer": "Deine E-Mail-Adresse, dein Passwort nur als Hash, deine Favoriten, dein Fortschritt in den Anleitungen, deine Einstellungen und deine Anfragen. Die Einzelheiten stehen in der Datenschutzerklärung."
+      },
+      "delete": {
+        "question": "Wie lösche ich mein Konto?",
+        "answer": "Unter Profil, Konto. Dabei werden alle Daten gelöscht, die zu deinem Konto gehören. Vorher kannst du deine Daten dort auch herunterladen."
+      }
+    },
+    "costs": {
+      "title": "Kosten",
+      "free": {
+        "question": "Kostet SnipAtlas etwas?",
+        "answer": "Nein. SnipAtlas ist kostenlos, ohne Werbung und ohne Tracking."
+      }
+    },
+    "requests": {
+      "title": "Anfragen",
+      "suggest": {
+        "question": "Wie schlage ich einen Eintrag oder eine Verbesserung vor?",
+        "answer": "Über das Anfrage-Formular. Du wählst die Art der Anfrage und füllst die passenden Felder aus. Ein Konto brauchst du dafür nicht."
+      },
+      "answer": {
+        "question": "Bekomme ich eine Antwort?",
+        "answer": "Ja, an die E-Mail-Adresse, die du im Formular angibst. Ich lese jede Nachricht selbst."
+      }
+    },
+    "moreBefore": "Deine Frage ist nicht dabei? Schreib mir über die",
+    "moreLink": "Anfrage",
+    "moreAfter": "."
+  },
   "legal": {
     "updated": "Stand: Oktober 2026",
     "country": "Deutschland",
@@ -363,6 +422,9 @@
   },
   "request": {
     "lead": "Fehlt ein Befehl, stimmt etwas nicht oder hast du eine Idee? Schreib mir, ich lese jede Nachricht selbst.",
+    "faqBefore": "Vielleicht ist deine Frage schon in den",
+    "faqLink": "häufigen Fragen",
+    "faqAfter": " beantwortet.",
     "kindLabel": "Worum geht es?",
     "kinds": {
       "entry": "Eintrag vorschlagen",

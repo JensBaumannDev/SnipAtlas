@@ -21,6 +21,7 @@
     "request": "Request",
     "imprint": "Legal notice",
     "privacy": "Privacy policy",
+    "faq": "FAQ",
     "settings": "Settings",
     "profile": "Profile",
     "notFound": "Page not found",
@@ -267,6 +268,64 @@
   "footer": {
     "label": "Legal and contact"
   },
+  "faq": {
+    "lead": "Answers to general questions about SnipAtlas: what you'll find here, what you need an account for and how to contact me.",
+    "content": {
+      "title": "Content",
+      "what": {
+        "question": "What is SnipAtlas?",
+        "answer": "A reference for beginners in web development. You'll find commands to copy, basics in plain words, guides for whole projects and help with error messages. The goal: from your first command to a finished project online."
+      },
+      "tested": {
+        "question": "Are the commands tested?",
+        "answer": "Yes. Every command is tried out before it goes on the site. Where the version matters, for example with Angular, it's stated right next to it."
+      },
+      "os": {
+        "question": "Why are there commands for Windows and for Linux/Mac?",
+        "answer": "Some commands differ between systems. Choose yours once in the settings, and SnipAtlas shows the matching variant everywhere."
+      },
+      "wrong": {
+        "question": "A command is missing or wrong. What can I do?",
+        "answer": "Every command, error message and term has a “Report an error” link. It opens the request form with the matching reference. Suggest missing content through the request form."
+      }
+    },
+    "account": {
+      "title": "Account",
+      "needed": {
+        "question": "Do I need an account?",
+        "answer": "No. You can read all content without an account, and checking off steps in the guides works too, your progress then stays in your browser. You need an account for favorites, color themes and to see your requests in your profile."
+      },
+      "stored": {
+        "question": "What is stored with my account?",
+        "answer": "Your email address, your password only as a hash, your favorites, your guide progress, your settings and your requests. The details are in the privacy policy."
+      },
+      "delete": {
+        "question": "How do I delete my account?",
+        "answer": "Under Profile, Account. This deletes all data that belongs to your account. You can download your data there first."
+      }
+    },
+    "costs": {
+      "title": "Costs",
+      "free": {
+        "question": "Does SnipAtlas cost anything?",
+        "answer": "No. SnipAtlas is free, without ads and without tracking."
+      }
+    },
+    "requests": {
+      "title": "Requests",
+      "suggest": {
+        "question": "How do I suggest an entry or an improvement?",
+        "answer": "Through the request form. Choose the kind of request and fill in the matching fields. You don't need an account for it."
+      },
+      "answer": {
+        "question": "Will I get an answer?",
+        "answer": "Yes, to the email address you enter in the form. I read every message myself."
+      }
+    },
+    "moreBefore": "Your question isn't here? Write to me through the",
+    "moreLink": "request form",
+    "moreAfter": "."
+  },
   "legal": {
     "updated": "Last updated: October 2026",
     "country": "Germany",
@@ -363,6 +422,9 @@
   },
   "request": {
     "lead": "Is a command missing, something wrong or do you have an idea? Write to me, I read every message myself.",
+    "faqBefore": "Your question may already be answered in the",
+    "faqLink": "FAQ",
+    "faqAfter": ".",
     "kindLabel": "What is it about?",
     "kinds": {
       "entry": "Suggest an entry",

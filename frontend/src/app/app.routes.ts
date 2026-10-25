@@ -54,6 +54,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/settings/settings').then((m) => m.Settings),
   },
   {
+    path: 'faq',
+    title: 'pages.faq',
+    loadComponent: () => import('./features/faq/faq').then((m) => m.Faq),
+  },
+  {
     path: 'impressum',
     title: 'pages.imprint',
     loadComponent: () => import('./features/legal/imprint/imprint').then((m) => m.Imprint),
