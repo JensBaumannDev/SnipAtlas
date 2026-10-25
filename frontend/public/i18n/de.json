@@ -272,11 +272,19 @@
     "label": "Rechtliches und Kontakt"
   },
   "project": {
-    "title": "Mein Projekt",
-    "hint": "Trag die Werte deines Projekts ein. Befehle mit Platzhaltern zeigen dann deine Werte und kopieren sie mit. Die Werte bleiben in diesem Browser.",
+    "title": "Dein Projekt",
+    "hint": "Trag einmal die Werte deines Projekts ein. Alle Befehle in dieser Anleitung übernehmen sie und kopieren sie mit. Die Werte bleiben in diesem Browser und gelten auch bei den Befehlen.",
     "missing": "{{count}} Werte fehlen: für dein Projekt ausfüllen",
     "missingOne": "1 Wert fehlt: für dein Projekt ausfüllen",
     "filled": "Mit deinen Projektwerten: ändern",
+    "labels": {
+      "project": "Projektname",
+      "githubUser": "GitHub-Benutzer",
+      "repo": "Repository",
+      "domain": "Domain",
+      "serverUser": "Server-Benutzer",
+      "serverIp": "Server-IP"
+    },
     "keys": {
       "project": "projektname",
       "githubUser": "github-benutzer",

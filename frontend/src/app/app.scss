@@ -29,6 +29,7 @@
 }
 
 .shell {
+  position: relative;
   display: flex;
   flex: 1;
   gap: $space-xxl;
@@ -36,6 +37,18 @@
   padding-right: $space-xl;
   padding-left: calc(var(--nav-width) + $space-xl);
   overflow-x: clip;
+  isolation: isolate;
+
+  &:not(:has(app-home, app-area-intro))::before {
+    @include dot-grid;
+
+    bottom: auto;
+    height: $glow-height;
+    mask-image:
+      linear-gradient(to bottom, #000 20%, transparent),
+      linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
+    mask-composite: intersect;
+  }
 }
 
 .shell__content {

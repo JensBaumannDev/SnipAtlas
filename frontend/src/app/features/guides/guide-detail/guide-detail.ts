@@ -5,12 +5,14 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/blueprint-api';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
 import { PageOutline } from '../../../core/page-outline';
+import { placeholderKeys } from '../../../core/project-values';
 import { TopicApi } from '../../../core/topic-api';
 import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
+import { ProjectForm } from '../../../shared/project-form/project-form';
 import { GuideStep } from '../guide-step/guide-step';
 
 @Component({
-  imports: [GuideStep, ProgressBar, RouterLink, TranslatePipe],
+  imports: [GuideStep, ProgressBar, ProjectForm, RouterLink, TranslatePipe],
   selector: 'app-guide-detail',
   styleUrl: './guide-detail.scss',
   templateUrl: './guide-detail.html',
@@ -37,6 +39,14 @@ export class GuideDetail {
   protected readonly currentTopic = this.topicResource.value;
 
   private readonly doneSteps = computed(() => this.progress.doneSteps(this.slug()));
+
+  protected readonly projectKeys = computed(() => {
+    const codes =
+      this.blueprint()?.steps.flatMap((step) =>
+        step.code.flatMap(({ code }) => (typeof code === 'string' ? [code] : Object.values(code))),
+      ) ?? [];
+    return placeholderKeys(codes.join('\n'));
+  });
 
   protected readonly doneCount = computed(() => {
     const blueprint = this.blueprint();

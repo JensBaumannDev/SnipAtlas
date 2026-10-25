@@ -272,11 +272,19 @@
     "label": "Legal and contact"
   },
   "project": {
-    "title": "My project",
-    "hint": "Enter your project values. Commands with placeholders then show your values and copy them along. The values stay in this browser.",
+    "title": "Your project",
+    "hint": "Enter your project values once. Every command in this guide uses them and copies them along. The values stay in this browser and also apply to commands.",
     "missing": "{{count}} values missing: fill in for your project",
     "missingOne": "1 value missing: fill in for your project",
     "filled": "Using your project values: change",
+    "labels": {
+      "project": "Project name",
+      "githubUser": "GitHub user",
+      "repo": "Repository",
+      "domain": "Domain",
+      "serverUser": "Server user",
+      "serverIp": "Server IP"
+    },
     "keys": {
       "project": "project-name",
       "githubUser": "github-user",

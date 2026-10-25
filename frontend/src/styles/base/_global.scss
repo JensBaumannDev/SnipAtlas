@@ -9,7 +9,7 @@ html {
 body {
   color: var(--ink);
   background:
-    linear-gradient(to bottom, var(--glow), transparent $glow-height) no-repeat,
+    radial-gradient(ellipse 60% $glow-height at 50% 0, var(--glow), transparent) no-repeat,
     var(--bg);
 }
 

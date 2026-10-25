@@ -7,18 +7,28 @@
     <p class="guide-detail__lead">{{ blueprint.summary }}</p>
   </header>
 
+  @if (projectKeys().length) {
+    <section class="guide-detail__project" aria-labelledby="guide-project">
+      <h2 class="guide-detail__project-title" id="guide-project">{{ 'project.title' | translate }}</h2>
+      <p class="guide-detail__project-hint">{{ 'project.hint' | translate }}</p>
+      <app-project-form [keys]="projectKeys()" />
+    </section>
+  }
+
   <div class="guide-detail__progress">
-    <app-progress-bar
-      class="guide-detail__bar"
-      [done]="doneCount()"
-      [total]="blueprint.steps.length"
-      [label]="'guides.progressLabel' | translate"
-    />
-    @if (doneCount()) {
-      <button class="btn btn--ghost" type="button" (click)="reset()">
-        {{ 'guides.reset' | translate }}
-      </button>
-    }
+    <div class="guide-detail__progress-inner">
+      <app-progress-bar
+        class="guide-detail__bar"
+        [done]="doneCount()"
+        [total]="blueprint.steps.length"
+        [label]="'guides.progressLabel' | translate"
+      />
+      @if (doneCount()) {
+        <button class="btn btn--ghost" type="button" (click)="reset()">
+          {{ 'guides.reset' | translate }}
+        </button>
+      }
+    </div>
   </div>
 
   <ol class="guide-detail__steps" role="list">

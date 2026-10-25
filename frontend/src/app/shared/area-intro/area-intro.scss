@@ -24,10 +24,10 @@
   &::before {
     @include dot-grid;
 
-    inset: 0 calc(50% - 50vw);
+    inset: -$space-xl calc(50% - 50vw) 0;
     mask-image:
-      linear-gradient(to bottom, transparent, #000 15%, #000 70%, transparent),
-      linear-gradient(to right, transparent, #000 25%, #000 75%, transparent),
+      linear-gradient(to bottom, #000 65%, transparent),
+      linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
       radial-gradient(ellipse rem(560) rem(280) at 50% 50%, transparent 40%, #000 90%);
     mask-composite: intersect;
   }

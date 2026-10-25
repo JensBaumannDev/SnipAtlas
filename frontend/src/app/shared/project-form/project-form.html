@@ -1,7 +1,7 @@
 <div class="project-form" [formGroup]="form">
   @for (key of keys(); track key) {
     <div class="field">
-      <label class="field__label" [for]="idPrefix + '-' + key">{{ 'project.keys.' + key | translate }}</label>
+      <label class="field__label" [for]="idPrefix + '-' + key">{{ 'project.labels.' + key | translate }}</label>
       <input
         class="input input--code"
         type="text"
