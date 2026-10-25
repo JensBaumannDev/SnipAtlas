@@ -22,7 +22,7 @@
     <p class="sidebar__area">{{ label | translate }}</p>
   }
 
-  <section class="sidebar__group" aria-labelledby="sidebar-group-collection">
+  <section class="sidebar__group sidebar__group--collection" aria-labelledby="sidebar-group-collection">
     <h2 class="sidebar__heading sidebar__heading--text" id="sidebar-group-collection">{{ 'sidebar.collection' | translate }}</h2>
     <app-collection class="sidebar__collection" [limit]="5" />
   </section>

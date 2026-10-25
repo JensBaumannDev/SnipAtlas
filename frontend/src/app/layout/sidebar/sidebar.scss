@@ -245,6 +245,13 @@
 }
 
 // Collection
+.sidebar__group--collection {
+  padding: $space-sm $space-xs $space-md;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-xl;
+}
+
 .sidebar__collection {
   padding-inline: $space-sm;
 }
