@@ -3,14 +3,14 @@
     [topic]="topic"
     [heading]="topic.name"
     [parentLabel]="'pages.blueprints' | translate"
-    parentLink="/bauplaene"
+    parentLink="/anleitungen"
   />
 
   <ul class="guides__list" role="list">
     @for (blueprint of topicBlueprints(); track blueprint.slug) {
       <li class="guides__item" [id]="blueprint.slug">
         <h2 class="guides__title">
-          <a class="guides__link" [routerLink]="['/bauplaene', blueprint.topic, blueprint.slug]">{{ blueprint.title }}</a>
+          <a class="guides__link" [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]">{{ blueprint.title }}</a>
         </h2>
         <p class="guides__summary">{{ blueprint.summary }}</p>
         <app-progress-bar
@@ -29,5 +29,28 @@
     lead="guides.lead"
     [summary]="'guides.summary' | translate: summary()"
     [icon]="icon"
-  />
+  >
+    <section aria-labelledby="guides-all">
+      <h2 class="guides__section-title" id="guides-all">{{ 'guides.all' | translate }}</h2>
+      <ul class="guides__overview" role="list">
+        @for (blueprint of blueprints(); track blueprint.slug) {
+          <li class="guides__row">
+            <a class="guides__row-link" [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]">
+              <span class="guides__row-text">
+                <span class="guides__row-title">{{ blueprint.title }}</span>
+                <span class="guides__summary">{{ blueprint.summary }}</span>
+              </span>
+              <svg lucideChevronRight class="icon guides__chevron"></svg>
+            </a>
+            <app-progress-bar
+              class="guides__row-progress"
+              [done]="progress.doneCount(blueprint)"
+              [total]="blueprint.steps.length"
+              [label]="'guides.progressOf' | translate: { title: blueprint.title }"
+            />
+          </li>
+        }
+      </ul>
+    </section>
+  </app-area-intro>
 }

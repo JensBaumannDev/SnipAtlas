@@ -7,7 +7,7 @@
     [topic]="topic"
     [heading]="subtopic?.name ?? topic.name"
     [parentLabel]="subtopic ? topic.name : undefined"
-    [parentLink]="['/konzepte', topic.slug]"
+    [parentLink]="['/grundlagen', topic.slug]"
   >
     <p class="concepts__meta">
       {{ (count === 1 ? 'concepts.conceptCountOne' : 'concepts.conceptCount') | translate: { count: count } }}
@@ -23,7 +23,7 @@
     <section class="concepts__section">
       @if (!subtopic) {
         <h2 class="concepts__section-title" [id]="section.subtopic.slug">
-          <a class="concepts__section-link" [routerLink]="['/konzepte', topic.slug, section.subtopic.slug]">
+          <a class="concepts__section-link" [routerLink]="['/grundlagen', topic.slug, section.subtopic.slug]">
             {{ section.subtopic.name }}
           </a>
         </h2>
@@ -46,5 +46,7 @@
     lead="concepts.lead"
     [summary]="'concepts.summary' | translate: summary()"
     [icon]="icon"
-  />
+  >
+    <app-topic-index area="concepts" path="/grundlagen" />
+  </app-area-intro>
 }

@@ -19,7 +19,7 @@ const NEWS: NewsItem[] = [
     date: '2026-10-08',
     topic: 'django-rest-framework',
     title: 'Django REST Framework: Login per Token einrichten',
-    link: ['/konzepte', 'django-rest-framework', 'authentifizierung'],
+    link: ['/grundlagen', 'django-rest-framework', 'authentifizierung'],
   },
   {
     date: '2026-10-01',

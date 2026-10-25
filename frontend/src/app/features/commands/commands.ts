@@ -11,6 +11,7 @@ import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
+import { TopicIndex } from '../../shared/topic-index/topic-index';
 import { EntryCard } from './entry-card/entry-card';
 
 interface EntrySection {
@@ -19,7 +20,7 @@ interface EntrySection {
 }
 
 @Component({
-  imports: [AreaIntro, EntryCard, RouterLink, TopicHeader, TranslatePipe],
+  imports: [AreaIntro, EntryCard, RouterLink, TopicHeader, TopicIndex, TranslatePipe],
   selector: 'app-commands',
   styleUrl: './commands.scss',
   templateUrl: './commands.html',

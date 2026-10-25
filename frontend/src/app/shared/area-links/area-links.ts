@@ -25,19 +25,19 @@ const AREAS: Area[] = [
     icon: LucideTerminal,
   },
   {
-    path: '/konzepte',
+    path: '/grundlagen',
     label: 'nav.concepts',
     description: 'home.areas.concepts',
     icon: LucideBookText,
   },
   {
-    path: '/bauplaene',
+    path: '/anleitungen',
     label: 'nav.blueprints',
     description: 'home.areas.blueprints',
     icon: LucideRoute,
   },
   {
-    path: '/debugging',
+    path: '/fehler',
     label: 'nav.debugging',
     description: 'home.areas.debugging',
     icon: LucideTriangleAlert,

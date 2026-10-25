@@ -11,7 +11,7 @@
     <div class="profile-row">
       <a
         class="profile-row__title profile-overview__link"
-        [routerLink]="['/bauplaene', item.blueprint.topic, item.blueprint.slug]"
+        [routerLink]="['/anleitungen', item.blueprint.topic, item.blueprint.slug]"
       >
         {{ item.blueprint.title }}
       </a>
@@ -25,7 +25,7 @@
   } @empty {
     <div class="profile-section__block">
       <p class="profile-section__text">{{ 'profile.noProgress' | translate }}</p>
-      <a routerLink="/bauplaene">{{ 'profile.toBlueprints' | translate }}</a>
+      <a routerLink="/anleitungen">{{ 'profile.toBlueprints' | translate }}</a>
     </div>
   }
 </section>

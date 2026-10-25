@@ -1,0 +1,93 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xxl;
+}
+
+// Group
+.topic-index__title {
+  @include card-title;
+
+  padding: 0 $space-xs;
+  margin-bottom: $space-sm;
+
+  &::after {
+    @include card-line;
+
+    display: block;
+    width: rem(48);
+    margin-top: $space-sm;
+  }
+}
+
+.topic-index__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+// Topic
+.topic-index__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.topic-index__link {
+  display: flex;
+  gap: $space-md;
+  align-items: center;
+  min-height: $control-height;
+  padding: $space-md $space-xs;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover .topic-index__name {
+    color: var(--accent);
+  }
+
+  &:hover .topic-index__chevron {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+.topic-index__logo {
+  align-self: flex-start;
+  width: rem(24);
+  height: rem(24);
+}
+
+.topic-index__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: $space-sm;
+  min-width: 0;
+}
+
+.topic-index__name {
+  font-weight: $font-weight-medium;
+  line-height: $line-height-tight;
+  overflow-wrap: anywhere;
+  transition: color var(--duration-fast);
+}
+
+.topic-index__subtopics {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.topic-index__chevron {
+  flex: none;
+  width: rem(20);
+  height: rem(20);
+  color: var(--muted);
+  transition:
+    color var(--duration-fast),
+    transform var(--duration-fast);
+}

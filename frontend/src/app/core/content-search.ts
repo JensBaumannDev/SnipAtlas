@@ -58,7 +58,7 @@ function fromConcept(concept: Concept): SearchItem {
     area: 'concepts',
     title: concept.title,
     text: concept.summary,
-    link: ['/konzepte', concept.topic, concept.subtopic],
+    link: ['/grundlagen', concept.topic, concept.subtopic],
     fragment: concept.slug,
   });
 }
@@ -68,7 +68,7 @@ function fromError(error: ErrorMessage): SearchItem {
     area: 'debugging',
     title: error.message,
     text: error.meaning,
-    link: ['/debugging', error.topic],
+    link: ['/fehler', error.topic],
     fragment: error.slug,
   });
 }
@@ -78,7 +78,7 @@ function fromGuide(guide: DebugGuide): SearchItem {
     area: 'debugging',
     title: guide.title,
     text: guide.summary,
-    link: guide.topic ? ['/debugging', guide.topic] : ['/debugging'],
+    link: guide.topic ? ['/fehler', guide.topic] : ['/fehler'],
     fragment: guide.slug,
   });
 }
@@ -88,7 +88,7 @@ function fromBlueprint(blueprint: Blueprint): SearchItem {
     area: 'blueprints',
     title: blueprint.title,
     text: blueprint.summary,
-    link: ['/bauplaene', blueprint.topic, blueprint.slug],
+    link: ['/anleitungen', blueprint.topic, blueprint.slug],
   });
 }
 

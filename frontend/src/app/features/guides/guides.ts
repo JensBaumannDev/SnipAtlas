@@ -1,7 +1,7 @@
 import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideRoute } from '@lucide/angular';
+import { LucideChevronRight, LucideRoute } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../core/blueprint-api';
 import { BlueprintProgress } from '../../core/blueprint-progress';
@@ -12,7 +12,7 @@ import { ProgressBar } from '../../shared/progress-bar/progress-bar';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 
 @Component({
-  imports: [AreaIntro, ProgressBar, RouterLink, TopicHeader, TranslatePipe],
+  imports: [AreaIntro, ProgressBar, RouterLink, TopicHeader, TranslatePipe, LucideChevronRight],
   selector: 'app-guides',
   styleUrl: './guides.scss',
   templateUrl: './guides.html',
@@ -29,7 +29,7 @@ export class Guides {
     initialValue: { blueprints: 0, steps: 0 },
   });
 
-  private readonly blueprints = toSignal(this.blueprintApi.getAll(), { initialValue: [] });
+  protected readonly blueprints = toSignal(this.blueprintApi.getAll(), { initialValue: [] });
 
   private readonly topicResource = rxResource({
     params: () => this.topic(),

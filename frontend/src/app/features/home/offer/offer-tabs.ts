@@ -28,7 +28,7 @@ export const OFFER_TABS: OfferTab[] = [
   },
   {
     area: 'concepts',
-    link: '/konzepte',
+    link: '/grundlagen',
     window: 'counter.ts',
     cwd: '~',
     cursor: false,
@@ -43,7 +43,7 @@ export const OFFER_TABS: OfferTab[] = [
   },
   {
     area: 'blueprints',
-    link: '/bauplaene',
+    link: '/anleitungen',
     window: 'snipatlas — zsh',
     cwd: '~',
     cursor: false,
@@ -59,7 +59,7 @@ export const OFFER_TABS: OfferTab[] = [
   },
   {
     area: 'debugging',
-    link: '/debugging',
+    link: '/fehler',
     window: 'snipatlas — zsh',
     cwd: '~/projekt',
     cursor: true,

@@ -3,7 +3,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: $space-xl;
+  gap: $space-xxl;
   align-items: center;
 }
 
@@ -19,7 +19,7 @@
   gap: $space-xxl;
   align-items: center;
   width: 100%;
-  max-width: rem(1040);
+  max-width: $home-section-width;
 
   &[hidden] {
     display: none;

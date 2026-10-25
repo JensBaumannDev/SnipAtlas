@@ -5,19 +5,19 @@
   },
   "nav": {
     "label": "Bereiche",
-    "home": "Dashboard",
+    "home": "Start",
     "commands": "Befehle",
-    "concepts": "Konzepte",
-    "blueprints": "Baupläne",
-    "debugging": "Debugging",
+    "concepts": "Grundlagen",
+    "blueprints": "Anleitungen",
+    "debugging": "Fehler",
     "request": "Anfrage",
     "settings": "Einstellungen"
   },
   "pages": {
     "commands": "Befehle",
-    "concepts": "Konzepte",
-    "blueprints": "Baupläne",
-    "debugging": "Debugging",
+    "concepts": "Grundlagen",
+    "blueprints": "Anleitungen",
+    "debugging": "Fehler",
     "request": "Anfrage",
     "imprint": "Impressum",
     "privacy": "Datenschutz",
@@ -34,7 +34,7 @@
     "collectionHint": "Melde dich an, um Befehle als Favoriten zu speichern und hier wiederzufinden."
   },
   "search": {
-    "label": "Befehle, Konzepte und Fehlermeldungen durchsuchen",
+    "label": "Befehle, Grundlagen, Anleitungen und Fehlermeldungen durchsuchen",
     "placeholder": "Suchen …",
     "ctrl": "Strg",
     "heroPlaceholder": "Wonach suchst du? Zum Beispiel git stash",
@@ -43,9 +43,9 @@
     "count": "{{count}} Treffer",
     "areas": {
       "commands": "Befehl",
-      "concepts": "Konzept",
-      "blueprints": "Bauplan",
-      "debugging": "Debugging"
+      "concepts": "Grundlagen",
+      "blueprints": "Anleitung",
+      "debugging": "Fehler"
     }
   },
   "account": {
@@ -64,8 +64,8 @@
       "account": "Konto"
     },
     "progress": "Fortschritt",
-    "noProgress": "Du hast noch keinen Bauplan begonnen.",
-    "toBlueprints": "Zu den Bauplänen",
+    "noProgress": "Du hast noch keine Anleitung begonnen.",
+    "toBlueprints": "Zu den Anleitungen",
     "allRequests": "Alle Anfragen ansehen",
     "requestSummary": "{{open}} offen, {{done}} erledigt",
     "noRequests": "Du hast noch keine Anfragen gestellt.",
@@ -157,17 +157,18 @@
   },
   "concepts": {
     "lead": "Begriffe und Grundlagen in einfachen Worten erklärt, jeweils mit einem kurzen Beispiel und dem, was man sich merken sollte.",
-    "summary": "{{entries}} Konzepte in {{topics}} Themen",
-    "empty": "Zu diesem Thema gibt es noch keine Konzepte.",
-    "conceptCount": "{{count}} Konzepte",
-    "conceptCountOne": "1 Konzept",
+    "summary": "{{entries}} Erklärungen in {{topics}} Themen",
+    "empty": "Zu diesem Thema gibt es noch keine Erklärungen.",
+    "conceptCount": "{{count}} Erklärungen",
+    "conceptCountOne": "1 Erklärung",
     "expandAll": "Alle aufklappen",
     "collapseAll": "Alle zuklappen",
     "note": "Merke"
   },
   "guides": {
     "lead": "Abläufe Schritt für Schritt: was du tust, warum, und den Code zum Kopieren. Vom leeren Ordner bis zum fertigen Projekt.",
-    "summary": "{{blueprints}} Baupläne mit {{steps}} Schritten",
+    "summary": "{{blueprints}} Anleitungen mit {{steps}} Schritten",
+    "all": "Alle Anleitungen",
     "progress": "{{done}} von {{total}} Schritten erledigt",
     "progressComplete": "Alle {{total}} Schritte erledigt",
     "progressLabel": "Fortschritt",
@@ -175,7 +176,7 @@
     "markDone": "Schritt {{number}} erledigt: {{title}}",
     "reset": "Zurücksetzen",
     "note": "Hinweis",
-    "empty": "Zu diesem Thema gibt es noch keine Baupläne."
+    "empty": "Zu diesem Thema gibt es noch keine Anleitungen."
   },
   "debugging": {
     "lead": "Häufige Fehlermeldungen verstehen und lösen: was die Meldung bedeutet, woher sie kommt und wie du sie behebst.",
@@ -183,7 +184,7 @@
     "errorCount": "{{count}} Fehlermeldungen",
     "errorCountOne": "1 Fehlermeldung",
     "empty": "Zu diesem Thema gibt es noch keine Fehlermeldungen.",
-    "basics": "Grundlagen: So gehst du vor",
+    "basics": "So gehst du vor",
     "topicGuides": "So debuggst du {{topic}}",
     "commonErrors": "Häufige Fehlermeldungen",
     "cause": "Warum passiert das?",
@@ -198,10 +199,10 @@
   "report": {
     "link": "Fehler melden",
     "command": "Befehl",
-    "concept": "Konzept",
+    "concept": "Erklärung",
     "error": "Fehlermeldung",
-    "step": "Bauplan-Schritt",
-    "guide": "Debugging-Anleitung"
+    "step": "Schritt einer Anleitung",
+    "guide": "Vorgehen bei Fehlern"
   },
   "code": {
     "copy": "Kopieren",
@@ -213,7 +214,7 @@
   },
   "home": {
     "title": "Nachschlagewerk für Webentwicklung",
-    "lead": "Befehle zum Kopieren, Konzepte mit Beispielen, Baupläne für ganze Projekte und Lösungen für häufige Fehlermeldungen. Kostenlos und laufend ergänzt.",
+    "lead": "Befehle zum Kopieren, Grundlagen mit Beispielen, Anleitungen für ganze Projekte und Lösungen für häufige Fehlermeldungen. Kostenlos und laufend ergänzt.",
     "areas": {
       "label": "Bereiche im Überblick",
       "commands": "Terminal, Git, npm und Docker zum Kopieren",
@@ -236,17 +237,17 @@
         "comment": "# Änderungen kurz beiseitelegen und zurückholen"
       },
       "concepts": {
-        "title": "Konzepte in einfachen Worten",
+        "title": "Grundlagen in einfachen Worten",
         "text": "Was ist ein Signal, ein Interceptor, ein Serializer? Kurz erklärt, mit einem kleinen Codebeispiel, das man versteht.",
-        "count": "Konzepte: {{count}}",
-        "open": "Zu den Konzepten",
+        "count": "Erklärungen: {{count}}",
+        "open": "Zu den Grundlagen",
         "comment": "// Ein Signal hält einen Wert und meldet Änderungen"
       },
       "blueprints": {
-        "title": "Baupläne zum Abhaken",
+        "title": "Anleitungen zum Abhaken",
         "text": "Ein ganzes Projekt Schritt für Schritt, vom leeren Ordner bis zum Ziel. Jeder Schritt erklärt, warum er nötig ist, und dein Fortschritt bleibt gespeichert.",
-        "count": "Baupläne: {{count}}",
-        "open": "Zu den Bauplänen",
+        "count": "Anleitungen: {{count}}",
+        "open": "Zu den Anleitungen",
         "step1": "Projektordner anlegen",
         "step2": "Virtuelle Umgebung einrichten",
         "step3": "Django installieren",
@@ -258,7 +259,7 @@
         "title": "Fehler verstehen und lösen",
         "text": "Häufige Fehlermeldungen mit Bedeutung, Ursache und Lösung, dazu Anleitungen, wie du Fehler selbst findest.",
         "count": "Fehlerhilfen: {{count}}",
-        "open": "Zum Debugging",
+        "open": "Zu den Fehlermeldungen",
         "comment": "# Port 8000 ist schon belegt. Einfach einen anderen nehmen:"
       }
     }
@@ -323,7 +324,7 @@
       "accountItems": {
         "login": "E-Mail-Adresse, Passwort-Hash, Datum der Registrierung und der letzten Anmeldung",
         "favorites": "deine Favoriten",
-        "progress": "deinen Fortschritt in den Bauplänen",
+        "progress": "deinen Fortschritt in den Anleitungen",
         "settings": "deine Einstellungen (Befehle für Windows oder Linux/Mac, Darstellung, E-Mail bei Antwort auf eine Anfrage)",
         "requests": "deine Anfragen mit Status und meiner Antwort"
       },
@@ -400,14 +401,14 @@
       "title": "So geht es weiter",
       "read": "Ich bearbeite jede Anfrage selbst.",
       "answer": "Du bekommst innerhalb von 24 Stunden eine Antwort per E-Mail.",
-      "publish": "Neue Einträge erscheinen auf dem Dashboard unter „Neu auf SnipAtlas“."
+      "publish": "Neue Einträge erscheinen auf der Startseite unter „Neu auf SnipAtlas“."
     },
     "choose": "Bitte wählen …",
     "entry": {
       "areaLabel": "Was fehlt?",
       "areas": {
         "command": "Befehl",
-        "concept": "Begriff (Konzept)",
+        "concept": "Begriff (Grundlagen)",
         "error": "Fehlermeldung"
       },
       "topicLabel": "Thema",
