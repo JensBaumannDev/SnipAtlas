@@ -8,6 +8,7 @@ import {
   ThemeMode,
 } from '../../core/preferences';
 import { Session } from '../../core/session';
+import { ProjectForm } from '../../shared/project-form/project-form';
 
 interface Option<T> {
   value: T;
@@ -15,7 +16,7 @@ interface Option<T> {
 }
 
 @Component({
-  imports: [TranslatePipe],
+  imports: [ProjectForm, TranslatePipe],
   selector: 'app-settings',
   styleUrl: './settings.scss',
   templateUrl: './settings.html',

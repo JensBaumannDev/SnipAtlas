@@ -18,6 +18,7 @@ import { Favorites } from '../../../core/favorites';
 import { LoginDialog } from '../../../core/login-dialog';
 import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
+import { ProjectValues, fillPlaceholders } from '../../../core/project-values';
 import { Session } from '../../../core/session';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
@@ -31,6 +32,7 @@ import { TermText } from '../../../shared/term-text/term-text';
 })
 export class EntryCard {
   private readonly os = inject(Preferences).os;
+  private readonly project = inject(ProjectValues);
   private readonly favorites = inject(Favorites);
   private readonly session = inject(Session);
   private readonly loginDialog = inject(LoginDialog);
@@ -42,7 +44,11 @@ export class EntryCard {
   readonly expanded = model(false);
 
   protected readonly resolved = computed(() => resolveOsCode(this.entry().code, this.os()));
-  protected readonly peek = computed(() => firstCodeLine(this.resolved().code));
+  protected readonly peek = computed(() =>
+    firstCodeLine(
+      fillPlaceholders(this.resolved().code, this.project.values(), (key) => `<${key}>`),
+    ),
+  );
   protected readonly bodyId = computed(() => `${this.entry().slug}-body`);
   protected readonly favorite = computed(() => this.favorites.has(this.entry()));
   protected readonly loginHint = signal(false);

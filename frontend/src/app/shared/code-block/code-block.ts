@@ -1,10 +1,19 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
 import { LucideCheck, LucideCopy } from '@lucide/angular';
-import { TranslatePipe } from '@ngx-translate/core';
-import { CodeToken, highlight } from '../../core/code-highlight';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TokenKind, highlight } from '../../core/code-highlight';
 import { CodeLanguage } from '../../core/entry';
 import { OperatingSystem } from '../../core/preferences';
+import {
+  ProjectKey,
+  ProjectValues,
+  fillPlaceholders,
+  markPlaceholders,
+  placeholderKeys,
+  splitMarkers,
+} from '../../core/project-values';
+import { ProjectForm } from '../project-form/project-form';
 
 const COPIED_DURATION = 2000;
 
@@ -19,30 +28,61 @@ const LANGUAGE_LABELS: Record<CodeLanguage, string> = {
   env: '.env',
 };
 
+interface ViewToken {
+  text: string;
+  kind: TokenKind;
+  key?: ProjectKey;
+}
+
+let nextId = 0;
+
 @Component({
-  imports: [TranslatePipe, LucideCheck, LucideCopy],
+  imports: [ProjectForm, TranslatePipe, LucideCheck, LucideCopy],
   selector: 'app-code-block',
   styleUrl: './code-block.scss',
   templateUrl: './code-block.html',
 })
 export class CodeBlock {
   private readonly clipboard = inject(Clipboard);
+  private readonly translate = inject(TranslateService);
+  private readonly project = inject(ProjectValues);
   private resetTimer?: ReturnType<typeof setTimeout>;
 
   readonly code = input.required<string>();
   readonly language = input.required<CodeLanguage>();
   readonly os = input<OperatingSystem>();
 
-  protected readonly lines = computed(() => highlight(this.code(), this.language()));
+  protected readonly formId = `code-block-project-${nextId++}`;
+  protected readonly keys = computed(() => placeholderKeys(this.code()));
+  protected readonly missing = computed(
+    () => this.keys().filter((key) => !this.project.values()[key]?.trim()).length,
+  );
+  protected readonly lines = computed(() => {
+    const values = this.project.values();
+    return highlight(markPlaceholders(this.code()), this.language()).map((line) => ({
+      prompt: line.prompt,
+      tokens: line.tokens.flatMap((token) =>
+        splitMarkers(token.text).map<ViewToken>(({ text, key }) =>
+          key ? { text: values[key]?.trim() ?? '', kind: token.kind, key } : { text, kind: token.kind },
+        ),
+      ),
+    }));
+  });
   protected readonly languageLabel = computed(() => LANGUAGE_LABELS[this.language()]);
   protected readonly copied = signal(false);
+  protected readonly editing = signal(false);
 
   constructor() {
     inject(DestroyRef).onDestroy(() => clearTimeout(this.resetTimer));
   }
 
   protected copy(): void {
-    if (!this.clipboard.copy(this.code())) {
+    const code = fillPlaceholders(
+      this.code(),
+      this.project.values(),
+      (key) => `<${this.translate.instant(`project.keys.${key}`)}>`,
+    );
+    if (!this.clipboard.copy(code)) {
       return;
     }
     this.copied.set(true);
@@ -50,7 +90,11 @@ export class CodeBlock {
     this.resetTimer = setTimeout(() => this.copied.set(false), COPIED_DURATION);
   }
 
-  protected tokenClass(token: CodeToken): string {
+  protected toggleEditing(): void {
+    this.editing.update((editing) => !editing);
+  }
+
+  protected tokenClass(token: ViewToken): string {
     return `code-block__token code-block__token--${token.kind}`;
   }
 }
