@@ -4,7 +4,8 @@
   display: inline-flex;
   gap: $space-xs;
   padding: $space-xs;
-  background: var(--hover);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: $radius-lg;
 }
 
@@ -42,7 +43,6 @@
   &[aria-selected='true'],
   &:has(:checked) {
     color: var(--accent);
-    background: var(--raised);
-    border-color: var(--line);
+    background: var(--accent-soft);
   }
 }
