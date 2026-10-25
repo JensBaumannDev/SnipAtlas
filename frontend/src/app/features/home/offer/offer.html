@@ -1,0 +1,50 @@
+<div
+  class="segmented offer__tabs"
+  role="tablist"
+  [attr.aria-label]="'home.offer.tabs' | translate"
+  (keydown)="onKeydown($event)"
+>
+  @for (tab of tabs; track tab.area) {
+    <button
+      #tab
+      class="segmented__option"
+      type="button"
+      role="tab"
+      [id]="'offer-tab-' + tab.area"
+      [attr.aria-selected]="tab.area === active()"
+      [attr.aria-controls]="'offer-panel-' + tab.area"
+      [tabIndex]="tab.area === active() ? 0 : -1"
+      (click)="select(tab.area)"
+    >
+      {{ 'nav.' + tab.area | translate }}
+    </button>
+  }
+</div>
+
+@for (tab of tabs; track tab.area) {
+  <div
+    class="offer__panel"
+    role="tabpanel"
+    [id]="'offer-panel-' + tab.area"
+    [attr.aria-labelledby]="'offer-tab-' + tab.area"
+    [hidden]="tab.area !== active()"
+  >
+    <div class="offer__text">
+      <h3 class="offer__title">{{ 'home.offer.' + tab.area + '.title' | translate }}</h3>
+      <p class="offer__lead">{{ 'home.offer.' + tab.area + '.text' | translate }}</p>
+      <p class="offer__count">
+        {{ 'home.offer.' + tab.area + '.count' | translate: { count: counts()[tab.area] } }}
+      </p>
+      <a class="offer__link" [routerLink]="tab.link">
+        {{ 'home.offer.' + tab.area + '.open' | translate }} →
+      </a>
+    </div>
+    <app-terminal-window
+      class="offer__window"
+      [title]="tab.window"
+      [cwd]="tab.cwd"
+      [cursor]="tab.cursor"
+      [lines]="tab.lines"
+    />
+  </div>
+}

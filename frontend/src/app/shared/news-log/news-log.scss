@@ -1,0 +1,72 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// List
+.news-log__list {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  column-gap: $space-md;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.news-log__item,
+.news-log__row {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+.news-log__row {
+  align-items: baseline;
+  padding-block: $space-xs;
+  color: var(--code-ink);
+  text-decoration: none;
+
+  &:hover .news-log__title {
+    text-decoration: underline;
+  }
+}
+
+.news-log__plus {
+  color: var(--sx-str);
+}
+
+.news-log__topic {
+  color: var(--sx-num);
+}
+
+.news-log__title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.news-log__meta {
+  color: var(--code-dim);
+  white-space: nowrap;
+}
+
+.news-log__fresh {
+  color: var(--sx-cmd);
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .news-log__list {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .news-log__topic {
+    display: none;
+  }
+
+  .news-log__meta {
+    grid-column: 2;
+  }
+}
+
+/* #endregion */

@@ -1,0 +1,6 @@
+<header class="news__head">
+  <h1>{{ 'pages.news' | translate }}</h1>
+  <p class="news__lead">{{ 'news.lead' | translate }}</p>
+</header>
+
+<app-news-log command="snipatlas log --all" [items]="items()" />

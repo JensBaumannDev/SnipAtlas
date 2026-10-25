@@ -31,7 +31,7 @@ const NEWS: NewsItem[] = [
 
 @Service()
 export class NewsApi {
-  getLatest(): Observable<NewsItem[]> {
+  getAll(): Observable<NewsItem[]> {
     return of(NEWS);
   }
 }

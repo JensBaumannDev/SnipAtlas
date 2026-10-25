@@ -39,6 +39,7 @@
   }
 
   &[aria-pressed='true'],
+  &[aria-selected='true'],
   &:has(:checked) {
     color: var(--accent);
     background: var(--raised);

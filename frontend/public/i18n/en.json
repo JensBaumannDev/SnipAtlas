@@ -23,7 +23,8 @@
     "privacy": "Privacy policy",
     "settings": "Settings",
     "profile": "Profile",
-    "notFound": "Page not found"
+    "notFound": "Page not found",
+    "news": "New on SnipAtlas"
   },
   "sidebar": {
     "label": "Topics",
@@ -277,30 +278,48 @@
       "commands": "Terminal, Git, npm and Docker to copy",
       "concepts": "Terms explained in plain words",
       "blueprints": "Build projects step by step",
-      "debugging": "Understand and fix error messages",
-      "title": "Areas",
-      "count": "{{count}} entries"
+      "debugging": "Understand and fix error messages"
     },
     "news": {
       "title": "New on SnipAtlas",
-      "text": "Recently added commands and explanations."
+      "all": "All news"
     },
-    "collection": {
-      "hint": "Sign in to save commands with the star. Your favourites will then appear here.",
-      "text": "Commands you saved with the star."
-    },
-    "guide": {
-      "title": "Your blueprint",
-      "empty": "Build a project step by step and tick off what you have done.",
-      "open": "Go to blueprints",
-      "continue": "Continue blueprint",
-      "next": "Next step: {{step}}",
-      "text": "Your progress in the blueprint you started."
-    },
-    "errors": {
-      "title": "Error messages",
-      "text": "Common error messages with cause and solution.",
-      "open": "Go to debugging"
+    "offer": {
+      "title": "What you will find here",
+      "tabs": "Areas",
+      "commands": {
+        "title": "Commands to copy",
+        "text": "Terminal, Git, npm and Docker. Every command with a short explanation of what it is for, and separate versions for Windows and Linux/Mac where needed.",
+        "count": "Commands: {{count}}",
+        "open": "Go to commands",
+        "comment": "# Put changes aside for a moment and bring them back"
+      },
+      "concepts": {
+        "title": "Concepts in plain words",
+        "text": "What is a signal, an interceptor, a serializer? Explained briefly, with a small code example that makes sense.",
+        "count": "Concepts: {{count}}",
+        "open": "Go to concepts",
+        "comment": "// A signal holds a value and reports changes"
+      },
+      "blueprints": {
+        "title": "Blueprints to tick off",
+        "text": "A whole project step by step, from an empty folder to the goal. Every step explains why it is needed, and your progress is saved.",
+        "count": "Blueprints: {{count}}",
+        "open": "Go to blueprints",
+        "step1": "Create the project folder",
+        "step2": "Set up a virtual environment",
+        "step3": "Install Django",
+        "step4": "Create the Django project",
+        "step5": "Add .gitignore and make the first commit",
+        "more": "# … and more steps"
+      },
+      "debugging": {
+        "title": "Understand and fix errors",
+        "text": "Common error messages with meaning, cause and solution, plus guides on how to find errors yourself.",
+        "count": "Error guides: {{count}}",
+        "open": "Go to debugging",
+        "comment": "# Port 8000 is already taken. Just use another one:"
+      }
     }
   },
   "footer": {
@@ -497,5 +516,13 @@
     "lead": "This address does not exist on SnipAtlas. One of these areas might help you.",
     "missing": "Is something missing?",
     "request": "Send a request"
+  },
+  "news": {
+    "lead": "Everything recently added to SnipAtlas, newest first.",
+    "fresh": "new"
+  },
+  "terminal": {
+    "done": "done:",
+    "todo": "open:"
   }
 }

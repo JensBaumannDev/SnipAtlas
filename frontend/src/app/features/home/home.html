@@ -10,102 +10,13 @@
   />
 </header>
 
-<nav class="home__section" aria-labelledby="home-areas">
-  <h2 class="home__heading" id="home-areas">{{ 'home.areas.title' | translate }}</h2>
-  <ul class="home__areas" role="list">
-    @for (stat of stats(); track stat.path) {
-      <li>
-        <a class="home__card home__area" [routerLink]="stat.path">
-          <span class="home__card-head">
-            <span class="home__card-title">{{ stat.label | translate }}</span>
-            <svg [lucideIcon]="stat.icon" class="icon home__area-icon"></svg>
-          </span>
-          <span class="home__area-text">{{ stat.description | translate }}</span>
-          <span class="home__count">
-            {{ 'home.areas.count' | translate: { count: stat.count } }}
-          </span>
-        </a>
-      </li>
-    }
-  </ul>
-</nav>
+<section class="home__section" aria-labelledby="home-offer">
+  <h2 class="home__heading" id="home-offer">{{ 'home.offer.title' | translate }}</h2>
+  <app-offer />
+</section>
 
-<div class="home__grid">
-  <section class="home__card" aria-labelledby="home-news">
-    <div class="home__card-intro">
-      <h2 class="home__card-title" id="home-news">{{ 'home.news.title' | translate }}</h2>
-      <p class="home__card-text">{{ 'home.news.text' | translate }}</p>
-    </div>
-    <ul class="home__list" role="list">
-      @for (item of news(); track item.date + item.title) {
-        <li>
-          <a class="home__row" [routerLink]="item.link">
-            @if (item.topicData; as topic) {
-              <app-topic-logo class="home__row-logo" [topic]="topic" />
-            }
-            <span class="home__row-title">{{ item.title }}</span>
-            <time class="home__date" [attr.datetime]="item.date">{{
-              item.date | date: 'mediumDate' : undefined : language()
-            }}</time>
-          </a>
-        </li>
-      }
-    </ul>
-  </section>
-
-  <section class="home__card" aria-labelledby="home-guide">
-    <div class="home__card-intro">
-      <h2 class="home__card-title" id="home-guide">{{ 'home.guide.title' | translate }}</h2>
-      <p class="home__card-text">{{ 'home.guide.text' | translate }}</p>
-    </div>
-    @if (current(); as item) {
-      <div class="home__guide">
-        <div
-          class="home__ring"
-          role="progressbar"
-          aria-valuemin="0"
-          [attr.aria-valuemax]="item.total"
-          [attr.aria-valuenow]="item.done"
-          [attr.aria-valuetext]="
-            'guides.progress' | translate: { done: item.done, total: item.total }
-          "
-          [attr.aria-label]="'guides.progressOf' | translate: { title: item.blueprint.title }"
-          [style.--progress]="item.percent + '%'"
-        >
-          <span class="home__ring-value" aria-hidden="true">{{ item.done }}/{{ item.total }}</span>
-        </div>
-        <div class="home__guide-text">
-          <p class="home__guide-name">{{ item.blueprint.title }}</p>
-          @if (item.next; as step) {
-            <p class="home__muted">{{ 'home.guide.next' | translate: { step: step.title } }}</p>
-          }
-        </div>
-      </div>
-      <a
-        class="home__link"
-        [routerLink]="['/bauplaene', item.blueprint.topic, item.blueprint.slug]"
-      >
-        {{ 'home.guide.continue' | translate }} →
-      </a>
-    } @else {
-      <p class="home__muted">{{ 'home.guide.empty' | translate }}</p>
-      <a class="home__link" routerLink="/bauplaene">{{ 'home.guide.open' | translate }} →</a>
-    }
-  </section>
-
-  <section class="home__card" aria-labelledby="home-collection">
-    <div class="home__card-intro">
-      <h2 class="home__card-title" id="home-collection">{{ 'sidebar.collection' | translate }}</h2>
-      <p class="home__card-text">{{ 'home.collection.text' | translate }}</p>
-    </div>
-    <app-collection hint="home.collection.hint" [limit]="5" />
-  </section>
-
-  <section class="home__card" aria-labelledby="home-errors">
-    <div class="home__card-intro">
-      <h2 class="home__card-title" id="home-errors">{{ 'home.errors.title' | translate }}</h2>
-      <p class="home__card-text">{{ 'home.errors.text' | translate }}</p>
-    </div>
-    <a class="home__link" routerLink="/debugging">{{ 'home.errors.open' | translate }} →</a>
-  </section>
-</div>
+<section class="home__section home__news" aria-labelledby="home-news">
+  <h2 class="home__heading" id="home-news">{{ 'home.news.title' | translate }}</h2>
+  <app-news-log class="home__log" [items]="news()" />
+  <a class="home__link" routerLink="/neu">{{ 'home.news.all' | translate }} →</a>
+</section>

@@ -35,6 +35,7 @@
   align-items: flex-start;
   padding-right: $space-xl;
   padding-left: calc(var(--nav-width) + $space-xl);
+  overflow-x: clip;
 }
 
 .shell__content {

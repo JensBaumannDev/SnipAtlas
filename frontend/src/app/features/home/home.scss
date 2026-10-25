@@ -20,6 +20,13 @@
 
   &::before {
     @include dot-grid;
+
+    inset: -$space-xl calc(50% - 50vw) rem(-120) calc(50% - 50vw);
+    mask-image:
+      linear-gradient(to bottom, #000 65%, transparent),
+      linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
+      radial-gradient(ellipse rem(600) rem(300) at 50% 47%, transparent 40%, #000 90%);
+    mask-composite: intersect;
   }
 }
 
@@ -54,186 +61,14 @@
   text-align: center;
 }
 
-// Cards
-.home__card {
-  @include card-surface;
-
-  display: flex;
-  flex-direction: column;
-  gap: $space-md;
-  padding: $space-xl;
-
-  &::after {
-    @include card-line;
-
-    margin-top: auto;
-  }
-}
-
-.home__card-head {
-  display: flex;
-  gap: $space-md;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.home__card-intro {
-  display: flex;
-  flex-direction: column;
-  gap: $space-sm;
-}
-
-.home__card-title {
-  @include card-title;
-}
-
-.home__card-text {
-  color: var(--muted);
-}
-
-.home__count {
-  align-self: flex-start;
-  padding: 0 $space-sm;
-  font-variant-numeric: tabular-nums;
-  color: var(--muted);
-  background: var(--hover);
-  border-radius: rem(999);
-}
-
-// Areas
-.home__areas {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: $space-md;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.home__area {
-  height: 100%;
-  color: var(--muted);
-  text-decoration: none;
-  transition: transform var(--duration) var(--ease);
-
-  &:hover {
-    transform: translateY(-4px);
-
-    .home__card-title {
-      color: var(--accent);
-    }
-  }
-}
-
-.home__area-icon {
-  flex: none;
-  width: rem(40);
-  height: rem(40);
-  color: var(--accent);
-  stroke-width: 1.5;
-}
-
-.home__area-text {
-  margin-bottom: $space-sm;
-}
-
-// Grid
-.home__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: $space-md;
-}
-
 // News
-.home__list {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0 (-$space-sm);
-  list-style: none;
-}
-
-.home__row {
-  display: flex;
-  gap: $space-md;
-  align-items: center;
-  padding: $space-sm;
-  color: var(--ink);
-  text-decoration: none;
-  border-radius: $radius-lg;
-  transition: background-color var(--duration-fast);
-
-  &:hover {
-    background: var(--hover);
-
-    .home__row-title {
-      color: var(--accent);
-    }
-  }
-}
-
-.home__row-logo {
-  width: rem(20);
-  height: rem(20);
-}
-
-.home__row-title {
-  flex: 1;
-  min-width: 0;
-  font-weight: $font-weight-medium;
-  transition: color var(--duration-fast);
-}
-
-.home__date {
-  flex: none;
-  font-variant-numeric: tabular-nums;
-  color: var(--muted);
-}
-
-// Guide
-.home__guide {
-  display: flex;
-  gap: $space-md;
+.home__news {
   align-items: center;
 }
 
-.home__ring {
-  position: relative;
-  display: grid;
-  flex: none;
-  place-items: center;
-  width: rem(64);
-  height: rem(64);
-  background: conic-gradient(var(--accent) var(--progress), var(--line) 0);
-  border-radius: 50%;
-
-  &::before {
-    position: absolute;
-    inset: rem(6);
-    content: '';
-    background: var(--card-to);
-    border-radius: 50%;
-  }
-}
-
-.home__ring-value {
-  position: relative;
-  font-weight: $font-weight-semibold;
-  font-variant-numeric: tabular-nums;
-}
-
-.home__guide-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.home__guide-name {
-  font-weight: $font-weight-medium;
-}
-
-.home__muted {
-  color: var(--muted);
+.home__log {
+  width: 100%;
+  max-width: rem(760);
 }
 
 .home__link {
@@ -262,14 +97,6 @@
   .home__heading {
     font-size: rem(30);
   }
-
-  .home__areas {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .home__grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 @include small {
@@ -279,23 +106,6 @@
 
   .home__heading {
     font-size: $font-size-xxl;
-  }
-
-  .home__areas {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .home__card {
-    padding: $space-md;
-  }
-
-  .home__row {
-    flex-wrap: wrap;
-  }
-
-  .home__date {
-    width: 100%;
-    padding-left: rem(36);
   }
 }
 

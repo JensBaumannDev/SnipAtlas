@@ -1,0 +1,20 @@
+<app-terminal-window title="snipatlas — zsh" [lines]="lines()">
+  <ul class="news-log__list" role="list">
+    @for (item of rows(); track item.date + item.title) {
+      <li class="news-log__item">
+        <a class="news-log__row" [routerLink]="item.link">
+          <span class="news-log__plus" aria-hidden="true">+</span>
+          <span class="news-log__topic">{{ item.topic }}</span>
+          <span class="news-log__title">{{ item.title }}</span>
+          <span class="news-log__meta">
+            @if (item.fresh) {
+              <span class="news-log__fresh">{{ 'news.fresh' | translate }}</span>
+              <span aria-hidden="true"> · </span>
+            }
+            <time [attr.datetime]="item.date">{{ item.date }}</time>
+          </span>
+        </a>
+      </li>
+    }
+  </ul>
+</app-terminal-window>

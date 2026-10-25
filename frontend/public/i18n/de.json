@@ -23,7 +23,8 @@
     "privacy": "Datenschutz",
     "settings": "Einstellungen",
     "profile": "Profil",
-    "notFound": "Seite nicht gefunden"
+    "notFound": "Seite nicht gefunden",
+    "news": "Neu auf SnipAtlas"
   },
   "sidebar": {
     "label": "Themen",
@@ -277,30 +278,48 @@
       "commands": "Terminal, Git, npm und Docker zum Kopieren",
       "concepts": "Begriffe in einfachen Worten erklärt",
       "blueprints": "Projekte Schritt für Schritt bauen",
-      "debugging": "Fehlermeldungen verstehen und lösen",
-      "title": "Bereiche",
-      "count": "{{count}} Einträge"
+      "debugging": "Fehlermeldungen verstehen und lösen"
     },
     "news": {
       "title": "Neu auf SnipAtlas",
-      "text": "Zuletzt hinzugefügte Befehle und Erklärungen."
+      "all": "Alle Neuigkeiten"
     },
-    "collection": {
-      "hint": "Melde dich an, um Befehle mit dem Stern zu speichern. Deine Favoriten erscheinen dann hier.",
-      "text": "Befehle, die du mit dem Stern gespeichert hast."
-    },
-    "guide": {
-      "title": "Dein Bauplan",
-      "empty": "Bau ein Projekt Schritt für Schritt und hake dabei ab, was du erledigt hast.",
-      "open": "Zu den Bauplänen",
-      "continue": "Weiter im Bauplan",
-      "next": "Nächster Schritt: {{step}}",
-      "text": "Dein Fortschritt im angefangenen Bauplan."
-    },
-    "errors": {
-      "title": "Fehlermeldungen",
-      "text": "Häufige Fehlermeldungen mit Ursache und Lösung.",
-      "open": "Zum Debugging"
+    "offer": {
+      "title": "Das findest du hier",
+      "tabs": "Bereiche",
+      "commands": {
+        "title": "Befehle zum Kopieren",
+        "text": "Terminal, Git, npm und Docker. Jeder Befehl mit kurzer Erklärung, wofür er da ist, und getrennt für Windows und Linux/Mac, wo es nötig ist.",
+        "count": "Befehle: {{count}}",
+        "open": "Zu den Befehlen",
+        "comment": "# Änderungen kurz beiseitelegen und zurückholen"
+      },
+      "concepts": {
+        "title": "Konzepte in einfachen Worten",
+        "text": "Was ist ein Signal, ein Interceptor, ein Serializer? Kurz erklärt, mit einem kleinen Codebeispiel, das man versteht.",
+        "count": "Konzepte: {{count}}",
+        "open": "Zu den Konzepten",
+        "comment": "// Ein Signal hält einen Wert und meldet Änderungen"
+      },
+      "blueprints": {
+        "title": "Baupläne zum Abhaken",
+        "text": "Ein ganzes Projekt Schritt für Schritt, vom leeren Ordner bis zum Ziel. Jeder Schritt erklärt, warum er nötig ist, und dein Fortschritt bleibt gespeichert.",
+        "count": "Baupläne: {{count}}",
+        "open": "Zu den Bauplänen",
+        "step1": "Projektordner anlegen",
+        "step2": "Virtuelle Umgebung einrichten",
+        "step3": "Django installieren",
+        "step4": "Django-Projekt erstellen",
+        "step5": ".gitignore anlegen und erster Commit",
+        "more": "# … und weitere Schritte"
+      },
+      "debugging": {
+        "title": "Fehler verstehen und lösen",
+        "text": "Häufige Fehlermeldungen mit Bedeutung, Ursache und Lösung, dazu Anleitungen, wie du Fehler selbst findest.",
+        "count": "Fehlerhilfen: {{count}}",
+        "open": "Zum Debugging",
+        "comment": "# Port 8000 ist schon belegt. Einfach einen anderen nehmen:"
+      }
     }
   },
   "footer": {
@@ -497,5 +516,13 @@
     "lead": "Diese Adresse gibt es auf SnipAtlas nicht. Vielleicht hilft dir einer dieser Bereiche weiter.",
     "missing": "Fehlt hier etwas?",
     "request": "Anfrage stellen"
+  },
+  "news": {
+    "lead": "Alles, was zuletzt auf SnipAtlas dazugekommen ist, das Neueste zuerst.",
+    "fresh": "neu"
+  },
+  "terminal": {
+    "done": "erledigt:",
+    "todo": "offen:"
   }
 }
