@@ -13,6 +13,12 @@
   }
 }
 
+@mixin tiny {
+  @media (max-width: $bp-tiny) {
+    @content;
+  }
+}
+
 @mixin desktop {
   @media (min-width: $bp-mobile + 1) {
     @content;

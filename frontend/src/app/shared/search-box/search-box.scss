@@ -157,6 +157,15 @@
     --search-height: #{rem(52)};
   }
 
+  .search-box--hero .search-box__icon {
+    left: $space-md;
+  }
+
+  .search-box--hero .search-box__input {
+    padding-right: $space-md;
+    padding-left: rem(48);
+  }
+
   .search-box__area {
     grid-column: 1;
   }

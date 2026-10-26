@@ -40,7 +40,7 @@
     "label": "Befehle, Grundlagen, Anleitungen und Fehlermeldungen durchsuchen",
     "placeholder": "Suchen …",
     "ctrl": "Strg",
-    "heroPlaceholder": "Wonach suchst du? Zum Beispiel git stash",
+    "heroPlaceholder": "Suche, z. B. git stash",
     "resultsLabel": "Suchergebnisse",
     "empty": "Keine Treffer. Versuch es mit einem anderen Begriff.",
     "count": "{{count}} Treffer",

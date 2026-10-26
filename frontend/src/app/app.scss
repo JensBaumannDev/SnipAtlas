@@ -4,6 +4,7 @@
   --nav-width: #{$rail-width};
   --content-max: #{$layout-max-width - $rail-width};
   --outline-space: 0px;
+  --bottom-nav-height: #{$bottom-nav-height};
 
   display: flex;
   flex-direction: column;
@@ -79,7 +80,7 @@
 
 @include mobile {
   :host {
-    padding-bottom: $bottom-nav-height;
+    padding-bottom: var(--bottom-nav-height);
   }
 
   .shell {
@@ -92,6 +93,12 @@
     width: 100%;
     max-width: none;
     padding-block: 0;
+  }
+}
+
+@include tiny {
+  :host {
+    --bottom-nav-height: #{$bottom-nav-height-tiny};
   }
 }
 

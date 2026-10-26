@@ -164,9 +164,11 @@
 
   .segmented {
     display: flex;
+    flex-wrap: wrap;
   }
 
   .segmented__option {
+    flex: 1 1 auto;
     padding-inline: $space-sm;
   }
 }

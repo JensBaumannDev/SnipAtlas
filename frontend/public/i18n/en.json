@@ -40,7 +40,7 @@
     "label": "Search commands, basics, guides and error messages",
     "placeholder": "Search …",
     "ctrl": "Ctrl",
-    "heroPlaceholder": "What are you looking for? For example git stash",
+    "heroPlaceholder": "Search, e.g. git stash",
     "resultsLabel": "Search results",
     "empty": "No results. Try a different term.",
     "count": "{{count}} results",

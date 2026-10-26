@@ -66,3 +66,30 @@
     border-bottom-color: var(--accent);
   }
 }
+
+/* #region RESPONSIVE */
+@include small {
+  .profile__tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $space-xs;
+    padding: $space-xs;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: $radius-lg;
+  }
+
+  .profile__tab {
+    padding: $space-sm;
+    text-align: center;
+    border-bottom: 0;
+    border-radius: $radius-md;
+
+    &--active {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+  }
+}
+
+/* #endregion */
