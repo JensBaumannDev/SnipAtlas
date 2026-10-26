@@ -46,8 +46,7 @@ function fromEntry(entry: Entry): SearchItem {
       area: 'commands',
       title: entry.title,
       text: entry.description,
-      link: ['/befehle', entry.topic, entry.subtopic],
-      fragment: entry.slug,
+      link: ['/befehle', entry.topic, entry.subtopic, entry.slug],
     },
     codeText(entry.code),
   );

@@ -9,8 +9,7 @@
       <li>
         <a
           class="collection__link"
-          [routerLink]="['/befehle', favorite.topic, favorite.subtopic]"
-          [fragment]="favorite.slug"
+          [routerLink]="['/befehle', favorite.topic, favorite.subtopic, favorite.slug]"
         >
           <svg lucideStar class="icon collection__icon"></svg>
           <span class="collection__title">{{ favorite.title }}</span>

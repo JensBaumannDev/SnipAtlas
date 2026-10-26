@@ -323,6 +323,10 @@ export class EntryApi {
     return of(ENTRIES.filter((entry) => entry.topic === topic));
   }
 
+  getBySlug(slug: string): Observable<Entry | undefined> {
+    return of(ENTRIES.find((entry) => entry.slug === slug));
+  }
+
   getSummary(): Observable<{ entries: number; topics: number }> {
     return of({
       entries: ENTRIES.length,

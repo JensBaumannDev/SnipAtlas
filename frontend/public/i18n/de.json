@@ -156,7 +156,9 @@
     "entryCount": "{{count}} Einträge",
     "entryCountOne": "1 Eintrag",
     "expandAll": "Alle aufklappen",
-    "collapseAll": "Alle zuklappen"
+    "collapseAll": "Alle zuklappen",
+    "moreIn": "Mehr in {{name}}",
+    "openPage": "Als eigene Seite öffnen"
   },
   "concepts": {
     "lead": "Begriffe und Grundlagen in einfachen Worten erklärt, jeweils mit einem kurzen Beispiel und dem, was man sich merken sollte.",
