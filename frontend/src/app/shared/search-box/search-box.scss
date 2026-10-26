@@ -51,16 +51,16 @@
   gap: $space-xs;
   pointer-events: none;
   transform: translateY(-50%);
+}
 
-  span {
-    padding: 0 $space-sm;
-    font-family: $font-sans;
-    font-size: $font-size-base;
-    line-height: $line-height-base;
-    color: var(--muted);
-    border: 1px solid var(--line);
-    border-radius: $radius-xs;
-  }
+.search-box__key {
+  padding: 0 $space-sm;
+  font-family: $font-sans;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: $radius-xs;
 }
 
 // Results
