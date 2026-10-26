@@ -1,0 +1,59 @@
+@use 'abstracts' as *;
+
+:host {
+  display: contents;
+}
+
+// Star
+.favorite-star {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: $control-height;
+  height: $control-height;
+  color: var(--muted);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: $radius-md;
+  transition: color var(--duration-fast);
+
+  &:hover {
+    color: var(--accent);
+  }
+
+  &--active {
+    color: var(--accent);
+  }
+
+  &--active .favorite-star__icon {
+    fill: currentcolor;
+  }
+}
+
+.favorite-star__icon {
+  width: rem(20);
+  height: rem(20);
+}
+
+// Hint
+.favorite-star__hint {
+  flex-basis: 100%;
+  padding: 0 $space-xs $space-md;
+  color: var(--muted);
+}
+
+.favorite-star__login {
+  padding: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: var(--accent);
+  cursor: pointer;
+  background: none;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

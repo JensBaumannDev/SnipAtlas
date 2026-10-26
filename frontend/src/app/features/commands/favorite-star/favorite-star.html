@@ -1,0 +1,20 @@
+<button
+  #star
+  class="favorite-star"
+  type="button"
+  [class.favorite-star--active]="favorite()"
+  [attr.aria-pressed]="favorite()"
+  [attr.aria-label]="'favorites.toggle' | translate: { title: entry().title }"
+  (click)="toggle()"
+>
+  <svg lucideStar class="icon favorite-star__icon"></svg>
+</button>
+
+@if (loginHint()) {
+  <p class="favorite-star__hint" role="status">
+    {{ 'favorites.loginHint' | translate }}
+    <button class="favorite-star__login" type="button" (click)="login()">
+      {{ 'auth.login' | translate }}
+    </button>
+  </p>
+}

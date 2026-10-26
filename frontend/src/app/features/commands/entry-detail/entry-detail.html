@@ -1,0 +1,40 @@
+@if (entry(); as entry) {
+  @if (currentTopic(); as topic) {
+    @let subtopic = currentSubtopic();
+
+    <app-topic-header
+      class="entry-detail__header"
+      [topic]="topic"
+      [heading]="entry.title"
+      [parentLabel]="subtopic ? topic.name + ' · ' + subtopic.name : topic.name"
+      [parentLink]="['/befehle', topic.slug, entry.subtopic]"
+    >
+      <app-favorite-star [entry]="entry" />
+    </app-topic-header>
+
+    @if (resolved(); as resolved) {
+      <div class="entry-detail__body">
+        <app-term-text class="entry-detail__description" [text]="entry.description" />
+        <app-code-block [code]="resolved.code" [language]="entry.language" [os]="resolved.os" />
+        <app-report-link [subject]="('report.command' | translate) + ': ' + entry.title" />
+      </div>
+    }
+
+    @if (related().length) {
+      <section class="entry-detail__related" aria-labelledby="entry-related">
+        <h2 class="entry-detail__related-title" id="entry-related">
+          {{ 'commands.moreIn' | translate: { name: subtopic?.name ?? topic.name } }}
+        </h2>
+        <ul class="entry-detail__list" role="list">
+          @for (item of related(); track item.slug) {
+            <li>
+              <a class="entry-detail__link" [routerLink]="['/befehle', item.topic, item.subtopic, item.slug]">
+                {{ item.title }}
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  }
+}

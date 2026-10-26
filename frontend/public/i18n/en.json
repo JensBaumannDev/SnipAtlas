@@ -156,7 +156,9 @@
     "entryCount": "{{count}} entries",
     "entryCountOne": "1 entry",
     "expandAll": "Expand all",
-    "collapseAll": "Collapse all"
+    "collapseAll": "Collapse all",
+    "moreIn": "More in {{name}}",
+    "openPage": "Open as page"
   },
   "concepts": {
     "lead": "Terms and basics explained in plain words, each with a short example and what to remember.",
