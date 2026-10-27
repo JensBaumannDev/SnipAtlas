@@ -18,11 +18,12 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
-import { LucideChevronDown, LucideChevronRight } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { AreaContent } from '../../core/area-content';
 import { ContentArea, filterGroups, isContentArea } from '../../core/content-index';
+import { chevronDownIcon, chevronRightIcon } from '../../core/icons';
 import { TopicApi } from '../../core/topic-api';
 import { Collection } from '../../shared/collection/collection';
 import { TopicLogo } from '../../shared/topic-logo/topic-logo';
@@ -36,15 +37,7 @@ const AREA_LABELS: Record<ContentArea, string> = {
 };
 
 @Component({
-  imports: [
-    Collection,
-    RouterLink,
-    RouterLinkActive,
-    TopicLogo,
-    TranslatePipe,
-    LucideChevronDown,
-    LucideChevronRight,
-  ],
+  imports: [Collection, RouterLink, RouterLinkActive, TopicLogo, TranslatePipe, LucideDynamicIcon],
   selector: 'app-sidebar',
   styleUrl: './sidebar.scss',
   templateUrl: './sidebar.html',
@@ -59,6 +52,8 @@ export class Sidebar {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
 
+  protected readonly chevronDownIcon = chevronDownIcon;
+  protected readonly chevronRightIcon = chevronRightIcon;
   protected readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
   protected readonly mode = signal<SidebarMode | undefined>(undefined);
   protected readonly basePath = signal('/');

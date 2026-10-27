@@ -1,10 +1,10 @@
 import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideTerminal } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Entry } from '../../core/entry';
 import { EntryApi } from '../../core/entry-api';
+import { terminalIcon } from '../../core/icons';
 import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { Preferences } from '../../core/preferences';
 import { Subtopic } from '../../core/topic';
@@ -35,7 +35,7 @@ export class Commands {
 
   protected readonly os = inject(Preferences).os;
 
-  protected readonly icon = LucideTerminal;
+  protected readonly icon = terminalIcon;
   protected readonly summary = toSignal(this.entryApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });

@@ -13,16 +13,10 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import {
-  LucideBug,
-  LucideCircleCheck,
-  LucideDynamicIcon,
-  LucideFilePlus,
-  LucideIcon,
-  LucideLightbulb,
-} from '@lucide/angular';
+import { LucideDynamicIcon, LucideIconData } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { RequestKind } from '../../core/contact-request';
+import { bugIcon, circleCheckIcon, filePlusIcon, lightbulbIcon } from '../../core/icons';
 import { RequestApi } from '../../core/request-api';
 import { describeEnvironment } from '../../core/user-environment';
 import { BugFields } from './bug-fields/bug-fields';
@@ -42,7 +36,7 @@ interface KindOption {
   value: RequestKind;
   label: string;
   description: string;
-  icon: LucideIcon;
+  icon: LucideIconData;
 }
 
 const KINDS: KindOption[] = [
@@ -50,19 +44,19 @@ const KINDS: KindOption[] = [
     value: 'entry',
     label: 'request.kinds.entry',
     description: 'request.kinds.entryText',
-    icon: LucideFilePlus,
+    icon: filePlusIcon,
   },
   {
     value: 'improvement',
     label: 'request.kinds.improvement',
     description: 'request.kinds.improvementText',
-    icon: LucideLightbulb,
+    icon: lightbulbIcon,
   },
   {
     value: 'bug',
     label: 'request.kinds.bug',
     description: 'request.kinds.bugText',
-    icon: LucideBug,
+    icon: bugIcon,
   },
 ];
 
@@ -72,7 +66,6 @@ const KINDS: KindOption[] = [
     RouterLink,
     TranslatePipe,
     LucideDynamicIcon,
-    LucideCircleCheck,
     EntryFields,
     ImprovementFields,
     BugFields,
@@ -90,6 +83,7 @@ export class Request {
 
   readonly reference = input<string>(undefined, { alias: 'bezug' });
 
+  protected readonly circleCheckIcon = circleCheckIcon;
   protected readonly kinds = KINDS;
   protected readonly status = signal<SendStatus>('idle');
   protected readonly submitted = signal(false);

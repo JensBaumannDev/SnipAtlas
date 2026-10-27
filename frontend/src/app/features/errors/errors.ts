@@ -1,9 +1,9 @@
 import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
-import { LucideTriangleAlert } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DebugGuideApi } from '../../core/debug-guide-api';
 import { ErrorApi } from '../../core/error-api';
+import { triangleAlertIcon } from '../../core/icons';
 import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { TopicApi } from '../../core/topic-api';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
@@ -24,7 +24,7 @@ export class Errors {
 
   readonly topic = input<string>();
 
-  protected readonly icon = LucideTriangleAlert;
+  protected readonly icon = triangleAlertIcon;
   protected readonly summary = toSignal(this.errorApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });

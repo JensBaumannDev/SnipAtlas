@@ -1,4 +1,5 @@
-import { LucideArrowRightLeft, LucideFolder, LucideIcon, LucideTerminal } from '@lucide/angular';
+import { LucideIconData } from '@lucide/angular';
+import { arrowRightLeftIcon, folderIcon, terminalIcon } from './icons';
 
 const BRAND_LOGOS: Readonly<Partial<Record<string, string>>> = {
   angular: 'angular',
@@ -15,9 +16,9 @@ const BRAND_LOGOS: Readonly<Partial<Record<string, string>>> = {
   typescript: 'typescript',
 };
 
-export const TOPIC_ICONS: Readonly<Partial<Record<string, LucideIcon>>> = {
-  'django-rest-framework': LucideArrowRightLeft,
-  terminal: LucideTerminal,
+export const TOPIC_ICONS: Readonly<Partial<Record<string, LucideIconData>>> = {
+  'django-rest-framework': arrowRightLeftIcon,
+  terminal: terminalIcon,
 };
 
 export function topicLogo(slug: string): string | undefined {
@@ -25,6 +26,6 @@ export function topicLogo(slug: string): string | undefined {
   return file ? `url('/img/topics/${file}.svg')` : undefined;
 }
 
-export function topicIcon(slug: string): LucideIcon {
-  return TOPIC_ICONS[slug] ?? LucideFolder;
+export function topicIcon(slug: string): LucideIconData {
+  return TOPIC_ICONS[slug] ?? folderIcon;
 }

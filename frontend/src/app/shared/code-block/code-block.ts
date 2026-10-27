@@ -1,9 +1,10 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
-import { LucideCheck, LucideCopy } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { TokenKind, highlight } from '../../core/code-highlight';
 import { CodeLanguage } from '../../core/entry';
+import { checkIcon, copyIcon } from '../../core/icons';
 import { OperatingSystem } from '../../core/preferences';
 import {
   ProjectKey,
@@ -37,7 +38,7 @@ interface ViewToken {
 let nextId = 0;
 
 @Component({
-  imports: [ProjectForm, TranslatePipe, LucideCheck, LucideCopy],
+  imports: [ProjectForm, TranslatePipe, LucideDynamicIcon],
   selector: 'app-code-block',
   styleUrl: './code-block.scss',
   templateUrl: './code-block.html',
@@ -52,6 +53,8 @@ export class CodeBlock {
   readonly language = input.required<CodeLanguage>();
   readonly os = input<OperatingSystem>();
 
+  protected readonly checkIcon = checkIcon;
+  protected readonly copyIcon = copyIcon;
   protected readonly formId = `code-block-project-${nextId++}`;
   protected readonly keys = computed(() => placeholderKeys(this.code()));
   protected readonly missing = computed(

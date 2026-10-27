@@ -14,7 +14,7 @@
           <code class="entry-card__peek">{{ peek() }}</code>
         }
       </span>
-      <svg lucideChevronDown class="icon entry-card__chevron"></svg>
+      <svg [lucideIcon]="chevronDownIcon" class="icon entry-card__chevron"></svg>
     </button>
   </div>
   <app-favorite-star [entry]="entry()" />

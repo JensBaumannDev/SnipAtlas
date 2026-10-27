@@ -1,5 +1,5 @@
 <a class="report-link" routerLink="/anfrage" [queryParams]="{ bezug: subject() }">
-  <svg lucideFlag class="icon report-link__icon"></svg>
+  <svg [lucideIcon]="flagIcon" class="icon report-link__icon"></svg>
   {{ 'report.link' | translate }}
   <span class="visually-hidden">: {{ subject() }}</span>
 </a>

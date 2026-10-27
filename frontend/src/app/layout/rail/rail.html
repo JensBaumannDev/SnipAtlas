@@ -2,49 +2,49 @@
   <ul class="rail__list" role="list">
     <li class="rail__item rail__item--home">
       <a class="rail__link" routerLink="/" routerLinkActive [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">
-        <svg lucideHouse class="icon"></svg>
+        <svg [lucideIcon]="houseIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.home' | translate }}</span>
       </a>
     </li>
     <li class="rail__item rail__item--glossary">
       <a class="rail__link" routerLink="/begriffe" routerLinkActive ariaCurrentWhenActive="page">
-        <svg lucideBookA class="icon"></svg>
+        <svg [lucideIcon]="bookAIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.glossary' | translate }}</span>
       </a>
     </li>
     <li class="rail__item">
       <a class="rail__link" routerLink="/befehle" routerLinkActive ariaCurrentWhenActive="page">
-        <svg lucideTerminal class="icon"></svg>
+        <svg [lucideIcon]="terminalIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.commands' | translate }}</span>
       </a>
     </li>
     <li class="rail__item">
       <a class="rail__link" routerLink="/grundlagen" routerLinkActive ariaCurrentWhenActive="page">
-        <svg lucideBookText class="icon"></svg>
+        <svg [lucideIcon]="bookTextIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.concepts' | translate }}</span>
       </a>
     </li>
     <li class="rail__item">
       <a class="rail__link" routerLink="/anleitungen" routerLinkActive ariaCurrentWhenActive="page">
-        <svg lucideRoute class="icon"></svg>
+        <svg [lucideIcon]="routeIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.blueprints' | translate }}</span>
       </a>
     </li>
     <li class="rail__item">
       <a class="rail__link" routerLink="/fehler" routerLinkActive ariaCurrentWhenActive="page">
-        <svg lucideTriangleAlert class="icon"></svg>
+        <svg [lucideIcon]="triangleAlertIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.debugging' | translate }}</span>
       </a>
     </li>
     <li class="rail__item rail__item--end rail__item--settings">
       <a class="rail__link" routerLink="/einstellungen" routerLinkActive ariaCurrentWhenActive="page">
-        <svg lucideSettings class="icon"></svg>
+        <svg [lucideIcon]="settingsIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.settings' | translate }}</span>
       </a>
     </li>
     <li class="rail__item rail__item--request">
       <a class="rail__link" routerLink="/anfrage" routerLinkActive ariaCurrentWhenActive="page">
-        <svg lucideMessageSquarePlus class="icon"></svg>
+        <svg [lucideIcon]="messageSquarePlusIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.request' | translate }}</span>
       </a>
     </li>

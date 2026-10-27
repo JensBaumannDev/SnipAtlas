@@ -8,7 +8,7 @@
   <span class="sidebar__toggle-label">
     {{ 'sidebar.topics' | translate }}@if (activeTopic(); as topic) {: {{ topic.name }}}
   </span>
-  <svg lucideChevronDown class="icon sidebar__toggle-icon"></svg>
+  <svg [lucideIcon]="chevronDownIcon" class="icon sidebar__toggle-icon"></svg>
 </button>
 
 <nav
@@ -42,7 +42,7 @@
           (click)="toggleGroup(group.slug)"
         >
           {{ group.name }}
-          <svg lucideChevronRight class="icon sidebar__chevron"></svg>
+          <svg [lucideIcon]="chevronRightIcon" class="icon sidebar__chevron"></svg>
         </button>
       </h2>
       <div
@@ -76,7 +76,7 @@
                       [attr.aria-label]="'sidebar.toggleSubtopics' | translate: { topic: topic.name }"
                       (click)="toggleTopic(topic.slug)"
                     >
-                      <svg lucideChevronRight class="icon sidebar__chevron"></svg>
+                      <svg [lucideIcon]="chevronRightIcon" class="icon sidebar__chevron"></svg>
                     </button>
                   }
                 </div>

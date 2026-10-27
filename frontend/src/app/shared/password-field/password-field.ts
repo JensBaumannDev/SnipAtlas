@@ -1,9 +1,10 @@
 import { Component, ElementRef, inject, signal } from '@angular/core';
-import { LucideEye, LucideEyeOff } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { eyeIcon, eyeOffIcon } from '../../core/icons';
 
 @Component({
-  imports: [TranslatePipe, LucideEye, LucideEyeOff],
+  imports: [TranslatePipe, LucideDynamicIcon],
   selector: 'app-password-field',
   styleUrl: './password-field.scss',
   templateUrl: './password-field.html',
@@ -11,6 +12,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class PasswordField {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
+  protected readonly eyeIcon = eyeIcon;
+  protected readonly eyeOffIcon = eyeOffIcon;
   protected readonly visible = signal(false);
 
   protected toggle(): void {

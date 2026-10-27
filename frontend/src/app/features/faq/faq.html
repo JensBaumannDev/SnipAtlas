@@ -16,7 +16,7 @@
               <span class="faq__question-text">
                 {{ 'faq.' + group.id + '.' + question + '.question' | translate }}
               </span>
-              <svg lucideChevronDown class="icon faq__chevron"></svg>
+              <svg [lucideIcon]="chevronDownIcon" class="icon faq__chevron"></svg>
             </summary>
             <p class="faq__answer">
               {{ 'faq.' + group.id + '.' + question + '.answer' | translate }}

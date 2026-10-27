@@ -9,15 +9,16 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { LucideStar } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Entry } from '../../../core/entry';
 import { Favorites } from '../../../core/favorites';
+import { starIcon } from '../../../core/icons';
 import { LoginDialog } from '../../../core/login-dialog';
 import { Session } from '../../../core/session';
 
 @Component({
-  imports: [TranslatePipe, LucideStar],
+  imports: [TranslatePipe, LucideDynamicIcon],
   selector: 'app-favorite-star',
   styleUrl: './favorite-star.scss',
   templateUrl: './favorite-star.html',
@@ -32,6 +33,7 @@ export class FavoriteStar {
 
   readonly entry = input.required<Entry>();
 
+  protected readonly starIcon = starIcon;
   protected readonly favorite = computed(() => this.favorites.has(this.entry()));
   protected readonly loginHint = signal(false);
 

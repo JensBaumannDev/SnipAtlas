@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { LucideDynamicIcon, LucideIcon } from '@lucide/angular';
+import { LucideDynamicIcon, LucideIconData } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -9,7 +9,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './area-intro.html',
 })
 export class AreaIntro {
-  readonly icon = input.required<LucideIcon>();
+  readonly icon = input.required<LucideIconData>();
   readonly title = input.required<string>();
   readonly lead = input.required<string>();
   readonly summary = input<string>();

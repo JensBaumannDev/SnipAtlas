@@ -11,7 +11,7 @@
         <code class="error-card__message">{{ error().message }}</code>
         <span class="error-card__meaning">{{ error().meaning }}</span>
       </span>
-      <svg lucideChevronDown class="icon error-card__chevron"></svg>
+      <svg [lucideIcon]="chevronDownIcon" class="icon error-card__chevron"></svg>
     </button>
   </div>
 

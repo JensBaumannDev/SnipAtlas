@@ -10,9 +10,10 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideSettings } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
+import { settingsIcon } from '../../core/icons';
 import { LoginDialog } from '../../core/login-dialog';
 import { Session } from '../../core/session';
 import { SearchBox } from '../../shared/search-box/search-box';
@@ -21,7 +22,7 @@ import { UserMenu } from '../user-menu/user-menu';
 const SCROLL_GAP = 16;
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, SearchBox, TranslatePipe, UserMenu, LucideSettings],
+  imports: [RouterLink, RouterLinkActive, SearchBox, TranslatePipe, UserMenu, LucideDynamicIcon],
   selector: 'app-topbar',
   styleUrl: './topbar.scss',
   templateUrl: './topbar.html',
@@ -34,6 +35,7 @@ export class Topbar {
   private readonly userMenu = viewChild(UserMenu);
 
   protected readonly session = inject(Session);
+  protected readonly settingsIcon = settingsIcon;
   protected readonly isHome = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
