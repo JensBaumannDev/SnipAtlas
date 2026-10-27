@@ -168,7 +168,9 @@
     "conceptCountOne": "1 Erklärung",
     "expandAll": "Alle aufklappen",
     "collapseAll": "Alle zuklappen",
-    "note": "Merke"
+    "note": "Merke",
+    "moreIn": "Mehr in {{name}}",
+    "openPage": "Als eigene Seite öffnen"
   },
   "guides": {
     "lead": "Abläufe Schritt für Schritt: was du tust, warum, und den Code zum Kopieren. Vom leeren Ordner bis zum fertigen Projekt.",

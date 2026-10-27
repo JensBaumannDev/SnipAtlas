@@ -57,8 +57,7 @@ function fromConcept(concept: Concept): SearchItem {
     area: 'concepts',
     title: concept.title,
     text: concept.summary,
-    link: ['/grundlagen', concept.topic, concept.subtopic],
-    fragment: concept.slug,
+    link: ['/grundlagen', concept.topic, concept.subtopic, concept.slug],
   });
 }
 

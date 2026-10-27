@@ -109,3 +109,20 @@
   display: block;
   font-weight: $font-weight-semibold;
 }
+
+.concept-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-lg;
+  align-items: center;
+}
+
+.concept-card__page {
+  font-weight: $font-weight-medium;
+  color: var(--accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

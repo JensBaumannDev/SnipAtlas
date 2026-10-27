@@ -525,6 +525,10 @@ export class ConceptApi {
     return of(CONCEPTS.filter((concept) => concept.topic === topic));
   }
 
+  getBySlug(slug: string): Observable<Concept | undefined> {
+    return of(CONCEPTS.find((concept) => concept.slug === slug));
+  }
+
   getSummary(): Observable<{ entries: number; topics: number }> {
     return of({
       entries: CONCEPTS.length,

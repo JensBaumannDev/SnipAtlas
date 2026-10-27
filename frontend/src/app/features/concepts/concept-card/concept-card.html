@@ -24,6 +24,12 @@
         {{ note }}
       </p>
     }
-    <app-report-link [subject]="('report.concept' | translate) + ': ' + concept().title" />
+    <div class="concept-card__links">
+      <a class="concept-card__page" [routerLink]="link()">
+        {{ 'concepts.openPage' | translate }}
+        <span class="visually-hidden">: {{ concept().title }}</span>
+      </a>
+      <app-report-link [subject]="('report.concept' | translate) + ': ' + concept().title" />
+    </div>
   </div>
 </article>
