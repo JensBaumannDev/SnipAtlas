@@ -1,0 +1,80 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Header
+.concept-detail__header {
+  padding-bottom: $space-lg;
+  border-bottom: 1px solid var(--line);
+}
+
+.concept-detail__summary {
+  color: var(--muted);
+}
+
+// Body
+.concept-detail__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  padding-top: $space-lg;
+}
+
+.concept-detail__explanation {
+  max-width: 70ch;
+  overflow-wrap: anywhere;
+}
+
+.concept-detail__note {
+  max-width: 70ch;
+  padding: $space-xs $space-md;
+  overflow-wrap: anywhere;
+  border-left: 2px solid var(--accent);
+}
+
+.concept-detail__note-label {
+  display: block;
+  font-weight: $font-weight-semibold;
+}
+
+// Related
+.concept-detail__related {
+  margin-top: $space-xxl;
+}
+
+.concept-detail__related-title {
+  @include card-title;
+
+  padding: 0 $space-xs;
+  margin-bottom: $space-sm;
+
+  &::after {
+    @include card-line;
+
+    display: block;
+    width: rem(48);
+    margin-top: $space-sm;
+  }
+}
+
+.concept-detail__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.concept-detail__link {
+  display: block;
+  padding: $space-md $space-xs;
+  font-weight: $font-weight-medium;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+
+  &:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+}

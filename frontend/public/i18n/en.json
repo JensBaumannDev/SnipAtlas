@@ -168,7 +168,9 @@
     "conceptCountOne": "1 explanation",
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
-    "note": "Remember"
+    "note": "Remember",
+    "moreIn": "More in {{name}}",
+    "openPage": "Open as page"
   },
   "guides": {
     "lead": "Step-by-step workflows: what to do, why, and the code to copy. From an empty folder to a finished project.",
