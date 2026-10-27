@@ -92,7 +92,7 @@
     right: 0;
     flex-direction: row;
     width: auto;
-    height: $bottom-nav-height;
+    height: var(--bottom-nav-height);
     padding-block: 0;
     border-top: 1px solid var(--line);
     border-right: 0;
@@ -134,6 +134,17 @@
     &[aria-current='page'] {
       background: none;
     }
+  }
+}
+
+@include tiny {
+  .rail__link {
+    padding-inline: $space-xs;
+  }
+
+  .rail__label {
+    max-width: 100%;
+    hyphens: auto;
   }
 }
 

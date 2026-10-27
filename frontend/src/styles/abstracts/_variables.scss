@@ -48,6 +48,7 @@ $radius-card: rem(28);
 $opacity-disabled: 0.5;
 
 // Breakpoints
+$bp-tiny: 369px;
 $bp-small: 480px;
 $bp-mobile: 820px;
 $bp-wide: 1600px;
@@ -61,6 +62,7 @@ $layout-max-width: rem(1440);
 $home-section-width: rem(960);
 $glow-height: rem(560);
 $bottom-nav-height: rem(64);
+$bottom-nav-height-tiny: rem(80);
 
 // Controls
 $control-height: rem(44);
