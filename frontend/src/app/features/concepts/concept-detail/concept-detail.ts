@@ -3,7 +3,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ConceptApi } from '../../../core/concept-api';
-import { TopicApi } from '../../../core/topic-api';
+import { findSubtopic, injectTopic } from '../../../core/topic-resource';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { TermText } from '../../../shared/term-text/term-text';
@@ -17,7 +17,6 @@ import { TopicHeader } from '../../../shared/topic-header/topic-header';
 })
 export class ConceptDetail {
   private readonly conceptApi = inject(ConceptApi);
-  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input.required<string>();
   readonly subtopic = input.required<string>();
@@ -27,10 +26,6 @@ export class ConceptDetail {
     params: () => this.slug(),
     stream: ({ params }) => this.conceptApi.getBySlug(params),
   });
-  private readonly topicResource = rxResource({
-    params: () => this.topic(),
-    stream: ({ params }) => this.topicApi.getBySlug(params),
-  });
   private readonly topicConcepts = rxResource({
     params: () => this.topic(),
     stream: ({ params }) => this.conceptApi.getByTopic(params),
@@ -38,10 +33,10 @@ export class ConceptDetail {
   });
 
   protected readonly concept = this.conceptResource.value;
-  protected readonly currentTopic = this.topicResource.value;
+  protected readonly currentTopic = injectTopic(this.topic);
 
   protected readonly currentSubtopic = computed(() =>
-    this.currentTopic()?.subtopics.find((subtopic) => subtopic.slug === this.subtopic()),
+    findSubtopic(this.currentTopic(), this.subtopic()),
   );
 
   protected readonly related = computed(() =>

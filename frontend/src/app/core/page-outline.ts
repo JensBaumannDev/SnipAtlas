@@ -1,4 +1,4 @@
-import { Service, signal } from '@angular/core';
+import { DestroyRef, Service, effect, inject, signal } from '@angular/core';
 
 export interface OutlineItem {
   id: string;
@@ -16,4 +16,10 @@ export class PageOutline {
   clear(): void {
     this.items.set([]);
   }
+}
+
+export function syncOutline(items: () => readonly OutlineItem[]): void {
+  const outline = inject(PageOutline);
+  effect(() => outline.set(items()));
+  inject(DestroyRef).onDestroy(() => outline.clear());
 }

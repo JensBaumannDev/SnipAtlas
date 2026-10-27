@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, effect, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -7,7 +7,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { GlossaryApi } from '../../core/glossary-api';
 import { GlossaryTerm } from '../../core/glossary-term';
 import { bookAIcon, searchIcon } from '../../core/icons';
-import { PageOutline } from '../../core/page-outline';
+import { syncOutline } from '../../core/page-outline';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { ReportLink } from '../../shared/report-link/report-link';
 
@@ -68,13 +68,9 @@ export class Glossary {
   });
 
   constructor() {
-    const outline = inject(PageOutline);
-    effect(() =>
-      outline.set(
-        this.groups().map((group) => ({ id: this.letterId(group.letter), label: group.letter })),
-      ),
+    syncOutline(() =>
+      this.groups().map((group) => ({ id: this.letterId(group.letter), label: group.letter })),
     );
-    inject(DestroyRef).onDestroy(() => outline.clear());
   }
 
   protected letterId(letter: string): string {

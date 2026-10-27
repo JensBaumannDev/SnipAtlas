@@ -28,12 +28,12 @@
           </a>
         </h2>
       }
-      @for (concept of section.concepts; track concept.slug) {
+      @for (concept of section.items; track concept.slug) {
         <app-concept-card
           [concept]="concept"
           [level]="subtopic ? 2 : 3"
-          [expanded]="isExpanded(concept.slug)"
-          (expandedChange)="setExpanded(concept.slug, $event)"
+          [expanded]="expanded.has(concept.slug)"
+          (expandedChange)="expanded.set(concept.slug, $event)"
         />
       }
     </section>

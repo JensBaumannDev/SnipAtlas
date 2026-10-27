@@ -1,13 +1,13 @@
-import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
-import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { Component, computed, inject, input } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../core/blueprint-api';
 import { BlueprintProgress } from '../../core/blueprint-progress';
 import { chevronRightIcon, routeIcon } from '../../core/icons';
-import { PageOutline } from '../../core/page-outline';
-import { TopicApi } from '../../core/topic-api';
+import { syncOutline } from '../../core/page-outline';
+import { injectTopic } from '../../core/topic-resource';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { ProgressBar } from '../../shared/progress-bar/progress-bar';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
@@ -21,7 +21,6 @@ import { TopicHeader } from '../../shared/topic-header/topic-header';
 export class Guides {
   private readonly blueprintApi = inject(BlueprintApi);
   protected readonly progress = inject(BlueprintProgress);
-  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input<string>();
 
@@ -33,29 +32,20 @@ export class Guides {
 
   protected readonly blueprints = toSignal(this.blueprintApi.getAll(), { initialValue: [] });
 
-  private readonly topicResource = rxResource({
-    params: () => this.topic(),
-    stream: ({ params }) => this.topicApi.getBySlug(params),
-  });
-
-  protected readonly currentTopic = this.topicResource.value;
+  protected readonly currentTopic = injectTopic(this.topic);
 
   protected readonly topicBlueprints = computed(() =>
     this.blueprints().filter((blueprint) => blueprint.topic === this.topic()),
   );
 
   constructor() {
-    const outline = inject(PageOutline);
-    effect(() =>
-      outline.set(
-        this.currentTopic()
-          ? this.topicBlueprints().map((blueprint) => ({
-              id: blueprint.slug,
-              label: blueprint.title,
-            }))
-          : [],
-      ),
+    syncOutline(() =>
+      this.currentTopic()
+        ? this.topicBlueprints().map((blueprint) => ({
+            id: blueprint.slug,
+            label: blueprint.title,
+          }))
+        : [],
     );
-    inject(DestroyRef).onDestroy(() => outline.clear());
   }
 }

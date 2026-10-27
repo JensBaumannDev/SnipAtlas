@@ -1,23 +1,17 @@
-import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Entry } from '../../core/entry';
 import { EntryApi } from '../../core/entry-api';
+import { ExpandedSet } from '../../core/expanded-set';
 import { terminalIcon } from '../../core/icons';
-import { OutlineItem, PageOutline } from '../../core/page-outline';
+import { syncOutline } from '../../core/page-outline';
 import { Preferences } from '../../core/preferences';
-import { Subtopic } from '../../core/topic';
-import { TopicApi } from '../../core/topic-api';
+import { findSubtopic, groupBySubtopic, injectTopic } from '../../core/topic-resource';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { TopicIndex } from '../../shared/topic-index/topic-index';
 import { EntryCard } from './entry-card/entry-card';
-
-interface EntrySection {
-  subtopic: Subtopic;
-  entries: Entry[];
-}
 
 @Component({
   imports: [AreaIntro, EntryCard, RouterLink, TopicHeader, TopicIndex, TranslatePipe],
@@ -27,15 +21,13 @@ interface EntrySection {
 })
 export class Commands {
   private readonly entryApi = inject(EntryApi);
-  private readonly outline = inject(PageOutline);
-  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input<string>();
   readonly subtopic = input<string>();
 
   protected readonly os = inject(Preferences).os;
-
   protected readonly icon = terminalIcon;
+  protected readonly expanded = new ExpandedSet();
   protected readonly summary = toSignal(this.entryApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });
@@ -45,83 +37,37 @@ export class Commands {
     stream: ({ params }) => this.entryApi.getByTopic(params),
     defaultValue: [],
   });
-  private readonly expandedSlugs = signal<ReadonlySet<string>>(new Set());
 
-  private readonly topicResource = rxResource({
-    params: () => this.topic(),
-    stream: ({ params }) => this.topicApi.getBySlug(params),
-  });
-
-  protected readonly currentTopic = this.topicResource.value;
-
+  protected readonly currentTopic = injectTopic(this.topic);
   protected readonly currentSubtopic = computed(() =>
-    this.currentTopic()?.subtopics.find((subtopic) => subtopic.slug === this.subtopic()),
+    findSubtopic(this.currentTopic(), this.subtopic()),
   );
 
-  protected readonly sections = computed<EntrySection[]>(() => {
-    const topic = this.currentTopic();
-    if (!topic) {
-      return [];
-    }
+  protected readonly sections = computed(() => {
     const current = this.currentSubtopic();
-    const subtopics = current ? [current] : topic.subtopics;
-    return subtopics
-      .map((subtopic) => ({
-        subtopic,
-        entries: this.entries.value().filter((entry) => entry.subtopic === subtopic.slug),
-      }))
-      .filter((section) => section.entries.length);
+    const subtopics = current ? [current] : (this.currentTopic()?.subtopics ?? []);
+    return groupBySubtopic(subtopics, this.entries.value());
   });
 
   protected readonly visibleEntries = computed(() =>
-    this.sections().flatMap((section) => section.entries),
+    this.sections().flatMap((section) => section.items),
   );
+  private readonly visibleSlugs = computed(() => this.visibleEntries().map((entry) => entry.slug));
+  protected readonly allExpanded = computed(() => this.expanded.hasAll(this.visibleSlugs()));
 
   protected readonly hasOsVariants = computed(() =>
     this.visibleEntries().some((entry) => typeof entry.code !== 'string'),
   );
 
-  protected readonly allExpanded = computed(() => {
-    const entries = this.visibleEntries();
-    const expanded = this.expandedSlugs();
-    return entries.length > 0 && entries.every((entry) => expanded.has(entry.slug));
-  });
-
-  private readonly outlineItems = computed<OutlineItem[]>(() =>
-    this.currentSubtopic()
-      ? this.visibleEntries().map((entry) => ({ id: entry.slug, label: entry.title }))
-      : this.sections().map(({ subtopic }) => ({ id: subtopic.slug, label: subtopic.name })),
-  );
-
   constructor() {
-    effect(() => this.outline.set(this.outlineItems()));
-    inject(DestroyRef).onDestroy(() => this.outline.clear());
-  }
-
-  protected isExpanded(slug: string): boolean {
-    return this.expandedSlugs().has(slug);
-  }
-
-  protected setExpanded(slug: string, expanded: boolean): void {
-    this.updateExpanded([slug], expanded);
+    syncOutline(() =>
+      this.currentSubtopic()
+        ? this.visibleEntries().map((entry) => ({ id: entry.slug, label: entry.title }))
+        : this.sections().map(({ subtopic }) => ({ id: subtopic.slug, label: subtopic.name })),
+    );
   }
 
   protected toggleAll(): void {
-    const slugs = this.visibleEntries().map((entry) => entry.slug);
-    this.updateExpanded(slugs, !this.allExpanded());
-  }
-
-  private updateExpanded(slugs: string[], expanded: boolean): void {
-    this.expandedSlugs.update((current) => {
-      const next = new Set(current);
-      for (const slug of slugs) {
-        if (expanded) {
-          next.add(slug);
-        } else {
-          next.delete(slug);
-        }
-      }
-      return next;
-    });
+    this.expanded.setAll(this.visibleSlugs(), !this.allExpanded());
   }
 }
