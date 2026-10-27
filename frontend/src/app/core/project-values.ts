@@ -24,7 +24,7 @@ const STORAGE_KEY = 'snipatlas-project';
 const PLACEHOLDER = /\{\{(\w+)\}\}/g;
 const MARKER = /__ph_(\w+?)__/g;
 
-export function isProjectKey(value: string): value is ProjectKey {
+function isProjectKey(value: string): value is ProjectKey {
   return PROJECT_KEYS.some((key) => key === value);
 }
 

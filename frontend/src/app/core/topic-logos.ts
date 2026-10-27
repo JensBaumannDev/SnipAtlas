@@ -16,7 +16,7 @@ const BRAND_LOGOS: Readonly<Partial<Record<string, string>>> = {
   typescript: 'typescript',
 };
 
-export const TOPIC_ICONS: Readonly<Partial<Record<string, LucideIconData>>> = {
+const TOPIC_ICONS: Readonly<Partial<Record<string, LucideIconData>>> = {
   'django-rest-framework': arrowRightLeftIcon,
   terminal: terminalIcon,
 };
