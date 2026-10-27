@@ -1,4 +1,5 @@
-import { DOCUMENT, Service, effect, inject, signal } from '@angular/core';
+import { Service } from '@angular/core';
+import { storedJson } from './browser-storage';
 
 export type ProjectKey = 'project' | 'githubUser' | 'repo' | 'domain' | 'serverUser' | 'serverIp';
 
@@ -32,7 +33,9 @@ export function placeholderKeys(code: string): ProjectKey[] {
 }
 
 export function markPlaceholders(code: string): string {
-  return code.replace(PLACEHOLDER, (match, key: string) => (isProjectKey(key) ? `__ph_${key}__` : match));
+  return code.replace(PLACEHOLDER, (match, key: string) =>
+    isProjectKey(key) ? `__ph_${key}__` : match,
+  );
 }
 
 export function splitMarkers(text: string): PlaceholderPart[] {
@@ -65,43 +68,24 @@ export function fillPlaceholders(
   );
 }
 
+function toProjectValues(value: unknown): ProjectValueMap {
+  if (!value || typeof value !== 'object') {
+    return {};
+  }
+  const entries: [string, unknown][] = Object.entries(value);
+  return Object.fromEntries(
+    entries.filter(
+      (entry): entry is [ProjectKey, string] =>
+        isProjectKey(entry[0]) && typeof entry[1] === 'string',
+    ),
+  );
+}
+
 @Service()
 export class ProjectValues {
-  private readonly window = inject(DOCUMENT).defaultView;
-
-  readonly values = signal<ProjectValueMap>(this.read());
-
-  constructor() {
-    effect(() => this.write(this.values()));
-  }
+  readonly values = storedJson(STORAGE_KEY, toProjectValues);
 
   set(key: ProjectKey, value: string): void {
     this.values.update((values) => ({ ...values, [key]: value }));
-  }
-
-  private read(): ProjectValueMap {
-    try {
-      const parsed: unknown = JSON.parse(this.window?.localStorage.getItem(STORAGE_KEY) ?? '{}');
-      if (!parsed || typeof parsed !== 'object') {
-        return {};
-      }
-      const values: ProjectValueMap = {};
-      for (const [key, value] of Object.entries(parsed)) {
-        if (isProjectKey(key) && typeof value === 'string') {
-          values[key] = value;
-        }
-      }
-      return values;
-    } catch {
-      return {};
-    }
-  }
-
-  private write(values: ProjectValueMap): void {
-    try {
-      this.window?.localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
-    } catch {
-      return;
-    }
   }
 }
