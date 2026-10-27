@@ -15,7 +15,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon, LucideIconData } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { RequestKind } from '../../core/contact-request';
+import { ContactRequest, RequestKind } from '../../core/contact-request';
 import { bugIcon, circleCheckIcon, filePlusIcon, lightbulbIcon } from '../../core/icons';
 import { RequestApi } from '../../core/request-api';
 import { describeEnvironment } from '../../core/user-environment';
@@ -117,7 +117,10 @@ export class Request {
       this.focusFirstError();
       return;
     }
+    this.send(request);
+  }
 
+  private send(request: ContactRequest): void {
     this.status.set('sending');
     this.api
       .send(request)

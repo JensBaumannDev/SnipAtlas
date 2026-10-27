@@ -17,12 +17,14 @@ import {
   Router,
   RouterLink,
   RouterLinkActive,
+  UrlSegment,
 } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { AreaContent } from '../../core/area-content';
 import { ContentArea, filterGroups, isContentArea } from '../../core/content-index';
+import { ExpandedSet } from '../../core/expanded-set';
 import { chevronDownIcon, chevronRightIcon } from '../../core/icons';
 import { TopicApi } from '../../core/topic-api';
 import { Collection } from '../../shared/collection/collection';
@@ -35,6 +37,21 @@ const AREA_LABELS: Record<ContentArea, string> = {
   blueprints: 'nav.blueprints',
   debugging: 'nav.debugging',
 };
+
+function deepestData<T>(
+  root: ActivatedRouteSnapshot,
+  key: string,
+  guard: (value: unknown) => value is T,
+): T | undefined {
+  let found: T | undefined;
+  for (let route: ActivatedRouteSnapshot | null = root; route; route = route.firstChild) {
+    const value: unknown = route.data[key];
+    if (guard(value)) {
+      found = value;
+    }
+  }
+  return found;
+}
 
 @Component({
   imports: [Collection, RouterLink, RouterLinkActive, TopicLogo, TranslatePipe, LucideDynamicIcon],
@@ -49,6 +66,8 @@ const AREA_LABELS: Record<ContentArea, string> = {
 })
 export class Sidebar {
   private readonly router = inject(Router);
+  private readonly window = inject(DOCUMENT).defaultView;
+  private readonly destroyRef = inject(DestroyRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
 
@@ -58,7 +77,7 @@ export class Sidebar {
   protected readonly mode = signal<SidebarMode | undefined>(undefined);
   protected readonly basePath = signal('/');
   protected readonly expandedSlug = signal<string | undefined>(undefined);
-  protected readonly openGroups = signal<ReadonlySet<string>>(new Set());
+  protected readonly openGroups = new ExpandedSet();
   protected readonly menuOpen = signal(false);
   protected readonly hasMore = signal(false);
 
@@ -93,18 +112,7 @@ export class Sidebar {
         takeUntilDestroyed(),
       )
       .subscribe(() => this.onNavigation());
-
-    const window = inject(DOCUMENT).defaultView;
-    const destroyRef = inject(DestroyRef);
-    afterNextRender(() => {
-      if (!window?.ResizeObserver) {
-        return;
-      }
-      const observer = new window.ResizeObserver(() => this.updateMore());
-      observer.observe(this.host);
-      observer.observe(this.panel().nativeElement);
-      destroyRef.onDestroy(() => observer.disconnect());
-    });
+    this.observeSize();
   }
 
   protected toggleMenu(): void {
@@ -115,67 +123,49 @@ export class Sidebar {
     this.expandedSlug.update((expanded) => (expanded === slug ? undefined : slug));
   }
 
-  protected toggleGroup(slug: string): void {
-    this.openGroups.update((open) => {
-      const next = new Set(open);
-      if (next.has(slug)) {
-        next.delete(slug);
-      } else {
-        next.add(slug);
-      }
-      return next;
-    });
-  }
-
   protected updateMore(): void {
     const { scrollHeight, scrollTop, clientHeight } = this.host;
     this.hasMore.set(scrollHeight - scrollTop - clientHeight > 1);
   }
 
+  private observeSize(): void {
+    afterNextRender(() => {
+      if (!this.window?.ResizeObserver) {
+        return;
+      }
+      const observer = new this.window.ResizeObserver(() => this.updateMore());
+      observer.observe(this.host);
+      observer.observe(this.panel().nativeElement);
+      this.destroyRef.onDestroy(() => observer.disconnect());
+    });
+  }
+
   private onNavigation(): void {
-    const segments =
-      this.router.parseUrl(this.router.url).root.children[PRIMARY_OUTLET]?.segments ?? [];
     const root = this.router.routerState.snapshot.root;
-    const mode = this.modeFromRoute(root);
+    const segments = this.urlSegments();
+    const mode = deepestData(root, 'sidebar', isSidebarMode);
     const slug = mode ? segments[1]?.path : undefined;
-    const entering = !this.mode();
-
-    const group = this.groups().find((item) => item.topics.some((topic) => topic.slug === slug));
-
+    this.openActiveGroup(slug, !this.mode());
     this.mode.set(mode);
-    this.area.set(this.areaFromRoute(root));
+    this.area.set(deepestData(root, 'area', isContentArea));
     this.basePath.set(`/${segments[0]?.path ?? ''}`);
     this.activeSlug.set(slug);
     this.menuOpen.set(false);
     if (slug) {
       this.expandedSlug.set(slug);
     }
+  }
+
+  private urlSegments(): UrlSegment[] {
+    return this.router.parseUrl(this.router.url).root.children[PRIMARY_OUTLET]?.segments ?? [];
+  }
+
+  private openActiveGroup(slug: string | undefined, entering: boolean): void {
+    const group = this.groups().find((item) => item.topics.some((topic) => topic.slug === slug));
     if (entering) {
-      this.openGroups.set(new Set(group ? [group.slug] : this.groups().map((item) => item.slug)));
+      this.openGroups.replace(group ? [group.slug] : this.groups().map((item) => item.slug));
     } else if (group) {
-      this.openGroups.update((open) => new Set(open).add(group.slug));
+      this.openGroups.set(group.slug, true);
     }
-  }
-
-  private modeFromRoute(root: ActivatedRouteSnapshot): SidebarMode | undefined {
-    let mode: SidebarMode | undefined;
-    for (let route: ActivatedRouteSnapshot | null = root; route; route = route.firstChild) {
-      const value: unknown = route.data['sidebar'];
-      if (isSidebarMode(value)) {
-        mode = value;
-      }
-    }
-    return mode;
-  }
-
-  private areaFromRoute(root: ActivatedRouteSnapshot): ContentArea | undefined {
-    let area: ContentArea | undefined;
-    for (let route: ActivatedRouteSnapshot | null = root; route; route = route.firstChild) {
-      const value: unknown = route.data['area'];
-      if (isContentArea(value)) {
-        area = value;
-      }
-    }
-    return area;
   }
 }

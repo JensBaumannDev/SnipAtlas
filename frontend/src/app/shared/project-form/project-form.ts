@@ -2,7 +2,12 @@ import { Component, effect, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
-import { PROJECT_KEYS, ProjectKey, ProjectValues, isProjectKey } from '../../core/project-values';
+import {
+  PROJECT_KEYS,
+  ProjectKey,
+  ProjectValueMap,
+  ProjectValues,
+} from '../../core/project-values';
 
 let nextId = 0;
 
@@ -25,23 +30,26 @@ export class ProjectForm {
   );
 
   constructor() {
-    effect(() => {
-      const values = this.project.values();
-      for (const key of PROJECT_KEYS) {
-        const control = this.form.controls[key];
-        const value = values[key] ?? '';
-        if (control.value !== value) {
-          control.setValue(value, { emitEvent: false });
-        }
-      }
-    });
+    effect(() => this.showValues(this.project.values()));
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((values) => this.save(values));
+  }
 
-    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((values) => {
-      for (const [key, value] of Object.entries(values)) {
-        if (isProjectKey(key) && typeof value === 'string' && value !== this.project.values()[key]) {
-          this.project.set(key, value);
-        }
+  private showValues(values: ProjectValueMap): void {
+    for (const key of PROJECT_KEYS) {
+      const control = this.form.controls[key];
+      const value = values[key] ?? '';
+      if (control.value !== value) {
+        control.setValue(value, { emitEvent: false });
       }
-    });
+    }
+  }
+
+  private save(values: ProjectValueMap): void {
+    for (const key of PROJECT_KEYS) {
+      const value = values[key];
+      if (value !== undefined && value !== this.project.values()[key]) {
+        this.project.set(key, value);
+      }
+    }
   }
 }

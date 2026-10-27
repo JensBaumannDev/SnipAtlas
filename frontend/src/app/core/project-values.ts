@@ -1,5 +1,6 @@
 import { Service } from '@angular/core';
 import { storedJson } from './browser-storage';
+import { pushText } from './text-parts';
 
 export type ProjectKey = 'project' | 'githubUser' | 'repo' | 'domain' | 'serverUser' | 'serverIp';
 
@@ -46,15 +47,11 @@ export function splitMarkers(text: string): PlaceholderPart[] {
     if (!isProjectKey(key)) {
       continue;
     }
-    if (match.index > last) {
-      parts.push({ text: text.slice(last, match.index) });
-    }
+    pushText(parts, text.slice(last, match.index));
     parts.push({ text: match[0], key });
     last = match.index + match[0].length;
   }
-  if (last < text.length) {
-    parts.push({ text: text.slice(last) });
-  }
+  pushText(parts, text.slice(last));
   return parts;
 }
 

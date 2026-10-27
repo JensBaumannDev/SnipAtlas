@@ -50,6 +50,16 @@ export class SearchBox {
     this.expanded() && this.active() >= 0 ? this.optionId(this.active()) : null,
   );
 
+  private readonly keyActions: Partial<Record<string, () => boolean>> = {
+    ArrowDown: () => {
+      this.open.set(true);
+      return this.moveActive(1);
+    },
+    ArrowUp: () => this.moveActive(-1),
+    Enter: () => this.goToActive(),
+    Escape: () => this.closeIfOpen(),
+  };
+
   focus(): void {
     this.input().nativeElement.focus();
   }
@@ -82,31 +92,8 @@ export class SearchBox {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    const count = this.results().length;
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault();
-        this.open.set(true);
-        this.active.update((index) => (count ? (index + 1) % count : -1));
-        break;
-      case 'ArrowUp':
-        event.preventDefault();
-        this.active.update((index) => (count ? (index - 1 + count) % count : -1));
-        break;
-      case 'Enter': {
-        const result = this.results()[Math.max(this.active(), 0)];
-        if (this.expanded() && result) {
-          event.preventDefault();
-          this.go(result);
-        }
-        break;
-      }
-      case 'Escape':
-        if (this.expanded()) {
-          event.preventDefault();
-          this.close();
-        }
-        break;
+    if (this.keyActions[event.key]?.()) {
+      event.preventDefault();
     }
   }
 
@@ -127,5 +114,28 @@ export class SearchBox {
   protected close(): void {
     this.open.set(false);
     this.active.set(-1);
+  }
+
+  private moveActive(step: 1 | -1): boolean {
+    const count = this.results().length;
+    this.active.update((index) => (count ? (index + step + count) % count : -1));
+    return true;
+  }
+
+  private goToActive(): boolean {
+    const result = this.results()[Math.max(this.active(), 0)];
+    if (!this.expanded() || !result) {
+      return false;
+    }
+    this.go(result);
+    return true;
+  }
+
+  private closeIfOpen(): boolean {
+    if (!this.expanded()) {
+      return false;
+    }
+    this.close();
+    return true;
   }
 }

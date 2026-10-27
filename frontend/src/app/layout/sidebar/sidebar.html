@@ -31,7 +31,7 @@
   @let showSubtopics = mode() === 'subtopics';
 
   @for (group of visibleGroups(); track group.slug) {
-    @let groupOpen = openGroups().has(group.slug);
+    @let groupOpen = openGroups.has(group.slug);
     <section class="sidebar__group" [attr.aria-labelledby]="'sidebar-group-' + group.slug">
       <h2 class="sidebar__heading" [id]="'sidebar-group-' + group.slug">
         <button
@@ -39,7 +39,7 @@
           type="button"
           [attr.aria-expanded]="groupOpen"
           [attr.aria-controls]="'sidebar-group-list-' + group.slug"
-          (click)="toggleGroup(group.slug)"
+          (click)="openGroups.toggle(group.slug)"
         >
           {{ group.name }}
           <svg [lucideIcon]="chevronRightIcon" class="icon sidebar__chevron"></svg>
