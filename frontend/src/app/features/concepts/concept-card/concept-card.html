@@ -1,35 +1,15 @@
-<article class="concept-card" [id]="concept().slug" [class.concept-card--open]="expanded()">
-  <div class="concept-card__heading" role="heading" [attr.aria-level]="level()">
-    <button
-      class="concept-card__toggle"
-      type="button"
-      [attr.aria-expanded]="expanded()"
-      [attr.aria-controls]="bodyId()"
-      (click)="toggle()"
-    >
-      <span class="concept-card__text">
-        <span class="concept-card__title">{{ concept().title }}</span>
-        <span class="concept-card__summary">{{ concept().summary }}</span>
-      </span>
-      <svg [lucideIcon]="chevronDownIcon" class="icon concept-card__chevron"></svg>
-    </button>
-  </div>
+<app-disclosure [anchor]="concept().slug" [level]="level()" [(expanded)]="expanded">
+  <span disclosure-title>{{ concept().title }}</span>
+  <span disclosure-summary>{{ concept().summary }}</span>
 
-  <div class="concept-card__body" [id]="bodyId()" [hidden]="!expanded()">
-    <app-term-text class="concept-card__explanation" [text]="concept().explanation" />
-    <app-code-block [code]="concept().code" [language]="concept().language" />
-    @if (concept().note; as note) {
-      <p class="concept-card__note">
-        <strong class="concept-card__note-label">{{ 'concepts.note' | translate }}</strong>
-        {{ note }}
-      </p>
-    }
-    <div class="concept-card__links">
-      <a class="concept-card__page" [routerLink]="link()">
-        {{ 'concepts.openPage' | translate }}
-        <span class="visually-hidden">: {{ concept().title }}</span>
-      </a>
-      <app-report-link [subject]="('report.concept' | translate) + ': ' + concept().title" />
-    </div>
-  </div>
-</article>
+  <app-term-text class="concept-card__explanation" [text]="concept().explanation" />
+  <app-code-block [code]="concept().code" [language]="concept().language" />
+  @if (concept().note; as note) {
+    <app-note [label]="'concepts.note' | translate" [text]="note" />
+  }
+  <app-item-links
+    [link]="link()"
+    [title]="concept().title"
+    [report]="('report.concept' | translate) + ': ' + concept().title"
+  />
+</app-disclosure>

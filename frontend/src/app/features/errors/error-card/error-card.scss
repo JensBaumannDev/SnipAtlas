@@ -1,97 +1,17 @@
 @use 'abstracts' as *;
 
 :host {
+  --disclosure-gap: #{$space-lg};
+
   display: block;
 }
 
-// Card
-.error-card {
-  position: relative;
-  border-bottom: 1px solid var(--line);
-
-  &--open::before {
-    position: absolute;
-    top: $space-md;
-    bottom: $space-lg;
-    left: -$space-sm;
-    width: 2px;
-    content: '';
-    background: var(--accent);
-  }
-
-  &--open .error-card__message {
-    color: var(--accent);
-  }
-}
-
-// Toggle
-.error-card__toggle {
-  display: flex;
-  gap: $space-md;
-  align-items: center;
-  width: 100%;
-  min-height: $control-height;
-  padding: $space-md $space-xs;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  background: none;
-  border: 0;
-
-  &:hover .error-card__message {
-    color: var(--accent);
-  }
-
-  &:focus-visible {
-    outline-offset: -2px;
-  }
-
-  &[aria-expanded='true'] .error-card__chevron {
-    color: var(--accent);
-    transform: rotate(180deg);
-  }
-}
-
-.error-card__text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: $space-sm;
-  min-width: 0;
-}
-
+// Head
 .error-card__message {
-  font-weight: $font-weight-medium;
   line-height: $line-height-base;
-  overflow-wrap: anywhere;
-  transition: color var(--duration-fast);
-}
-
-.error-card__meaning {
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
-
-.error-card__chevron {
-  flex: none;
-  width: rem(20);
-  height: rem(20);
-  color: var(--muted);
-  transition: transform var(--duration);
 }
 
 // Body
-.error-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: $space-lg;
-  padding: 0 $space-xs $space-lg;
-
-  &[hidden] {
-    display: none;
-  }
-}
-
 .error-card__section {
   display: flex;
   flex-direction: column;

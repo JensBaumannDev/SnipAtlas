@@ -1,16 +1,18 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { conceptLink } from '../../../core/concept';
 import { ConceptApi } from '../../../core/concept-api';
 import { findSubtopic, injectTopic } from '../../../core/topic-resource';
 import { CodeBlock } from '../../../shared/code-block/code-block';
+import { Note } from '../../../shared/note/note';
+import { RelatedList } from '../../../shared/related-list/related-list';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { TermText } from '../../../shared/term-text/term-text';
 import { TopicHeader } from '../../../shared/topic-header/topic-header';
 
 @Component({
-  imports: [CodeBlock, ReportLink, RouterLink, TermText, TopicHeader, TranslatePipe],
+  imports: [CodeBlock, Note, RelatedList, ReportLink, TermText, TopicHeader, TranslatePipe],
   selector: 'app-concept-detail',
   styleUrl: './concept-detail.scss',
   templateUrl: './concept-detail.html',
@@ -42,6 +44,7 @@ export class ConceptDetail {
   protected readonly related = computed(() =>
     this.topicConcepts
       .value()
-      .filter((concept) => concept.subtopic === this.subtopic() && concept.slug !== this.slug()),
+      .filter((concept) => concept.subtopic === this.subtopic() && concept.slug !== this.slug())
+      .map((concept) => ({ slug: concept.slug, title: concept.title, link: conceptLink(concept) })),
   );
 }

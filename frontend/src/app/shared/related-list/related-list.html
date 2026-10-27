@@ -1,0 +1,12 @@
+<section class="related-list" aria-labelledby="related-title">
+  <h2 class="related-list__title" id="related-title">
+    {{ 'item.moreIn' | translate: { name: name() } }}
+  </h2>
+  <ul class="related-list__list" role="list">
+    @for (item of items(); track item.slug) {
+      <li>
+        <a class="related-list__link" [routerLink]="item.link">{{ item.title }}</a>
+      </li>
+    }
+  </ul>
+</section>

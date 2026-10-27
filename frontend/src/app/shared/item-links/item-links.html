@@ -1,0 +1,5 @@
+<a class="item-links__page" [routerLink]="link()">
+  {{ 'item.openPage' | translate }}
+  <span class="visually-hidden">: {{ title() }}</span>
+</a>
+<app-report-link [subject]="report()" />

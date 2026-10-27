@@ -16,29 +16,13 @@
       <app-term-text class="concept-detail__explanation" [text]="concept.explanation" />
       <app-code-block [code]="concept.code" [language]="concept.language" />
       @if (concept.note; as note) {
-        <p class="concept-detail__note">
-          <strong class="concept-detail__note-label">{{ 'concepts.note' | translate }}</strong>
-          {{ note }}
-        </p>
+        <app-note [label]="'concepts.note' | translate" [text]="note" />
       }
       <app-report-link [subject]="('report.concept' | translate) + ': ' + concept.title" />
     </div>
 
     @if (related().length) {
-      <section class="concept-detail__related" aria-labelledby="concept-related">
-        <h2 class="concept-detail__related-title" id="concept-related">
-          {{ 'concepts.moreIn' | translate: { name: subtopic?.name ?? topic.name } }}
-        </h2>
-        <ul class="concept-detail__list" role="list">
-          @for (item of related(); track item.slug) {
-            <li>
-              <a class="concept-detail__link" [routerLink]="['/grundlagen', item.topic, item.subtopic, item.slug]">
-                {{ item.title }}
-              </a>
-            </li>
-          }
-        </ul>
-      </section>
+      <app-related-list [name]="subtopic?.name ?? topic.name" [items]="related()" />
     }
   }
 }

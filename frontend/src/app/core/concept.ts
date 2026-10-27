@@ -11,3 +11,7 @@ export interface Concept {
   code: string;
   note?: string;
 }
+
+export function conceptLink({ topic, subtopic, slug }: Concept): string[] {
+  return ['/grundlagen', topic, subtopic, slug];
+}

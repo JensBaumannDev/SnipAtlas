@@ -1,0 +1,24 @@
+<article class="disclosure" [id]="anchor()" [class.disclosure--open]="expanded()">
+  <div class="disclosure__head">
+    <div class="disclosure__heading" role="heading" [attr.aria-level]="level()">
+      <button
+        class="disclosure__toggle"
+        type="button"
+        [attr.aria-expanded]="expanded()"
+        [attr.aria-controls]="bodyId()"
+        (click)="toggle()"
+      >
+        <span class="disclosure__text">
+          <span class="disclosure__title"><ng-content select="[disclosure-title]" /></span>
+          <span class="disclosure__summary"><ng-content select="[disclosure-summary]" /></span>
+        </span>
+        <svg [lucideIcon]="chevronDownIcon" class="icon disclosure__chevron"></svg>
+      </button>
+    </div>
+    <ng-content select="[disclosure-action]" />
+  </div>
+
+  <div class="disclosure__body" [id]="bodyId()" [hidden]="!expanded()">
+    <ng-content />
+  </div>
+</article>

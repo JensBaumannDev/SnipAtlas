@@ -68,6 +68,21 @@
   border-radius: 1px;
 }
 
+@mixin section-heading {
+  @include card-title;
+
+  padding: 0 $space-xs;
+  margin-bottom: $space-sm;
+
+  &::after {
+    @include card-line;
+
+    display: block;
+    width: rem(48);
+    margin-top: $space-sm;
+  }
+}
+
 // Backgrounds
 @mixin dot-grid($shape: ellipse 60% 70% at 50% 45%) {
   position: absolute;

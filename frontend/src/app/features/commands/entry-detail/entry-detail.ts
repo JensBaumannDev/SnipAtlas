@@ -1,19 +1,20 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { entryLink } from '../../../core/entry';
 import { EntryApi } from '../../../core/entry-api';
 import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
 import { findSubtopic, injectTopic } from '../../../core/topic-resource';
 import { CodeBlock } from '../../../shared/code-block/code-block';
+import { RelatedList } from '../../../shared/related-list/related-list';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { TermText } from '../../../shared/term-text/term-text';
 import { TopicHeader } from '../../../shared/topic-header/topic-header';
 import { FavoriteStar } from '../favorite-star/favorite-star';
 
 @Component({
-  imports: [CodeBlock, FavoriteStar, ReportLink, RouterLink, TermText, TopicHeader, TranslatePipe],
+  imports: [CodeBlock, FavoriteStar, RelatedList, ReportLink, TermText, TopicHeader, TranslatePipe],
   selector: 'app-entry-detail',
   styleUrl: './entry-detail.scss',
   templateUrl: './entry-detail.html',
@@ -51,6 +52,7 @@ export class EntryDetail {
   protected readonly related = computed(() =>
     this.topicEntries
       .value()
-      .filter((entry) => entry.subtopic === this.subtopic() && entry.slug !== this.slug()),
+      .filter((entry) => entry.subtopic === this.subtopic() && entry.slug !== this.slug())
+      .map((entry) => ({ slug: entry.slug, title: entry.title, link: entryLink(entry) })),
   );
 }

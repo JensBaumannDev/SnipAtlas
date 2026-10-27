@@ -4,11 +4,12 @@ import { BlueprintStep } from '../../../core/blueprint';
 import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
 import { CodeBlock } from '../../../shared/code-block/code-block';
+import { Note } from '../../../shared/note/note';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { TermText } from '../../../shared/term-text/term-text';
 
 @Component({
-  imports: [CodeBlock, ReportLink, TermText, TranslatePipe],
+  imports: [CodeBlock, Note, ReportLink, TermText, TranslatePipe],
   selector: 'app-guide-step',
   styleUrl: './guide-step.scss',
   templateUrl: './guide-step.html',

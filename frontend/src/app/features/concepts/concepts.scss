@@ -16,18 +16,9 @@
 
 // Sections
 .concepts__section-title {
-  @include card-title;
+  @include section-heading;
 
-  padding: 0 $space-xs;
-  margin: $space-xxl 0 $space-sm;
-
-  &::after {
-    @include card-line;
-
-    display: block;
-    width: rem(48);
-    margin-top: $space-sm;
-  }
+  margin-top: $space-xxl;
 }
 
 .concepts__section-link {
