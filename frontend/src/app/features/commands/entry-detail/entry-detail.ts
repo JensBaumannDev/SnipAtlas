@@ -5,7 +5,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { EntryApi } from '../../../core/entry-api';
 import { resolveOsCode } from '../../../core/os-code';
 import { Preferences } from '../../../core/preferences';
-import { TopicApi } from '../../../core/topic-api';
+import { findSubtopic, injectTopic } from '../../../core/topic-resource';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { TermText } from '../../../shared/term-text/term-text';
@@ -20,7 +20,6 @@ import { FavoriteStar } from '../favorite-star/favorite-star';
 })
 export class EntryDetail {
   private readonly entryApi = inject(EntryApi);
-  private readonly topicApi = inject(TopicApi);
   private readonly os = inject(Preferences).os;
 
   readonly topic = input.required<string>();
@@ -31,10 +30,6 @@ export class EntryDetail {
     params: () => this.slug(),
     stream: ({ params }) => this.entryApi.getBySlug(params),
   });
-  private readonly topicResource = rxResource({
-    params: () => this.topic(),
-    stream: ({ params }) => this.topicApi.getBySlug(params),
-  });
   private readonly topicEntries = rxResource({
     params: () => this.topic(),
     stream: ({ params }) => this.entryApi.getByTopic(params),
@@ -42,10 +37,10 @@ export class EntryDetail {
   });
 
   protected readonly entry = this.entryResource.value;
-  protected readonly currentTopic = this.topicResource.value;
+  protected readonly currentTopic = injectTopic(this.topic);
 
   protected readonly currentSubtopic = computed(() =>
-    this.currentTopic()?.subtopics.find((subtopic) => subtopic.slug === this.subtopic()),
+    findSubtopic(this.currentTopic(), this.subtopic()),
   );
 
   protected readonly resolved = computed(() => {

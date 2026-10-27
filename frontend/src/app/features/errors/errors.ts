@@ -1,11 +1,11 @@
-import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DebugGuideApi } from '../../core/debug-guide-api';
 import { ErrorApi } from '../../core/error-api';
 import { triangleAlertIcon } from '../../core/icons';
-import { OutlineItem, PageOutline } from '../../core/page-outline';
-import { TopicApi } from '../../core/topic-api';
+import { syncOutline } from '../../core/page-outline';
+import { injectTopic } from '../../core/topic-resource';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { DebugGuideCard } from './debug-guide-card/debug-guide-card';
@@ -20,7 +20,6 @@ import { ErrorCard } from './error-card/error-card';
 export class Errors {
   private readonly errorApi = inject(ErrorApi);
   private readonly debugGuideApi = inject(DebugGuideApi);
-  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input<string>();
 
@@ -45,25 +44,16 @@ export class Errors {
     defaultValue: [],
   });
 
-  private readonly topicResource = rxResource({
-    params: () => this.topic(),
-    stream: ({ params }) => this.topicApi.getBySlug(params),
-  });
-
-  protected readonly currentTopic = this.topicResource.value;
-
-  private readonly outlineItems = computed<OutlineItem[]>(() =>
-    this.currentTopic()
-      ? [
-          ...this.topicGuides.value().map((guide) => ({ id: guide.slug, label: guide.title })),
-          ...this.errors.value().map((error) => ({ id: error.slug, label: error.message })),
-        ]
-      : this.generalGuides().map((guide) => ({ id: guide.slug, label: guide.title })),
-  );
+  protected readonly currentTopic = injectTopic(this.topic);
 
   constructor() {
-    const outline = inject(PageOutline);
-    effect(() => outline.set(this.outlineItems()));
-    inject(DestroyRef).onDestroy(() => outline.clear());
+    syncOutline(() =>
+      this.currentTopic()
+        ? [
+            ...this.topicGuides.value().map((guide) => ({ id: guide.slug, label: guide.title })),
+            ...this.errors.value().map((error) => ({ id: error.slug, label: error.message })),
+          ]
+        : this.generalGuides().map((guide) => ({ id: guide.slug, label: guide.title })),
+    );
   }
 }

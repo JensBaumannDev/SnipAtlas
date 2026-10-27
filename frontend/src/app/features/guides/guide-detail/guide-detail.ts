@@ -1,12 +1,12 @@
-import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/blueprint-api';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
-import { PageOutline } from '../../../core/page-outline';
+import { syncOutline } from '../../../core/page-outline';
 import { placeholderKeys } from '../../../core/project-values';
-import { TopicApi } from '../../../core/topic-api';
+import { injectTopic } from '../../../core/topic-resource';
 import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
 import { ProjectForm } from '../../../shared/project-form/project-form';
 import { GuideStep } from '../guide-step/guide-step';
@@ -20,8 +20,6 @@ import { GuideStep } from '../guide-step/guide-step';
 export class GuideDetail {
   private readonly blueprintApi = inject(BlueprintApi);
   private readonly progress = inject(BlueprintProgress);
-  private readonly outline = inject(PageOutline);
-  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input.required<string>();
   readonly slug = input.required<string>();
@@ -30,13 +28,9 @@ export class GuideDetail {
     params: () => this.slug(),
     stream: ({ params }) => this.blueprintApi.getBySlug(params),
   });
-  private readonly topicResource = rxResource({
-    params: () => this.topic(),
-    stream: ({ params }) => this.topicApi.getBySlug(params),
-  });
 
   protected readonly blueprint = this.resource.value;
-  protected readonly currentTopic = this.topicResource.value;
+  protected readonly currentTopic = injectTopic(this.topic);
 
   private readonly doneSteps = computed(() => this.progress.doneSteps(this.slug()));
 
@@ -54,12 +48,9 @@ export class GuideDetail {
   });
 
   constructor() {
-    effect(() =>
-      this.outline.set(
-        this.blueprint()?.steps.map((step) => ({ id: step.slug, label: step.title })) ?? [],
-      ),
+    syncOutline(
+      () => this.blueprint()?.steps.map((step) => ({ id: step.slug, label: step.title })) ?? [],
     );
-    inject(DestroyRef).onDestroy(() => this.outline.clear());
   }
 
   protected isDone(step: string): boolean {

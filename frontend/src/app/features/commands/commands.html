@@ -32,12 +32,12 @@
           </a>
         </h2>
       }
-      @for (entry of section.entries; track entry.slug) {
+      @for (entry of section.items; track entry.slug) {
         <app-entry-card
           [entry]="entry"
           [level]="subtopic ? 2 : 3"
-          [expanded]="isExpanded(entry.slug)"
-          (expandedChange)="setExpanded(entry.slug, $event)"
+          [expanded]="expanded.has(entry.slug)"
+          (expandedChange)="expanded.set(entry.slug, $event)"
         />
       }
     </section>

@@ -1,22 +1,16 @@
-import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Concept } from '../../core/concept';
 import { ConceptApi } from '../../core/concept-api';
+import { ExpandedSet } from '../../core/expanded-set';
 import { bookTextIcon } from '../../core/icons';
-import { OutlineItem, PageOutline } from '../../core/page-outline';
-import { Subtopic } from '../../core/topic';
-import { TopicApi } from '../../core/topic-api';
+import { syncOutline } from '../../core/page-outline';
+import { findSubtopic, groupBySubtopic, injectTopic } from '../../core/topic-resource';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { TopicIndex } from '../../shared/topic-index/topic-index';
 import { ConceptCard } from './concept-card/concept-card';
-
-interface ConceptSection {
-  subtopic: Subtopic;
-  concepts: Concept[];
-}
 
 @Component({
   imports: [AreaIntro, ConceptCard, RouterLink, TopicHeader, TopicIndex, TranslatePipe],
@@ -26,13 +20,12 @@ interface ConceptSection {
 })
 export class Concepts {
   private readonly conceptApi = inject(ConceptApi);
-  private readonly outline = inject(PageOutline);
-  private readonly topicApi = inject(TopicApi);
 
   readonly topic = input<string>();
   readonly subtopic = input<string>();
 
   protected readonly icon = bookTextIcon;
+  protected readonly expanded = new ExpandedSet();
   protected readonly summary = toSignal(this.conceptApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });
@@ -42,79 +35,35 @@ export class Concepts {
     stream: ({ params }) => this.conceptApi.getByTopic(params),
     defaultValue: [],
   });
-  private readonly expandedSlugs = signal<ReadonlySet<string>>(new Set());
 
-  private readonly topicResource = rxResource({
-    params: () => this.topic(),
-    stream: ({ params }) => this.topicApi.getBySlug(params),
-  });
-
-  protected readonly currentTopic = this.topicResource.value;
-
+  protected readonly currentTopic = injectTopic(this.topic);
   protected readonly currentSubtopic = computed(() =>
-    this.currentTopic()?.subtopics.find((subtopic) => subtopic.slug === this.subtopic()),
+    findSubtopic(this.currentTopic(), this.subtopic()),
   );
 
-  protected readonly sections = computed<ConceptSection[]>(() => {
-    const topic = this.currentTopic();
-    if (!topic) {
-      return [];
-    }
+  protected readonly sections = computed(() => {
     const current = this.currentSubtopic();
-    const subtopics = current ? [current] : topic.subtopics;
-    return subtopics
-      .map((subtopic) => ({
-        subtopic,
-        concepts: this.concepts.value().filter((concept) => concept.subtopic === subtopic.slug),
-      }))
-      .filter((section) => section.concepts.length);
+    const subtopics = current ? [current] : (this.currentTopic()?.subtopics ?? []);
+    return groupBySubtopic(subtopics, this.concepts.value());
   });
 
   protected readonly visibleConcepts = computed(() =>
-    this.sections().flatMap((section) => section.concepts),
+    this.sections().flatMap((section) => section.items),
   );
-
-  protected readonly allExpanded = computed(() => {
-    const concepts = this.visibleConcepts();
-    const expanded = this.expandedSlugs();
-    return concepts.length > 0 && concepts.every((concept) => expanded.has(concept.slug));
-  });
-
-  private readonly outlineItems = computed<OutlineItem[]>(() =>
-    this.currentSubtopic()
-      ? this.visibleConcepts().map((concept) => ({ id: concept.slug, label: concept.title }))
-      : this.sections().map(({ subtopic }) => ({ id: subtopic.slug, label: subtopic.name })),
+  private readonly visibleSlugs = computed(() =>
+    this.visibleConcepts().map((concept) => concept.slug),
   );
+  protected readonly allExpanded = computed(() => this.expanded.hasAll(this.visibleSlugs()));
 
   constructor() {
-    effect(() => this.outline.set(this.outlineItems()));
-    inject(DestroyRef).onDestroy(() => this.outline.clear());
-  }
-
-  protected isExpanded(slug: string): boolean {
-    return this.expandedSlugs().has(slug);
-  }
-
-  protected setExpanded(slug: string, expanded: boolean): void {
-    this.updateExpanded([slug], expanded);
+    syncOutline(() =>
+      this.currentSubtopic()
+        ? this.visibleConcepts().map((concept) => ({ id: concept.slug, label: concept.title }))
+        : this.sections().map(({ subtopic }) => ({ id: subtopic.slug, label: subtopic.name })),
+    );
   }
 
   protected toggleAll(): void {
-    const slugs = this.visibleConcepts().map((concept) => concept.slug);
-    this.updateExpanded(slugs, !this.allExpanded());
-  }
-
-  private updateExpanded(slugs: string[], expanded: boolean): void {
-    this.expandedSlugs.update((current) => {
-      const next = new Set(current);
-      for (const slug of slugs) {
-        if (expanded) {
-          next.add(slug);
-        } else {
-          next.delete(slug);
-        }
-      }
-      return next;
-    });
+    this.expanded.setAll(this.visibleSlugs(), !this.allExpanded());
   }
 }
