@@ -26,7 +26,7 @@
         ariaCurrentWhenActive="page"
         [attr.aria-label]="'settings.title' | translate"
       >
-        <svg lucideSettings class="icon topbar__icon"></svg>
+        <svg [lucideIcon]="settingsIcon" class="icon topbar__icon"></svg>
       </a>
 
       @if (session.user()) {

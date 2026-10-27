@@ -10,7 +10,7 @@
               <span class="topic-index__name">{{ topic.name }}</span>
               <span class="topic-index__subtopics">{{ subtopicNames(topic.subtopics) }}</span>
             </span>
-            <svg lucideChevronRight class="icon topic-index__chevron"></svg>
+            <svg [lucideIcon]="chevronRightIcon" class="icon topic-index__chevron"></svg>
           </a>
         </li>
       }

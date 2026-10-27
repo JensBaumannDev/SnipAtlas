@@ -10,9 +10,9 @@
     (click)="copy()"
   >
     @if (copied()) {
-      <svg lucideCheck class="icon code-block__icon"></svg>
+      <svg [lucideIcon]="checkIcon" class="icon code-block__icon"></svg>
     } @else {
-      <svg lucideCopy class="icon code-block__icon"></svg>
+      <svg [lucideIcon]="copyIcon" class="icon code-block__icon"></svg>
     }
     <span>{{ (copied() ? 'code.copied' : 'code.copy') | translate }}</span>
   </button>

@@ -2,10 +2,11 @@ import { Component, DestroyRef, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { LucideBookA, LucideSearch } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { GlossaryApi } from '../../core/glossary-api';
 import { GlossaryTerm } from '../../core/glossary-term';
+import { bookAIcon, searchIcon } from '../../core/icons';
 import { PageOutline } from '../../core/page-outline';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { ReportLink } from '../../shared/report-link/report-link';
@@ -16,7 +17,14 @@ interface LetterGroup {
 }
 
 @Component({
-  imports: [AreaIntro, ReactiveFormsModule, ReportLink, RouterLink, TranslatePipe, LucideSearch],
+  imports: [
+    AreaIntro,
+    ReactiveFormsModule,
+    ReportLink,
+    RouterLink,
+    TranslatePipe,
+    LucideDynamicIcon,
+  ],
   selector: 'app-glossary',
   styleUrl: './glossary.scss',
   templateUrl: './glossary.html',
@@ -24,7 +32,8 @@ interface LetterGroup {
 export class Glossary {
   private readonly terms = toSignal(inject(GlossaryApi).getAll(), { initialValue: [] });
 
-  protected readonly icon = LucideBookA;
+  protected readonly searchIcon = searchIcon;
+  protected readonly icon = bookAIcon;
   protected readonly total = computed(() => this.terms().length);
 
   protected readonly query = new FormControl('', { nonNullable: true });

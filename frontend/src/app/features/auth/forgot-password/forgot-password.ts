@@ -1,12 +1,13 @@
 import { Component, computed, inject, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideArrowLeft } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { arrowLeftIcon } from '../../../core/icons';
 import { hasVisibleError, injectFocusInvalid } from '../auth-form';
 
 @Component({
-  imports: [ReactiveFormsModule, TranslatePipe, LucideArrowLeft],
+  imports: [ReactiveFormsModule, TranslatePipe, LucideDynamicIcon],
   selector: 'app-forgot-password',
   styleUrl: './forgot-password.scss',
   templateUrl: './forgot-password.html',
@@ -17,6 +18,7 @@ export class ForgotPassword {
 
   readonly login = output<void>();
 
+  protected readonly arrowLeftIcon = arrowLeftIcon;
   protected readonly attempted = signal(false);
   protected readonly submitted = signal(false);
   protected readonly form = inject(FormBuilder).nonNullable.group({

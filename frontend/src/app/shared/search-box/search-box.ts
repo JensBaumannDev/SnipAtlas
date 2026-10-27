@@ -9,13 +9,14 @@ import {
   viewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { LucideSearch } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import type { ContentSearch } from '../../core/content-search';
+import { searchIcon } from '../../core/icons';
 import { SearchResult } from '../../core/search-result';
 
 @Component({
-  imports: [TranslatePipe, LucideSearch],
+  imports: [TranslatePipe, LucideDynamicIcon],
   selector: 'app-search-box',
   styleUrl: './search-box.scss',
   templateUrl: './search-box.html',
@@ -34,6 +35,7 @@ export class SearchBox {
   readonly placeholder = input('search.placeholder');
   readonly shortcut = input(false);
 
+  protected readonly searchIcon = searchIcon;
   protected readonly query = signal('');
   protected readonly open = signal(false);
   protected readonly active = signal(-1);

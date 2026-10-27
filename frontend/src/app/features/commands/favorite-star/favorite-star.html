@@ -7,7 +7,7 @@
   [attr.aria-label]="'favorites.toggle' | translate: { title: entry().title }"
   (click)="toggle()"
 >
-  <svg lucideStar class="icon favorite-star__icon"></svg>
+  <svg [lucideIcon]="starIcon" class="icon favorite-star__icon"></svg>
 </button>
 
 @if (loginHint()) {

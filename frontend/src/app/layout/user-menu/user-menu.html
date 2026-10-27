@@ -19,25 +19,25 @@
   <ul class="user-menu__list" role="list">
     <li>
       <a class="user-menu__item" routerLink="/profil" (click)="close()">
-        <svg lucideUser class="icon user-menu__icon"></svg>
+        <svg [lucideIcon]="userIcon" class="icon user-menu__icon"></svg>
         {{ 'account.profile' | translate }}
       </a>
     </li>
     <li>
       <a class="user-menu__item" routerLink="/profil/anfragen" (click)="close()">
-        <svg lucideMessageSquare class="icon user-menu__icon"></svg>
+        <svg [lucideIcon]="messageSquareIcon" class="icon user-menu__icon"></svg>
         {{ 'account.requests' | translate }}
       </a>
     </li>
     <li>
       <a class="user-menu__item" routerLink="/profil/einstellungen" (click)="close()">
-        <svg lucideSettings class="icon user-menu__icon"></svg>
+        <svg [lucideIcon]="settingsIcon" class="icon user-menu__icon"></svg>
         {{ 'settings.title' | translate }}
       </a>
     </li>
     <li class="user-menu__separator">
       <button class="user-menu__item" type="button" (click)="logout()">
-        <svg lucideLogOut class="icon user-menu__icon"></svg>
+        <svg [lucideIcon]="logOutIcon" class="icon user-menu__icon"></svg>
         {{ 'account.logout' | translate }}
       </button>
     </li>

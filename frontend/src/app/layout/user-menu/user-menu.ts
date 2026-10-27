@@ -1,18 +1,12 @@
 import { Component, ElementRef, inject, output, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideLogOut, LucideMessageSquare, LucideSettings, LucideUser } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { logOutIcon, messageSquareIcon, settingsIcon, userIcon } from '../../core/icons';
 import { Session } from '../../core/session';
 
 @Component({
-  imports: [
-    RouterLink,
-    TranslatePipe,
-    LucideLogOut,
-    LucideMessageSquare,
-    LucideSettings,
-    LucideUser,
-  ],
+  imports: [RouterLink, TranslatePipe, LucideDynamicIcon],
   selector: 'app-user-menu',
   styleUrl: './user-menu.scss',
   templateUrl: './user-menu.html',
@@ -28,6 +22,10 @@ export class UserMenu {
   readonly loggedOut = output<void>();
 
   protected readonly session = inject(Session);
+  protected readonly logOutIcon = logOutIcon;
+  protected readonly messageSquareIcon = messageSquareIcon;
+  protected readonly settingsIcon = settingsIcon;
+  protected readonly userIcon = userIcon;
   protected readonly open = signal(false);
 
   focus(): void {

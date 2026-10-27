@@ -1,10 +1,10 @@
 import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideBookText } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Concept } from '../../core/concept';
 import { ConceptApi } from '../../core/concept-api';
+import { bookTextIcon } from '../../core/icons';
 import { OutlineItem, PageOutline } from '../../core/page-outline';
 import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
@@ -32,7 +32,7 @@ export class Concepts {
   readonly topic = input<string>();
   readonly subtopic = input<string>();
 
-  protected readonly icon = LucideBookText;
+  protected readonly icon = bookTextIcon;
   protected readonly summary = toSignal(this.conceptApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });

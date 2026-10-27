@@ -1,10 +1,11 @@
 import { Component, DestroyRef, computed, effect, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideChevronRight, LucideRoute } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../core/blueprint-api';
 import { BlueprintProgress } from '../../core/blueprint-progress';
+import { chevronRightIcon, routeIcon } from '../../core/icons';
 import { PageOutline } from '../../core/page-outline';
 import { TopicApi } from '../../core/topic-api';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
@@ -12,7 +13,7 @@ import { ProgressBar } from '../../shared/progress-bar/progress-bar';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 
 @Component({
-  imports: [AreaIntro, ProgressBar, RouterLink, TopicHeader, TranslatePipe, LucideChevronRight],
+  imports: [AreaIntro, ProgressBar, RouterLink, TopicHeader, TranslatePipe, LucideDynamicIcon],
   selector: 'app-guides',
   styleUrl: './guides.scss',
   templateUrl: './guides.html',
@@ -24,7 +25,8 @@ export class Guides {
 
   readonly topic = input<string>();
 
-  protected readonly icon = LucideRoute;
+  protected readonly chevronRightIcon = chevronRightIcon;
+  protected readonly icon = routeIcon;
   protected readonly summary = toSignal(this.blueprintApi.getSummary(), {
     initialValue: { blueprints: 0, steps: 0 },
   });

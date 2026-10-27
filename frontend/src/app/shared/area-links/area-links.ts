@@ -1,20 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import {
-  LucideBookText,
-  LucideDynamicIcon,
-  LucideIcon,
-  LucideRoute,
-  LucideTerminal,
-  LucideTriangleAlert,
-} from '@lucide/angular';
+import { LucideDynamicIcon, LucideIconData } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { bookTextIcon, routeIcon, terminalIcon, triangleAlertIcon } from '../../core/icons';
 
 interface Area {
   path: string;
   label: string;
   description: string;
-  icon: LucideIcon;
+  icon: LucideIconData;
 }
 
 const AREAS: Area[] = [
@@ -22,25 +16,25 @@ const AREAS: Area[] = [
     path: '/befehle',
     label: 'nav.commands',
     description: 'home.areas.commands',
-    icon: LucideTerminal,
+    icon: terminalIcon,
   },
   {
     path: '/grundlagen',
     label: 'nav.concepts',
     description: 'home.areas.concepts',
-    icon: LucideBookText,
+    icon: bookTextIcon,
   },
   {
     path: '/anleitungen',
     label: 'nav.blueprints',
     description: 'home.areas.blueprints',
-    icon: LucideRoute,
+    icon: routeIcon,
   },
   {
     path: '/fehler',
     label: 'nav.debugging',
     description: 'home.areas.debugging',
-    icon: LucideTriangleAlert,
+    icon: triangleAlertIcon,
   },
 ];
 

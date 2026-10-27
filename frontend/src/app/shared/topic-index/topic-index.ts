@@ -1,15 +1,16 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { LucideChevronRight } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { AreaContent } from '../../core/area-content';
 import { ContentArea, filterGroups } from '../../core/content-index';
+import { chevronRightIcon } from '../../core/icons';
 import { Subtopic } from '../../core/topic';
 import { TopicApi } from '../../core/topic-api';
 import { TopicLogo } from '../topic-logo/topic-logo';
 
 @Component({
-  imports: [RouterLink, TopicLogo, LucideChevronRight],
+  imports: [RouterLink, TopicLogo, LucideDynamicIcon],
   selector: 'app-topic-index',
   styleUrl: './topic-index.scss',
   templateUrl: './topic-index.html',
@@ -26,6 +27,7 @@ export class TopicIndex {
     stream: ({ params }) => this.areaContent.getIndex(params),
   });
 
+  protected readonly chevronRightIcon = chevronRightIcon;
   protected readonly visibleGroups = computed(() => {
     const index = this.index.value();
     return index ? filterGroups(this.groups(), index) : [];

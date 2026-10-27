@@ -9,14 +9,15 @@ import {
   viewChild,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideStar } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Favorites } from '../../core/favorites';
+import { starIcon } from '../../core/icons';
 import { LoginDialog } from '../../core/login-dialog';
 import { Session } from '../../core/session';
 
 @Component({
-  imports: [RouterLink, TranslatePipe, LucideStar],
+  imports: [RouterLink, TranslatePipe, LucideDynamicIcon],
   selector: 'app-collection',
   styleUrl: './collection.scss',
   templateUrl: './collection.html',
@@ -31,6 +32,7 @@ export class Collection {
 
   protected readonly session = inject(Session);
   protected readonly favorites = inject(Favorites).list;
+  protected readonly starIcon = starIcon;
   protected readonly shown = computed(() => {
     const limit = this.limit();
     return limit ? this.favorites().slice(0, limit) : this.favorites();

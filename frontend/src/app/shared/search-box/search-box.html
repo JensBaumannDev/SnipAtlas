@@ -1,5 +1,5 @@
 <div class="search-box" role="search" [class.search-box--hero]="variant() === 'hero'">
-  <svg lucideSearch class="icon search-box__icon"></svg>
+  <svg [lucideIcon]="searchIcon" class="icon search-box__icon"></svg>
   <label class="visually-hidden" [for]="inputId()">{{ 'search.label' | translate }}</label>
   <input
     #input

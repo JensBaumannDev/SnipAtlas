@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideChevronDown } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { chevronDownIcon } from '../../core/icons';
 
 interface FaqGroup {
   id: string;
@@ -16,11 +17,12 @@ const GROUPS: FaqGroup[] = [
 ];
 
 @Component({
-  imports: [RouterLink, TranslatePipe, LucideChevronDown],
+  imports: [RouterLink, TranslatePipe, LucideDynamicIcon],
   selector: 'app-faq',
   styleUrl: './faq.scss',
   templateUrl: './faq.html',
 })
 export class Faq {
+  protected readonly chevronDownIcon = chevronDownIcon;
   protected readonly groups = GROUPS;
 }

@@ -10,7 +10,7 @@
 <div class="request__layout">
   @if (status() === 'sent') {
     <section class="request__done" role="status">
-      <svg lucideCircleCheck class="icon request__done-icon"></svg>
+      <svg [lucideIcon]="circleCheckIcon" class="icon request__done-icon"></svg>
       <h2 class="request__heading">{{ 'request.done.title' | translate }}</h2>
       <p class="request__hint">{{ 'request.done.text' | translate }}</p>
       <button class="btn btn--ghost" type="button" (click)="startOver()">

@@ -1,8 +1,9 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, ElementRef, Injector, afterNextRender, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LucideX } from '@lucide/angular';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { xIcon } from '../../../core/icons';
 import { ForgotPassword } from '../forgot-password/forgot-password';
 import { Login } from '../login/login';
 import { Register } from '../register/register';
@@ -10,7 +11,7 @@ import { Register } from '../register/register';
 export type AuthView = 'login' | 'register' | 'forgot';
 
 @Component({
-  imports: [ForgotPassword, Login, Register, TranslatePipe, LucideX],
+  imports: [ForgotPassword, Login, Register, TranslatePipe, LucideDynamicIcon],
   selector: 'app-auth-dialog',
   styleUrl: './auth-dialog.scss',
   templateUrl: './auth-dialog.html',
@@ -23,6 +24,7 @@ export class AuthDialog {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
 
+  protected readonly xIcon = xIcon;
   protected readonly view = signal<AuthView>('login');
   protected readonly closing = signal(false);
 
