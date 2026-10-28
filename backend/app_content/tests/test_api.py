@@ -1,5 +1,6 @@
 import pytest
 from django.db.models import Model
+from django.forms.models import model_to_dict
 from django.urls import reverse
 from pytest_django import DjangoAssertNumQueries
 from rest_framework.authtoken.models import Token
@@ -7,13 +8,23 @@ from rest_framework.test import APIClient
 from rest_framework.throttling import AnonRateThrottle
 
 from app_accounts.models import User
-from app_content.models import Concept, Entry, Group, Subtopic, Topic
+from app_content.models import Concept, Entry, ErrorMessage, Group, Subtopic, Topic
 
 pytestmark = pytest.mark.django_db
 
 WRITE_METHODS = ['post', 'put', 'patch', 'delete']
 CONTENT = ['entry', 'concept']
 CONTENT_MODELS = {'entry': Entry, 'concept': Concept}
+BROKEN_TOPICS = [
+    'cobol',
+    'PYTHON',
+    'schleifen',
+    "python' OR '1'='1",
+    'python%',
+    'python\n',
+    'py\x00thon',
+    'x' * 5000,
+]
 
 
 # Groups
@@ -289,19 +300,7 @@ def test_content_list_without_topic_returns_all_in_order(
 
 
 @pytest.mark.parametrize('model', CONTENT)
-@pytest.mark.parametrize(
-    'value',
-    [
-        'cobol',
-        'PYTHON',
-        'schleifen',
-        "python' OR '1'='1",
-        'python%',
-        'python\n',
-        'py\x00thon',
-        'x' * 5000,
-    ],
-)
+@pytest.mark.parametrize('value', BROKEN_TOPICS)
 def test_content_list_with_unknown_topic_is_empty(
     api_client: APIClient, subtopic: Subtopic, model: str, value: str
 ) -> None:
@@ -362,16 +361,6 @@ def test_content_detail_ignores_slug_of_other_area(
 
 
 @pytest.mark.parametrize('fixture', CONTENT)
-@pytest.mark.parametrize('value', ['git', 'py\x00thon'])
-def test_content_detail_ignores_topic_param(
-    api_client: APIClient, request: pytest.FixtureRequest, fixture: str, value: str
-) -> None:
-    request.getfixturevalue(fixture)
-    url = reverse(f'{fixture}-detail', args=['for-schleife'])
-    assert api_client.get(url, {'topic': value}).status_code == 200
-
-
-@pytest.mark.parametrize('fixture', CONTENT)
 def test_content_detail_loads_in_one_query(
     api_client: APIClient,
     request: pytest.FixtureRequest,
@@ -396,109 +385,6 @@ def test_content_returns_text_unchanged_as_json(
 
 
 @pytest.mark.parametrize('fixture', CONTENT)
-@pytest.mark.parametrize('route', ['list', 'detail'])
-def test_content_works_with_token(
-    api_client: APIClient, user: User, request: pytest.FixtureRequest, fixture: str, route: str
-) -> None:
-    request.getfixturevalue(fixture)
-    token = Token.objects.create(user=user)
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
-    args = ['for-schleife'] if route == 'detail' else []
-    assert api_client.get(reverse(f'{fixture}-{route}', args=args)).status_code == 200
-
-
-@pytest.mark.parametrize('fixture', CONTENT)
-@pytest.mark.parametrize('route', ['list', 'detail'])
-def test_content_rejects_invalid_token(
-    api_client: APIClient, request: pytest.FixtureRequest, fixture: str, route: str
-) -> None:
-    request.getfixturevalue(fixture)
-    api_client.credentials(HTTP_AUTHORIZATION='Token invalid')
-    args = ['for-schleife'] if route == 'detail' else []
-    response = api_client.get(reverse(f'{fixture}-{route}', args=args))
-    assert response.status_code == 401
-    assert response.json() == {'code': 'authentication_failed'}
-
-
-@pytest.mark.parametrize('fixture', CONTENT)
-@pytest.mark.parametrize('route', ['list', 'detail'])
-def test_content_is_throttled(
-    api_client: APIClient,
-    request: pytest.FixtureRequest,
-    monkeypatch: pytest.MonkeyPatch,
-    fixture: str,
-    route: str,
-) -> None:
-    request.getfixturevalue(fixture)
-    monkeypatch.setitem(AnonRateThrottle.THROTTLE_RATES, 'anon', '1/hour')
-    args = ['for-schleife'] if route == 'detail' else []
-    api_client.get(reverse(f'{fixture}-{route}', args=args))
-    response = api_client.get(reverse(f'{fixture}-{route}', args=args))
-    assert response.status_code == 429
-    assert response.json()['code'] == 'throttled'
-
-
-@pytest.mark.parametrize('fixture', CONTENT)
-@pytest.mark.parametrize('route', ['list', 'detail'])
-@pytest.mark.parametrize('method', WRITE_METHODS)
-def test_content_rejects_writes(
-    api_client: APIClient, request: pytest.FixtureRequest, fixture: str, route: str, method: str
-) -> None:
-    obj = request.getfixturevalue(fixture)
-    args = ['for-schleife'] if route == 'detail' else []
-    body = {'slug': 'neu', 'title': 'Hacked', 'subtopic': obj.subtopic.pk}
-    response = getattr(api_client, method)(reverse(f'{fixture}-{route}', args=args), body)
-    obj.refresh_from_db()
-    assert response.status_code == 405
-    assert response.json() == {'code': 'method_not_allowed'}
-    assert (type(obj).objects.count(), obj.title) == (1, obj.title_de)
-
-
-@pytest.mark.parametrize('fixture', CONTENT)
-@pytest.mark.parametrize('method', WRITE_METHODS)
-def test_content_rejects_writes_with_token(
-    api_client: APIClient,
-    admin_user: User,
-    request: pytest.FixtureRequest,
-    fixture: str,
-    method: str,
-) -> None:
-    obj = request.getfixturevalue(fixture)
-    token = Token.objects.create(user=admin_user)
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
-    url = reverse(f'{fixture}-detail', args=['for-schleife'])
-    response = getattr(api_client, method)(url, {'title': 'Hacked'})
-    assert response.status_code == 405
-    assert type(obj).objects.get(pk=obj.pk).title == obj.title_de
-
-
-@pytest.mark.parametrize('fixture', CONTENT)
-def test_content_rejects_token_of_inactive_user(
-    api_client: APIClient, user: User, request: pytest.FixtureRequest, fixture: str
-) -> None:
-    request.getfixturevalue(fixture)
-    token = Token.objects.create(user=user)
-    User.objects.filter(pk=user.pk).update(is_active=False)
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
-    response = api_client.get(reverse(f'{fixture}-list'))
-    assert response.status_code == 401
-    assert response.json() == {'code': 'authentication_failed'}
-
-
-@pytest.mark.parametrize('fixture', CONTENT)
-@pytest.mark.parametrize('route', ['list', 'detail'])
-@pytest.mark.parametrize('method', ['get', 'head', 'options'])
-def test_content_allows_only_reading_methods(
-    api_client: APIClient, request: pytest.FixtureRequest, fixture: str, route: str, method: str
-) -> None:
-    request.getfixturevalue(fixture)
-    args = ['for-schleife'] if route == 'detail' else []
-    response = getattr(api_client, method)(reverse(f'{fixture}-{route}', args=args))
-    assert response.status_code == 200
-    assert response['Allow'] == 'GET, HEAD, OPTIONS'
-
-
-@pytest.mark.parametrize('fixture', CONTENT)
 def test_content_understands_browser_language_header(
     api_client: APIClient, request: pytest.FixtureRequest, fixture: str
 ) -> None:
@@ -508,9 +394,318 @@ def test_content_understands_browser_language_header(
     assert data['title'] == obj.title_en
 
 
-@pytest.mark.parametrize('model', ['entries', 'concepts'])
-@pytest.mark.parametrize('slug', ['for.schleife', 'for%20schleife', 'f%C3%BCr', '%00'])
-def test_content_detail_with_invalid_characters_returns_404(
-    api_client: APIClient, entry: Entry, concept: Concept, model: str, slug: str
+# Public content: security
+AREAS = {
+    'entry': ('entry', 'for-schleife'),
+    'concept': ('concept', 'for-schleife'),
+    'error': ('error_message', 'module-not-found'),
+}
+ROUTES = ['list', 'detail']
+HACKED = {'slug': 'neu', 'title': 'Hacked', 'message': 'Hacked', 'code': 'rm -rf /'}
+
+
+def stored(obj: Model) -> dict:
+    return model_to_dict(type(obj).objects.get(pk=obj.pk))
+
+
+def area_url(request: pytest.FixtureRequest, area: str, route: str = 'detail') -> tuple[Model, str]:
+    fixture, slug = AREAS[area]
+    obj = request.getfixturevalue(fixture)
+    args = [slug] if route == 'detail' else []
+    return obj, reverse(f'{area}-{route}', args=args)
+
+
+@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize('value', ['git', 'py\x00thon'])
+def test_detail_ignores_topic_param(
+    api_client: APIClient, request: pytest.FixtureRequest, area: str, value: str
 ) -> None:
-    assert api_client.get(f'/api/{model}/{slug}/').status_code == 404
+    url = area_url(request, area)[1]
+    assert api_client.get(url, {'topic': value}).status_code == 200
+
+
+@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize('route', ROUTES)
+def test_public_content_works_with_token(
+    api_client: APIClient, user: User, request: pytest.FixtureRequest, area: str, route: str
+) -> None:
+    url = area_url(request, area, route)[1]
+    token = Token.objects.create(user=user)
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+    assert api_client.get(url).status_code == 200
+
+
+@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize('route', ROUTES)
+def test_public_content_rejects_invalid_token(
+    api_client: APIClient, request: pytest.FixtureRequest, area: str, route: str
+) -> None:
+    url = area_url(request, area, route)[1]
+    api_client.credentials(HTTP_AUTHORIZATION='Token invalid')
+    response = api_client.get(url)
+    assert response.status_code == 401
+    assert response.json() == {'code': 'authentication_failed'}
+
+
+@pytest.mark.parametrize('area', AREAS)
+def test_public_content_rejects_token_of_inactive_user(
+    api_client: APIClient, user: User, request: pytest.FixtureRequest, area: str
+) -> None:
+    url = area_url(request, area, 'list')[1]
+    token = Token.objects.create(user=user)
+    User.objects.filter(pk=user.pk).update(is_active=False)
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+    response = api_client.get(url)
+    assert response.status_code == 401
+    assert response.json() == {'code': 'authentication_failed'}
+
+
+@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize('route', ROUTES)
+def test_public_content_is_throttled(
+    api_client: APIClient,
+    request: pytest.FixtureRequest,
+    monkeypatch: pytest.MonkeyPatch,
+    area: str,
+    route: str,
+) -> None:
+    url = area_url(request, area, route)[1]
+    monkeypatch.setitem(AnonRateThrottle.THROTTLE_RATES, 'anon', '1/hour')
+    api_client.get(url)
+    response = api_client.get(url)
+    assert response.status_code == 429
+    assert response.json()['code'] == 'throttled'
+
+
+@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize('route', ROUTES)
+@pytest.mark.parametrize('method', WRITE_METHODS)
+def test_public_content_rejects_writes(
+    api_client: APIClient, request: pytest.FixtureRequest, area: str, route: str, method: str
+) -> None:
+    obj, url = area_url(request, area, route)
+    before = stored(obj)
+    response = getattr(api_client, method)(url, HACKED)
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert (type(obj).objects.count(), stored(obj)) == (1, before)
+
+
+@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize('method', WRITE_METHODS)
+def test_public_content_rejects_writes_with_admin_token(
+    api_client: APIClient, admin_user: User, request: pytest.FixtureRequest, area: str, method: str
+) -> None:
+    obj, url = area_url(request, area)
+    token = Token.objects.create(user=admin_user)
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+    before = stored(obj)
+    response = getattr(api_client, method)(url, HACKED)
+    assert response.status_code == 405
+    assert (type(obj).objects.count(), stored(obj)) == (1, before)
+
+
+@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize('route', ROUTES)
+@pytest.mark.parametrize('method', ['get', 'head', 'options'])
+def test_public_content_allows_only_reading_methods(
+    api_client: APIClient, request: pytest.FixtureRequest, area: str, route: str, method: str
+) -> None:
+    url = area_url(request, area, route)[1]
+    response = getattr(api_client, method)(url)
+    assert response.status_code == 200
+    assert response['Allow'] == 'GET, HEAD, OPTIONS'
+
+
+@pytest.mark.parametrize('path', ['entries', 'concepts', 'errors'])
+@pytest.mark.parametrize('slug', ['for.schleife', 'for%20schleife', 'f%C3%BCr', '%00'])
+def test_detail_with_invalid_characters_returns_404(
+    api_client: APIClient,
+    entry: Entry,
+    concept: Concept,
+    error_message: ErrorMessage,
+    path: str,
+    slug: str,
+) -> None:
+    assert api_client.get(f'/api/{path}/{slug}/').status_code == 404
+
+
+# Errors
+ERROR_JSON = {
+    'slug': 'module-not-found',
+    'topic': 'python',
+    'message': "ModuleNotFoundError: No module named 'django'",
+    'meaning': 'Python findet das Paket nicht.',
+    'cause': 'Die virtuelle Umgebung ist nicht aktiv.',
+    'steps': ['Umgebung aktivieren.', 'Paket installieren.'],
+    'solution': {'language': 'terminal', 'code': 'pip install django'},
+}
+
+
+def create_error(topic: Topic, slug: str, **fields: object) -> ErrorMessage:
+    return ErrorMessage.objects.create(**({'topic': topic, 'slug': slug, 'message': slug} | fields))
+
+
+def test_errors_list_is_public(api_client: APIClient, error_message: ErrorMessage) -> None:
+    response = api_client.get(reverse('error-list'))
+    assert response.status_code == 200
+    assert response.json() == [ERROR_JSON]
+
+
+def test_error_detail_is_public(api_client: APIClient, error_message: ErrorMessage) -> None:
+    response = api_client.get(reverse('error-detail', args=['module-not-found']))
+    assert response.status_code == 200
+    assert response.json() == ERROR_JSON
+
+
+def test_error_without_solution_has_no_solution_key(
+    api_client: APIClient, error_message: ErrorMessage
+) -> None:
+    ErrorMessage.objects.filter(pk=error_message.pk).update(language='', code_de='')
+    data = api_client.get(reverse('error-detail', args=['module-not-found'])).json()
+    assert 'solution' not in data
+    assert data == {key: value for key, value in ERROR_JSON.items() if key != 'solution'}
+
+
+def test_error_without_steps_has_empty_steps(
+    api_client: APIClient, error_message: ErrorMessage
+) -> None:
+    error_message.steps.all().delete()
+    data = api_client.get(reverse('error-detail', args=['module-not-found'])).json()
+    assert data['steps'] == []
+
+
+@pytest.mark.parametrize('header', ['en', 'en-US,en;q=0.9,de;q=0.8'])
+def test_error_detail_uses_accept_language(
+    api_client: APIClient, error_message: ErrorMessage, header: str
+) -> None:
+    url = reverse('error-detail', args=['module-not-found'])
+    data = api_client.get(url, HTTP_ACCEPT_LANGUAGE=header).json()
+    assert [data['meaning'], data['cause']] == [
+        'Python cannot find the package.',
+        'The virtual environment is not active.',
+    ]
+    assert data['steps'] == ['Activate the environment.', 'Paket installieren.']
+    assert data['message'] == ERROR_JSON['message']
+    assert data['solution'] == ERROR_JSON['solution']
+
+
+def test_error_uses_german_for_unknown_language(
+    api_client: APIClient, error_message: ErrorMessage
+) -> None:
+    url = reverse('error-detail', args=['module-not-found'])
+    assert api_client.get(url, HTTP_ACCEPT_LANGUAGE='fr').json() == ERROR_JSON
+
+
+def test_errors_list_filters_by_topic(
+    api_client: APIClient, topic: Topic, git_alltag: Subtopic
+) -> None:
+    create_error(topic, 'module')
+    create_error(git_alltag.topic, 'push')
+    assert list_slugs(api_client, 'error', topic='python') == ['module']
+    assert list_slugs(api_client, 'error', topic='git') == ['push']
+
+
+@pytest.mark.parametrize('params', [{}, {'topic': ''}, {'page': '2', 'search': 'x'}])
+def test_errors_list_without_topic_returns_all_in_order(
+    api_client: APIClient, topic: Topic, git_alltag: Subtopic, params: dict
+) -> None:
+    create_error(topic, 'port', position=2)
+    create_error(topic, 'module', position=1)
+    create_error(git_alltag.topic, 'push', position=9)
+    assert list_slugs(api_client, 'error', **params) == ['push', 'module', 'port']
+
+
+@pytest.mark.parametrize('value', BROKEN_TOPICS)
+def test_errors_list_with_unknown_topic_is_empty(
+    api_client: APIClient, error_message: ErrorMessage, value: str
+) -> None:
+    assert list_slugs(api_client, 'error', topic=value) == []
+
+
+def test_errors_list_is_empty_without_errors(api_client: APIClient, topic: Topic) -> None:
+    assert list_slugs(api_client, 'error') == []
+
+
+def test_errors_load_in_two_queries(
+    api_client: APIClient,
+    error_message: ErrorMessage,
+    git_alltag: Subtopic,
+    django_assert_num_queries: DjangoAssertNumQueries,
+) -> None:
+    create_error(git_alltag.topic, 'push').steps.create(text_de='Erst pullen.')
+    with django_assert_num_queries(2):
+        api_client.get(reverse('error-list'))
+    with django_assert_num_queries(2):
+        api_client.get(reverse('error-list'), {'topic': 'python'})
+    with django_assert_num_queries(2):
+        api_client.get(reverse('error-detail', args=['module-not-found']))
+
+
+@pytest.mark.parametrize('slug', ['cobol', 'MODULE-NOT-FOUND', 'module_not_found', 'python'])
+def test_error_detail_unknown_slug_returns_404(
+    api_client: APIClient, error_message: ErrorMessage, slug: str
+) -> None:
+    response = api_client.get(reverse('error-detail', args=[slug]))
+    assert response.status_code == 404
+    assert response.json() == {'code': 'not_found'}
+
+
+def test_error_detail_ignores_slug_of_other_area(api_client: APIClient, entry: Entry) -> None:
+    assert api_client.get(reverse('error-detail', args=['for-schleife'])).status_code == 404
+
+
+def test_error_returns_text_unchanged_as_json(api_client: APIClient, topic: Topic) -> None:
+    script = '<script>alert(1)</script>'
+    error = create_error(topic, 'xss', message=script, meaning_de=script)
+    error.steps.create(text_de=script)
+    response = api_client.get(reverse('error-detail', args=['xss']))
+    data = response.json()
+    assert response['Content-Type'] == 'application/json'
+    assert [data['message'], data['meaning'], data['steps']] == [script, script, [script]]
+
+
+def test_error_detail_uses_english_code(api_client: APIClient, error_message: ErrorMessage) -> None:
+    error_message.code_en = 'python -m pip install django'
+    error_message.save()
+    url = reverse('error-detail', args=['module-not-found'])
+    data = api_client.get(url, HTTP_ACCEPT_LANGUAGE='en').json()
+    assert data['solution'] == {'language': 'terminal', 'code': 'python -m pip install django'}
+
+
+def test_errors_list_keeps_steps_with_their_error(
+    api_client: APIClient, error_message: ErrorMessage, git_alltag: Subtopic
+) -> None:
+    push = create_error(git_alltag.topic, 'push')
+    push.steps.create(text_de='Zuerst pullen.', position=1)
+    push.steps.create(text_de='Konflikte lösen.', position=2)
+    create_error(git_alltag.topic, 'merge')
+    data = api_client.get(reverse('error-list')).json()
+    assert {item['slug']: item['steps'] for item in data} == {
+        'push': ['Zuerst pullen.', 'Konflikte lösen.'],
+        'merge': [],
+        'module-not-found': ['Umgebung aktivieren.', 'Paket installieren.'],
+    }
+
+
+def test_errors_list_for_topic_without_errors_is_empty(
+    api_client: APIClient, error_message: ErrorMessage, group: Group
+) -> None:
+    Topic.objects.create(group=group, slug='django', name_de='Django')
+    assert list_slugs(api_client, 'error', topic='django') == []
+
+
+@pytest.mark.parametrize(
+    ('header', 'meaning'),
+    [
+        ('en', 'Python cannot find the package.'),
+        ('en-US,en;q=0.9,de;q=0.8', 'Python cannot find the package.'),
+        ('fr', 'Python findet das Paket nicht.'),
+        ('de', 'Python findet das Paket nicht.'),
+    ],
+)
+def test_errors_list_uses_accept_language(
+    api_client: APIClient, error_message: ErrorMessage, header: str, meaning: str
+) -> None:
+    data = api_client.get(reverse('error-list'), HTTP_ACCEPT_LANGUAGE=header).json()
+    assert [item['meaning'] for item in data] == [meaning]

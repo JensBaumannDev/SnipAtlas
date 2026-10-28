@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app_content.models import Concept, Entry, Group, Subtopic, Topic
+from app_content.models import Concept, Entry, ErrorMessage, Group, Subtopic, Topic
 
 
 class SubtopicSerializer(serializers.ModelSerializer):
@@ -53,3 +53,31 @@ class ConceptSerializer(ContentItemSerializer):
             'code',
             'note',
         )
+
+
+# Errors and debug guides
+class OptionalFieldsSerializer(serializers.ModelSerializer):
+    optional_fields: tuple[str, ...] = ()
+
+    def to_representation(self, instance: object) -> dict:
+        data = super().to_representation(instance)
+        for field in self.optional_fields:
+            if not data[field]:
+                del data[field]
+        return data
+
+
+class ErrorMessageSerializer(OptionalFieldsSerializer):
+    topic = serializers.CharField(source='topic.slug', read_only=True)
+    steps = serializers.SlugRelatedField(many=True, read_only=True, slug_field='text')
+    solution = serializers.SerializerMethodField()
+    optional_fields = ('solution',)
+
+    class Meta:
+        model = ErrorMessage
+        fields = ('slug', 'topic', 'message', 'meaning', 'cause', 'steps', 'solution')
+
+    def get_solution(self, error: ErrorMessage) -> dict[str, str] | None:
+        if not error.code:
+            return None
+        return {'language': error.language, 'code': error.code}
