@@ -1,9 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny
 
-from app_content.models import Group, Topic
+from app_content.models import Concept, ContentItemQuerySet, Entry, Group, Topic
 
-from .serializers import GroupSerializer, TopicSerializer
+from .serializers import ConceptSerializer, EntrySerializer, GroupSerializer, TopicSerializer
 
 
 class GroupListView(generics.ListAPIView):
@@ -17,3 +17,27 @@ class TopicDetailView(generics.RetrieveAPIView):
     serializer_class = TopicSerializer
     permission_classes = (AllowAny,)
     lookup_field = 'slug'
+
+
+# Entries and concepts
+class ContentItemViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (AllowAny,)
+    lookup_field = 'slug'
+    lookup_value_regex = '[-a-zA-Z0-9_]+'
+
+    def get_queryset(self) -> ContentItemQuerySet:
+        queryset = super().get_queryset().select_related('subtopic__topic')
+        topic = self.request.query_params.get('topic')
+        if topic and self.action == 'list':
+            return queryset.for_topic(topic)
+        return queryset
+
+
+class EntryViewSet(ContentItemViewSet):
+    queryset = Entry.objects.all()
+    serializer_class = EntrySerializer
+
+
+class ConceptViewSet(ContentItemViewSet):
+    queryset = Concept.objects.all()
+    serializer_class = ConceptSerializer

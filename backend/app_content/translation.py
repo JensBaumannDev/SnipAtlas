@@ -1,6 +1,6 @@
 from modeltranslation.translator import TranslationOptions, register
 
-from .models import Group, Subtopic, Topic
+from .models import Concept, Entry, Group, Subtopic, Topic
 
 
 @register(Group)
@@ -16,3 +16,13 @@ class TopicTranslation(TranslationOptions):
 @register(Subtopic)
 class SubtopicTranslation(TranslationOptions):
     fields = ('name',)
+
+
+@register(Entry)
+class EntryTranslation(TranslationOptions):
+    fields = ('title', 'description', 'code', 'code_unix')
+
+
+@register(Concept)
+class ConceptTranslation(TranslationOptions):
+    fields = ('title', 'summary', 'explanation', 'code', 'note')
