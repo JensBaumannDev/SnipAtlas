@@ -1,7 +1,11 @@
 import pytest
+from django.contrib.sessions.models import Session
+from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.urls import reverse
+from pytest_django import DjangoAssertNumQueries
 from rest_framework.test import APIClient
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from app_accounts.models import User
 
@@ -15,6 +19,11 @@ OTHER_METHODS = ['get', 'put', 'patch', 'delete']
 def register(api_client: APIClient, **changes: object) -> HttpResponse:
     data = {'email': 'grace@example.com', 'password': PASSWORD} | changes
     return api_client.post(reverse('auth-register'), data, format='json')
+
+
+def login(api_client: APIClient, **changes: object) -> HttpResponse:
+    data = {'email': 'ada@example.com', 'password': PASSWORD} | changes
+    return api_client.post(reverse('auth-login'), data, format='json')
 
 
 def field_codes(response: HttpResponse, field: str) -> list[str]:
@@ -247,3 +256,654 @@ def test_register_rejects_other_methods(api_client: APIClient, method: str) -> N
     assert response.json() == {'code': 'method_not_allowed'}
     assert response['Allow'] == 'POST, OPTIONS'
     assert not User.objects.exists()
+
+
+# CSRF
+def test_csrf_returns_no_content(api_client: APIClient) -> None:
+    response = api_client.get(reverse('auth-csrf'))
+    assert response.status_code == 204
+    assert response.content == b''
+
+
+def test_csrf_sets_readable_cookie(api_client: APIClient) -> None:
+    cookie = api_client.get(reverse('auth-csrf')).cookies['csrftoken']
+    assert len(cookie.value) == 32
+    assert not cookie['httponly']
+    assert cookie['samesite'] == 'Lax'
+
+
+def test_csrf_keeps_existing_token(api_client: APIClient) -> None:
+    api_client.cookies['csrftoken'] = CSRF_TOKEN
+    response = api_client.get(reverse('auth-csrf'))
+    assert response.cookies['csrftoken'].value == CSRF_TOKEN
+
+
+def test_csrf_replaces_broken_token(api_client: APIClient) -> None:
+    api_client.cookies['csrftoken'] = '<script>'
+    cookie = api_client.get(reverse('auth-csrf')).cookies['csrftoken']
+    assert cookie.value != '<script>'
+    assert len(cookie.value) == 32
+
+
+def test_csrf_token_allows_register(csrf_client: APIClient) -> None:
+    token = csrf_client.get(reverse('auth-csrf')).cookies['csrftoken'].value
+    data = {'email': 'grace@example.com', 'password': PASSWORD}
+    url = reverse('auth-register')
+    response = csrf_client.post(url, data, format='json', HTTP_X_CSRFTOKEN=token)
+    assert response.status_code == 201
+
+
+def test_csrf_does_not_start_session(api_client: APIClient) -> None:
+    response = api_client.get(reverse('auth-csrf'))
+    assert 'sessionid' not in response.cookies
+    assert logged_in_user_id(api_client) is None
+
+
+def test_csrf_keeps_user_logged_in(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    assert api_client.get(reverse('auth-csrf')).status_code == 204
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+def test_csrf_treats_unknown_session_as_guest(api_client: APIClient) -> None:
+    api_client.cookies['sessionid'] = 'invalid'
+    assert api_client.get(reverse('auth-csrf')).status_code == 204
+
+
+def test_csrf_is_throttled_for_guests(
+    api_client: APIClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(AnonRateThrottle.THROTTLE_RATES, 'anon', '1/hour')
+    api_client.get(reverse('auth-csrf'))
+    response = api_client.get(reverse('auth-csrf'))
+    assert response.status_code == 429
+    assert response.json()['code'] == 'throttled'
+
+
+def test_csrf_is_throttled_for_users(
+    api_client: APIClient, user: User, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(UserRateThrottle.THROTTLE_RATES, 'user', '1/hour')
+    api_client.force_login(user)
+    api_client.get(reverse('auth-csrf'))
+    assert api_client.get(reverse('auth-csrf')).status_code == 429
+
+
+def test_csrf_is_not_limited_like_login(api_client: APIClient) -> None:
+    for _ in range(6):
+        response = api_client.get(reverse('auth-csrf'))
+    assert response.status_code == 204
+
+
+@pytest.mark.parametrize('method', ['post', 'put', 'patch', 'delete'])
+def test_csrf_rejects_other_methods(api_client: APIClient, method: str) -> None:
+    response = getattr(api_client, method)(reverse('auth-csrf'))
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert response['Allow'] == 'GET, HEAD, OPTIONS'
+
+
+def test_csrf_needs_no_queries(
+    api_client: APIClient, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    with django_assert_num_queries(0):
+        api_client.get(reverse('auth-csrf'))
+
+
+# Login
+def test_login_returns_user(api_client: APIClient, user: User) -> None:
+    response = login(api_client)
+    assert response.status_code == 200
+    assert response.json() == {
+        'email': 'ada@example.com',
+        'since': user.since.isoformat(),
+        'notifyByMail': True,
+        'accent': 'blue',
+    }
+
+
+def test_login_returns_stored_settings(api_client: APIClient, user: User) -> None:
+    User.objects.filter(pk=user.pk).update(accent='teal', notify_by_mail=False)
+    data = login(api_client).json()
+    assert (data['accent'], data['notifyByMail']) == ('teal', False)
+
+
+def test_login_logs_in_user(api_client: APIClient, user: User) -> None:
+    login(api_client)
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+def test_login_sets_http_only_session_cookie(api_client: APIClient, user: User) -> None:
+    cookie = login(api_client).cookies['sessionid']
+    assert cookie['httponly']
+    assert cookie['samesite'] == 'Lax'
+
+
+def test_login_creates_new_session_key(api_client: APIClient, user: User) -> None:
+    session = api_client.session
+    session['visited'] = True
+    session.save()
+    api_client.cookies['sessionid'] = session.session_key
+    login(api_client)
+    assert api_client.cookies['sessionid'].value != session.session_key
+
+
+def test_login_sets_new_readable_csrf_cookie(api_client: APIClient, user: User) -> None:
+    api_client.cookies['csrftoken'] = CSRF_TOKEN
+    cookie = login(api_client).cookies['csrftoken']
+    assert cookie.value != CSRF_TOKEN
+    assert not cookie['httponly']
+
+
+def test_login_ignores_case_and_spaces_in_email(api_client: APIClient, user: User) -> None:
+    assert login(api_client, email=' ADA@Example.com ').status_code == 200
+
+
+def test_login_sets_last_login(api_client: APIClient, user: User) -> None:
+    login(api_client)
+    user.refresh_from_db()
+    assert user.last_login is not None
+
+
+def test_login_works_for_staff(api_client: APIClient, staff_user: User) -> None:
+    assert login(api_client, email='staff@example.com').status_code == 200
+
+
+def test_login_while_logged_in_switches_user(
+    api_client: APIClient, user: User, staff_user: User
+) -> None:
+    api_client.force_login(staff_user)
+    login(api_client)
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+def test_login_treats_unknown_session_as_guest(api_client: APIClient, user: User) -> None:
+    api_client.cookies['sessionid'] = 'invalid'
+    assert login(api_client).status_code == 200
+
+
+@pytest.mark.parametrize(
+    'changes',
+    [
+        {'password': 'wrong'},
+        {'password': f' {PASSWORD} '},
+        {'password': PASSWORD.lower()},
+        {'email': 'grace@example.com'},
+        {'email': 'no-mail'},
+        {'email': 'ada@examıple.com'},
+        {'email': 'x' * 5000},
+        {'email': '<script>@example.com'},
+    ],
+)
+def test_login_with_wrong_data_is_rejected(
+    api_client: APIClient, user: User, changes: dict
+) -> None:
+    response = login(api_client, **changes)
+    assert response.status_code == 400
+    assert response.json() == {'code': 'invalid_credentials'}
+    assert logged_in_user_id(api_client) is None
+
+
+def test_login_of_inactive_user_is_rejected(api_client: APIClient, user: User) -> None:
+    User.objects.filter(pk=user.pk).update(is_active=False)
+    assert login(api_client).json() == {'code': 'invalid_credentials'}
+
+
+def test_login_of_user_without_password_is_rejected(api_client: APIClient) -> None:
+    User.objects.create_user('grace@example.com')
+    response = login(api_client, email='grace@example.com', password='!')
+    assert response.json() == {'code': 'invalid_credentials'}
+
+
+def test_login_with_wrong_password_does_not_set_last_login(
+    api_client: APIClient, user: User
+) -> None:
+    login(api_client, password='wrong')
+    user.refresh_from_db()
+    assert user.last_login is None
+
+
+def test_failed_login_keeps_current_user_logged_in(
+    api_client: APIClient, user: User, staff_user: User
+) -> None:
+    api_client.force_login(staff_user)
+    login(api_client, password='wrong')
+    assert logged_in_user_id(api_client) == str(staff_user.pk)
+
+
+@pytest.mark.parametrize('field', ['email', 'password'])
+def test_login_without_field_is_rejected(api_client: APIClient, user: User, field: str) -> None:
+    data = {'email': 'ada@example.com', 'password': PASSWORD}
+    del data[field]
+    response = api_client.post(reverse('auth-login'), data, format='json')
+    assert field_codes(response, field) == ['required']
+
+
+@pytest.mark.parametrize(
+    ('value', 'code'), [('', 'blank'), (None, 'null'), (['x'], 'invalid'), ({'a': 1}, 'invalid')]
+)
+@pytest.mark.parametrize('field', ['email', 'password'])
+def test_login_with_empty_or_broken_field_is_rejected(
+    api_client: APIClient, user: User, field: str, value: object, code: str
+) -> None:
+    assert field_codes(login(api_client, **{field: value}), field) == [code]
+
+
+@pytest.mark.parametrize('field', ['email', 'password'])
+def test_login_with_null_character_is_rejected(
+    api_client: APIClient, user: User, field: str
+) -> None:
+    response = login(api_client, **{field: 'ada\x00@example.com'})
+    assert field_codes(response, field) == ['null_characters_not_allowed']
+
+
+def test_login_without_body_lists_both_fields(api_client: APIClient) -> None:
+    response = api_client.post(reverse('auth-login'), format='json')
+    assert response.json() == {
+        'code': 'validation_error',
+        'fields': {'email': ['required'], 'password': ['required']},
+    }
+
+
+def test_login_with_broken_json_is_rejected(api_client: APIClient) -> None:
+    response = api_client.post(reverse('auth-login'), '{"email":', content_type='application/json')
+    assert response.status_code == 400
+    assert response.json() == {'code': 'parse_error'}
+
+
+def test_login_queries(
+    api_client: APIClient, user: User, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    with django_assert_num_queries(9):
+        login(api_client)
+
+
+def test_login_ignores_query_parameters(api_client: APIClient, user: User) -> None:
+    url = f'{reverse("auth-login")}?email=grace@example.com&password=x'
+    data = {'email': 'ada@example.com', 'password': PASSWORD}
+    assert api_client.post(url, data, format='json').status_code == 200
+
+
+def test_login_with_very_long_password_is_rejected(api_client: APIClient, user: User) -> None:
+    response = login(api_client, password='x' * 100_000)
+    assert response.json() == {'code': 'invalid_credentials'}
+
+
+# Login: security
+def test_login_is_throttled_after_five_attempts(api_client: APIClient, user: User) -> None:
+    for _ in range(5):
+        login(api_client, password='wrong')
+    response = login(api_client)
+    assert response.status_code == 429
+    assert response.json()['code'] == 'throttled'
+    assert logged_in_user_id(api_client) is None
+
+
+def test_login_shares_throttling_with_register(api_client: APIClient, user: User) -> None:
+    for number in range(3):
+        register(api_client, email=f'user{number}@example.com')
+    login(api_client)
+    login(api_client)
+    assert login(api_client).status_code == 429
+    assert register(api_client).status_code == 429
+
+
+def test_login_throttles_per_ip(api_client: APIClient, user: User) -> None:
+    for _ in range(5):
+        login(api_client, password='wrong')
+    data = {'email': 'ada@example.com', 'password': PASSWORD}
+    url = reverse('auth-login')
+    assert api_client.post(url, data, format='json', REMOTE_ADDR='10.0.0.2').status_code == 200
+
+
+def test_login_without_csrf_token_is_rejected(csrf_client: APIClient, user: User) -> None:
+    response = login(csrf_client)
+    assert response.status_code == 403
+    assert response.json() == {'code': 'csrf_failed'}
+    assert logged_in_user_id(csrf_client) is None
+
+
+def test_login_with_csrf_token_from_endpoint_is_allowed(csrf_client: APIClient, user: User) -> None:
+    token = csrf_client.get(reverse('auth-csrf')).cookies['csrftoken'].value
+    data = {'email': 'ada@example.com', 'password': PASSWORD}
+    url = reverse('auth-login')
+    response = csrf_client.post(url, data, format='json', HTTP_X_CSRFTOKEN=token)
+    assert response.status_code == 200
+
+
+@pytest.mark.parametrize('method', OTHER_METHODS)
+def test_login_rejects_other_methods(api_client: APIClient, user: User, method: str) -> None:
+    data = {'email': 'ada@example.com', 'password': PASSWORD}
+    response = getattr(api_client, method)(reverse('auth-login'), data, format='json')
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert response['Allow'] == 'POST, OPTIONS'
+    assert logged_in_user_id(api_client) is None
+
+
+# Logout
+def test_logout_returns_no_content(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = api_client.post(reverse('auth-logout'))
+    assert response.status_code == 204
+    assert response.content == b''
+
+
+def test_logout_ends_session(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    session_key = api_client.session.session_key
+    api_client.post(reverse('auth-logout'))
+    assert logged_in_user_id(api_client) is None
+    assert not Session.objects.filter(session_key=session_key).exists()
+
+
+def test_logout_deletes_session_cookie(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    cookie = api_client.post(reverse('auth-logout')).cookies['sessionid']
+    assert cookie.value == ''
+    assert cookie['max-age'] == 0
+
+
+def test_logout_keeps_other_devices_logged_in(user: User) -> None:
+    laptop, phone = APIClient(), APIClient()
+    laptop.force_login(user)
+    phone.force_login(user)
+    laptop.post(reverse('auth-logout'))
+    assert logged_in_user_id(phone) == str(user.pk)
+
+
+def test_logout_twice_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    api_client.post(reverse('auth-logout'))
+    response = api_client.post(reverse('auth-logout'))
+    assert response.status_code == 401
+    assert response.json() == {'code': 'not_authenticated'}
+
+
+def test_logout_of_guest_is_rejected(api_client: APIClient) -> None:
+    response = api_client.post(reverse('auth-logout'))
+    assert response.status_code == 401
+    assert response.json() == {'code': 'not_authenticated'}
+
+
+def test_logout_with_unknown_session_is_rejected(api_client: APIClient) -> None:
+    api_client.cookies['sessionid'] = 'invalid'
+    assert api_client.post(reverse('auth-logout')).status_code == 401
+
+
+def test_logout_without_csrf_token_is_rejected(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    response = csrf_client.post(reverse('auth-logout'))
+    assert response.status_code == 403
+    assert response.json() == {'code': 'csrf_failed'}
+    assert logged_in_user_id(csrf_client) == str(user.pk)
+
+
+def test_logout_with_csrf_token_is_allowed(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    csrf_client.cookies['csrftoken'] = CSRF_TOKEN
+    response = csrf_client.post(reverse('auth-logout'), HTTP_X_CSRFTOKEN=CSRF_TOKEN)
+    assert response.status_code == 204
+
+
+def test_logout_is_throttled(
+    api_client: APIClient, user: User, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(UserRateThrottle.THROTTLE_RATES, 'user', '1/hour')
+    api_client.force_login(user)
+    api_client.get(reverse('auth-csrf'))
+    response = api_client.post(reverse('auth-logout'))
+    assert response.status_code == 429
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+@pytest.mark.parametrize('method', OTHER_METHODS)
+def test_logout_rejects_other_methods(api_client: APIClient, user: User, method: str) -> None:
+    api_client.force_login(user)
+    response = getattr(api_client, method)(reverse('auth-logout'))
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert response['Allow'] == 'POST, OPTIONS'
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+def test_logout_queries(
+    api_client: APIClient, user: User, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    api_client.force_login(user)
+    with django_assert_num_queries(4):
+        api_client.post(reverse('auth-logout'))
+
+
+# Me
+def update_me(api_client: APIClient, data: object) -> HttpResponse:
+    return api_client.patch(reverse('auth-me'), data, format='json')
+
+
+def test_me_returns_logged_in_user(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = api_client.get(reverse('auth-me'))
+    assert response.status_code == 200
+    assert response.json() == {
+        'email': 'ada@example.com',
+        'since': user.since.isoformat(),
+        'notifyByMail': True,
+        'accent': 'blue',
+    }
+
+
+def test_me_returns_only_own_user(api_client: APIClient, user: User, staff_user: User) -> None:
+    api_client.force_login(staff_user)
+    assert api_client.get(reverse('auth-me')).json()['email'] == 'staff@example.com'
+
+
+def test_me_of_guest_is_rejected(api_client: APIClient) -> None:
+    response = api_client.get(reverse('auth-me'))
+    assert response.status_code == 401
+    assert response.json() == {'code': 'not_authenticated'}
+
+
+def test_me_with_unknown_session_is_rejected(api_client: APIClient) -> None:
+    api_client.cookies['sessionid'] = 'invalid'
+    assert api_client.get(reverse('auth-me')).status_code == 401
+
+
+def test_me_of_deactivated_user_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    User.objects.filter(pk=user.pk).update(is_active=False)
+    assert api_client.get(reverse('auth-me')).status_code == 401
+
+
+def test_me_of_deleted_user_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    user.delete()
+    assert api_client.get(reverse('auth-me')).status_code == 401
+
+
+def test_me_after_logout_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    api_client.post(reverse('auth-logout'))
+    assert api_client.get(reverse('auth-me')).status_code == 401
+
+
+def test_me_after_login_returns_user(api_client: APIClient, user: User) -> None:
+    login(api_client)
+    assert api_client.get(reverse('auth-me')).json()['email'] == 'ada@example.com'
+
+
+def test_me_needs_no_csrf_token_for_reading(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    assert csrf_client.get(reverse('auth-me')).status_code == 200
+
+
+def test_me_queries(
+    api_client: APIClient, user: User, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    api_client.force_login(user)
+    with django_assert_num_queries(2):
+        api_client.get(reverse('auth-me'))
+
+
+# Me: update
+def test_update_me_changes_settings(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = update_me(api_client, {'notifyByMail': False, 'accent': 'teal'})
+    user.refresh_from_db()
+    assert response.status_code == 200
+    assert response.json() == {
+        'email': 'ada@example.com',
+        'since': user.since.isoformat(),
+        'notifyByMail': False,
+        'accent': 'teal',
+    }
+    assert (user.notify_by_mail, user.accent) == (False, 'teal')
+
+
+def test_update_me_changes_only_given_field(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    update_me(api_client, {'accent': 'fuchsia'})
+    user.refresh_from_db()
+    assert (user.notify_by_mail, user.accent) == (True, 'fuchsia')
+
+
+def test_update_me_with_empty_body_changes_nothing(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = update_me(api_client, {})
+    assert response.status_code == 200
+    assert response.json()['accent'] == 'blue'
+
+
+def test_update_me_ignores_other_fields(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    extra = {'email': 'grace@example.com', 'since': '2000-01-01', 'password': 'x'}
+    update_me(api_client, extra | {'isStaff': True, 'isSuperuser': True, 'isActive': False})
+    user.refresh_from_db()
+    assert user.email == 'ada@example.com'
+    assert (user.is_staff, user.is_superuser, user.is_active) == (False, False, True)
+    assert user.date_joined.year != 2000
+    assert user.check_password(PASSWORD)
+
+
+def test_update_me_keeps_user_logged_in(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    update_me(api_client, {'accent': 'teal'})
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+@pytest.mark.parametrize(
+    ('data', 'field', 'code'),
+    [
+        ({'accent': 'green'}, 'accent', 'invalid_choice'),
+        ({'accent': 'BLUE'}, 'accent', 'invalid_choice'),
+        ({'accent': '<script>'}, 'accent', 'invalid_choice'),
+        ({'accent': ''}, 'accent', 'invalid_choice'),
+        ({'accent': None}, 'accent', 'null'),
+        ({'accent': ['blue']}, 'accent', 'invalid_choice'),
+        ({'notifyByMail': 'maybe'}, 'notifyByMail', 'invalid'),
+        ({'notifyByMail': None}, 'notifyByMail', 'null'),
+        ({'notifyByMail': [True]}, 'notifyByMail', 'invalid'),
+    ],
+)
+def test_update_me_with_invalid_value_is_rejected(
+    api_client: APIClient, user: User, data: dict, field: str, code: str
+) -> None:
+    api_client.force_login(user)
+    assert field_codes(update_me(api_client, data), field) == [code]
+    user.refresh_from_db()
+    assert (user.notify_by_mail, user.accent) == (True, 'blue')
+
+
+def test_update_me_with_one_invalid_field_changes_nothing(
+    api_client: APIClient, user: User
+) -> None:
+    api_client.force_login(user)
+    update_me(api_client, {'notifyByMail': False, 'accent': 'green'})
+    user.refresh_from_db()
+    assert user.notify_by_mail is True
+
+
+def test_update_me_with_list_body_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    assert field_codes(update_me(api_client, ['accent']), 'nonField') == ['invalid']
+
+
+def test_update_me_with_broken_json_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = api_client.patch(reverse('auth-me'), '{"accent":', content_type='application/json')
+    assert response.status_code == 400
+    assert response.json() == {'code': 'parse_error'}
+
+
+def test_update_me_queries(
+    api_client: APIClient, user: User, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    api_client.force_login(user)
+    with django_assert_num_queries(3):
+        update_me(api_client, {'accent': 'teal'})
+
+
+def test_update_me_ignores_query_parameters(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    url = f'{reverse("auth-me")}?accent=teal&email=grace@example.com'
+    response = api_client.patch(url, {}, format='json')
+    user.refresh_from_db()
+    assert response.status_code == 200
+    assert (user.accent, user.email) == ('blue', 'ada@example.com')
+
+
+# Me: security
+def test_update_me_of_guest_is_rejected(api_client: APIClient) -> None:
+    response = update_me(api_client, {'accent': 'teal'})
+    assert response.status_code == 401
+    assert response.json() == {'code': 'not_authenticated'}
+
+
+def test_update_me_without_csrf_token_is_rejected(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    response = update_me(csrf_client, {'accent': 'teal'})
+    user.refresh_from_db()
+    assert response.status_code == 403
+    assert response.json() == {'code': 'csrf_failed'}
+    assert user.accent == 'blue'
+
+
+def test_update_me_with_csrf_token_is_allowed(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    csrf_client.cookies['csrftoken'] = CSRF_TOKEN
+    url = reverse('auth-me')
+    response = csrf_client.patch(
+        url, {'accent': 'teal'}, format='json', HTTP_X_CSRFTOKEN=CSRF_TOKEN
+    )
+    assert response.status_code == 200
+
+
+def test_me_is_throttled(
+    api_client: APIClient, user: User, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(UserRateThrottle.THROTTLE_RATES, 'user', '1/hour')
+    api_client.force_login(user)
+    api_client.get(reverse('auth-me'))
+    response = update_me(api_client, {'accent': 'teal'})
+    user.refresh_from_db()
+    assert response.status_code == 429
+    assert user.accent == 'blue'
+
+
+@pytest.mark.parametrize('method', ['post', 'put', 'delete'])
+def test_me_rejects_other_methods(api_client: APIClient, user: User, method: str) -> None:
+    api_client.force_login(user)
+    response = getattr(api_client, method)(reverse('auth-me'), {'accent': 'teal'}, format='json')
+    user.refresh_from_db()
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert response['Allow'] == 'GET, PATCH, HEAD, OPTIONS'
+    assert (user.accent, User.objects.count()) == ('blue', 1)
+
+
+@pytest.mark.parametrize('method', ['post', 'put', 'delete'])
+def test_me_other_methods_change_no_field(api_client: APIClient, user: User, method: str) -> None:
+    api_client.force_login(user)
+    before = model_to_dict(User.objects.get(pk=user.pk))
+    data = {'email': 'grace@example.com', 'accent': 'teal', 'notifyByMail': False}
+    getattr(api_client, method)(reverse('auth-me'), data, format='json')
+    assert model_to_dict(User.objects.get(pk=user.pk)) == before
