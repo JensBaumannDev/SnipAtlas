@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 from django.db.models import Model
 from django.forms.models import model_to_dict
@@ -16,6 +18,7 @@ from app_content.models import (
     ErrorMessage,
     GlossaryTerm,
     Group,
+    News,
     Subtopic,
     Topic,
 )
@@ -412,6 +415,7 @@ AREAS = {
     'debug-guide': ('debug_guide', 'vorgehen'),
     'blueprint': ('blueprint', 'django-projekt-anlegen'),
     'glossary': ('glossary_term', None),
+    'news': ('news', None),
 }
 ROUTES = ['list', 'detail']
 ENDPOINTS = [
@@ -1320,3 +1324,105 @@ def test_glossary_returns_text_unchanged_as_json(api_client: APIClient, db: None
     assert response.json() == [
         {'slug': 'xss', 'term': script, 'aliases': [script], 'definition': script}
     ]
+
+
+# News
+NEWS_JSON = {
+    'date': '2026-10-20',
+    'topic': 'python',
+    'title': 'Python: Schleifen',
+    'link': ['/befehle', 'python', 'schleifen'],
+}
+
+
+def news_list(api_client: APIClient, language: str = 'de', **params: str) -> list[dict]:
+    response = api_client.get(reverse('news-list'), params, HTTP_ACCEPT_LANGUAGE=language)
+    assert response.status_code == 200
+    return response.json()
+
+
+def create_news(topic: Topic, day: date, **fields: object) -> News:
+    data = {'date': day, 'title_de': str(day), 'area': 'fehler', 'topic': topic}
+    return News.objects.create(**(data | fields))
+
+
+def test_news_list_is_public(api_client: APIClient, news: News) -> None:
+    assert news_list(api_client) == [NEWS_JSON]
+
+
+@pytest.mark.parametrize(
+    ('header', 'title'),
+    [
+        ('en', 'Python: loops'),
+        ('en-US,en;q=0.9,de;q=0.8', 'Python: loops'),
+        ('fr', 'Python: Schleifen'),
+    ],
+)
+def test_news_list_uses_accept_language(
+    api_client: APIClient, news: News, header: str, title: str
+) -> None:
+    assert news_list(api_client, header) == [NEWS_JSON | {'title': title}]
+
+
+def test_news_title_falls_back_to_german(api_client: APIClient, topic: Topic) -> None:
+    create_news(topic, date(2026, 1, 5), title_de='Nur Deutsch')
+    assert news_list(api_client, 'en')[0]['title'] == 'Nur Deutsch'
+
+
+@pytest.mark.parametrize('area', ['befehle', 'grundlagen', 'anleitungen', 'fehler'])
+def test_news_link_without_subtopic(api_client: APIClient, topic: Topic, area: str) -> None:
+    create_news(topic, date(2026, 1, 5), area=area)
+    assert news_list(api_client)[0]['link'] == [f'/{area}', 'python']
+
+
+def test_news_date_is_iso_format(api_client: APIClient, topic: Topic) -> None:
+    create_news(topic, date(2026, 1, 5))
+    assert news_list(api_client)[0]['date'] == '2026-01-05'
+
+
+def test_news_list_is_newest_first(api_client: APIClient, news: News, git_alltag: Subtopic) -> None:
+    create_news(git_alltag.topic, date(2026, 9, 1), title_de='alt')
+    create_news(git_alltag.topic, date(2026, 10, 20), title_de='gleicher Tag', subtopic=None)
+    create_news(
+        git_alltag.topic, date(2026, 11, 1), title_de='neu', area='befehle', subtopic=git_alltag
+    )
+    data = news_list(api_client)
+    assert [(item['title'], item['link']) for item in data] == [
+        ('neu', ['/befehle', 'git', 'alltag']),
+        ('gleicher Tag', ['/fehler', 'git']),
+        ('Python: Schleifen', NEWS_JSON['link']),
+        ('alt', ['/fehler', 'git']),
+    ]
+
+
+@pytest.mark.parametrize('params', [{'topic': 'git'}, {'area': 'fehler'}, {'page': '2'}])
+def test_news_list_ignores_query_params(api_client: APIClient, news: News, params: dict) -> None:
+    assert news_list(api_client, **params) == [NEWS_JSON]
+
+
+def test_news_list_is_empty_without_news(api_client: APIClient, db: None) -> None:
+    assert news_list(api_client) == []
+
+
+def test_news_list_loads_in_one_query(
+    api_client: APIClient,
+    news: News,
+    git_alltag: Subtopic,
+    django_assert_num_queries: DjangoAssertNumQueries,
+) -> None:
+    create_news(git_alltag.topic, date(2026, 9, 1))
+    create_news(git_alltag.topic, date(2026, 9, 2), area='befehle', subtopic=git_alltag)
+    with django_assert_num_queries(1):
+        news_list(api_client, 'en')
+
+
+def test_news_has_no_detail(api_client: APIClient, news: News) -> None:
+    assert api_client.get(f'/api/news/{news.pk}/').status_code == 404
+
+
+def test_news_returns_text_unchanged_as_json(api_client: APIClient, topic: Topic) -> None:
+    script = '<script>alert(1)</script>'
+    create_news(topic, date(2026, 1, 5), title_de=script)
+    response = api_client.get(reverse('news-list'))
+    assert response['Content-Type'] == 'application/json'
+    assert response.json()[0]['title'] == script

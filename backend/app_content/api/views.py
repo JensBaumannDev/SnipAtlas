@@ -11,6 +11,7 @@ from app_content.models import (
     ErrorMessage,
     GlossaryTerm,
     Group,
+    News,
     Topic,
     TopicQuerySet,
 )
@@ -23,6 +24,7 @@ from .serializers import (
     ErrorMessageSerializer,
     GlossaryTermSerializer,
     GroupSerializer,
+    NewsSerializer,
     TopicSerializer,
 )
 
@@ -93,4 +95,11 @@ class GlossaryListView(generics.ListAPIView):
         'aliases'
     )
     serializer_class = GlossaryTermSerializer
+    permission_classes = (AllowAny,)
+
+
+# News
+class NewsListView(generics.ListAPIView):
+    queryset = News.objects.select_related('topic', 'subtopic')
+    serializer_class = NewsSerializer
     permission_classes = (AllowAny,)

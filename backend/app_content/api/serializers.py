@@ -12,6 +12,7 @@ from app_content.models import (
     ErrorMessage,
     GlossaryTerm,
     Group,
+    News,
     Subtopic,
     Topic,
 )
@@ -167,3 +168,13 @@ class GlossaryTermSerializer(OptionalFieldsSerializer):
             return None
         subtopic = term.concept.subtopic
         return {'topic': subtopic.topic.slug, 'subtopic': subtopic.slug, 'slug': term.concept.slug}
+
+
+# News
+class NewsSerializer(serializers.ModelSerializer):
+    topic = serializers.CharField(source='topic.slug', read_only=True)
+    link = serializers.ListField(child=serializers.CharField(), read_only=True)
+
+    class Meta:
+        model = News
+        fields = ('date', 'topic', 'title', 'link')

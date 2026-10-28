@@ -9,6 +9,7 @@ from .views import (
     ErrorMessageViewSet,
     GlossaryListView,
     GroupListView,
+    NewsListView,
     TopicDetailView,
 )
 
@@ -23,5 +24,6 @@ urlpatterns: list[URLPattern] = [
     path('groups/', GroupListView.as_view(), name='group-list'),
     path('topics/<slug:slug>/', TopicDetailView.as_view(), name='topic-detail'),
     path('glossary/', GlossaryListView.as_view(), name='glossary-list'),
+    path('news/', NewsListView.as_view(), name='news-list'),
     *router.urls,
 ]
