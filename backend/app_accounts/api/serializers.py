@@ -1,7 +1,9 @@
-from django.contrib.auth import password_validation
+from django.contrib.auth import authenticate, password_validation
 from rest_framework import serializers
 
 from app_accounts.models import User, UserManager
+
+from .exceptions import InvalidCredentials
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -33,3 +35,16 @@ class RegisterSerializer(serializers.Serializer):
 
     def to_representation(self, user: User) -> dict:
         return UserSerializer(user).data
+
+
+# Login
+class LoginSerializer(serializers.Serializer):
+    email = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, trim_whitespace=False)
+
+    def validate(self, attrs: dict) -> dict:
+        request = self.context['request']
+        user = authenticate(request, email=attrs['email'], password=attrs['password'])
+        if user is None:
+            raise InvalidCredentials
+        return {'user': user}

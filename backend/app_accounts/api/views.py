@@ -9,7 +9,7 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from config.permissions import CsrfProtected
 from config.throttling import AuthRateThrottle
 
-from .serializers import RegisterSerializer
+from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
 
 AUTH_THROTTLES = (AnonRateThrottle, UserRateThrottle, AuthRateThrottle)
 
@@ -29,3 +29,16 @@ class RegisterView(generics.CreateAPIView):
 
     def perform_create(self, serializer: RegisterSerializer) -> None:
         login(self.request, serializer.save())
+
+
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+    permission_classes = (CsrfProtected,)
+    throttle_classes = AUTH_THROTTLES
+
+    def post(self, request: Request) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request, user)
+        return Response(UserSerializer(user).data)
