@@ -157,7 +157,7 @@ export class Sidebar {
     const mode = deepestData(root, 'sidebar', isSidebarMode);
     const slug = mode ? segments[1]?.path : undefined;
     const area = deepestData(root, 'area', isContentArea);
-    this.openActiveGroup(slug, area, !this.mode());
+    this.openGroupsFor(slug, area, area !== this.area());
     this.mode.set(mode);
     this.area.set(area);
     this.basePath.set(`/${segments[0]?.path ?? ''}`);
@@ -172,15 +172,17 @@ export class Sidebar {
     return this.router.parseUrl(this.router.url).root.children[PRIMARY_OUTLET]?.segments ?? [];
   }
 
-  private openActiveGroup(
+  private openGroupsFor(
     slug: string | undefined,
     area: ContentArea | undefined,
-    entering: boolean,
+    areaChanged: boolean,
   ): void {
+    if (areaChanged) {
+      this.openGroups.replace(navGroupSlugs(area, this.groups()));
+      return;
+    }
     const active = activeNavGroup(area, slug, this.groups());
-    if (entering) {
-      this.openGroups.replace(active ? [active] : navGroupSlugs(area, this.groups()));
-    } else if (active) {
+    if (active) {
       this.openGroups.set(active, true);
     }
   }
