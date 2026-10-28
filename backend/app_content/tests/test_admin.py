@@ -1,6 +1,7 @@
 import pytest
 from django.contrib.auth.models import Permission
 from django.db.models import Model
+from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.test import Client
 from django.urls import reverse
@@ -14,7 +15,10 @@ from app_content.models import (
     DebugGuide,
     Entry,
     ErrorMessage,
+    GlossaryAlias,
+    GlossaryTerm,
     Group,
+    News,
     Subtopic,
     Topic,
 )
@@ -59,6 +63,8 @@ CONTENT_ADMINS = [
     'debugguide',
     'blueprint',
     'blueprintstep',
+    'glossaryterm',
+    'news',
 ]
 
 
@@ -1280,3 +1286,314 @@ def test_admin_rejects_moving_step_to_blueprint_with_same_slug(
     venv_step.refresh_from_db()
     assert form_error_codes(response, '__all__') == ['unique_together']
     assert venv_step.blueprint == blueprint
+
+
+# Glossary
+@pytest.fixture
+def git_topic(group: Group) -> Topic:
+    return Topic.objects.create(group=group, slug='git', name_de='Git', position=-1)
+
+
+def term_data(**changes: object) -> dict:
+    data = {
+        'slug': 'merge',
+        'term_de': 'Merge',
+        'term_en': '',
+        'definition_de': 'Führt zwei Branches zusammen.',
+        'definition_en': '',
+        'concept': '',
+        'aliases-TOTAL_FORMS': 2,
+        'aliases-INITIAL_FORMS': 0,
+        'aliases-0-language': 'de',
+        'aliases-0-name': 'mergen',
+        'aliases-1-language': 'en',
+        'aliases-1-name': 'merging',
+    }
+    return data | changes
+
+
+def add_term(admin_client: Client, **changes: object) -> HttpResponse:
+    return admin_client.post(reverse('admin:app_content_glossaryterm_add'), term_data(**changes))
+
+
+def test_admin_adds_term_with_aliases(admin_client: Client, concept: Concept) -> None:
+    response = add_term(admin_client, concept=concept.pk)
+    term = GlossaryTerm.objects.get(slug='merge')
+    assert response.status_code == 302
+    assert term.concept == concept
+    assert list(term.aliases.values_list('language', 'name')) == [
+        ('de', 'mergen'),
+        ('en', 'merging'),
+    ]
+
+
+def test_admin_adds_term_without_concept_and_aliases(admin_client: Client, db: None) -> None:
+    response = add_term(admin_client, **{'aliases-TOTAL_FORMS': 0})
+    term = GlossaryTerm.objects.get(slug='merge')
+    assert response.status_code == 302
+    assert (term.concept, term.aliases.count()) == (None, 0)
+
+
+@pytest.mark.parametrize(
+    ('field', 'value', 'code'),
+    [
+        ('slug', 'Merge_Branch', 'invalid'),
+        ('term_de', '', 'required'),
+        ('term_de', 'x' * 61, 'max_length'),
+        ('definition_de', '', 'required'),
+        ('concept', '999999', 'invalid_choice'),
+    ],
+)
+def test_admin_rejects_invalid_term_values(
+    admin_client: Client, db: None, field: str, value: str, code: str
+) -> None:
+    response = add_term(admin_client, **{field: value})
+    assert form_error_codes(response, field) == [code]
+    assert not GlossaryTerm.objects.exists()
+
+
+def test_admin_rejects_duplicate_term_slug(
+    admin_client: Client, glossary_term: GlossaryTerm
+) -> None:
+    response = add_term(admin_client, slug='schleife')
+    assert form_error_codes(response, 'slug') == ['unique']
+    assert GlossaryTerm.objects.count() == 1
+
+
+@pytest.mark.parametrize('name', ['mergen', 'MERGEN'])
+def test_admin_rejects_same_alias_twice_in_form(admin_client: Client, db: None, name: str) -> None:
+    response = add_term(admin_client, **{'aliases-1-language': 'de', 'aliases-1-name': name})
+    formset = response.context['inline_admin_formsets'][0].formset
+    assert response.status_code == 200
+    assert [error.code for error in formset.non_form_errors().as_data()] == ['duplicate']
+    assert not GlossaryTerm.objects.exists()
+
+
+def test_admin_allows_same_alias_in_two_languages(admin_client: Client, db: None) -> None:
+    response = add_term(admin_client, **{'aliases-1-name': 'mergen'})
+    assert response.status_code == 302
+    assert GlossaryTerm.objects.get(slug='merge').aliases.count() == 2
+
+
+def test_admin_rejects_alias_of_other_term(
+    admin_client: Client, glossary_term: GlossaryTerm
+) -> None:
+    response = add_term(admin_client, **{'aliases-0-name': 'SCHLEIFEN'})
+    form = response.context['inline_admin_formsets'][0].formset.forms[0]
+    assert response.status_code == 200
+    assert form.errors
+    assert GlossaryTerm.objects.count() == 1
+
+
+def test_admin_rejects_alias_with_unknown_language(admin_client: Client, db: None) -> None:
+    response = add_term(admin_client, **{'aliases-0-language': 'fr'})
+    assert step_error_codes(response, 'language') == ['invalid_choice']
+    assert not GlossaryTerm.objects.exists()
+
+
+def test_admin_changes_term_and_deletes_single_alias(
+    admin_client: Client, glossary_term: GlossaryTerm
+) -> None:
+    data = term_data(slug='schleife', term_de='Schleife', **{'aliases-INITIAL_FORMS': 2})
+    for index, alias in enumerate(glossary_term.aliases.all()):
+        prefix = f'aliases-{index}-'
+        data |= {f'{prefix}id': alias.pk, f'{prefix}term': glossary_term.pk}
+        data |= {f'{prefix}language': alias.language, f'{prefix}name': alias.name}
+    data['aliases-0-DELETE'] = 'on'
+    data['definition_de'] = 'Wiederholt Code, bis eine Bedingung endet.'
+    url = reverse('admin:app_content_glossaryterm_change', args=[glossary_term.pk])
+    response = admin_client.post(url, data)
+    glossary_term.refresh_from_db()
+    assert response.status_code == 302
+    assert glossary_term.definition_de == 'Wiederholt Code, bis eine Bedingung endet.'
+    assert [alias.name for alias in glossary_term.aliases.all()] == ['Schleifen']
+
+
+def test_admin_deletes_term_with_aliases(admin_client: Client, glossary_term: GlossaryTerm) -> None:
+    url = reverse('admin:app_content_glossaryterm_delete', args=[glossary_term.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    assert response.status_code == 302
+    assert not GlossaryAlias.objects.exists()
+    assert Concept.objects.exists()
+
+
+def test_admin_deletes_concept_but_keeps_term(
+    admin_client: Client, glossary_term: GlossaryTerm
+) -> None:
+    url = reverse('admin:app_content_concept_delete', args=[glossary_term.concept.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    glossary_term.refresh_from_db()
+    assert response.status_code == 302
+    assert glossary_term.concept is None
+
+
+def test_term_concept_uses_autocomplete(admin_client: Client, glossary_term: GlossaryTerm) -> None:
+    params = {
+        'app_label': 'app_content',
+        'model_name': 'glossaryterm',
+        'field_name': 'concept',
+        'term': 'for-schleife',
+    }
+    response = admin_client.get(reverse('admin:autocomplete'), params)
+    assert response.status_code == 200
+    assert [item['text'] for item in response.json()['results']] == ['Die for-Schleife']
+
+
+def test_term_list_searches_term_and_alias(
+    admin_client: Client, glossary_term: GlossaryTerm
+) -> None:
+    GlossaryTerm.objects.create(slug='api', term_de='API')
+    url = reverse('admin:app_content_glossaryterm_changelist')
+    for query in ('schleife', 'loops'):
+        response = admin_client.get(url, {'q': query})
+        assert list(response.context['cl'].result_list) == [glossary_term]
+
+
+def test_term_list_escapes_html(admin_client: Client, db: None) -> None:
+    GlossaryTerm.objects.create(slug='xss', term_de=SCRIPT)
+    content = admin_client.get(reverse('admin:app_content_glossaryterm_changelist')).content
+    assert SCRIPT not in content.decode()
+    assert ESCAPED in content.decode()
+
+
+# News
+def news_data(topic: Topic, subtopic: Subtopic | None, /, **changes: object) -> dict:
+    data = {
+        'date': '2026-10-28',
+        'title_de': 'Python: Schleifen',
+        'title_en': '',
+        'area': 'befehle',
+        'topic': topic.pk,
+        'subtopic': subtopic.pk if subtopic else '',
+    }
+    return data | changes
+
+
+def add_news(
+    admin_client: Client, topic: Topic, subtopic: Subtopic | None, /, **changes: object
+) -> HttpResponse:
+    url = reverse('admin:app_content_news_add')
+    return admin_client.post(url, news_data(topic, subtopic, **changes))
+
+
+def test_admin_adds_news_with_subtopic(admin_client: Client, subtopic: Subtopic) -> None:
+    response = add_news(admin_client, subtopic.topic, subtopic)
+    news = News.objects.get()
+    assert response.status_code == 302
+    assert news.link == ['/befehle', 'python', 'schleifen']
+
+
+def test_admin_adds_news_without_subtopic(admin_client: Client, topic: Topic) -> None:
+    response = add_news(admin_client, topic, None, area='fehler')
+    assert response.status_code == 302
+    assert News.objects.get().link == ['/fehler', 'python']
+
+
+@pytest.mark.parametrize(
+    ('field', 'value', 'code'),
+    [
+        ('date', '2026-13-45', 'invalid'),
+        ('date', '', 'required'),
+        ('title_de', '', 'required'),
+        ('title_de', 'x' * 121, 'max_length'),
+        ('area', 'blog', 'invalid_choice'),
+        ('topic', '999999', 'invalid_choice'),
+        ('subtopic', '999999', 'invalid_choice'),
+    ],
+)
+def test_admin_rejects_invalid_news_values(
+    admin_client: Client, subtopic: Subtopic, field: str, value: str, code: str
+) -> None:
+    response = add_news(admin_client, subtopic.topic, subtopic, **{field: value})
+    assert code in form_error_codes(response, field)
+    assert not News.objects.exists()
+
+
+def test_admin_rejects_subtopic_of_other_topic(
+    admin_client: Client, subtopic: Subtopic, git_topic: Topic
+) -> None:
+    response = add_news(admin_client, git_topic, subtopic)
+    assert form_error_codes(response, 'subtopic') == ['invalid']
+    assert not News.objects.exists()
+
+
+@pytest.mark.parametrize('area', ['anleitungen', 'fehler'])
+def test_admin_rejects_subtopic_for_area_without_subtopics(
+    admin_client: Client, subtopic: Subtopic, area: str
+) -> None:
+    response = add_news(admin_client, subtopic.topic, subtopic, area=area)
+    assert form_error_codes(response, 'subtopic') == ['invalid']
+    assert not News.objects.exists()
+
+
+def test_news_subtopic_choices_name_topic(
+    admin_client: Client, subtopic: Subtopic, git_topic: Topic
+) -> None:
+    Subtopic.objects.create(topic=git_topic, slug='alltag', name_de='Alltag')
+    response = admin_client.get(reverse('admin:app_content_news_add'))
+    choices = response.context['adminform'].form.fields['subtopic'].choices
+    assert [label for value, label in choices if value] == ['Git – Alltag', 'Python – Schleifen']
+
+
+def test_admin_changes_news(admin_client: Client, news: News) -> None:
+    url = reverse('admin:app_content_news_change', args=[news.pk])
+    response = admin_client.post(
+        url, news_data(news.topic, None, title_de='Neu', area='grundlagen')
+    )
+    news.refresh_from_db()
+    assert response.status_code == 302
+    assert (news.title_de, news.link) == ('Neu', ['/grundlagen', 'python'])
+
+
+def test_admin_deletes_news(admin_client: Client, news: News) -> None:
+    url = reverse('admin:app_content_news_delete', args=[news.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    assert response.status_code == 302
+    assert not News.objects.exists()
+    assert Subtopic.objects.exists()
+
+
+def test_admin_keeps_subtopic_with_news(admin_client: Client, group: Group, news: News) -> None:
+    url = reverse('admin:app_content_topic_delete', args=[news.topic.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    assert response.context['protected']
+    assert Subtopic.objects.filter(pk=news.subtopic.pk).exists()
+
+
+def test_news_list_filters_and_searches(admin_client: Client, news: News, git_topic: Topic) -> None:
+    other = News.objects.create(
+        date=news.date, title_de='Git: Stash', area='fehler', topic=git_topic
+    )
+    url = reverse('admin:app_content_news_changelist')
+    by_area = admin_client.get(url, {'area__exact': 'fehler'})
+    by_topic = admin_client.get(url, {'topic__id__exact': news.topic.pk})
+    by_search = admin_client.get(url, {'q': 'stash'})
+    assert list(by_area.context['cl'].result_list) == [other]
+    assert list(by_topic.context['cl'].result_list) == [news]
+    assert list(by_search.context['cl'].result_list) == [other]
+
+
+def test_news_list_escapes_html(admin_client: Client, news: News) -> None:
+    News.objects.filter(pk=news.pk).update(title_de=SCRIPT)
+    content = admin_client.get(reverse('admin:app_content_news_changelist')).content.decode()
+    assert SCRIPT not in content
+    assert ESCAPED in content
+
+
+@pytest.mark.parametrize(
+    ('model', 'fixture'), [('glossaryterm', 'glossary_term'), ('news', 'news')]
+)
+def test_staff_with_view_permission_cannot_change_glossary_or_news(
+    staff_client: Client,
+    staff_user: User,
+    request: pytest.FixtureRequest,
+    model: str,
+    fixture: str,
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    staff_user.user_permissions.add(Permission.objects.get(codename=f'view_{model}'))
+    url = reverse(f'admin:app_content_{model}_change', args=[obj.pk])
+    before = model_to_dict(type(obj).objects.get(pk=obj.pk))
+    assert staff_client.get(url).status_code == 200
+    assert staff_client.post(url, {'title_de': 'Neu', 'term_de': 'Neu'}).status_code == 403
+    assert model_to_dict(type(obj).objects.get(pk=obj.pk)) == before

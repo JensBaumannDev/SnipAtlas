@@ -10,7 +10,9 @@ from .models import (
     Entry,
     ErrorMessage,
     ErrorStep,
+    GlossaryTerm,
     Group,
+    News,
     Subtopic,
     Topic,
 )
@@ -74,3 +76,13 @@ class BlueprintStepTranslation(TranslationOptions):
 @register(BlueprintCode)
 class BlueprintCodeTranslation(TranslationOptions):
     fields = ('code', 'code_unix')
+
+
+@register(GlossaryTerm)
+class GlossaryTermTranslation(TranslationOptions):
+    fields = ('term', 'definition')
+
+
+@register(News)
+class NewsTranslation(TranslationOptions):
+    fields = ('title',)

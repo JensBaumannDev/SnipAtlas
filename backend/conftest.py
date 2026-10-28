@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 from django.contrib.auth.models import Permission
 from django.core.cache import cache
@@ -12,7 +14,9 @@ from app_content.models import (
     DebugGuide,
     Entry,
     ErrorMessage,
+    GlossaryTerm,
     Group,
+    News,
     Subtopic,
     Topic,
 )
@@ -202,3 +206,30 @@ def blueprint(topic: Topic) -> Blueprint:
 @pytest.fixture
 def venv_step(blueprint: Blueprint) -> BlueprintStep:
     return blueprint.steps.get(slug='virtuelle-umgebung')
+
+
+@pytest.fixture
+def glossary_term(concept: Concept) -> GlossaryTerm:
+    term = GlossaryTerm.objects.create(
+        slug='schleife',
+        term_de='Schleife',
+        term_en='Loop',
+        definition_de='Wiederholt Code.',
+        definition_en='Repeats code.',
+        concept=concept,
+    )
+    term.aliases.create(name='Schleifen')
+    term.aliases.create(language='en', name='Loops')
+    return term
+
+
+@pytest.fixture
+def news(subtopic: Subtopic) -> News:
+    return News.objects.create(
+        date=date(2026, 10, 20),
+        title_de='Python: Schleifen',
+        title_en='Python: loops',
+        area='befehle',
+        topic=subtopic.topic,
+        subtopic=subtopic,
+    )
