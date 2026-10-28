@@ -26,7 +26,9 @@
       }
     </select>
     @if (areaError) {
-      <p class="field__error" id="entry-area-error">{{ areaError.key | translate: areaError.params }}</p>
+      <p class="field__error" id="entry-area-error">
+        {{ areaError.key | translate: areaError.params }}
+      </p>
     }
   </div>
 
@@ -53,7 +55,9 @@
       }
     </select>
     @if (topicError) {
-      <p class="field__error" id="entry-topic-error">{{ topicError.key | translate: topicError.params }}</p>
+      <p class="field__error" id="entry-topic-error">
+        {{ topicError.key | translate: topicError.params }}
+      </p>
     }
   </div>
 
@@ -74,7 +78,9 @@
       [attr.aria-describedby]="titleError ? 'entry-title-error' : null"
     />
     @if (titleError) {
-      <p class="field__error" id="entry-title-error">{{ titleError.key | translate: titleError.params }}</p>
+      <p class="field__error" id="entry-title-error">
+        {{ titleError.key | translate: titleError.params }}
+      </p>
     }
   </div>
 
@@ -94,12 +100,16 @@
       [attr.aria-describedby]="reasonError ? 'entry-reason-error' : null"
     ></textarea>
     @if (reasonError) {
-      <p class="field__error" id="entry-reason-error">{{ reasonError.key | translate: reasonError.params }}</p>
+      <p class="field__error" id="entry-reason-error">
+        {{ reasonError.key | translate: reasonError.params }}
+      </p>
     }
   </div>
 
   <div class="field form-grid__wide">
-    <label class="field__label" for="entry-example">{{ 'request.entry.exampleLabel' | translate }}</label>
+    <label class="field__label" for="entry-example">{{
+      'request.entry.exampleLabel' | translate
+    }}</label>
     <textarea
       id="entry-example"
       class="input input--code"
@@ -112,12 +122,16 @@
       [attr.aria-describedby]="exampleError ? 'entry-example-error' : null"
     ></textarea>
     @if (exampleError) {
-      <p class="field__error" id="entry-example-error">{{ exampleError.key | translate: exampleError.params }}</p>
+      <p class="field__error" id="entry-example-error">
+        {{ exampleError.key | translate: exampleError.params }}
+      </p>
     }
   </div>
 
   <div class="field form-grid__wide">
-    <label class="field__label" for="entry-source">{{ 'request.entry.sourceLabel' | translate }}</label>
+    <label class="field__label" for="entry-source">{{
+      'request.entry.sourceLabel' | translate
+    }}</label>
     <input
       id="entry-source"
       class="input"
@@ -129,7 +143,9 @@
       [attr.aria-describedby]="sourceError ? 'entry-source-error' : 'entry-source-hint'"
     />
     @if (sourceError) {
-      <p class="field__error" id="entry-source-error">{{ sourceError.key | translate: sourceError.params }}</p>
+      <p class="field__error" id="entry-source-error">
+        {{ sourceError.key | translate: sourceError.params }}
+      </p>
     } @else {
       <p class="field__hint" id="entry-source-hint">{{ 'request.entry.sourceHint' | translate }}</p>
     }

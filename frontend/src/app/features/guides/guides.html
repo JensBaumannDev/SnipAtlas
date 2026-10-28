@@ -10,7 +10,11 @@
     @for (blueprint of topicBlueprints(); track blueprint.slug) {
       <li class="guides__item" [id]="blueprint.slug">
         <h2 class="guides__title">
-          <a class="guides__link" [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]">{{ blueprint.title }}</a>
+          <a
+            class="guides__link"
+            [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]"
+            >{{ blueprint.title }}</a
+          >
         </h2>
         <p class="guides__summary">{{ blueprint.summary }}</p>
         <app-progress-bar
@@ -35,7 +39,10 @@
       <ul class="guides__overview" role="list">
         @for (blueprint of blueprints(); track blueprint.slug) {
           <li class="guides__row">
-            <a class="guides__row-link" [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]">
+            <a
+              class="guides__row-link"
+              [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]"
+            >
               <span class="guides__row-text">
                 <span class="guides__row-title">{{ blueprint.title }}</span>
                 <span class="guides__summary">{{ blueprint.summary }}</span>

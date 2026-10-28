@@ -9,7 +9,9 @@
 
   @if (projectKeys().length) {
     <section class="guide-detail__project" aria-labelledby="guide-project">
-      <h2 class="guide-detail__project-title" id="guide-project">{{ 'project.title' | translate }}</h2>
+      <h2 class="guide-detail__project-title" id="guide-project">
+        {{ 'project.title' | translate }}
+      </h2>
       <p class="guide-detail__project-hint">{{ 'project.hint' | translate }}</p>
       <app-project-form [keys]="projectKeys()" />
     </section>

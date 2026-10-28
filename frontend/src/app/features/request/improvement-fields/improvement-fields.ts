@@ -14,7 +14,13 @@ export class ImprovementFields {
   readonly group = input.required<ImprovementForm>();
   readonly submitted = input(false);
 
-  protected readonly areas: ImprovementArea[] = ['content', 'usability', 'design', 'feature', 'other'];
+  protected readonly areas: ImprovementArea[] = [
+    'content',
+    'usability',
+    'design',
+    'feature',
+    'other',
+  ];
 
   protected error(control: AbstractControl): FieldError | undefined {
     return visibleError(control, this.submitted());

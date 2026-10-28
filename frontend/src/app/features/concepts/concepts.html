@@ -10,7 +10,10 @@
     [parentLink]="['/grundlagen', topic.slug]"
   >
     <p class="concepts__meta">
-      {{ (count === 1 ? 'concepts.conceptCountOne' : 'concepts.conceptCount') | translate: { count: count } }}
+      {{
+        (count === 1 ? 'concepts.conceptCountOne' : 'concepts.conceptCount')
+          | translate: { count: count }
+      }}
     </p>
     @if (count) {
       <button class="btn btn--ghost" type="button" (click)="toggleAll()">
@@ -23,7 +26,10 @@
     <section class="concepts__section">
       @if (!subtopic) {
         <h2 class="concepts__section-title" [id]="section.subtopic.slug">
-          <a class="concepts__section-link" [routerLink]="['/grundlagen', topic.slug, section.subtopic.slug]">
+          <a
+            class="concepts__section-link"
+            [routerLink]="['/grundlagen', topic.slug, section.subtopic.slug]"
+          >
             {{ section.subtopic.name }}
           </a>
         </h2>

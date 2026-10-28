@@ -6,7 +6,10 @@
   (click)="toggleMenu()"
 >
   <span class="sidebar__toggle-label">
-    {{ 'sidebar.topics' | translate }}@if (activeTopic(); as topic) {: {{ topic.name }}}
+    {{ 'sidebar.topics' | translate }}
+    @if (activeTopic(); as topic) {
+      : {{ topic.name }}
+    }
   </span>
   <svg [lucideIcon]="chevronDownIcon" class="icon sidebar__toggle-icon"></svg>
 </button>
@@ -22,8 +25,13 @@
     <p class="sidebar__area">{{ label | translate }}</p>
   }
 
-  <section class="sidebar__group sidebar__group--collection" aria-labelledby="sidebar-group-collection">
-    <h2 class="sidebar__heading sidebar__heading--text" id="sidebar-group-collection">{{ 'sidebar.collection' | translate }}</h2>
+  <section
+    class="sidebar__group sidebar__group--collection"
+    aria-labelledby="sidebar-group-collection"
+  >
+    <h2 class="sidebar__heading sidebar__heading--text" id="sidebar-group-collection">
+      {{ 'sidebar.collection' | translate }}
+    </h2>
     <app-collection class="sidebar__collection" [limit]="5" />
   </section>
 
@@ -73,7 +81,9 @@
                       type="button"
                       [attr.aria-controls]="'sidebar-topic-' + topic.slug"
                       [attr.aria-expanded]="isOpen"
-                      [attr.aria-label]="'sidebar.toggleSubtopics' | translate: { topic: topic.name }"
+                      [attr.aria-label]="
+                        'sidebar.toggleSubtopics' | translate: { topic: topic.name }
+                      "
                       (click)="toggleTopic(topic.slug)"
                     >
                       <svg [lucideIcon]="chevronRightIcon" class="icon sidebar__chevron"></svg>
@@ -81,9 +91,17 @@
                   }
                 </div>
                 @if (showSubtopics && topic.subtopics.length) {
-                  <div class="sidebar__collapse" [class.sidebar__collapse--open]="isOpen" [inert]="!isOpen">
+                  <div
+                    class="sidebar__collapse"
+                    [class.sidebar__collapse--open]="isOpen"
+                    [inert]="!isOpen"
+                  >
                     <div class="sidebar__collapse-inner">
-                      <ul class="sidebar__subtopics" role="list" [id]="'sidebar-topic-' + topic.slug">
+                      <ul
+                        class="sidebar__subtopics"
+                        role="list"
+                        [id]="'sidebar-topic-' + topic.slug"
+                      >
                         @for (subtopic of topic.subtopics; track subtopic.slug) {
                           <li>
                             <a

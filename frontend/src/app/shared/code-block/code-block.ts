@@ -66,7 +66,9 @@ export class CodeBlock {
       prompt: line.prompt,
       tokens: line.tokens.flatMap((token) =>
         splitMarkers(token.text).map<ViewToken>(({ text, key }) =>
-          key ? { text: values[key]?.trim() ?? '', kind: token.kind, key } : { text, kind: token.kind },
+          key
+            ? { text: values[key]?.trim() ?? '', kind: token.kind, key }
+            : { text, kind: token.kind },
         ),
       ),
     }));

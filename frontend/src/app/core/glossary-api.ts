@@ -42,7 +42,8 @@ const TERMS: GlossaryTerm[] = [
     slug: 'commit',
     term: 'Commit',
     aliases: ['Commits', 'committet', 'committen'],
-    definition: 'Ein gespeicherter Zwischenstand in Git, mit einer Nachricht, was sich geändert hat.',
+    definition:
+      'Ein gespeicherter Zwischenstand in Git, mit einer Nachricht, was sich geändert hat.',
   },
   {
     slug: 'container',
@@ -253,7 +254,8 @@ const TERMS: GlossaryTerm[] = [
     slug: 'ssh',
     term: 'SSH',
     aliases: [],
-    definition: 'Verschlüsselte Verbindung zu einem anderen Rechner, um dort im Terminal zu arbeiten.',
+    definition:
+      'Verschlüsselte Verbindung zu einem anderen Rechner, um dort im Terminal zu arbeiten.',
   },
   {
     slug: 'statuscode',
@@ -266,8 +268,7 @@ const TERMS: GlossaryTerm[] = [
     slug: 'template',
     term: 'Template',
     aliases: ['Templates'],
-    definition:
-      'Die HTML-Vorlage einer Angular-Komponente, mit Platzhaltern wie {{ task.title }}.',
+    definition: 'Die HTML-Vorlage einer Angular-Komponente, mit Platzhaltern wie {{ task.title }}.',
   },
   {
     slug: 'token',

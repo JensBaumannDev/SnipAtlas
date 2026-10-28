@@ -1,7 +1,9 @@
 <h1>{{ 'pages.privacy' | translate }}</h1>
 
 <section class="legal__section" aria-labelledby="privacy-controller">
-  <h2 class="legal__heading" id="privacy-controller">{{ 'legal.privacy.controller' | translate }}</h2>
+  <h2 class="legal__heading" id="privacy-controller">
+    {{ 'legal.privacy.controller' | translate }}
+  </h2>
   <p>{{ 'legal.privacy.controllerText' | translate }}</p>
   <address class="legal__address">
     Jens Baumann<br />
@@ -68,7 +70,8 @@
   <h2 class="legal__heading" id="privacy-request">{{ 'legal.privacy.request' | translate }}</h2>
   <p>
     {{ 'legal.privacy.requestBefore' | translate }}
-    <a routerLink="/anfrage">{{ 'legal.privacy.requestLink' | translate }}</a>{{ 'legal.privacy.requestAfter' | translate }}
+    <a routerLink="/anfrage">{{ 'legal.privacy.requestLink' | translate }}</a
+    >{{ 'legal.privacy.requestAfter' | translate }}
   </p>
   <p>{{ 'legal.privacy.requestAccount' | translate }}</p>
   <p>{{ 'legal.privacy.requestBasis' | translate }}</p>
