@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, password_validation
 from rest_framework import serializers
 
-from app_accounts.models import User, UserManager
+from app_accounts.models import Favorite, User, UserManager
 
 from .exceptions import InvalidCredentials
 
@@ -48,3 +48,16 @@ class LoginSerializer(serializers.Serializer):
         if user is None:
             raise InvalidCredentials
         return {'user': user}
+
+
+# Favorites
+class FavoriteSerializer(serializers.ModelSerializer):
+    topic = serializers.CharField(source='entry.subtopic.topic.slug')
+    subtopic = serializers.CharField(source='entry.subtopic.slug')
+    slug = serializers.CharField(source='entry.slug')
+    title = serializers.CharField(source='entry.title')
+
+    class Meta:
+        model = Favorite
+        fields = ('topic', 'subtopic', 'slug', 'title')
+        read_only_fields = fields
