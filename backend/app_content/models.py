@@ -104,11 +104,17 @@ def split_os_code(code: str, code_unix: str) -> str | dict[str, str]:
     return {'win': code, 'unix': code_unix}
 
 
-class ContentItemQuerySet(models.QuerySet):
-    def for_topic(self, slug: str) -> ContentItemQuerySet:
+class TopicQuerySet(models.QuerySet):
+    topic_lookup = 'topic__slug'
+
+    def for_topic(self, slug: str) -> TopicQuerySet:
         if not validate_clean_slug.regex.fullmatch(slug):
             return self.none()
-        return self.filter(subtopic__topic__slug=slug)
+        return self.filter(**{self.topic_lookup: slug})
+
+
+class ContentItemQuerySet(TopicQuerySet):
+    topic_lookup = 'subtopic__topic__slug'
 
 
 class ContentItem(models.Model):
@@ -182,6 +188,8 @@ class ErrorMessage(OptionalCode):
     meaning = models.TextField()
     cause = models.TextField()
     position = models.IntegerField(default=0)
+
+    objects = TopicQuerySet.as_manager()
 
     class Meta:
         ordering = ('topic__position', 'topic_id', 'position', 'pk')
