@@ -9,6 +9,9 @@ from modeltranslation.admin import (
 )
 
 from .models import (
+    Blueprint,
+    BlueprintCode,
+    BlueprintStep,
     Concept,
     ContentItem,
     DebugGuide,
@@ -120,3 +123,41 @@ class DebugGuideAdmin(TabbedTranslationAdmin):
     list_select_related = ('topic',)
     prepopulated_fields = {'slug': ('title',)}
     inlines = (DebugGuideStepInline,)
+
+
+# Blueprints
+class BlueprintStepInline(TranslationStackedInline):
+    model = BlueprintStep
+    fields = ('title', 'slug', 'why', 'note', 'position')
+    extra = 1
+    prepopulated_fields = {'slug': ('title',)}
+    show_change_link = True
+
+
+@admin.register(Blueprint)
+class BlueprintAdmin(TabbedTranslationAdmin):
+    fields = ('topic', 'slug', 'title', 'summary', 'position')
+    list_display = ('title', 'topic', 'slug', 'position')
+    list_editable = ('position',)
+    list_filter = ('topic',)
+    search_fields = ('title', 'slug')
+    list_select_related = ('topic',)
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = (BlueprintStepInline,)
+
+
+class BlueprintCodeInline(TranslationStackedInline):
+    model = BlueprintCode
+    extra = 1
+
+
+@admin.register(BlueprintStep)
+class BlueprintStepAdmin(TabbedTranslationAdmin):
+    fields = ('blueprint', 'slug', 'title', 'why', 'note', 'position')
+    list_display = ('title', 'blueprint', 'slug', 'position')
+    list_editable = ('position',)
+    list_filter = ('blueprint',)
+    search_fields = ('title',)
+    list_select_related = ('blueprint',)
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = (BlueprintCodeInline,)

@@ -272,3 +272,65 @@ class DebugGuideStep(OptionalCode):
     @property
     def os_code(self) -> str | dict[str, str]:
         return split_os_code(self.code, self.code_unix)
+
+
+# Blueprints
+class Blueprint(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.PROTECT, related_name='+')
+    slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
+    title = models.CharField(max_length=120)
+    summary = models.TextField()
+    position = models.IntegerField(default=0)
+
+    objects = TopicQuerySet.as_manager()
+
+    class Meta:
+        ordering = ('topic__position', 'topic_id', 'position', 'pk')
+        constraints = [slug_constraint()]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class BlueprintStep(models.Model):
+    blueprint = models.ForeignKey(Blueprint, on_delete=models.CASCADE, related_name='steps')
+    slug = models.SlugField(max_length=80, validators=[validate_clean_slug])
+    title = models.CharField(max_length=120)
+    why = models.TextField()
+    note = models.TextField(blank=True)
+    position = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ('position', 'pk')
+        constraints = [
+            models.UniqueConstraint(
+                fields=('blueprint', 'slug'), name='blueprintstep_slug_unique_per_blueprint'
+            ),
+            slug_constraint(),
+        ]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class BlueprintCode(models.Model):
+    step = models.ForeignKey(BlueprintStep, on_delete=models.CASCADE, related_name='codes')
+    language = models.CharField(max_length=20, choices=CodeLanguage.choices)
+    code = models.TextField()
+    code_unix = models.TextField(blank=True)
+    position = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ('position', 'pk')
+        constraints = [language_constraint()]
+
+    def __str__(self) -> str:
+        return self.get_language_display()
+
+    def clean(self) -> None:
+        super().clean()
+        require_german(self, 'code_unix')
+
+    @property
+    def os_code(self) -> str | dict[str, str]:
+        return split_os_code(self.code, self.code_unix)
