@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.middleware.csrf import get_token
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
@@ -42,3 +42,9 @@ class LoginView(generics.GenericAPIView):
         user = serializer.validated_data['user']
         login(request, user)
         return Response(UserSerializer(user).data)
+
+
+class LogoutView(generics.GenericAPIView):
+    def post(self, request: Request) -> Response:
+        logout(request)
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.sessions.models import Session
 from django.http import HttpResponse
 from django.urls import reverse
 from pytest_django import DjangoAssertNumQueries
@@ -577,3 +578,97 @@ def test_login_rejects_other_methods(api_client: APIClient, user: User, method: 
     assert response.json() == {'code': 'method_not_allowed'}
     assert response['Allow'] == 'POST, OPTIONS'
     assert logged_in_user_id(api_client) is None
+
+
+# Logout
+def test_logout_returns_no_content(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = api_client.post(reverse('auth-logout'))
+    assert response.status_code == 204
+    assert response.content == b''
+
+
+def test_logout_ends_session(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    session_key = api_client.session.session_key
+    api_client.post(reverse('auth-logout'))
+    assert logged_in_user_id(api_client) is None
+    assert not Session.objects.filter(session_key=session_key).exists()
+
+
+def test_logout_deletes_session_cookie(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    cookie = api_client.post(reverse('auth-logout')).cookies['sessionid']
+    assert cookie.value == ''
+    assert cookie['max-age'] == 0
+
+
+def test_logout_keeps_other_devices_logged_in(user: User) -> None:
+    laptop, phone = APIClient(), APIClient()
+    laptop.force_login(user)
+    phone.force_login(user)
+    laptop.post(reverse('auth-logout'))
+    assert logged_in_user_id(phone) == str(user.pk)
+
+
+def test_logout_twice_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    api_client.post(reverse('auth-logout'))
+    response = api_client.post(reverse('auth-logout'))
+    assert response.status_code == 401
+    assert response.json() == {'code': 'not_authenticated'}
+
+
+def test_logout_of_guest_is_rejected(api_client: APIClient) -> None:
+    response = api_client.post(reverse('auth-logout'))
+    assert response.status_code == 401
+    assert response.json() == {'code': 'not_authenticated'}
+
+
+def test_logout_with_unknown_session_is_rejected(api_client: APIClient) -> None:
+    api_client.cookies['sessionid'] = 'invalid'
+    assert api_client.post(reverse('auth-logout')).status_code == 401
+
+
+def test_logout_without_csrf_token_is_rejected(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    response = csrf_client.post(reverse('auth-logout'))
+    assert response.status_code == 403
+    assert response.json() == {'code': 'csrf_failed'}
+    assert logged_in_user_id(csrf_client) == str(user.pk)
+
+
+def test_logout_with_csrf_token_is_allowed(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    csrf_client.cookies['csrftoken'] = CSRF_TOKEN
+    response = csrf_client.post(reverse('auth-logout'), HTTP_X_CSRFTOKEN=CSRF_TOKEN)
+    assert response.status_code == 204
+
+
+def test_logout_is_throttled(
+    api_client: APIClient, user: User, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(UserRateThrottle.THROTTLE_RATES, 'user', '1/hour')
+    api_client.force_login(user)
+    api_client.get(reverse('auth-csrf'))
+    response = api_client.post(reverse('auth-logout'))
+    assert response.status_code == 429
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+@pytest.mark.parametrize('method', OTHER_METHODS)
+def test_logout_rejects_other_methods(api_client: APIClient, user: User, method: str) -> None:
+    api_client.force_login(user)
+    response = getattr(api_client, method)(reverse('auth-logout'))
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert response['Allow'] == 'POST, OPTIONS'
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+def test_logout_queries(
+    api_client: APIClient, user: User, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    api_client.force_login(user)
+    with django_assert_num_queries(4):
+        api_client.post(reverse('auth-logout'))
