@@ -1,9 +1,9 @@
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny
 
-from app_content.models import ContentItemQuerySet, Entry, Group, Topic
+from app_content.models import Concept, ContentItemQuerySet, Entry, Group, Topic
 
-from .serializers import EntrySerializer, GroupSerializer, TopicSerializer
+from .serializers import ConceptSerializer, EntrySerializer, GroupSerializer, TopicSerializer
 
 
 class GroupListView(generics.ListAPIView):
@@ -36,3 +36,8 @@ class ContentItemViewSet(viewsets.ReadOnlyModelViewSet):
 class EntryViewSet(ContentItemViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
+
+
+class ConceptViewSet(ContentItemViewSet):
+    queryset = Concept.objects.all()
+    serializer_class = ConceptSerializer

@@ -12,8 +12,8 @@ from app_content.models import Concept, Entry, Group, Subtopic, Topic
 pytestmark = pytest.mark.django_db
 
 WRITE_METHODS = ['post', 'put', 'patch', 'delete']
-CONTENT = ['entry']
-CONTENT_MODELS = {'entry': Entry}
+CONTENT = ['entry', 'concept']
+CONTENT_MODELS = {'entry': Entry, 'concept': Concept}
 
 
 # Groups
@@ -208,6 +208,46 @@ def test_entry_detail_falls_back_to_german_code(api_client: APIClient, os_entry:
     }
 
 
+# Concepts
+CONCEPT_JSON = {
+    'slug': 'for-schleife',
+    'topic': 'python',
+    'subtopic': 'schleifen',
+    'title': 'Die for-Schleife',
+    'summary': 'Läuft über alle Elemente.',
+    'explanation': 'Python nimmt nacheinander jedes Element.',
+    'language': 'python',
+    'code': 'for item in items: print(item)',
+    'note': 'Nicht die Liste in der Schleife ändern.',
+}
+
+
+def test_concepts_list_is_public(api_client: APIClient, concept: Concept) -> None:
+    response = api_client.get(reverse('concept-list'))
+    assert response.status_code == 200
+    assert response.json() == [CONCEPT_JSON]
+
+
+def test_concept_detail_is_public(api_client: APIClient, concept: Concept) -> None:
+    response = api_client.get(reverse('concept-detail', args=['for-schleife']))
+    assert response.status_code == 200
+    assert response.json() == CONCEPT_JSON
+
+
+def test_concept_without_note_has_empty_note(api_client: APIClient, concept: Concept) -> None:
+    concept.note_de = ''
+    concept.save()
+    data = api_client.get(reverse('concept-detail', args=['for-schleife'])).json()
+    assert data['note'] == ''
+
+
+def test_concept_detail_uses_accept_language(api_client: APIClient, concept: Concept) -> None:
+    url = reverse('concept-detail', args=['for-schleife'])
+    data = api_client.get(url, HTTP_ACCEPT_LANGUAGE='en').json()
+    assert [data['title'], data['summary']] == ['The for loop', 'Runs over all items.']
+    assert data['note'] == 'Nicht die Liste in der Schleife ändern.'
+
+
 # Entries and concepts: filter
 def create_item(model: str, subtopic: Subtopic, slug: str, **fields: object) -> Model:
     return CONTENT_MODELS[model].objects.create(
@@ -310,6 +350,15 @@ def test_content_detail_unknown_slug_returns_404(
     response = api_client.get(reverse(f'{model}-detail', args=[slug]))
     assert response.status_code == 404
     assert response.json() == {'code': 'not_found'}
+
+
+@pytest.mark.parametrize(('model', 'other'), [('entry', 'concept'), ('concept', 'entry')])
+def test_content_detail_ignores_slug_of_other_area(
+    api_client: APIClient, subtopic: Subtopic, model: str, other: str
+) -> None:
+    create_item(other, subtopic, 'nur-dort')
+    response = api_client.get(reverse(f'{model}-detail', args=['nur-dort']))
+    assert response.status_code == 404
 
 
 @pytest.mark.parametrize('fixture', CONTENT)
@@ -459,7 +508,7 @@ def test_content_understands_browser_language_header(
     assert data['title'] == obj.title_en
 
 
-@pytest.mark.parametrize('model', ['entries'])
+@pytest.mark.parametrize('model', ['entries', 'concepts'])
 @pytest.mark.parametrize('slug', ['for.schleife', 'for%20schleife', 'f%C3%BCr', '%00'])
 def test_content_detail_with_invalid_characters_returns_404(
     api_client: APIClient, entry: Entry, concept: Concept, model: str, slug: str

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app_content.models import Entry, Group, Subtopic, Topic
+from app_content.models import Concept, Entry, Group, Subtopic, Topic
 
 
 class SubtopicSerializer(serializers.ModelSerializer):
@@ -37,3 +37,19 @@ class EntrySerializer(ContentItemSerializer):
     class Meta:
         model = Entry
         fields = ('slug', 'topic', 'subtopic', 'title', 'description', 'language', 'code')
+
+
+class ConceptSerializer(ContentItemSerializer):
+    class Meta:
+        model = Concept
+        fields = (
+            'slug',
+            'topic',
+            'subtopic',
+            'title',
+            'summary',
+            'explanation',
+            'language',
+            'code',
+            'note',
+        )
