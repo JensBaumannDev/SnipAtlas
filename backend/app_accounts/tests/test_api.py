@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.sessions.models import Session
+from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.urls import reverse
 from pytest_django import DjangoAssertNumQueries
@@ -672,3 +673,237 @@ def test_logout_queries(
     api_client.force_login(user)
     with django_assert_num_queries(4):
         api_client.post(reverse('auth-logout'))
+
+
+# Me
+def update_me(api_client: APIClient, data: object) -> HttpResponse:
+    return api_client.patch(reverse('auth-me'), data, format='json')
+
+
+def test_me_returns_logged_in_user(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = api_client.get(reverse('auth-me'))
+    assert response.status_code == 200
+    assert response.json() == {
+        'email': 'ada@example.com',
+        'since': user.since.isoformat(),
+        'notifyByMail': True,
+        'accent': 'blue',
+    }
+
+
+def test_me_returns_only_own_user(api_client: APIClient, user: User, staff_user: User) -> None:
+    api_client.force_login(staff_user)
+    assert api_client.get(reverse('auth-me')).json()['email'] == 'staff@example.com'
+
+
+def test_me_of_guest_is_rejected(api_client: APIClient) -> None:
+    response = api_client.get(reverse('auth-me'))
+    assert response.status_code == 401
+    assert response.json() == {'code': 'not_authenticated'}
+
+
+def test_me_with_unknown_session_is_rejected(api_client: APIClient) -> None:
+    api_client.cookies['sessionid'] = 'invalid'
+    assert api_client.get(reverse('auth-me')).status_code == 401
+
+
+def test_me_of_deactivated_user_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    User.objects.filter(pk=user.pk).update(is_active=False)
+    assert api_client.get(reverse('auth-me')).status_code == 401
+
+
+def test_me_of_deleted_user_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    user.delete()
+    assert api_client.get(reverse('auth-me')).status_code == 401
+
+
+def test_me_after_logout_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    api_client.post(reverse('auth-logout'))
+    assert api_client.get(reverse('auth-me')).status_code == 401
+
+
+def test_me_after_login_returns_user(api_client: APIClient, user: User) -> None:
+    login(api_client)
+    assert api_client.get(reverse('auth-me')).json()['email'] == 'ada@example.com'
+
+
+def test_me_needs_no_csrf_token_for_reading(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    assert csrf_client.get(reverse('auth-me')).status_code == 200
+
+
+def test_me_queries(
+    api_client: APIClient, user: User, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    api_client.force_login(user)
+    with django_assert_num_queries(2):
+        api_client.get(reverse('auth-me'))
+
+
+# Me: update
+def test_update_me_changes_settings(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = update_me(api_client, {'notifyByMail': False, 'accent': 'teal'})
+    user.refresh_from_db()
+    assert response.status_code == 200
+    assert response.json() == {
+        'email': 'ada@example.com',
+        'since': user.since.isoformat(),
+        'notifyByMail': False,
+        'accent': 'teal',
+    }
+    assert (user.notify_by_mail, user.accent) == (False, 'teal')
+
+
+def test_update_me_changes_only_given_field(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    update_me(api_client, {'accent': 'fuchsia'})
+    user.refresh_from_db()
+    assert (user.notify_by_mail, user.accent) == (True, 'fuchsia')
+
+
+def test_update_me_with_empty_body_changes_nothing(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = update_me(api_client, {})
+    assert response.status_code == 200
+    assert response.json()['accent'] == 'blue'
+
+
+def test_update_me_ignores_other_fields(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    extra = {'email': 'grace@example.com', 'since': '2000-01-01', 'password': 'x'}
+    update_me(api_client, extra | {'isStaff': True, 'isSuperuser': True, 'isActive': False})
+    user.refresh_from_db()
+    assert user.email == 'ada@example.com'
+    assert (user.is_staff, user.is_superuser, user.is_active) == (False, False, True)
+    assert user.date_joined.year != 2000
+    assert user.check_password(PASSWORD)
+
+
+def test_update_me_keeps_user_logged_in(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    update_me(api_client, {'accent': 'teal'})
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+@pytest.mark.parametrize(
+    ('data', 'field', 'code'),
+    [
+        ({'accent': 'green'}, 'accent', 'invalid_choice'),
+        ({'accent': 'BLUE'}, 'accent', 'invalid_choice'),
+        ({'accent': '<script>'}, 'accent', 'invalid_choice'),
+        ({'accent': ''}, 'accent', 'invalid_choice'),
+        ({'accent': None}, 'accent', 'null'),
+        ({'accent': ['blue']}, 'accent', 'invalid_choice'),
+        ({'notifyByMail': 'maybe'}, 'notifyByMail', 'invalid'),
+        ({'notifyByMail': None}, 'notifyByMail', 'null'),
+        ({'notifyByMail': [True]}, 'notifyByMail', 'invalid'),
+    ],
+)
+def test_update_me_with_invalid_value_is_rejected(
+    api_client: APIClient, user: User, data: dict, field: str, code: str
+) -> None:
+    api_client.force_login(user)
+    assert field_codes(update_me(api_client, data), field) == [code]
+    user.refresh_from_db()
+    assert (user.notify_by_mail, user.accent) == (True, 'blue')
+
+
+def test_update_me_with_one_invalid_field_changes_nothing(
+    api_client: APIClient, user: User
+) -> None:
+    api_client.force_login(user)
+    update_me(api_client, {'notifyByMail': False, 'accent': 'green'})
+    user.refresh_from_db()
+    assert user.notify_by_mail is True
+
+
+def test_update_me_with_list_body_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    assert field_codes(update_me(api_client, ['accent']), 'nonField') == ['invalid']
+
+
+def test_update_me_with_broken_json_is_rejected(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    response = api_client.patch(reverse('auth-me'), '{"accent":', content_type='application/json')
+    assert response.status_code == 400
+    assert response.json() == {'code': 'parse_error'}
+
+
+def test_update_me_queries(
+    api_client: APIClient, user: User, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    api_client.force_login(user)
+    with django_assert_num_queries(3):
+        update_me(api_client, {'accent': 'teal'})
+
+
+def test_update_me_ignores_query_parameters(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    url = f'{reverse("auth-me")}?accent=teal&email=grace@example.com'
+    response = api_client.patch(url, {}, format='json')
+    user.refresh_from_db()
+    assert response.status_code == 200
+    assert (user.accent, user.email) == ('blue', 'ada@example.com')
+
+
+# Me: security
+def test_update_me_of_guest_is_rejected(api_client: APIClient) -> None:
+    response = update_me(api_client, {'accent': 'teal'})
+    assert response.status_code == 401
+    assert response.json() == {'code': 'not_authenticated'}
+
+
+def test_update_me_without_csrf_token_is_rejected(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    response = update_me(csrf_client, {'accent': 'teal'})
+    user.refresh_from_db()
+    assert response.status_code == 403
+    assert response.json() == {'code': 'csrf_failed'}
+    assert user.accent == 'blue'
+
+
+def test_update_me_with_csrf_token_is_allowed(csrf_client: APIClient, user: User) -> None:
+    csrf_client.force_login(user)
+    csrf_client.cookies['csrftoken'] = CSRF_TOKEN
+    url = reverse('auth-me')
+    response = csrf_client.patch(
+        url, {'accent': 'teal'}, format='json', HTTP_X_CSRFTOKEN=CSRF_TOKEN
+    )
+    assert response.status_code == 200
+
+
+def test_me_is_throttled(
+    api_client: APIClient, user: User, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(UserRateThrottle.THROTTLE_RATES, 'user', '1/hour')
+    api_client.force_login(user)
+    api_client.get(reverse('auth-me'))
+    response = update_me(api_client, {'accent': 'teal'})
+    user.refresh_from_db()
+    assert response.status_code == 429
+    assert user.accent == 'blue'
+
+
+@pytest.mark.parametrize('method', ['post', 'put', 'delete'])
+def test_me_rejects_other_methods(api_client: APIClient, user: User, method: str) -> None:
+    api_client.force_login(user)
+    response = getattr(api_client, method)(reverse('auth-me'), {'accent': 'teal'}, format='json')
+    user.refresh_from_db()
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert response['Allow'] == 'GET, PATCH, HEAD, OPTIONS'
+    assert (user.accent, User.objects.count()) == ('blue', 1)
+
+
+@pytest.mark.parametrize('method', ['post', 'put', 'delete'])
+def test_me_other_methods_change_no_field(api_client: APIClient, user: User, method: str) -> None:
+    api_client.force_login(user)
+    before = model_to_dict(User.objects.get(pk=user.pk))
+    data = {'email': 'grace@example.com', 'accent': 'teal', 'notifyByMail': False}
+    getattr(api_client, method)(reverse('auth-me'), data, format='json')
+    assert model_to_dict(User.objects.get(pk=user.pk)) == before

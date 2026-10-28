@@ -6,6 +6,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
+from app_accounts.models import User
 from config.permissions import CsrfProtected
 from config.throttling import AuthRateThrottle
 
@@ -48,3 +49,11 @@ class LogoutView(generics.GenericAPIView):
     def post(self, request: Request) -> Response:
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class MeView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    http_method_names = ('get', 'patch', 'head', 'options')
+
+    def get_object(self) -> User:
+        return self.request.user
