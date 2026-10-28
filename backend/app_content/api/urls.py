@@ -3,6 +3,7 @@ from rest_framework.routers import SimpleRouter
 
 from .views import (
     ConceptViewSet,
+    DebugGuideViewSet,
     EntryViewSet,
     ErrorMessageViewSet,
     GroupListView,
@@ -13,6 +14,7 @@ router = SimpleRouter()
 router.register('entries', EntryViewSet)
 router.register('concepts', ConceptViewSet)
 router.register('errors', ErrorMessageViewSet, basename='error')
+router.register('debug-guides', DebugGuideViewSet, basename='debug-guide')
 
 urlpatterns: list[URLPattern] = [
     path('groups/', GroupListView.as_view(), name='group-list'),

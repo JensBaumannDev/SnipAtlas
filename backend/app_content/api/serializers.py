@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
-from app_content.models import Concept, Entry, ErrorMessage, Group, Subtopic, Topic
+from app_content.models import (
+    Concept,
+    DebugGuide,
+    DebugGuideStep,
+    Entry,
+    ErrorMessage,
+    Group,
+    Subtopic,
+    Topic,
+)
 
 
 class SubtopicSerializer(serializers.ModelSerializer):
@@ -81,3 +90,27 @@ class ErrorMessageSerializer(OptionalFieldsSerializer):
         if not error.code:
             return None
         return {'language': error.language, 'code': error.code}
+
+
+class DebugGuideStepSerializer(OptionalFieldsSerializer):
+    code = serializers.SerializerMethodField()
+    optional_fields = ('code',)
+
+    class Meta:
+        model = DebugGuideStep
+        fields = ('title', 'text', 'code')
+
+    def get_code(self, step: DebugGuideStep) -> dict[str, object] | None:
+        if not step.code:
+            return None
+        return {'language': step.language, 'code': step.os_code}
+
+
+class DebugGuideSerializer(OptionalFieldsSerializer):
+    topic = serializers.SlugRelatedField(read_only=True, slug_field='slug')
+    steps = DebugGuideStepSerializer(many=True, read_only=True)
+    optional_fields = ('topic', 'label')
+
+    class Meta:
+        model = DebugGuide
+        fields = ('slug', 'topic', 'label', 'title', 'summary', 'steps')
