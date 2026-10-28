@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app_content.models import Group, Subtopic, Topic
+from app_content.models import Entry, Group, Subtopic, Topic
 
 
 class SubtopicSerializer(serializers.ModelSerializer):
@@ -23,3 +23,17 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('slug', 'name', 'topics')
+
+
+# Entries and concepts
+class ContentItemSerializer(serializers.ModelSerializer):
+    topic = serializers.CharField(source='subtopic.topic.slug', read_only=True)
+    subtopic = serializers.CharField(source='subtopic.slug', read_only=True)
+
+
+class EntrySerializer(ContentItemSerializer):
+    code = serializers.JSONField(source='os_code', read_only=True)
+
+    class Meta:
+        model = Entry
+        fields = ('slug', 'topic', 'subtopic', 'title', 'description', 'language', 'code')
