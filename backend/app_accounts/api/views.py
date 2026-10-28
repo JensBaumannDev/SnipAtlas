@@ -1,5 +1,9 @@
 from django.contrib.auth import login
-from rest_framework import generics
+from django.middleware.csrf import get_token
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from config.permissions import CsrfProtected
@@ -8,6 +12,14 @@ from config.throttling import AuthRateThrottle
 from .serializers import RegisterSerializer
 
 AUTH_THROTTLES = (AnonRateThrottle, UserRateThrottle, AuthRateThrottle)
+
+
+class CsrfView(generics.GenericAPIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request: Request) -> Response:
+        get_token(request)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RegisterView(generics.CreateAPIView):

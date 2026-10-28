@@ -1,7 +1,9 @@
 import pytest
 from django.http import HttpResponse
 from django.urls import reverse
+from pytest_django import DjangoAssertNumQueries
 from rest_framework.test import APIClient
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from app_accounts.models import User
 
@@ -247,3 +249,95 @@ def test_register_rejects_other_methods(api_client: APIClient, method: str) -> N
     assert response.json() == {'code': 'method_not_allowed'}
     assert response['Allow'] == 'POST, OPTIONS'
     assert not User.objects.exists()
+
+
+# CSRF
+def test_csrf_returns_no_content(api_client: APIClient) -> None:
+    response = api_client.get(reverse('auth-csrf'))
+    assert response.status_code == 204
+    assert response.content == b''
+
+
+def test_csrf_sets_readable_cookie(api_client: APIClient) -> None:
+    cookie = api_client.get(reverse('auth-csrf')).cookies['csrftoken']
+    assert len(cookie.value) == 32
+    assert not cookie['httponly']
+    assert cookie['samesite'] == 'Lax'
+
+
+def test_csrf_keeps_existing_token(api_client: APIClient) -> None:
+    api_client.cookies['csrftoken'] = CSRF_TOKEN
+    response = api_client.get(reverse('auth-csrf'))
+    assert response.cookies['csrftoken'].value == CSRF_TOKEN
+
+
+def test_csrf_replaces_broken_token(api_client: APIClient) -> None:
+    api_client.cookies['csrftoken'] = '<script>'
+    cookie = api_client.get(reverse('auth-csrf')).cookies['csrftoken']
+    assert cookie.value != '<script>'
+    assert len(cookie.value) == 32
+
+
+def test_csrf_token_allows_register(csrf_client: APIClient) -> None:
+    token = csrf_client.get(reverse('auth-csrf')).cookies['csrftoken'].value
+    data = {'email': 'grace@example.com', 'password': PASSWORD}
+    url = reverse('auth-register')
+    response = csrf_client.post(url, data, format='json', HTTP_X_CSRFTOKEN=token)
+    assert response.status_code == 201
+
+
+def test_csrf_does_not_start_session(api_client: APIClient) -> None:
+    response = api_client.get(reverse('auth-csrf'))
+    assert 'sessionid' not in response.cookies
+    assert logged_in_user_id(api_client) is None
+
+
+def test_csrf_keeps_user_logged_in(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
+    assert api_client.get(reverse('auth-csrf')).status_code == 204
+    assert logged_in_user_id(api_client) == str(user.pk)
+
+
+def test_csrf_treats_unknown_session_as_guest(api_client: APIClient) -> None:
+    api_client.cookies['sessionid'] = 'invalid'
+    assert api_client.get(reverse('auth-csrf')).status_code == 204
+
+
+def test_csrf_is_throttled_for_guests(
+    api_client: APIClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(AnonRateThrottle.THROTTLE_RATES, 'anon', '1/hour')
+    api_client.get(reverse('auth-csrf'))
+    response = api_client.get(reverse('auth-csrf'))
+    assert response.status_code == 429
+    assert response.json()['code'] == 'throttled'
+
+
+def test_csrf_is_throttled_for_users(
+    api_client: APIClient, user: User, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(UserRateThrottle.THROTTLE_RATES, 'user', '1/hour')
+    api_client.force_login(user)
+    api_client.get(reverse('auth-csrf'))
+    assert api_client.get(reverse('auth-csrf')).status_code == 429
+
+
+def test_csrf_is_not_limited_like_login(api_client: APIClient) -> None:
+    for _ in range(6):
+        response = api_client.get(reverse('auth-csrf'))
+    assert response.status_code == 204
+
+
+@pytest.mark.parametrize('method', ['post', 'put', 'patch', 'delete'])
+def test_csrf_rejects_other_methods(api_client: APIClient, method: str) -> None:
+    response = getattr(api_client, method)(reverse('auth-csrf'))
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert response['Allow'] == 'GET, HEAD, OPTIONS'
+
+
+def test_csrf_needs_no_queries(
+    api_client: APIClient, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    with django_assert_num_queries(0):
+        api_client.get(reverse('auth-csrf'))
