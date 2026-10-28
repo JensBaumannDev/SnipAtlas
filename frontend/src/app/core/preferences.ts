@@ -1,5 +1,6 @@
-import { DOCUMENT, Service, computed, effect, inject, signal } from '@angular/core';
+import { DOCUMENT, Service, computed, effect, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { storedOption } from './browser-storage';
 import { Session } from './session';
 
 export type OperatingSystem = 'win' | 'unix';
@@ -21,11 +22,9 @@ export class Preferences {
   private readonly translate = inject(TranslateService);
   private readonly session = inject(Session);
 
-  readonly os = signal<OperatingSystem>(this.read(OS_KEY, ['win', 'unix'], 'win'));
-  readonly theme = signal<ThemeMode>(this.read(THEME_KEY, ['light', 'dark', 'system'], 'system'));
-  readonly languageMode = signal<LanguageMode>(
-    this.read(LANGUAGE_KEY, ['auto', 'de', 'en'], 'auto'),
-  );
+  readonly os = storedOption<OperatingSystem>(OS_KEY, ['win', 'unix'], 'win');
+  readonly theme = storedOption<ThemeMode>(THEME_KEY, ['light', 'dark', 'system'], 'system');
+  readonly languageMode = storedOption<LanguageMode>(LANGUAGE_KEY, ['auto', 'de', 'en'], 'auto');
   readonly language = computed<Language>(() => {
     const mode = this.languageMode();
     return mode === 'auto' ? this.browserLanguage() : mode;
@@ -34,9 +33,7 @@ export class Preferences {
 
   constructor() {
     effect(() => this.applyTheme(this.theme()));
-    effect(() => this.write(OS_KEY, this.os()));
     effect(() => this.applyLanguage(this.language()));
-    effect(() => this.write(LANGUAGE_KEY, this.languageMode()));
     effect(() => this.applyAccent(this.accent()));
   }
 
@@ -63,7 +60,6 @@ export class Preferences {
     } else {
       root.setAttribute('data-theme', theme);
     }
-    this.write(THEME_KEY, theme);
   }
 
   private applyAccent(accent: AccentTheme): void {
@@ -83,22 +79,5 @@ export class Preferences {
   private browserLanguage(): Language {
     const language = this.window?.navigator.language.toLowerCase() ?? '';
     return language.startsWith('de') ? 'de' : 'en';
-  }
-
-  private read<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
-    try {
-      const value = this.window?.localStorage.getItem(key);
-      return allowed.find((option) => option === value) ?? fallback;
-    } catch {
-      return fallback;
-    }
-  }
-
-  private write(key: string, value: string): void {
-    try {
-      this.window?.localStorage.setItem(key, value);
-    } catch {
-      return;
-    }
   }
 }

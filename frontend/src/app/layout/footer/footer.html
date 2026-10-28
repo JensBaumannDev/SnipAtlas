@@ -5,10 +5,18 @@
   </p>
   <nav [attr.aria-label]="'footer.label' | translate">
     <ul class="footer__links" role="list">
-      <li><a class="footer__link" routerLink="/impressum">{{ 'pages.imprint' | translate }}</a></li>
-      <li><a class="footer__link" routerLink="/datenschutz">{{ 'pages.privacy' | translate }}</a></li>
-      <li><a class="footer__link" routerLink="/faq">{{ 'pages.faq' | translate }}</a></li>
-      <li><a class="footer__link" routerLink="/anfrage">{{ 'pages.request' | translate }}</a></li>
+      <li>
+        <a class="footer__link" routerLink="/impressum">{{ 'pages.imprint' | translate }}</a>
+      </li>
+      <li>
+        <a class="footer__link" routerLink="/datenschutz">{{ 'pages.privacy' | translate }}</a>
+      </li>
+      <li>
+        <a class="footer__link" routerLink="/faq">{{ 'pages.faq' | translate }}</a>
+      </li>
+      <li>
+        <a class="footer__link" routerLink="/anfrage">{{ 'pages.request' | translate }}</a>
+      </li>
     </ul>
   </nav>
 </footer>

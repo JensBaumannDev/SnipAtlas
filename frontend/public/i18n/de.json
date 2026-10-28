@@ -154,11 +154,7 @@
     "summary": "{{entries}} Einträge in {{topics}} Themen",
     "empty": "Zu diesem Thema gibt es noch keine Einträge.",
     "entryCount": "{{count}} Einträge",
-    "entryCountOne": "1 Eintrag",
-    "expandAll": "Alle aufklappen",
-    "collapseAll": "Alle zuklappen",
-    "moreIn": "Mehr in {{name}}",
-    "openPage": "Als eigene Seite öffnen"
+    "entryCountOne": "1 Eintrag"
   },
   "concepts": {
     "lead": "Begriffe und Grundlagen in einfachen Worten erklärt, jeweils mit einem kurzen Beispiel und dem, was man sich merken sollte.",
@@ -166,11 +162,7 @@
     "empty": "Zu diesem Thema gibt es noch keine Erklärungen.",
     "conceptCount": "{{count}} Erklärungen",
     "conceptCountOne": "1 Erklärung",
-    "expandAll": "Alle aufklappen",
-    "collapseAll": "Alle zuklappen",
-    "note": "Merke",
-    "moreIn": "Mehr in {{name}}",
-    "openPage": "Als eigene Seite öffnen"
+    "note": "Merke"
   },
   "guides": {
     "lead": "Abläufe Schritt für Schritt: was du tust, warum, und den Code zum Kopieren. Vom leeren Ordner bis zum fertigen Projekt.",
@@ -196,6 +188,12 @@
     "commonErrors": "Häufige Fehlermeldungen",
     "cause": "Warum passiert das?",
     "fix": "So behebst du es"
+  },
+  "item": {
+    "expandAll": "Alle aufklappen",
+    "collapseAll": "Alle zuklappen",
+    "moreIn": "Mehr in {{name}}",
+    "openPage": "Als eigene Seite öffnen"
   },
   "favorites": {
     "toggle": "Als Favorit merken: {{title}}",

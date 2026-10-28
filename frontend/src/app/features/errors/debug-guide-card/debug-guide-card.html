@@ -1,21 +1,8 @@
-<article class="debug-guide-card" [id]="guide().slug" [class.debug-guide-card--open]="expanded()">
-  <div class="debug-guide-card__heading" role="heading" aria-level="3">
-    <button
-      class="debug-guide-card__toggle"
-      type="button"
-      [attr.aria-expanded]="expanded()"
-      [attr.aria-controls]="bodyId()"
-      (click)="toggle()"
-    >
-      <span class="debug-guide-card__text">
-        <span class="debug-guide-card__title">{{ guide().title }}</span>
-        <span class="debug-guide-card__summary">{{ guide().summary }}</span>
-      </span>
-      <svg [lucideIcon]="chevronDownIcon" class="icon debug-guide-card__chevron"></svg>
-    </button>
-  </div>
+<app-disclosure [anchor]="guide().slug" [(expanded)]="expanded">
+  <span disclosure-title>{{ guide().title }}</span>
+  <span disclosure-summary>{{ guide().summary }}</span>
 
-  <ol class="debug-guide-card__steps" [id]="bodyId()" [hidden]="!expanded()">
+  <ol class="debug-guide-card__steps">
     @for (step of steps(); track $index) {
       <li class="debug-guide-card__step">
         <span class="debug-guide-card__number" aria-hidden="true">{{ $index + 1 }}</span>
@@ -29,10 +16,5 @@
       </li>
     }
   </ol>
-  @if (expanded()) {
-    <app-report-link
-      class="debug-guide-card__report"
-      [subject]="('report.guide' | translate) + ': ' + guide().title"
-    />
-  }
-</article>
+  <app-report-link [subject]="('report.guide' | translate) + ': ' + guide().title" />
+</app-disclosure>

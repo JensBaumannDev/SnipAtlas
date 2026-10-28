@@ -18,7 +18,7 @@ export const COMMANDS_ROUTES: Routes = [
   {
     path: ':topic/:subtopic/:slug',
     component: EntryDetail,
-    title: itemTitle(findEntry, 'pages.commands'),
+    title: itemTitle(findEntry, (entry) => entry.title, 'pages.commands'),
     canActivate: [itemExists(findEntry)],
   },
 ];

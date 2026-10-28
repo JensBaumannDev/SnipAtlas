@@ -4,14 +4,7 @@ import { CodeToken, highlight } from '../../core/code-highlight';
 import { CodeLanguage } from '../../core/entry';
 
 export type TerminalLineKind =
-  | 'command'
-  | 'code'
-  | 'output'
-  | 'comment'
-  | 'error'
-  | 'success'
-  | 'done'
-  | 'todo';
+  'command' | 'code' | 'output' | 'comment' | 'error' | 'success' | 'done' | 'todo';
 
 export interface TerminalLine {
   kind: TerminalLineKind;

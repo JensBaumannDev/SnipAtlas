@@ -21,20 +21,7 @@
     }
 
     @if (related().length) {
-      <section class="entry-detail__related" aria-labelledby="entry-related">
-        <h2 class="entry-detail__related-title" id="entry-related">
-          {{ 'commands.moreIn' | translate: { name: subtopic?.name ?? topic.name } }}
-        </h2>
-        <ul class="entry-detail__list" role="list">
-          @for (item of related(); track item.slug) {
-            <li>
-              <a class="entry-detail__link" [routerLink]="['/befehle', item.topic, item.subtopic, item.slug]">
-                {{ item.title }}
-              </a>
-            </li>
-          }
-        </ul>
-      </section>
+      <app-related-list [name]="subtopic?.name ?? topic.name" [items]="related()" />
     }
   }
 }

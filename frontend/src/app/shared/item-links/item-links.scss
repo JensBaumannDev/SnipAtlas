@@ -1,0 +1,19 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-lg;
+  align-items: center;
+}
+
+// Page link
+.item-links__page {
+  font-weight: $font-weight-medium;
+  color: var(--accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

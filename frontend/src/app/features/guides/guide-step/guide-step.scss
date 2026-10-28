@@ -60,14 +60,3 @@
   overflow-wrap: anywhere;
 }
 
-.guide-step__note {
-  max-width: 70ch;
-  padding: $space-xs $space-md;
-  overflow-wrap: anywhere;
-  border-left: 2px solid var(--accent);
-}
-
-.guide-step__note-label {
-  display: block;
-  font-weight: $font-weight-semibold;
-}

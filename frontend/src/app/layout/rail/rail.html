@@ -1,7 +1,13 @@
 <nav class="rail__nav" [attr.aria-label]="'nav.label' | translate">
   <ul class="rail__list" role="list">
     <li class="rail__item rail__item--home">
-      <a class="rail__link" routerLink="/" routerLinkActive [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">
+      <a
+        class="rail__link"
+        routerLink="/"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+      >
         <svg [lucideIcon]="houseIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.home' | translate }}</span>
       </a>
@@ -37,7 +43,12 @@
       </a>
     </li>
     <li class="rail__item rail__item--end rail__item--settings">
-      <a class="rail__link" routerLink="/einstellungen" routerLinkActive ariaCurrentWhenActive="page">
+      <a
+        class="rail__link"
+        routerLink="/einstellungen"
+        routerLinkActive
+        ariaCurrentWhenActive="page"
+      >
         <svg [lucideIcon]="settingsIcon" class="icon"></svg>
         <span class="rail__label">{{ 'nav.settings' | translate }}</span>
       </a>

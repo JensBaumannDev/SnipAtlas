@@ -10,15 +10,19 @@
     [parentLink]="['/befehle', topic.slug]"
   >
     <p class="commands__meta">
-      {{ (count === 1 ? 'commands.entryCountOne' : 'commands.entryCount') | translate: { count: count } }}
+      {{
+        (count === 1 ? 'commands.entryCountOne' : 'commands.entryCount')
+          | translate: { count: count }
+      }}
       @if (hasOsVariants()) {
         <span aria-hidden="true">·</span>
-        {{ 'settings.os' | translate }} {{ (os() === 'win' ? 'settings.osWin' : 'settings.osUnix') | translate }}
+        {{ 'settings.os' | translate }}
+        {{ (os() === 'win' ? 'settings.osWin' : 'settings.osUnix') | translate }}
       }
     </p>
     @if (count) {
       <button class="btn btn--ghost" type="button" (click)="toggleAll()">
-        {{ (allExpanded() ? 'commands.collapseAll' : 'commands.expandAll') | translate }}
+        {{ (allExpanded() ? 'item.collapseAll' : 'item.expandAll') | translate }}
       </button>
     }
   </app-topic-header>
@@ -27,7 +31,10 @@
     <section class="commands__section">
       @if (!subtopic) {
         <h2 class="commands__section-title" [id]="section.subtopic.slug">
-          <a class="commands__section-link" [routerLink]="['/befehle', topic.slug, section.subtopic.slug]">
+          <a
+            class="commands__section-link"
+            [routerLink]="['/befehle', topic.slug, section.subtopic.slug]"
+          >
             {{ section.subtopic.name }}
           </a>
         </h2>

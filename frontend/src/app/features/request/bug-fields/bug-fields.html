@@ -25,7 +25,9 @@
       }
     </select>
     @if (typeError) {
-      <p class="field__error" id="bug-type-error">{{ typeError.key | translate: typeError.params }}</p>
+      <p class="field__error" id="bug-type-error">
+        {{ typeError.key | translate: typeError.params }}
+      </p>
     }
   </div>
 
@@ -46,7 +48,9 @@
       [attr.aria-describedby]="locationError ? 'bug-location-error' : null"
     />
     @if (locationError) {
-      <p class="field__error" id="bug-location-error">{{ locationError.key | translate: locationError.params }}</p>
+      <p class="field__error" id="bug-location-error">
+        {{ locationError.key | translate: locationError.params }}
+      </p>
     }
   </div>
 
@@ -66,12 +70,16 @@
       [attr.aria-describedby]="problemError ? 'bug-problem-error' : null"
     ></textarea>
     @if (problemError) {
-      <p class="field__error" id="bug-problem-error">{{ problemError.key | translate: problemError.params }}</p>
+      <p class="field__error" id="bug-problem-error">
+        {{ problemError.key | translate: problemError.params }}
+      </p>
     }
   </div>
 
   <div class="field form-grid__wide">
-    <label class="field__label" for="bug-correction">{{ 'request.bug.correctionLabel' | translate }}</label>
+    <label class="field__label" for="bug-correction">{{
+      'request.bug.correctionLabel' | translate
+    }}</label>
     <textarea
       id="bug-correction"
       class="input"
@@ -83,13 +91,17 @@
       [attr.aria-describedby]="correctionError ? 'bug-correction-error' : null"
     ></textarea>
     @if (correctionError) {
-      <p class="field__error" id="bug-correction-error">{{ correctionError.key | translate: correctionError.params }}</p>
+      <p class="field__error" id="bug-correction-error">
+        {{ correctionError.key | translate: correctionError.params }}
+      </p>
     }
   </div>
 
   @if (controls.type.value === 'broken') {
     <div class="field form-grid__wide">
-      <label class="field__label" for="bug-environment">{{ 'request.bug.environmentLabel' | translate }}</label>
+      <label class="field__label" for="bug-environment">{{
+        'request.bug.environmentLabel' | translate
+      }}</label>
       <input
         id="bug-environment"
         class="input"
@@ -98,12 +110,18 @@
         formControlName="environment"
         [maxlength]="limits.location"
         [attr.aria-invalid]="!!environmentError"
-        [attr.aria-describedby]="environmentError ? 'bug-environment-error' : 'bug-environment-hint'"
+        [attr.aria-describedby]="
+          environmentError ? 'bug-environment-error' : 'bug-environment-hint'
+        "
       />
       @if (environmentError) {
-        <p class="field__error" id="bug-environment-error">{{ environmentError.key | translate: environmentError.params }}</p>
+        <p class="field__error" id="bug-environment-error">
+          {{ environmentError.key | translate: environmentError.params }}
+        </p>
       } @else {
-        <p class="field__hint" id="bug-environment-hint">{{ 'request.bug.environmentHint' | translate }}</p>
+        <p class="field__hint" id="bug-environment-hint">
+          {{ 'request.bug.environmentHint' | translate }}
+        </p>
       }
     </div>
   }

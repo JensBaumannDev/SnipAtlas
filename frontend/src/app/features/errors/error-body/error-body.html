@@ -1,0 +1,19 @@
+<section class="error-body__section">
+  <p class="error-body__label" role="heading" [attr.aria-level]="level()">
+    {{ 'debugging.cause' | translate }}
+  </p>
+  <app-term-text [text]="error().cause" />
+</section>
+<section class="error-body__section">
+  <p class="error-body__label" role="heading" [attr.aria-level]="level()">
+    {{ 'debugging.fix' | translate }}
+  </p>
+  <ol class="error-body__steps">
+    @for (step of error().steps; track $index) {
+      <li><app-term-text [text]="step" /></li>
+    }
+  </ol>
+</section>
+@if (error().solution; as solution) {
+  <app-code-block [code]="solution.code" [language]="solution.language" />
+}

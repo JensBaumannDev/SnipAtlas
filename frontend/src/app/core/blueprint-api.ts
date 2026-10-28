@@ -14,7 +14,8 @@ const BLUEPRINTS: Blueprint[] = [
     slug: 'django-projekt-anlegen',
     topic: 'django',
     title: 'Neues Django-Projekt anlegen',
-    summary: 'Vom leeren Ordner bis zum ersten Model in der Datenbank, mit sauberem Start auf GitHub.',
+    summary:
+      'Vom leeren Ordner bis zum ersten Model in der Datenbank, mit sauberem Start auf GitHub.',
     steps: [
       {
         slug: 'ordner-anlegen',
@@ -83,7 +84,10 @@ const BLUEPRINTS: Blueprint[] = [
             language: 'python',
             code: '# tasks/models.py\nfrom django.db import models\n\n\nclass Task(models.Model):\n    title = models.CharField(max_length=200)\n    done = models.BooleanField(default=False)',
           },
-          { language: 'terminal', code: 'python manage.py makemigrations\npython manage.py migrate' },
+          {
+            language: 'terminal',
+            code: 'python manage.py makemigrations\npython manage.py migrate',
+          },
         ],
         note: 'Nach jeder Änderung an models.py brauchst du beide Befehle noch einmal.',
       },
@@ -120,7 +124,12 @@ const BLUEPRINTS: Blueprint[] = [
         slug: 'repo-klonen',
         title: 'Repository klonen',
         why: 'Holt das Projekt mit seiner ganzen Historie auf deinen Rechner.',
-        code: [{ language: 'terminal', code: 'git clone https://github.com/{{githubUser}}/{{repo}}.git\ncd {{repo}}' }],
+        code: [
+          {
+            language: 'terminal',
+            code: 'git clone https://github.com/{{githubUser}}/{{repo}}.git\ncd {{repo}}',
+          },
+        ],
       },
       {
         slug: 'virtuelle-umgebung',
@@ -183,7 +192,12 @@ const BLUEPRINTS: Blueprint[] = [
         slug: 'dotenv-installieren',
         title: 'python-dotenv installieren',
         why: 'Das Paket liest die .env beim Start und stellt ihre Werte als Umgebungsvariablen bereit.',
-        code: [{ language: 'terminal', code: 'pip install python-dotenv\npip freeze > requirements.txt' }],
+        code: [
+          {
+            language: 'terminal',
+            code: 'pip install python-dotenv\npip freeze > requirements.txt',
+          },
+        ],
       },
       {
         slug: 'settings-anpassen',

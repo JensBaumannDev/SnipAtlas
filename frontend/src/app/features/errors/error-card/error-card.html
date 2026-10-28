@@ -1,36 +1,11 @@
-<article class="error-card" [id]="error().slug" [class.error-card--open]="expanded()">
-  <div class="error-card__heading" role="heading" aria-level="3">
-    <button
-      class="error-card__toggle"
-      type="button"
-      [attr.aria-expanded]="expanded()"
-      [attr.aria-controls]="bodyId()"
-      (click)="toggle()"
-    >
-      <span class="error-card__text">
-        <code class="error-card__message">{{ error().message }}</code>
-        <span class="error-card__meaning">{{ error().meaning }}</span>
-      </span>
-      <svg [lucideIcon]="chevronDownIcon" class="icon error-card__chevron"></svg>
-    </button>
-  </div>
+<app-disclosure [anchor]="error().slug" [(expanded)]="expanded">
+  <code disclosure-title class="error-card__message">{{ error().message }}</code>
+  <span disclosure-summary>{{ error().meaning }}</span>
 
-  <div class="error-card__body" [id]="bodyId()" [hidden]="!expanded()">
-    <section class="error-card__section">
-      <h4 class="error-card__label">{{ 'debugging.cause' | translate }}</h4>
-      <app-term-text class="error-card__copy" [text]="error().cause" />
-    </section>
-    <section class="error-card__section">
-      <h4 class="error-card__label">{{ 'debugging.fix' | translate }}</h4>
-      <ol class="error-card__steps">
-        @for (step of error().steps; track $index) {
-          <li><app-term-text [text]="step" /></li>
-        }
-      </ol>
-    </section>
-    @if (error().solution; as solution) {
-      <app-code-block [code]="solution.code" [language]="solution.language" />
-    }
-    <app-report-link [subject]="('report.error' | translate) + ': ' + error().message" />
-  </div>
-</article>
+  <app-error-body [error]="error()" />
+  <app-item-links
+    [link]="link()"
+    [title]="error().message"
+    [report]="('report.error' | translate) + ': ' + error().message"
+  />
+</app-disclosure>

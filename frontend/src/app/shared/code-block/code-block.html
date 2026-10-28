@@ -1,7 +1,9 @@
 <div class="code-block__head">
   <span class="code-block__language">{{ languageLabel() }}</span>
   @if (os(); as os) {
-    <span class="code-block__os">{{ (os === 'win' ? 'settings.osWin' : 'settings.osUnix') | translate }}</span>
+    <span class="code-block__os">{{
+      (os === 'win' ? 'settings.osWin' : 'settings.osUnix') | translate
+    }}</span>
   }
   <button
     class="code-block__copy"
@@ -30,7 +32,9 @@
             @if (token.text) {
               <span class="code-block__value">{{ token.text }}</span>
             } @else {
-              <span class="code-block__value code-block__value--empty">&lt;{{ 'project.keys.' + key | translate }}&gt;</span>
+              <span class="code-block__value code-block__value--empty"
+                >&lt;{{ 'project.keys.' + key | translate }}&gt;</span
+              >
             }
           } @else {
             <span [class]="tokenClass(token)">{{ token.text }}</span>
@@ -51,7 +55,10 @@
       (click)="toggleEditing()"
     >
       @if (missing()) {
-        {{ (missing() === 1 ? 'project.missingOne' : 'project.missing') | translate: { count: missing() } }}
+        {{
+          (missing() === 1 ? 'project.missingOne' : 'project.missing')
+            | translate: { count: missing() }
+        }}
       } @else {
         {{ 'project.filled' | translate }}
       }
@@ -62,4 +69,6 @@
   </div>
 }
 
-<span class="visually-hidden" role="status">{{ copied() ? ('code.copiedStatus' | translate) : '' }}</span>
+<span class="visually-hidden" role="status">{{
+  copied() ? ('code.copiedStatus' | translate) : ''
+}}</span>

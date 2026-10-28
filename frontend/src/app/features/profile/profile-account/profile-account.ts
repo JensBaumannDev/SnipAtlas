@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
+import { downloadJson } from '../../../core/file-download';
 import { PASSWORD_MIN_LENGTH } from '../../../core/password-rules';
 import { Session } from '../../../core/session';
 import { UserRequestApi } from '../../../core/user-request-api';
@@ -85,23 +86,11 @@ export class ProfileAccount {
   }
 
   protected download(): void {
-    const window = this.document.defaultView;
-    if (!window) {
-      return;
-    }
-    const data = {
+    downloadJson(this.document, EXPORT_FILE, {
       account: this.session.user(),
       progress: this.progress.done(),
       requests: this.requests(),
-    };
-    const url = window.URL.createObjectURL(
-      new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }),
-    );
-    const link = this.document.createElement('a');
-    link.href = url;
-    link.download = EXPORT_FILE;
-    link.click();
-    window.setTimeout(() => window.URL.revokeObjectURL(url));
+    });
   }
 
   protected logout(): void {

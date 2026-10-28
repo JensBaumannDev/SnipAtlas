@@ -3,7 +3,8 @@
   <p class="request__lead">{{ 'request.lead' | translate }}</p>
   <p class="request__faq">
     {{ 'request.faqBefore' | translate }}
-    <a routerLink="/faq">{{ 'request.faqLink' | translate }}</a>{{ 'request.faqAfter' | translate }}
+    <a routerLink="/faq">{{ 'request.faqLink' | translate }}</a
+    >{{ 'request.faqAfter' | translate }}
   </p>
 </header>
 
@@ -45,7 +46,9 @@
           }
         </div>
         @if (kindError) {
-          <p class="field__error" id="request-kind-error">{{ 'request.errors.kind' | translate }}</p>
+          <p class="field__error" id="request-kind-error">
+            {{ 'request.errors.kind' | translate }}
+          </p>
         }
       </fieldset>
 
@@ -93,7 +96,9 @@
           [attr.aria-describedby]="emailError ? 'request-email-error' : 'request-email-hint'"
         />
         @if (emailError) {
-          <p class="field__error" id="request-email-error">{{ emailError.key | translate: emailError.params }}</p>
+          <p class="field__error" id="request-email-error">
+            {{ emailError.key | translate: emailError.params }}
+          </p>
         } @else {
           <p class="field__hint" id="request-email-hint">{{ 'request.emailHint' | translate }}</p>
         }
@@ -118,7 +123,9 @@
           </span>
         </label>
         @if (privacyError) {
-          <p class="field__error" id="request-privacy-error">{{ 'request.errors.privacy' | translate }}</p>
+          <p class="field__error" id="request-privacy-error">
+            {{ 'request.errors.privacy' | translate }}
+          </p>
         }
       </div>
 

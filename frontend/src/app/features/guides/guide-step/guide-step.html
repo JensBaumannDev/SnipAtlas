@@ -18,10 +18,7 @@
       <app-code-block [code]="block.code" [language]="block.language" [os]="block.os" />
     }
     @if (step().note; as note) {
-      <p class="guide-step__note">
-        <strong class="guide-step__note-label">{{ 'guides.note' | translate }}</strong>
-        {{ note }}
-      </p>
+      <app-note [label]="'guides.note' | translate" [text]="note" />
     }
     <app-report-link [subject]="('report.step' | translate) + ': ' + step().title" />
   </div>

@@ -23,7 +23,9 @@
       }
     </select>
     @if (areaError) {
-      <p class="field__error" id="improvement-area-error">{{ areaError.key | translate: areaError.params }}</p>
+      <p class="field__error" id="improvement-area-error">
+        {{ areaError.key | translate: areaError.params }}
+      </p>
     }
   </div>
 
@@ -43,12 +45,16 @@
       [attr.aria-describedby]="ideaError ? 'improvement-idea-error' : null"
     ></textarea>
     @if (ideaError) {
-      <p class="field__error" id="improvement-idea-error">{{ ideaError.key | translate: ideaError.params }}</p>
+      <p class="field__error" id="improvement-idea-error">
+        {{ ideaError.key | translate: ideaError.params }}
+      </p>
     }
   </div>
 
   <div class="field form-grid__wide">
-    <label class="field__label" for="improvement-benefit">{{ 'request.improvement.benefitLabel' | translate }}</label>
+    <label class="field__label" for="improvement-benefit">{{
+      'request.improvement.benefitLabel' | translate
+    }}</label>
     <textarea
       id="improvement-benefit"
       class="input"
@@ -60,7 +66,9 @@
       [attr.aria-describedby]="benefitError ? 'improvement-benefit-error' : null"
     ></textarea>
     @if (benefitError) {
-      <p class="field__error" id="improvement-benefit-error">{{ benefitError.key | translate: benefitError.params }}</p>
+      <p class="field__error" id="improvement-benefit-error">
+        {{ benefitError.key | translate: benefitError.params }}
+      </p>
     }
   </div>
 </div>

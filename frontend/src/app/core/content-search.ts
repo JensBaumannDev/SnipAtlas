@@ -3,14 +3,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { combineLatest, map } from 'rxjs';
 import { Blueprint } from './blueprint';
 import { BlueprintApi } from './blueprint-api';
-import { Concept } from './concept';
+import { Concept, conceptLink } from './concept';
 import { ConceptApi } from './concept-api';
 import { DebugGuide } from './debug-guide';
 import { DebugGuideApi } from './debug-guide-api';
-import { Entry } from './entry';
+import { Entry, entryLink } from './entry';
 import { EntryApi } from './entry-api';
 import { ErrorApi } from './error-api';
-import { ErrorMessage } from './error-message';
+import { ErrorMessage, errorLink } from './error-message';
 import { SearchResult } from './search-result';
 
 const MAX_RESULTS = 8;
@@ -46,7 +46,7 @@ function fromEntry(entry: Entry): SearchItem {
       area: 'commands',
       title: entry.title,
       text: entry.description,
-      link: ['/befehle', entry.topic, entry.subtopic, entry.slug],
+      link: entryLink(entry),
     },
     codeText(entry.code),
   );
@@ -57,7 +57,7 @@ function fromConcept(concept: Concept): SearchItem {
     area: 'concepts',
     title: concept.title,
     text: concept.summary,
-    link: ['/grundlagen', concept.topic, concept.subtopic, concept.slug],
+    link: conceptLink(concept),
   });
 }
 
@@ -66,8 +66,7 @@ function fromError(error: ErrorMessage): SearchItem {
     area: 'debugging',
     title: error.message,
     text: error.meaning,
-    link: ['/fehler', error.topic],
-    fragment: error.slug,
+    link: errorLink(error),
   });
 }
 

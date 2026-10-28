@@ -22,4 +22,12 @@ export class ExpandedSet {
       return next;
     });
   }
+
+  toggle(slug: string): void {
+    this.set(slug, !this.slugs().has(slug));
+  }
+
+  replace(slugs: readonly string[]): void {
+    this.slugs.set(new Set(slugs));
+  }
 }

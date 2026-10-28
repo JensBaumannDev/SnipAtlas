@@ -1,34 +1,15 @@
-<article class="entry-card" [id]="entry().slug" [class.entry-card--open]="expanded()">
-  <div class="entry-card__head">
-  <div class="entry-card__heading" role="heading" [attr.aria-level]="level()">
-    <button
-      class="entry-card__toggle"
-      type="button"
-      [attr.aria-expanded]="expanded()"
-      [attr.aria-controls]="bodyId()"
-      (click)="toggle()"
-    >
-      <span class="entry-card__text">
-        <span class="entry-card__title">{{ entry().title }}</span>
-        @if (!expanded()) {
-          <code class="entry-card__peek">{{ peek() }}</code>
-        }
-      </span>
-      <svg [lucideIcon]="chevronDownIcon" class="icon entry-card__chevron"></svg>
-    </button>
-  </div>
-  <app-favorite-star [entry]="entry()" />
-  </div>
+<app-disclosure [anchor]="entry().slug" [level]="level()" [(expanded)]="expanded">
+  <span disclosure-title>{{ entry().title }}</span>
+  @if (!expanded()) {
+    <code disclosure-summary>{{ peek() }}</code>
+  }
+  <app-favorite-star disclosure-action [entry]="entry()" />
 
-  <div class="entry-card__body" [id]="bodyId()" [hidden]="!expanded()">
-    <app-term-text class="entry-card__description" [text]="entry().description" />
-    <app-code-block [code]="resolved().code" [language]="entry().language" [os]="resolved().os" />
-    <div class="entry-card__links">
-      <a class="entry-card__page" [routerLink]="link()">
-        {{ 'commands.openPage' | translate }}
-        <span class="visually-hidden">: {{ entry().title }}</span>
-      </a>
-      <app-report-link [subject]="('report.command' | translate) + ': ' + entry().title" />
-    </div>
-  </div>
-</article>
+  <app-term-text class="entry-card__description" [text]="entry().description" />
+  <app-code-block [code]="resolved().code" [language]="entry().language" [os]="resolved().os" />
+  <app-item-links
+    [link]="link()"
+    [title]="entry().title"
+    [report]="('report.command' | translate) + ': ' + entry().title"
+  />
+</app-disclosure>

@@ -81,31 +81,38 @@ export function firstCodeLine(code: string): string {
 
 function highlightLine(line: string, language: CodeLanguage): CodeLine {
   const trimmed = line.trim();
-
   if (!trimmed) {
     return { prompt: false, tokens: [] };
   }
   if (isComment(trimmed, language)) {
-    return { prompt: false, tokens: [{ text: line, kind: 'comment' }] };
+    return singleToken(line, 'comment');
   }
   if (language === 'terminal' || COMMAND.test(trimmed)) {
     return { prompt: true, tokens: terminalTokens(line) };
   }
   if (language === 'gitignore' || language === 'env') {
-    return { prompt: false, tokens: [{ text: line, kind: 'plain' }] };
+    return singleToken(line, 'plain');
   }
+  return { prompt: false, tokens: lineTokens(line, language) };
+}
 
+function singleToken(text: string, kind: TokenKind): CodeLine {
+  return { prompt: false, tokens: [{ text, kind }] };
+}
+
+function lineTokens(line: string, language: CodeLanguage): CodeToken[] {
   const commentStart = language === 'python' ? line.indexOf('  #') : -1;
-  if (commentStart > 0) {
-    return {
-      prompt: false,
-      tokens: [
-        ...codeTokens(line.slice(0, commentStart), language),
-        { text: line.slice(commentStart), kind: 'comment' },
-      ],
-    };
+  if (commentStart <= 0) {
+    return codeTokens(line, language);
   }
-  return { prompt: false, tokens: codeTokens(line, language) };
+  return [
+    ...codeTokens(line.slice(0, commentStart), language),
+    { text: line.slice(commentStart), kind: 'comment' },
+  ];
+}
+
+function firstGroup(groups: readonly [string | undefined, TokenKind][]): TokenKind | undefined {
+  return groups.find(([group]) => group)?.[1];
 }
 
 function isComment(trimmed: string, language: CodeLanguage): boolean {
@@ -115,48 +122,42 @@ function isComment(trimmed: string, language: CodeLanguage): boolean {
 function terminalTokens(line: string): CodeToken[] {
   let commandFound = false;
   return tokenize(line, TERMINAL_TOKENS, ([, string, flag, number, word]) => {
-    if (string) {
-      return 'string';
+    const kind = firstGroup([
+      [string, 'string'],
+      [flag, 'flag'],
+      [number, 'number'],
+    ]);
+    if (kind || !word || commandFound) {
+      return kind ?? 'plain';
     }
-    if (flag) {
-      return 'flag';
-    }
-    if (number) {
-      return 'number';
-    }
-    if (word && !commandFound) {
-      commandFound = true;
-      return 'command';
-    }
-    return 'plain';
+    commandFound = true;
+    return 'command';
   });
 }
 
 function codeTokens(line: string, language: CodeLanguage): CodeToken[] {
   return tokenize(line, CODE_TOKENS, ([, comment, string, tag, number, word], rest) => {
-    if (comment) {
-      return 'comment';
-    }
-    if (string) {
-      return 'string';
-    }
-    if (tag) {
-      return language === 'html' ? 'tag' : 'plain';
-    }
-    if (number) {
-      return 'number';
-    }
-    if (word?.startsWith('@') || (word && KEYWORDS.has(word))) {
-      return 'keyword';
-    }
-    if (word && language === 'css' && /^\s*:/.test(rest)) {
-      return 'property';
-    }
-    if (word && /^\s*\(/.test(rest)) {
-      return 'function';
-    }
-    return 'plain';
+    const kind = firstGroup([
+      [comment, 'comment'],
+      [string, 'string'],
+      [tag, language === 'html' ? 'tag' : 'plain'],
+      [number, 'number'],
+    ]);
+    return kind ?? wordKind(word, rest, language);
   });
+}
+
+function wordKind(word: string | undefined, rest: string, language: CodeLanguage): TokenKind {
+  if (!word) {
+    return 'plain';
+  }
+  if (word.startsWith('@') || KEYWORDS.has(word)) {
+    return 'keyword';
+  }
+  if (language === 'css' && /^\s*:/.test(rest)) {
+    return 'property';
+  }
+  return /^\s*\(/.test(rest) ? 'function' : 'plain';
 }
 
 function tokenize(
@@ -166,18 +167,18 @@ function tokenize(
 ): CodeToken[] {
   const tokens: CodeToken[] = [];
   let last = 0;
-
   for (const match of line.matchAll(pattern)) {
-    if (match.index > last) {
-      tokens.push({ text: line.slice(last, match.index), kind: 'plain' });
-    }
+    pushPlain(tokens, line.slice(last, match.index));
     const end = match.index + match[0].length;
     tokens.push({ text: match[0], kind: classify(match, line.slice(end)) });
     last = end;
   }
-
-  if (last < line.length) {
-    tokens.push({ text: line.slice(last), kind: 'plain' });
-  }
+  pushPlain(tokens, line.slice(last));
   return tokens;
+}
+
+function pushPlain(tokens: CodeToken[], text: string): void {
+  if (text) {
+    tokens.push({ text, kind: 'plain' });
+  }
 }

@@ -1,0 +1,23 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Header
+.error-detail__header {
+  padding-bottom: $space-lg;
+  border-bottom: 1px solid var(--line);
+}
+
+.error-detail__meaning {
+  color: var(--muted);
+}
+
+// Body
+.error-detail__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  padding-top: $space-lg;
+}

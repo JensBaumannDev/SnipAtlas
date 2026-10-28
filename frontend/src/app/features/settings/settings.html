@@ -46,7 +46,9 @@
   <section class="settings__section" aria-labelledby="settings-accent">
     <div class="settings__text">
       <h2 class="settings__heading" id="settings-accent">{{ 'settings.accent' | translate }}</h2>
-      <p class="settings__hint" id="settings-accent-hint">{{ 'settings.accentHint' | translate }}</p>
+      <p class="settings__hint" id="settings-accent-hint">
+        {{ 'settings.accentHint' | translate }}
+      </p>
     </div>
     <div
       class="settings__themes settings__themes--accents"
@@ -103,7 +105,9 @@
 
   <div class="settings__row">
     <div class="settings__text">
-      <h2 class="settings__heading" id="settings-language">{{ 'settings.language' | translate }}</h2>
+      <h2 class="settings__heading" id="settings-language">
+        {{ 'settings.language' | translate }}
+      </h2>
       <p class="settings__hint">{{ 'settings.languageHint' | translate }}</p>
     </div>
     <div class="segmented" role="radiogroup" aria-labelledby="settings-language">
@@ -117,7 +121,9 @@
             [checked]="preferences.languageMode() === option.value"
             (change)="preferences.setLanguage(option.value)"
           />
-          <span [attr.lang]="option.value === 'auto' ? null : option.value">{{ option.label | translate }}</span>
+          <span [attr.lang]="option.value === 'auto' ? null : option.value">{{
+            option.label | translate
+          }}</span>
         </label>
       }
     </div>

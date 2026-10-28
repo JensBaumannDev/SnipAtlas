@@ -1,83 +1,9 @@
 @use 'abstracts' as *;
 
 :host {
+  --disclosure-gap: #{$space-lg};
+
   display: block;
-}
-
-// Card
-.debug-guide-card {
-  position: relative;
-  border-bottom: 1px solid var(--line);
-
-  &--open::before {
-    position: absolute;
-    top: $space-md;
-    bottom: $space-lg;
-    left: -$space-sm;
-    width: 2px;
-    content: '';
-    background: var(--accent);
-  }
-
-  &--open .debug-guide-card__title {
-    color: var(--accent);
-  }
-}
-
-// Toggle
-.debug-guide-card__toggle {
-  display: flex;
-  gap: $space-md;
-  align-items: center;
-  width: 100%;
-  min-height: $control-height;
-  padding: $space-md $space-xs;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  background: none;
-  border: 0;
-
-  &:hover .debug-guide-card__title {
-    color: var(--accent);
-  }
-
-  &:focus-visible {
-    outline-offset: -2px;
-  }
-
-  &[aria-expanded='true'] .debug-guide-card__chevron {
-    color: var(--accent);
-    transform: rotate(180deg);
-  }
-}
-
-.debug-guide-card__text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: $space-sm;
-  min-width: 0;
-}
-
-.debug-guide-card__title {
-  font-weight: $font-weight-medium;
-  line-height: $line-height-tight;
-  overflow-wrap: anywhere;
-  transition: color var(--duration-fast);
-}
-
-.debug-guide-card__summary {
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
-
-.debug-guide-card__chevron {
-  flex: none;
-  width: rem(20);
-  height: rem(20);
-  color: var(--muted);
-  transition: transform var(--duration);
 }
 
 // Steps
@@ -85,13 +11,9 @@
   display: flex;
   flex-direction: column;
   gap: $space-lg;
-  padding: 0 $space-xs $space-lg;
+  padding: 0;
   margin: 0;
   list-style: none;
-
-  &[hidden] {
-    display: none;
-  }
 }
 
 .debug-guide-card__step {
@@ -114,10 +36,6 @@
 
 .debug-guide-card__step-title {
   font-size: $font-size-base;
-}
-
-.debug-guide-card__report {
-  padding: 0 $space-xs $space-lg;
 }
 
 .debug-guide-card__step-text {

@@ -1,0 +1,18 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Note
+.note {
+  max-width: 70ch;
+  padding: $space-xs $space-md;
+  overflow-wrap: anywhere;
+  border-left: 2px solid var(--accent);
+}
+
+.note__label {
+  display: block;
+  font-weight: $font-weight-semibold;
+}

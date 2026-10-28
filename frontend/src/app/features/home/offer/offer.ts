@@ -11,6 +11,16 @@ import { ErrorApi } from '../../../core/error-api';
 import { TerminalWindow } from '../../../shared/terminal-window/terminal-window';
 import { OFFER_TABS, OfferArea } from './offer-tabs';
 
+function targetTab(key: string, current: number, last: number): number | undefined {
+  const targets: Partial<Record<string, number>> = {
+    ArrowRight: current === last ? 0 : current + 1,
+    ArrowLeft: current === 0 ? last : current - 1,
+    Home: 0,
+    End: last,
+  };
+  return targets[key];
+}
+
 @Component({
   imports: [RouterLink, TerminalWindow, TranslatePipe],
   selector: 'app-offer',
@@ -31,14 +41,12 @@ export class Offer {
       inject(ErrorApi).getSummary(),
       inject(DebugGuideApi).getAll(),
     ]).pipe(
-      map(
-        ([entries, concepts, blueprints, errors, guides]): Record<OfferArea, number> => ({
-          commands: entries.entries,
-          concepts: concepts.entries,
-          blueprints: blueprints.blueprints,
-          debugging: errors.entries + guides.length,
-        }),
-      ),
+      map(([entries, concepts, blueprints, errors, guides]): Record<OfferArea, number> => ({
+        commands: entries.entries,
+        concepts: concepts.entries,
+        blueprints: blueprints.blueprints,
+        debugging: errors.entries + guides.length,
+      })),
     ),
     { initialValue: { commands: 0, concepts: 0, blueprints: 0, debugging: 0 } },
   );
@@ -49,16 +57,8 @@ export class Offer {
 
   protected onKeydown(event: KeyboardEvent): void {
     const current = this.tabs.findIndex((tab) => tab.area === this.active());
-    const last = this.tabs.length - 1;
-    const next =
-      {
-        ArrowRight: current === last ? 0 : current + 1,
-        ArrowLeft: current === 0 ? last : current - 1,
-        Home: 0,
-        End: last,
-      }[event.key] ?? -1;
-
-    if (next === -1) {
+    const next = targetTab(event.key, current, this.tabs.length - 1);
+    if (next === undefined) {
       return;
     }
     event.preventDefault();

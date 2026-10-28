@@ -1,0 +1,22 @@
+@if (error(); as error) {
+  @if (currentTopic(); as topic) {
+    <app-topic-header
+      class="error-detail__header"
+      [topic]="topic"
+      [heading]="error.message"
+      [parentLabel]="topic.name"
+      [parentLink]="['/fehler', topic.slug]"
+    >
+      <p class="error-detail__meaning">{{ error.meaning }}</p>
+    </app-topic-header>
+
+    <div class="error-detail__body">
+      <app-error-body [error]="error" [level]="2" />
+      <app-report-link [subject]="('report.error' | translate) + ': ' + error.message" />
+    </div>
+
+    @if (related().length) {
+      <app-related-list [name]="topic.name" [items]="related()" />
+    }
+  }
+}
