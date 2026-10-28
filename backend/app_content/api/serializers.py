@@ -1,3 +1,4 @@
+from modeltranslation.utils import get_language
 from rest_framework import serializers
 
 from app_content.models import (
@@ -9,6 +10,7 @@ from app_content.models import (
     DebugGuideStep,
     Entry,
     ErrorMessage,
+    GlossaryTerm,
     Group,
     Subtopic,
     Topic,
@@ -144,3 +146,24 @@ class BlueprintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blueprint
         fields = ('slug', 'topic', 'title', 'summary', 'steps')
+
+
+# Glossary
+class GlossaryTermSerializer(OptionalFieldsSerializer):
+    aliases = serializers.SerializerMethodField()
+    concept = serializers.SerializerMethodField()
+    optional_fields = ('concept',)
+
+    class Meta:
+        model = GlossaryTerm
+        fields = ('slug', 'term', 'aliases', 'definition', 'concept')
+
+    def get_aliases(self, term: GlossaryTerm) -> list[str]:
+        language = get_language()
+        return [alias.name for alias in term.aliases.all() if alias.language == language]
+
+    def get_concept(self, term: GlossaryTerm) -> dict[str, str] | None:
+        if not term.concept:
+            return None
+        subtopic = term.concept.subtopic
+        return {'topic': subtopic.topic.slug, 'subtopic': subtopic.slug, 'slug': term.concept.slug}

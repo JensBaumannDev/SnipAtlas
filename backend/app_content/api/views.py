@@ -9,6 +9,7 @@ from app_content.models import (
     DebugGuideQuerySet,
     Entry,
     ErrorMessage,
+    GlossaryTerm,
     Group,
     Topic,
     TopicQuerySet,
@@ -20,6 +21,7 @@ from .serializers import (
     DebugGuideSerializer,
     EntrySerializer,
     ErrorMessageSerializer,
+    GlossaryTermSerializer,
     GroupSerializer,
     TopicSerializer,
 )
@@ -83,3 +85,12 @@ class DebugGuideViewSet(PublicContentViewSet):
 class BlueprintViewSet(PublicContentViewSet):
     queryset = Blueprint.objects.select_related('topic').prefetch_related('steps__codes')
     serializer_class = BlueprintSerializer
+
+
+# Glossary
+class GlossaryListView(generics.ListAPIView):
+    queryset = GlossaryTerm.objects.select_related('concept__subtopic__topic').prefetch_related(
+        'aliases'
+    )
+    serializer_class = GlossaryTermSerializer
+    permission_classes = (AllowAny,)
