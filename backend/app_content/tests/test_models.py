@@ -4,7 +4,18 @@ from django.db import IntegrityError
 from django.db.models import Model, ProtectedError
 from django.utils import translation
 
-from app_content.models import CodeLanguage, Concept, Entry, Group, Subtopic, Topic
+from app_content.models import (
+    CodeLanguage,
+    Concept,
+    DebugGuide,
+    DebugGuideStep,
+    Entry,
+    ErrorMessage,
+    ErrorStep,
+    Group,
+    Subtopic,
+    Topic,
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -329,3 +340,281 @@ def test_entry_unix_code_in_both_languages_is_valid(os_entry: Entry) -> None:
 
 def test_entry_unix_code_only_in_german_is_valid(os_entry: Entry) -> None:
     os_entry.full_clean()
+
+
+# Errors
+def test_error_str_returns_message(error_message: ErrorMessage) -> None:
+    assert str(error_message) == "ModuleNotFoundError: No module named 'django'"
+
+
+def test_steps_str_return_text_and_title(error_message: ErrorMessage, step: DebugGuideStep) -> None:
+    assert [str(error_message.steps.first()), str(step)] == [
+        'Umgebung aktivieren.',
+        'Änderungen ansehen',
+    ]
+
+
+def test_error_texts_follow_active_language(error_message: ErrorMessage) -> None:
+    with translation.override('en'):
+        assert [error_message.meaning, error_message.cause] == [
+            'Python cannot find the package.',
+            'The virtual environment is not active.',
+        ]
+        assert error_message.code == 'pip install django'
+
+
+def test_error_message_is_not_translated() -> None:
+    fields = {field.name for field in ErrorMessage._meta.get_fields()}
+    assert 'message' in fields
+    assert 'message_en' not in fields
+
+
+def test_error_requires_all_fields_except_solution(db: None) -> None:
+    errors = all_error_codes(ErrorMessage())
+    assert set(errors) == {'topic', 'slug', 'message', 'meaning', 'cause'}
+
+
+def test_error_without_solution_is_valid(error_message: ErrorMessage) -> None:
+    error_message.language = ''
+    error_message.code_de = ''
+    error_message.full_clean()
+
+
+def test_error_message_is_limited(error_message: ErrorMessage) -> None:
+    error_message.message = 'x' * 301
+    assert error_codes(error_message, 'message') == ['max_length']
+
+
+def test_error_slug_is_unique(error_message: ErrorMessage) -> None:
+    with pytest.raises(IntegrityError):
+        ErrorMessage.objects.create(topic=error_message.topic, slug='module-not-found')
+
+
+def test_error_steps_are_ordered_by_position(error_message: ErrorMessage) -> None:
+    texts = [step.text for step in error_message.steps.all()]
+    assert texts == ['Umgebung aktivieren.', 'Paket installieren.']
+
+
+def test_error_step_text_follows_active_language(error_message: ErrorMessage) -> None:
+    with translation.override('en'):
+        texts = [step.text for step in error_message.steps.all()]
+    assert texts == ['Activate the environment.', 'Paket installieren.']
+
+
+def test_error_step_requires_text(error_message: ErrorMessage) -> None:
+    assert set(all_error_codes(ErrorStep(error=error_message))) == {'text'}
+
+
+def test_deleting_error_deletes_steps(error_message: ErrorMessage) -> None:
+    error_message.delete()
+    assert not ErrorStep.objects.exists()
+
+
+def test_topic_with_errors_cannot_be_deleted(error_message: ErrorMessage) -> None:
+    with pytest.raises(ProtectedError):
+        error_message.topic.delete()
+
+
+def test_errors_are_ordered_by_topic_and_position(group: Group, topic: Topic) -> None:
+    git = Topic.objects.create(group=group, slug='git', name_de='Git', position=-1)
+    late = ErrorMessage.objects.create(topic=topic, slug='spaet', position=2)
+    early = ErrorMessage.objects.create(topic=topic, slug='frueh', position=1)
+    git_error = ErrorMessage.objects.create(topic=git, slug='push', position=9)
+    assert list(ErrorMessage.objects.all()) == [git_error, early, late]
+
+
+# Debug guides
+def test_debug_guide_str_returns_title(debug_guide: DebugGuide) -> None:
+    assert str(debug_guide) == 'Der Ablauf bei jedem Fehler'
+
+
+def test_debug_guide_texts_follow_active_language(debug_guide: DebugGuide) -> None:
+    with translation.override('en'):
+        assert [debug_guide.label, debug_guide.title] == ['Approach', 'The process for every error']
+        assert debug_guide.steps.first().title == 'Die Meldung lesen'
+
+
+def test_general_debug_guide_is_valid(debug_guide: DebugGuide) -> None:
+    debug_guide.full_clean()
+
+
+def test_topic_debug_guide_is_valid(topic_guide: DebugGuide) -> None:
+    topic_guide.full_clean()
+
+
+def test_debug_guide_requires_slug_title_summary_and_label(db: None) -> None:
+    errors = all_error_codes(DebugGuide())
+    assert set(errors) == {'slug', 'title', 'summary', 'label_de'}
+
+
+def test_general_debug_guide_requires_label(debug_guide: DebugGuide) -> None:
+    debug_guide.label_de = ''
+    assert error_codes(debug_guide, 'label_de') == ['required']
+
+
+@pytest.mark.parametrize('field', ['label_de', 'label_en'])
+def test_topic_debug_guide_rejects_label(topic_guide: DebugGuide, field: str) -> None:
+    setattr(topic_guide, field, 'Python')
+    assert error_codes(topic_guide, field) == ['invalid']
+
+
+def test_debug_guide_label_is_limited(debug_guide: DebugGuide) -> None:
+    debug_guide.label_de = 'x' * 31
+    assert error_codes(debug_guide, 'label_de') == ['max_length']
+
+
+def test_debug_guide_slug_is_unique(debug_guide: DebugGuide) -> None:
+    with pytest.raises(IntegrityError):
+        DebugGuide.objects.create(slug='vorgehen', title_de='Doppelt')
+
+
+def test_debug_guides_start_with_general_ones(
+    group: Group, topic: Topic, topic_guide: DebugGuide, debug_guide: DebugGuide
+) -> None:
+    git = Topic.objects.create(group=group, slug='git', name_de='Git', position=-1)
+    git_guide = DebugGuide.objects.create(topic=git, slug='git-debuggen', position=9)
+    first = DebugGuide.objects.create(slug='browser', label_de='Browser', position=-1)
+    assert list(DebugGuide.objects.all()) == [first, debug_guide, git_guide, topic_guide]
+
+
+def test_topic_with_debug_guides_cannot_be_deleted(topic_guide: DebugGuide) -> None:
+    with pytest.raises(ProtectedError):
+        topic_guide.topic.delete()
+
+
+def test_deleting_debug_guide_deletes_steps(debug_guide: DebugGuide) -> None:
+    debug_guide.delete()
+    assert not DebugGuideStep.objects.exists()
+
+
+# Debug guide steps
+def guide_step(guide: DebugGuide, **fields: str) -> DebugGuideStep:
+    return DebugGuideStep(guide=guide, **({'title_de': 'Schritt', 'text_de': 'Text'} | fields))
+
+
+def test_debug_guide_steps_are_ordered_by_position(debug_guide: DebugGuide) -> None:
+    titles = [step.title for step in debug_guide.steps.all()]
+    assert titles == ['Die Meldung lesen', 'Änderungen ansehen']
+
+
+def test_debug_guide_step_requires_title_and_text(debug_guide: DebugGuide) -> None:
+    errors = all_error_codes(DebugGuideStep(guide=debug_guide))
+    assert set(errors) == {'title', 'text'}
+
+
+def test_debug_guide_step_title_is_limited(debug_guide: DebugGuide) -> None:
+    step = guide_step(debug_guide, title_de='x' * 121)
+    assert error_codes(step, 'title_de') == ['max_length']
+
+
+def test_debug_guide_step_without_code_is_valid(debug_guide: DebugGuide) -> None:
+    guide_step(debug_guide).full_clean()
+
+
+def test_debug_guide_step_code_is_text_without_unix_code(debug_guide: DebugGuide) -> None:
+    assert debug_guide.steps.last().os_code == 'git diff'
+
+
+def test_debug_guide_step_code_is_split_by_os(topic_guide: DebugGuide) -> None:
+    assert topic_guide.steps.get().os_code == {
+        'win': 'python manage.py test',
+        'unix': 'python3 manage.py test',
+    }
+
+
+def test_debug_guide_step_unix_code_needs_code(debug_guide: DebugGuide) -> None:
+    step = guide_step(debug_guide, code_unix_de='ls')
+    assert error_codes(step, 'code_de') == ['required']
+
+
+def test_debug_guide_step_unix_code_in_english_needs_german(debug_guide: DebugGuide) -> None:
+    step = guide_step(debug_guide, language='terminal', code_de='dir', code_unix_en='ls')
+    assert error_codes(step, 'code_unix_de') == ['required']
+
+
+# Optional code
+OPTIONAL_CODE = ['error_message', 'step']
+
+
+@pytest.fixture
+def step(debug_guide: DebugGuide) -> DebugGuideStep:
+    return debug_guide.steps.last()
+
+
+@pytest.mark.parametrize('fixture', OPTIONAL_CODE)
+def test_code_without_language_is_rejected(request: pytest.FixtureRequest, fixture: str) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.language = ''
+    assert error_codes(obj, 'language') == ['required']
+
+
+@pytest.mark.parametrize('fixture', OPTIONAL_CODE)
+def test_language_without_code_is_rejected(request: pytest.FixtureRequest, fixture: str) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.code_de = ''
+    assert error_codes(obj, 'code_de') == ['required']
+
+
+@pytest.mark.parametrize('fixture', OPTIONAL_CODE)
+def test_english_code_without_german_code_is_rejected(
+    request: pytest.FixtureRequest, fixture: str
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.language, obj.code_de, obj.code_en = '', '', 'ls'
+    assert error_codes(obj, 'code_de') == ['required']
+
+
+@pytest.mark.parametrize('fixture', OPTIONAL_CODE)
+def test_optional_code_rejects_unknown_language(
+    request: pytest.FixtureRequest, fixture: str
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.language = 'cobol'
+    assert error_codes(obj, 'language') == ['invalid_choice']
+
+
+@pytest.mark.parametrize('language', ['cobol', 'Python'])
+def test_error_language_is_checked_in_database(topic: Topic, language: str) -> None:
+    with pytest.raises(IntegrityError):
+        ErrorMessage.objects.create(topic=topic, slug='neu', language=language)
+
+
+@pytest.mark.parametrize('language', ['cobol', 'Python'])
+def test_debug_step_language_is_checked_in_database(debug_guide: DebugGuide, language: str) -> None:
+    with pytest.raises(IntegrityError):
+        debug_guide.steps.create(title_de='Neu', language=language)
+
+
+@pytest.mark.parametrize('model', [ErrorMessage, DebugGuide])
+@pytest.mark.parametrize('slug', ['', 'Git', 'git_push', 'git-', 'git\n', 'a/b'])
+def test_error_and_guide_slug_is_checked_in_database(
+    topic: Topic, model: type[Model], slug: str
+) -> None:
+    with pytest.raises(IntegrityError):
+        model.objects.create(topic=topic, slug=slug)
+
+
+@pytest.mark.parametrize('model', [ErrorMessage, DebugGuide])
+def test_error_and_guide_with_valid_values_pass_database_checks(
+    topic: Topic, model: type[Model]
+) -> None:
+    assert model.objects.create(topic=topic, slug='git-push-2').pk
+
+
+# Limits and order
+@pytest.mark.parametrize('fixture', ['error_message', 'debug_guide'])
+def test_error_and_guide_slug_is_limited(request: pytest.FixtureRequest, fixture: str) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.slug = 'x' * 81
+    assert error_codes(obj, 'slug') == ['max_length']
+
+
+def test_steps_with_same_position_keep_creation_order(
+    error_message: ErrorMessage, debug_guide: DebugGuide
+) -> None:
+    first = error_message.steps.create(text_de='Erster', position=5)
+    second = error_message.steps.create(text_de='Zweiter', position=5)
+    step_first = debug_guide.steps.create(title_de='Erster', position=5)
+    step_second = debug_guide.steps.create(title_de='Zweiter', position=5)
+    assert list(error_message.steps.all())[-2:] == [first, second]
+    assert list(debug_guide.steps.all())[-2:] == [step_first, step_second]

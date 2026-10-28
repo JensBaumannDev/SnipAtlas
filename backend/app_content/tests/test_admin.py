@@ -6,7 +6,7 @@ from django.test import Client
 from django.urls import reverse
 
 from app_accounts.models import User
-from app_content.models import Concept, Entry, Group, Subtopic, Topic
+from app_content.models import Concept, DebugGuide, Entry, ErrorMessage, Group, Subtopic, Topic
 
 pytestmark = pytest.mark.django_db
 
@@ -39,7 +39,7 @@ def form_error_codes(response: HttpResponse, field: str) -> list[str]:
 
 
 # Access
-CONTENT_ADMINS = ['group', 'topic', 'entry', 'concept']
+CONTENT_ADMINS = ['group', 'topic', 'entry', 'concept', 'errormessage', 'debugguide']
 
 
 @pytest.mark.parametrize('model', CONTENT_ADMINS)
@@ -494,3 +494,426 @@ def test_admin_rejects_unix_code_only_in_english(admin_client: Client, subtopic:
     response = add_content(admin_client, 'entry', subtopic, code_unix_en='ls')
     assert form_error_codes(response, 'code_unix_de') == ['required']
     assert not Entry.objects.exists()
+
+
+# Errors and debug guides
+GUIDE_ADMINS = {'errormessage': 'error_message', 'debugguide': 'debug_guide'}
+
+
+def error_data(topic: Topic, /, **changes: str) -> dict:
+    data = {
+        'topic': topic.pk,
+        'slug': 'port-in-use',
+        'message': 'Error: That port is already in use.',
+        'meaning_de': 'Der Port ist belegt.',
+        'meaning_en': '',
+        'cause_de': 'Ein anderer Server läuft noch.',
+        'cause_en': '',
+        'language': 'terminal',
+        'code_de': 'python manage.py runserver 8001',
+        'code_en': '',
+        'position': 0,
+        'steps-TOTAL_FORMS': 2,
+        'steps-INITIAL_FORMS': 0,
+        'steps-0-text_de': 'Anderen Port nehmen.',
+        'steps-0-text_en': '',
+        'steps-0-position': 1,
+        'steps-1-text_de': 'Den anderen Server beenden.',
+        'steps-1-text_en': '',
+        'steps-1-position': 0,
+    }
+    return data | changes
+
+
+def guide_data(**changes: str) -> dict:
+    data = {
+        'topic': '',
+        'slug': 'debugger',
+        'label_de': 'Debugger',
+        'label_en': '',
+        'title_de': 'Mit dem Debugger arbeiten',
+        'title_en': '',
+        'summary_de': 'Code Zeile für Zeile ansehen.',
+        'summary_en': '',
+        'position': 0,
+        'steps-TOTAL_FORMS': 1,
+        'steps-INITIAL_FORMS': 0,
+        'steps-0-title_de': 'Haltepunkt setzen',
+        'steps-0-title_en': '',
+        'steps-0-text_de': 'Links neben die Zeile klicken.',
+        'steps-0-text_en': '',
+        'steps-0-language': '',
+        'steps-0-code_de': '',
+        'steps-0-code_en': '',
+        'steps-0-code_unix_de': '',
+        'steps-0-code_unix_en': '',
+        'steps-0-position': 0,
+    }
+    return data | changes
+
+
+def add_error(admin_client: Client, topic: Topic, /, **changes: str) -> HttpResponse:
+    url = reverse('admin:app_content_errormessage_add')
+    return admin_client.post(url, error_data(topic, **changes))
+
+
+def add_guide(admin_client: Client, /, **changes: str) -> HttpResponse:
+    return admin_client.post(reverse('admin:app_content_debugguide_add'), guide_data(**changes))
+
+
+def step_error_codes(response: HttpResponse, field: str) -> list[str]:
+    form = response.context['inline_admin_formsets'][0].formset.forms[0]
+    return [error.code for error in form.errors.as_data()[field]]
+
+
+@pytest.mark.parametrize(('model', 'fixture'), GUIDE_ADMINS.items())
+def test_error_and_guide_change_page_shows_steps(
+    admin_client: Client, request: pytest.FixtureRequest, model: str, fixture: str
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    response = admin_client.get(reverse(f'admin:app_content_{model}_change', args=[obj.pk]))
+    formset = response.context['inline_admin_formsets'][0].formset
+    assert response.status_code == 200
+    assert {'text_de', 'text_en'} <= set(formset.forms[0].fields)
+    assert len(formset.forms) == 3
+
+
+@pytest.mark.parametrize(('model', 'fixture'), GUIDE_ADMINS.items())
+def test_error_and_guide_list_saves_position(
+    admin_client: Client, request: pytest.FixtureRequest, model: str, fixture: str
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    data = {
+        'form-TOTAL_FORMS': 1,
+        'form-INITIAL_FORMS': 1,
+        'form-0-id': obj.pk,
+        'form-0-position': 4,
+        '_save': 'Save',
+    }
+    response = admin_client.post(reverse(f'admin:app_content_{model}_changelist'), data)
+    obj.refresh_from_db()
+    assert response.status_code == 302
+    assert obj.position == 4
+
+
+@pytest.mark.parametrize(('model', 'fixture'), GUIDE_ADMINS.items())
+def test_admin_deletes_error_and_guide_with_steps(
+    admin_client: Client, request: pytest.FixtureRequest, model: str, fixture: str
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    url = reverse(f'admin:app_content_{model}_delete', args=[obj.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    assert response.status_code == 302
+    assert not type(obj).objects.exists()
+    assert not type(obj).steps.rel.related_model.objects.exists()
+
+
+@pytest.mark.parametrize(('model', 'fixture'), GUIDE_ADMINS.items())
+def test_staff_with_view_permission_cannot_change_error_or_guide(
+    staff_client: Client,
+    staff_user: User,
+    request: pytest.FixtureRequest,
+    model: str,
+    fixture: str,
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    staff_user.user_permissions.add(Permission.objects.get(codename=f'view_{model}'))
+    url = reverse(f'admin:app_content_{model}_change', args=[obj.pk])
+    assert staff_client.get(url).status_code == 200
+    assert staff_client.post(url, {'slug': 'neu'}).status_code == 403
+    assert type(obj).objects.get(pk=obj.pk).slug == obj.slug
+
+
+@pytest.mark.parametrize('fixture', ['error_message', 'topic_guide'])
+def test_admin_keeps_topic_with_errors_or_guides(
+    admin_client: Client, request: pytest.FixtureRequest, fixture: str
+) -> None:
+    topic = request.getfixturevalue(fixture).topic
+    url = reverse('admin:app_content_topic_delete', args=[topic.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    assert response.context['protected']
+    assert Topic.objects.filter(pk=topic.pk).exists()
+
+
+# Errors
+def test_error_list_shows_message_and_topic(
+    admin_client: Client, error_message: ErrorMessage
+) -> None:
+    response = admin_client.get(reverse('admin:app_content_errormessage_changelist'))
+    content = response.content.decode()
+    assert response.status_code == 200
+    assert all(text in content for text in ('ModuleNotFoundError', 'Python'))
+
+
+def test_error_add_page_has_language_tabs(admin_client: Client) -> None:
+    response = admin_client.get(reverse('admin:app_content_errormessage_add'))
+    fields = response.context['adminform'].form.fields
+    assert {'meaning_de', 'meaning_en', 'code_de', 'code_en', 'message'} <= set(fields)
+    assert 'message_en' not in fields
+
+
+def test_admin_adds_error_with_steps(admin_client: Client, topic: Topic) -> None:
+    response = add_error(admin_client, topic)
+    error = ErrorMessage.objects.get(slug='port-in-use')
+    assert response.status_code == 302
+    assert (error.topic, error.language, error.code) == (topic, 'terminal', error.code_de)
+    texts = [step.text for step in error.steps.all()]
+    assert texts == ['Den anderen Server beenden.', 'Anderen Port nehmen.']
+
+
+def test_admin_adds_error_without_solution(admin_client: Client, topic: Topic) -> None:
+    response = add_error(admin_client, topic, language='', code_de='')
+    assert response.status_code == 302
+    assert not ErrorMessage.objects.get(slug='port-in-use').code
+
+
+@pytest.mark.parametrize('field', ['message', 'meaning_de', 'cause_de'])
+def test_admin_requires_error_texts(admin_client: Client, topic: Topic, field: str) -> None:
+    response = add_error(admin_client, topic, **{field: ''})
+    assert form_error_codes(response, field) == ['required']
+    assert not ErrorMessage.objects.exists()
+
+
+@pytest.mark.parametrize(
+    ('changes', 'field'),
+    [({'code_de': ''}, 'code_de'), ({'language': ''}, 'language')],
+)
+def test_admin_requires_language_and_code_together(
+    admin_client: Client, topic: Topic, changes: dict, field: str
+) -> None:
+    response = add_error(admin_client, topic, **changes)
+    assert form_error_codes(response, field) == ['required']
+    assert not ErrorMessage.objects.exists()
+
+
+@pytest.mark.parametrize(
+    ('field', 'value', 'code'),
+    [
+        ('slug', 'Port_In_Use', 'invalid'),
+        ('language', 'cobol', 'invalid_choice'),
+        ('topic', '999999', 'invalid_choice'),
+        ('message', 'x' * 301, 'max_length'),
+    ],
+)
+def test_admin_rejects_invalid_error_values(
+    admin_client: Client, topic: Topic, field: str, value: str, code: str
+) -> None:
+    response = add_error(admin_client, topic, **{field: value})
+    assert code in form_error_codes(response, field)
+    assert not ErrorMessage.objects.exists()
+
+
+def test_admin_rejects_duplicate_error_slug(
+    admin_client: Client, error_message: ErrorMessage
+) -> None:
+    response = add_error(admin_client, error_message.topic, slug='module-not-found')
+    assert form_error_codes(response, 'slug') == ['unique']
+    assert ErrorMessage.objects.count() == 1
+
+
+def test_admin_requires_error_step_text(admin_client: Client, topic: Topic) -> None:
+    response = add_error(admin_client, topic, **{'steps-0-text_de': ''})
+    assert step_error_codes(response, 'text_de') == ['required']
+    assert not ErrorMessage.objects.exists()
+
+
+def test_admin_changes_error(admin_client: Client, error_message: ErrorMessage) -> None:
+    changes = {'slug': error_message.slug, 'steps-TOTAL_FORMS': 0}
+    url = reverse('admin:app_content_errormessage_change', args=[error_message.pk])
+    response = admin_client.post(url, error_data(error_message.topic, **changes))
+    error_message.refresh_from_db()
+    assert response.status_code == 302
+    assert error_message.message == 'Error: That port is already in use.'
+
+
+def test_error_list_filters_by_topic(
+    admin_client: Client, group: Group, error_message: ErrorMessage
+) -> None:
+    git = Topic.objects.create(group=group, slug='git', name_de='Git')
+    ErrorMessage.objects.create(topic=git, slug='push', message='rejected')
+    url = reverse('admin:app_content_errormessage_changelist')
+    response = admin_client.get(url, {'topic__id__exact': error_message.topic.pk})
+    assert list(response.context['cl'].result_list) == [error_message]
+
+
+def test_error_list_searches_by_message(admin_client: Client, error_message: ErrorMessage) -> None:
+    ErrorMessage.objects.create(topic=error_message.topic, slug='port', message='Port in use')
+    url = reverse('admin:app_content_errormessage_changelist')
+    response = admin_client.get(url, {'q': 'modulenotfound'})
+    assert list(response.context['cl'].result_list) == [error_message]
+
+
+def test_error_list_escapes_html_in_message(admin_client: Client, topic: Topic) -> None:
+    ErrorMessage.objects.create(topic=topic, slug='xss', message='<script>alert(1)</script>')
+    response = admin_client.get(reverse('admin:app_content_errormessage_changelist'))
+    content = response.content.decode()
+    assert '<script>alert(1)</script>' not in content
+    assert '&lt;script&gt;alert(1)&lt;/script&gt;' in content
+
+
+# Debug guides
+def test_debug_guide_list_shows_title_and_label(
+    admin_client: Client, debug_guide: DebugGuide, topic_guide: DebugGuide
+) -> None:
+    response = admin_client.get(reverse('admin:app_content_debugguide_changelist'))
+    content = response.content.decode()
+    assert response.status_code == 200
+    assert all(text in content for text in ('Der Ablauf', 'Vorgehen', 'Python debuggen'))
+
+
+def test_admin_adds_general_debug_guide(admin_client: Client, db: None) -> None:
+    response = add_guide(admin_client)
+    guide = DebugGuide.objects.get(slug='debugger')
+    assert response.status_code == 302
+    assert (guide.topic, guide.label) == (None, 'Debugger')
+    assert guide.steps.get().title == 'Haltepunkt setzen'
+
+
+def test_admin_adds_topic_debug_guide(admin_client: Client, topic: Topic) -> None:
+    response = add_guide(admin_client, topic=topic.pk, label_de='')
+    assert response.status_code == 302
+    assert DebugGuide.objects.get(slug='debugger').topic == topic
+
+
+def test_admin_requires_label_for_general_guide(admin_client: Client, db: None) -> None:
+    response = add_guide(admin_client, label_de='')
+    assert form_error_codes(response, 'label_de') == ['required']
+    assert not DebugGuide.objects.exists()
+
+
+def test_admin_rejects_label_for_topic_guide(admin_client: Client, topic: Topic) -> None:
+    response = add_guide(admin_client, topic=topic.pk)
+    assert form_error_codes(response, 'label_de') == ['invalid']
+    assert not DebugGuide.objects.exists()
+
+
+@pytest.mark.parametrize(
+    ('field', 'value', 'code'),
+    [
+        ('slug', 'Der_Debugger', 'invalid'),
+        ('topic', '999999', 'invalid_choice'),
+        ('label_de', 'x' * 31, 'max_length'),
+        ('title_de', '', 'required'),
+        ('summary_de', '', 'required'),
+    ],
+)
+def test_admin_rejects_invalid_guide_values(
+    admin_client: Client, db: None, field: str, value: str, code: str
+) -> None:
+    response = add_guide(admin_client, **{field: value})
+    assert code in form_error_codes(response, field)
+    assert not DebugGuide.objects.exists()
+
+
+def test_admin_adds_guide_step_with_unix_code(admin_client: Client, db: None) -> None:
+    changes = {
+        'steps-0-language': 'terminal',
+        'steps-0-code_de': 'dir',
+        'steps-0-code_unix_de': 'ls',
+    }
+    add_guide(admin_client, **changes)
+    step = DebugGuide.objects.get(slug='debugger').steps.get()
+    assert step.os_code == {'win': 'dir', 'unix': 'ls'}
+
+
+@pytest.mark.parametrize(
+    ('changes', 'field'),
+    [
+        ({'steps-0-code_de': 'dir'}, 'language'),
+        ({'steps-0-language': 'terminal'}, 'code_de'),
+        ({'steps-0-code_unix_de': 'ls'}, 'code_de'),
+        ({'steps-0-title_de': ''}, 'title_de'),
+    ],
+)
+def test_admin_checks_guide_steps(
+    admin_client: Client, db: None, changes: dict, field: str
+) -> None:
+    response = add_guide(admin_client, **changes)
+    assert step_error_codes(response, field) == ['required']
+    assert not DebugGuide.objects.exists()
+
+
+def test_debug_guide_list_filters_general_guides(
+    admin_client: Client, debug_guide: DebugGuide, topic_guide: DebugGuide
+) -> None:
+    url = reverse('admin:app_content_debugguide_changelist')
+    general = admin_client.get(url, {'topic__isnull': 'True'})
+    by_topic = admin_client.get(url, {'topic__id__exact': topic_guide.topic.pk})
+    assert list(general.context['cl'].result_list) == [debug_guide]
+    assert list(by_topic.context['cl'].result_list) == [topic_guide]
+
+
+def test_debug_guide_list_searches_by_title(
+    admin_client: Client, debug_guide: DebugGuide, topic_guide: DebugGuide
+) -> None:
+    url = reverse('admin:app_content_debugguide_changelist')
+    response = admin_client.get(url, {'q': 'ablauf'})
+    assert list(response.context['cl'].result_list) == [debug_guide]
+
+
+# Changes and escaping
+def test_admin_rejects_duplicate_guide_slug(admin_client: Client, debug_guide: DebugGuide) -> None:
+    response = add_guide(admin_client, slug='vorgehen')
+    assert form_error_codes(response, 'slug') == ['unique']
+    assert DebugGuide.objects.count() == 1
+
+
+def test_admin_changes_debug_guide(admin_client: Client, debug_guide: DebugGuide) -> None:
+    data = guide_data(slug='vorgehen', title_de='Neuer Ablauf', **{'steps-TOTAL_FORMS': 0})
+    url = reverse('admin:app_content_debugguide_change', args=[debug_guide.pk])
+    response = admin_client.post(url, data)
+    debug_guide.refresh_from_db()
+    assert response.status_code == 302
+    assert debug_guide.title_de == 'Neuer Ablauf'
+    assert debug_guide.steps.count() == 2
+
+
+def test_admin_rejects_topic_guide_turned_general_without_label(
+    admin_client: Client, topic_guide: DebugGuide
+) -> None:
+    changes = {'slug': 'python-debuggen', 'label_de': '', 'steps-TOTAL_FORMS': 0}
+    url = reverse('admin:app_content_debugguide_change', args=[topic_guide.pk])
+    response = admin_client.post(url, guide_data(**changes))
+    topic_guide.refresh_from_db()
+    assert form_error_codes(response, 'label_de') == ['required']
+    assert topic_guide.topic is not None
+
+
+def existing_steps(error: ErrorMessage) -> dict:
+    data = {'steps-TOTAL_FORMS': 2, 'steps-INITIAL_FORMS': 2}
+    for index, step in enumerate(error.steps.all()):
+        prefix = f'steps-{index}-'
+        data |= {f'{prefix}id': step.pk, f'{prefix}error': error.pk}
+        data |= {f'{prefix}text_de': step.text_de, f'{prefix}position': step.position}
+    return data
+
+
+def test_admin_deletes_single_error_step(admin_client: Client, error_message: ErrorMessage) -> None:
+    changes = existing_steps(error_message) | {'slug': error_message.slug, 'steps-0-DELETE': 'on'}
+    url = reverse('admin:app_content_errormessage_change', args=[error_message.pk])
+    response = admin_client.post(url, error_data(error_message.topic, **changes))
+    assert response.status_code == 302
+    assert [step.text for step in error_message.steps.all()] == ['Paket installieren.']
+
+
+SCRIPT = '<script>alert(1)</script>'
+ESCAPED = '&lt;script&gt;alert(1)&lt;/script&gt;'
+
+
+def test_debug_guide_list_escapes_html_in_title(admin_client: Client, db: None) -> None:
+    DebugGuide.objects.create(slug='xss', label_de='XSS', title_de=SCRIPT)
+    content = admin_client.get(reverse('admin:app_content_debugguide_changelist')).content
+    assert SCRIPT not in content.decode()
+    assert ESCAPED in content.decode()
+
+
+@pytest.mark.parametrize(('model', 'fixture'), GUIDE_ADMINS.items())
+def test_change_page_escapes_html_in_steps(
+    admin_client: Client, request: pytest.FixtureRequest, model: str, fixture: str
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.steps.update(text_de=SCRIPT)
+    url = reverse(f'admin:app_content_{model}_change', args=[obj.pk])
+    content = admin_client.get(url).content.decode()
+    assert SCRIPT not in content
+    assert ESCAPED in content
