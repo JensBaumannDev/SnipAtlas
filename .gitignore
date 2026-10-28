@@ -19,7 +19,9 @@ db.sqlite3-journal
 staticfiles/
 media/
 .pytest_cache/
+.ruff_cache/
 .coverage
+coverage.xml
 htmlcov/
 
 # --- Node / Angular (frontend/) ---
