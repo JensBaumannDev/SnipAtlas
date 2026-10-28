@@ -37,7 +37,7 @@ const TOPIC_ICONS: Readonly<Partial<Record<string, LucideIconData>>> = {
 
 export function topicLogo(slug: string): string | undefined {
   const file = BRAND_LOGOS[slug];
-  return file ? `url('/img/topics/${file}.svg')` : undefined;
+  return file ? `url('img/topics/${file}.svg')` : undefined;
 }
 
 export function topicIcon(slug: string): LucideIconData {
