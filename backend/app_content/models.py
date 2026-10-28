@@ -1,6 +1,8 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models.functions import Lower
 
 RESERVED_TOPIC_SLUG = 'debuggen'
 
@@ -334,3 +336,87 @@ class BlueprintCode(models.Model):
     @property
     def os_code(self) -> str | dict[str, str]:
         return split_os_code(self.code, self.code_unix)
+
+
+# Glossary
+class GlossaryTerm(models.Model):
+    slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
+    term = models.CharField(max_length=60)
+    definition = models.TextField()
+    concept = models.ForeignKey(
+        Concept, on_delete=models.SET_NULL, null=True, blank=True, related_name='+'
+    )
+
+    class Meta:
+        ordering = ('slug',)
+        constraints = [slug_constraint()]
+
+    def __str__(self) -> str:
+        return self.term
+
+
+class GlossaryAlias(models.Model):
+    term = models.ForeignKey(GlossaryTerm, on_delete=models.CASCADE, related_name='aliases')
+    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='de')
+    name = models.CharField(max_length=60)
+
+    class Meta:
+        verbose_name_plural = 'glossary aliases'
+        ordering = ('name', 'pk')
+        constraints = [
+            models.UniqueConstraint(
+                Lower('name'), 'language', name='glossaryalias_name_unique_per_language'
+            ),
+            models.CheckConstraint(
+                condition=models.Q(language__in=[code for code, _ in settings.LANGUAGES]),
+                name='glossaryalias_language_valid',
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return self.name
+
+
+# News
+class NewsArea(models.TextChoices):
+    COMMANDS = 'befehle', 'Befehle'
+    CONCEPTS = 'grundlagen', 'Grundlagen'
+    BLUEPRINTS = 'anleitungen', 'Anleitungen'
+    ERRORS = 'fehler', 'Fehler'
+
+
+AREAS_WITH_SUBTOPICS = (NewsArea.COMMANDS, NewsArea.CONCEPTS)
+
+
+class News(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=120)
+    area = models.CharField(max_length=20, choices=NewsArea.choices)
+    topic = models.ForeignKey(Topic, on_delete=models.PROTECT, related_name='+')
+    subtopic = models.ForeignKey(
+        Subtopic, on_delete=models.PROTECT, null=True, blank=True, related_name='+'
+    )
+
+    class Meta:
+        verbose_name_plural = 'news'
+        ordering = ('-date', '-pk')
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(area__in=NewsArea.values), name='news_area_valid'
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return self.title
+
+    def clean(self) -> None:
+        super().clean()
+        if self.subtopic and self.area not in AREAS_WITH_SUBTOPICS:
+            raise field_error('subtopic', 'invalid', 'Only commands and concepts have subtopics.')
+        if self.subtopic and self.subtopic.topic_id != self.topic_id:
+            raise field_error('subtopic', 'invalid', 'The subtopic belongs to another topic.')
+
+    @property
+    def link(self) -> list[str]:
+        parts = [f'/{self.area}', self.topic.slug]
+        return [*parts, self.subtopic.slug] if self.subtopic else parts

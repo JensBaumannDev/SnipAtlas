@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -15,7 +17,11 @@ from app_content.models import (
     Entry,
     ErrorMessage,
     ErrorStep,
+    GlossaryAlias,
+    GlossaryTerm,
     Group,
+    News,
+    NewsArea,
     Subtopic,
     Topic,
 )
@@ -798,3 +804,205 @@ def test_deleting_step_deletes_only_its_codes(venv_step: BlueprintStep) -> None:
 def test_topic_with_blueprints_cannot_be_deleted(blueprint: Blueprint) -> None:
     with pytest.raises(ProtectedError):
         blueprint.topic.delete()
+
+
+# Glossary
+def test_glossary_term_and_alias_str(glossary_term: GlossaryTerm) -> None:
+    assert [str(glossary_term), str(glossary_term.aliases.first())] == ['Schleife', 'Loops']
+
+
+def test_glossary_texts_follow_active_language(glossary_term: GlossaryTerm) -> None:
+    with translation.override('en'):
+        assert [glossary_term.term, glossary_term.definition] == ['Loop', 'Repeats code.']
+
+
+def test_glossary_texts_fall_back_to_german(db: None) -> None:
+    term = GlossaryTerm.objects.create(slug='api', term_de='API', definition_de='Schnittstelle.')
+    with translation.override('en'):
+        assert [term.term, term.definition] == ['API', 'Schnittstelle.']
+
+
+def test_glossary_term_is_valid(glossary_term: GlossaryTerm) -> None:
+    glossary_term.full_clean()
+    for alias in glossary_term.aliases.all():
+        alias.full_clean()
+
+
+def test_glossary_term_requires_slug_term_and_definition(db: None) -> None:
+    assert set(all_error_codes(GlossaryTerm())) == {'slug', 'term', 'definition'}
+
+
+def test_glossary_term_without_concept_is_valid(glossary_term: GlossaryTerm) -> None:
+    glossary_term.concept = None
+    glossary_term.full_clean()
+
+
+def test_glossary_term_is_limited(glossary_term: GlossaryTerm) -> None:
+    glossary_term.term_de = 'x' * 61
+    glossary_term.slug = 'x' * 81
+    errors = all_error_codes(glossary_term)
+    assert [errors['term_de'], errors['slug']] == [['max_length'], ['max_length']]
+
+
+@pytest.mark.parametrize('slug', ['Api', 'http_methoden', 'http-', 'a b'])
+def test_glossary_term_rejects_invalid_slug(glossary_term: GlossaryTerm, slug: str) -> None:
+    glossary_term.slug = slug
+    assert 'invalid' in error_codes(glossary_term, 'slug')
+
+
+@pytest.mark.parametrize('slug', ['', 'Api', 'http_methoden', 'a/b', 'api\n'])
+def test_glossary_slug_is_checked_in_database(db: None, slug: str) -> None:
+    with pytest.raises(IntegrityError):
+        GlossaryTerm.objects.create(slug=slug, term_de='x')
+
+
+def test_glossary_slug_is_unique(glossary_term: GlossaryTerm) -> None:
+    with pytest.raises(IntegrityError):
+        GlossaryTerm.objects.create(slug='schleife', term_de='Doppelt')
+
+
+def test_glossary_terms_are_ordered_by_slug(glossary_term: GlossaryTerm) -> None:
+    api = GlossaryTerm.objects.create(slug='api', term_de='API')
+    zeta = GlossaryTerm.objects.create(slug='zeta', term_de='Zeta')
+    assert list(GlossaryTerm.objects.all()) == [api, glossary_term, zeta]
+
+
+def test_deleting_concept_keeps_term_without_link(glossary_term: GlossaryTerm) -> None:
+    glossary_term.concept.delete()
+    glossary_term.refresh_from_db()
+    assert glossary_term.concept is None
+
+
+def test_deleting_term_deletes_aliases(glossary_term: GlossaryTerm) -> None:
+    glossary_term.delete()
+    assert not GlossaryAlias.objects.exists()
+
+
+def test_glossary_aliases_are_ordered_by_name(glossary_term: GlossaryTerm) -> None:
+    glossary_term.aliases.create(name='Abschleifen')
+    names = [alias.name for alias in glossary_term.aliases.all()]
+    assert names == ['Abschleifen', 'Loops', 'Schleifen']
+
+
+def test_glossary_alias_requires_name(glossary_term: GlossaryTerm) -> None:
+    assert error_codes(GlossaryAlias(term=glossary_term), 'name') == ['blank']
+
+
+def test_glossary_alias_defaults_to_german(glossary_term: GlossaryTerm) -> None:
+    assert glossary_term.aliases.get(name='Schleifen').language == 'de'
+
+
+def test_glossary_alias_is_limited(glossary_term: GlossaryTerm) -> None:
+    alias = GlossaryAlias(term=glossary_term, name='x' * 61)
+    assert error_codes(alias, 'name') == ['max_length']
+
+
+def test_glossary_alias_rejects_unknown_language(glossary_term: GlossaryTerm) -> None:
+    alias = GlossaryAlias(term=glossary_term, language='fr', name='Boucle')
+    assert error_codes(alias, 'language') == ['invalid_choice']
+
+
+@pytest.mark.parametrize('language', ['', 'fr', 'DE'])
+def test_glossary_alias_language_is_checked_in_database(
+    glossary_term: GlossaryTerm, language: str
+) -> None:
+    with pytest.raises(IntegrityError):
+        glossary_term.aliases.create(language=language, name='Neu')
+
+
+@pytest.mark.parametrize('name', ['Schleifen', 'schleifen', 'SCHLEIFEN'])
+def test_glossary_alias_is_unique_per_language(
+    glossary_term: GlossaryTerm, db: None, name: str
+) -> None:
+    other = GlossaryTerm.objects.create(slug='zyklus', term_de='Zyklus')
+    with pytest.raises(IntegrityError):
+        other.aliases.create(name=name)
+
+
+def test_glossary_alias_duplicate_is_found_by_full_clean(glossary_term: GlossaryTerm) -> None:
+    other = GlossaryTerm.objects.create(slug='zyklus', term_de='Zyklus')
+    with pytest.raises(ValidationError):
+        GlossaryAlias(term=other, name='schleifen').full_clean()
+
+
+def test_glossary_alias_may_repeat_in_other_language(glossary_term: GlossaryTerm) -> None:
+    assert glossary_term.aliases.create(language='en', name='Schleifen').pk
+
+
+# News
+def test_news_str_and_title_follow_language(news: News) -> None:
+    assert str(news) == 'Python: Schleifen'
+    with translation.override('en'):
+        assert news.title == 'Python: loops'
+
+
+@pytest.mark.parametrize('area', ['befehle', 'grundlagen'])
+def test_news_with_subtopic_is_valid_for_commands_and_concepts(news: News, area: str) -> None:
+    news.area = area
+    news.full_clean()
+
+
+def test_news_requires_all_fields_except_subtopic(db: None) -> None:
+    assert set(all_error_codes(News())) == {'date', 'title', 'area', 'topic'}
+
+
+def test_news_without_subtopic_is_valid(news: News) -> None:
+    news.subtopic = None
+    news.full_clean()
+
+
+def test_news_title_is_limited(news: News) -> None:
+    news.title_de = 'x' * 121
+    assert error_codes(news, 'title_de') == ['max_length']
+
+
+def test_news_rejects_unknown_area(news: News) -> None:
+    news.area = 'blog'
+    assert error_codes(news, 'area') == ['invalid_choice']
+
+
+def test_news_areas_match_frontend_routes() -> None:
+    assert NewsArea.values == ['befehle', 'grundlagen', 'anleitungen', 'fehler']
+
+
+@pytest.mark.parametrize('area', ['', 'blog', 'Befehle'])
+def test_news_area_is_checked_in_database(topic: Topic, area: str) -> None:
+    with pytest.raises(IntegrityError):
+        News.objects.create(date=date(2026, 1, 1), area=area, topic=topic)
+
+
+def test_news_rejects_subtopic_of_other_topic(news: News, group: Group) -> None:
+    git = Topic.objects.create(group=group, slug='git', name_de='Git')
+    news.topic = git
+    assert error_codes(news, 'subtopic') == ['invalid']
+
+
+@pytest.mark.parametrize('area', ['anleitungen', 'fehler'])
+def test_news_rejects_subtopic_for_areas_without_subtopics(news: News, area: str) -> None:
+    news.area = area
+    assert error_codes(news, 'subtopic') == ['invalid']
+
+
+@pytest.mark.parametrize('area', ['befehle', 'grundlagen'])
+def test_news_link_with_subtopic(news: News, area: str) -> None:
+    news.area = area
+    assert news.link == [f'/{area}', 'python', 'schleifen']
+
+
+@pytest.mark.parametrize('area', NewsArea.values)
+def test_news_link_without_subtopic(news: News, area: str) -> None:
+    news.area, news.subtopic = area, None
+    assert news.link == [f'/{area}', 'python']
+
+
+def test_news_is_ordered_newest_first(news: News, topic: Topic) -> None:
+    old = News.objects.create(date=date(2026, 9, 1), area='fehler', topic=topic)
+    same_day = News.objects.create(date=date(2026, 10, 20), area='fehler', topic=topic)
+    assert list(News.objects.all()) == [same_day, news, old]
+
+
+def test_news_keeps_topic_and_subtopic(news: News) -> None:
+    with pytest.raises(ProtectedError):
+        news.subtopic.delete()
+    with pytest.raises(ProtectedError):
+        news.topic.delete()
