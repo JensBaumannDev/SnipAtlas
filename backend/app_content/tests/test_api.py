@@ -14,6 +14,7 @@ from app_content.models import (
     DebugGuide,
     Entry,
     ErrorMessage,
+    GlossaryTerm,
     Group,
     Subtopic,
     Topic,
@@ -410,8 +411,16 @@ AREAS = {
     'error': ('error_message', 'module-not-found'),
     'debug-guide': ('debug_guide', 'vorgehen'),
     'blueprint': ('blueprint', 'django-projekt-anlegen'),
+    'glossary': ('glossary_term', None),
 }
 ROUTES = ['list', 'detail']
+ENDPOINTS = [
+    (area, route)
+    for area, (_, slug) in AREAS.items()
+    for route in ROUTES
+    if slug or route == 'list'
+]
+DETAIL_AREAS = [area for area, (_, slug) in AREAS.items() if slug]
 HACKED = {'slug': 'neu', 'title': 'Hacked', 'message': 'Hacked', 'code': 'rm -rf /'}
 
 
@@ -426,7 +435,7 @@ def area_url(request: pytest.FixtureRequest, area: str, route: str = 'detail') -
     return obj, reverse(f'{area}-{route}', args=args)
 
 
-@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize('area', DETAIL_AREAS)
 @pytest.mark.parametrize('value', ['git', 'py\x00thon'])
 def test_detail_ignores_topic_param(
     api_client: APIClient, request: pytest.FixtureRequest, area: str, value: str
@@ -435,8 +444,7 @@ def test_detail_ignores_topic_param(
     assert api_client.get(url, {'topic': value}).status_code == 200
 
 
-@pytest.mark.parametrize('area', AREAS)
-@pytest.mark.parametrize('route', ROUTES)
+@pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
 def test_public_content_works_with_token(
     api_client: APIClient, user: User, request: pytest.FixtureRequest, area: str, route: str
 ) -> None:
@@ -446,8 +454,7 @@ def test_public_content_works_with_token(
     assert api_client.get(url).status_code == 200
 
 
-@pytest.mark.parametrize('area', AREAS)
-@pytest.mark.parametrize('route', ROUTES)
+@pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
 def test_public_content_rejects_invalid_token(
     api_client: APIClient, request: pytest.FixtureRequest, area: str, route: str
 ) -> None:
@@ -471,8 +478,7 @@ def test_public_content_rejects_token_of_inactive_user(
     assert response.json() == {'code': 'authentication_failed'}
 
 
-@pytest.mark.parametrize('area', AREAS)
-@pytest.mark.parametrize('route', ROUTES)
+@pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
 def test_public_content_is_throttled(
     api_client: APIClient,
     request: pytest.FixtureRequest,
@@ -488,8 +494,7 @@ def test_public_content_is_throttled(
     assert response.json()['code'] == 'throttled'
 
 
-@pytest.mark.parametrize('area', AREAS)
-@pytest.mark.parametrize('route', ROUTES)
+@pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
 @pytest.mark.parametrize('method', WRITE_METHODS)
 def test_public_content_rejects_writes(
     api_client: APIClient, request: pytest.FixtureRequest, area: str, route: str, method: str
@@ -502,12 +507,17 @@ def test_public_content_rejects_writes(
     assert (type(obj).objects.count(), stored(obj)) == (1, before)
 
 
-@pytest.mark.parametrize('area', AREAS)
+@pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
 @pytest.mark.parametrize('method', WRITE_METHODS)
 def test_public_content_rejects_writes_with_admin_token(
-    api_client: APIClient, admin_user: User, request: pytest.FixtureRequest, area: str, method: str
+    api_client: APIClient,
+    admin_user: User,
+    request: pytest.FixtureRequest,
+    area: str,
+    route: str,
+    method: str,
 ) -> None:
-    obj, url = area_url(request, area)
+    obj, url = area_url(request, area, route)
     token = Token.objects.create(user=admin_user)
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
     before = stored(obj)
@@ -516,8 +526,7 @@ def test_public_content_rejects_writes_with_admin_token(
     assert (type(obj).objects.count(), stored(obj)) == (1, before)
 
 
-@pytest.mark.parametrize('area', AREAS)
-@pytest.mark.parametrize('route', ROUTES)
+@pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
 @pytest.mark.parametrize('method', ['get', 'head', 'options'])
 def test_public_content_allows_only_reading_methods(
     api_client: APIClient, request: pytest.FixtureRequest, area: str, route: str, method: str
@@ -1190,4 +1199,124 @@ def test_blueprint_returns_text_unchanged_as_json(api_client: APIClient, topic: 
             'note': script,
             'code': [{'language': 'html', 'code': script}],
         }
+    ]
+
+
+# Glossary
+GLOSSARY_JSON = {
+    'slug': 'schleife',
+    'term': 'Schleife',
+    'aliases': ['Schleifen'],
+    'definition': 'Wiederholt Code.',
+    'concept': {'topic': 'python', 'subtopic': 'schleifen', 'slug': 'for-schleife'},
+}
+
+
+def glossary(api_client: APIClient, language: str = 'de', **params: str) -> list[dict]:
+    response = api_client.get(reverse('glossary-list'), params, HTTP_ACCEPT_LANGUAGE=language)
+    assert response.status_code == 200
+    return response.json()
+
+
+def test_glossary_list_is_public(api_client: APIClient, glossary_term: GlossaryTerm) -> None:
+    assert glossary(api_client) == [GLOSSARY_JSON]
+
+
+@pytest.mark.parametrize('header', ['en', 'en-US,en;q=0.9,de;q=0.8'])
+def test_glossary_uses_accept_language_with_own_aliases(
+    api_client: APIClient, glossary_term: GlossaryTerm, header: str
+) -> None:
+    data = glossary(api_client, header)
+    assert data == [
+        GLOSSARY_JSON | {'term': 'Loop', 'definition': 'Repeats code.', 'aliases': ['Loops']}
+    ]
+
+
+def test_glossary_uses_german_for_unknown_language(
+    api_client: APIClient, glossary_term: GlossaryTerm
+) -> None:
+    assert glossary(api_client, 'fr') == [GLOSSARY_JSON]
+
+
+def test_glossary_english_has_no_german_aliases(api_client: APIClient, db: None) -> None:
+    term = GlossaryTerm.objects.create(slug='api', term_de='API', definition_de='Schnittstelle.')
+    term.aliases.create(name='Schnittstelle')
+    data = glossary(api_client, 'en')
+    assert data == [{'slug': 'api', 'term': 'API', 'aliases': [], 'definition': 'Schnittstelle.'}]
+
+
+def test_glossary_term_without_concept_has_no_concept_key(
+    api_client: APIClient, glossary_term: GlossaryTerm
+) -> None:
+    glossary_term.concept.delete()
+    data = glossary(api_client)
+    assert 'concept' not in data[0]
+    assert data == [{key: value for key, value in GLOSSARY_JSON.items() if key != 'concept'}]
+
+
+def test_glossary_keeps_aliases_and_concepts_with_their_term(
+    api_client: APIClient, glossary_term: GlossaryTerm, git_alltag: Subtopic
+) -> None:
+    stash = create_item('concept', git_alltag, 'stash')
+    branch = GlossaryTerm.objects.create(slug='branch', term_de='Branch', concept=stash)
+    branch.aliases.create(name='Branches')
+    branch.aliases.create(name='Abzweig')
+    GlossaryTerm.objects.create(slug='api', term_de='API')
+    data = {item['slug']: (item['aliases'], item.get('concept')) for item in glossary(api_client)}
+    assert data == {
+        'api': ([], None),
+        'branch': (
+            ['Abzweig', 'Branches'],
+            {'topic': 'git', 'subtopic': 'alltag', 'slug': 'stash'},
+        ),
+        'schleife': (['Schleifen'], GLOSSARY_JSON['concept']),
+    }
+
+
+def test_glossary_is_ordered_by_slug(api_client: APIClient, glossary_term: GlossaryTerm) -> None:
+    GlossaryTerm.objects.create(slug='zeta', term_de='Zeta')
+    GlossaryTerm.objects.create(slug='api', term_de='API')
+    assert [item['slug'] for item in glossary(api_client)] == ['api', 'schleife', 'zeta']
+
+
+@pytest.mark.parametrize('params', [{'topic': 'git'}, {'general': 'true'}, {'search': 'x'}])
+def test_glossary_ignores_query_params(
+    api_client: APIClient, glossary_term: GlossaryTerm, params: dict
+) -> None:
+    assert glossary(api_client, **params) == [GLOSSARY_JSON]
+
+
+def test_glossary_is_empty_without_terms(api_client: APIClient, db: None) -> None:
+    assert glossary(api_client) == []
+
+
+def test_glossary_loads_in_two_queries(
+    api_client: APIClient,
+    glossary_term: GlossaryTerm,
+    git_alltag: Subtopic,
+    django_assert_num_queries: DjangoAssertNumQueries,
+) -> None:
+    stash = create_item('concept', git_alltag, 'stash')
+    GlossaryTerm.objects.create(slug='branch', term_de='Branch', concept=stash).aliases.create(
+        name='Branches'
+    )
+    with django_assert_num_queries(2):
+        glossary(api_client, 'en')
+
+
+@pytest.mark.parametrize('path', ['schleife', 'for-schleife'])
+def test_glossary_has_no_detail(
+    api_client: APIClient, glossary_term: GlossaryTerm, path: str
+) -> None:
+    assert api_client.get(f'/api/glossary/{path}/').status_code == 404
+
+
+def test_glossary_returns_text_unchanged_as_json(api_client: APIClient, db: None) -> None:
+    script = '<script>alert(1)</script>'
+    term = GlossaryTerm.objects.create(slug='xss', term_de=script, definition_de=script)
+    term.aliases.create(name=script)
+    response = api_client.get(reverse('glossary-list'))
+    assert response['Content-Type'] == 'application/json'
+    assert response.json() == [
+        {'slug': 'xss', 'term': script, 'aliases': [script], 'definition': script}
     ]

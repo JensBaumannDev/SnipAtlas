@@ -7,6 +7,7 @@ from .views import (
     DebugGuideViewSet,
     EntryViewSet,
     ErrorMessageViewSet,
+    GlossaryListView,
     GroupListView,
     TopicDetailView,
 )
@@ -21,5 +22,6 @@ router.register('blueprints', BlueprintViewSet, basename='blueprint')
 urlpatterns: list[URLPattern] = [
     path('groups/', GroupListView.as_view(), name='group-list'),
     path('topics/<slug:slug>/', TopicDetailView.as_view(), name='topic-detail'),
+    path('glossary/', GlossaryListView.as_view(), name='glossary-list'),
     *router.urls,
 ]
