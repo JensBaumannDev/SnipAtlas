@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
 from app_content.models import (
+    Blueprint,
+    BlueprintCode,
+    BlueprintStep,
     Concept,
     DebugGuide,
     DebugGuideStep,
@@ -114,3 +117,30 @@ class DebugGuideSerializer(OptionalFieldsSerializer):
     class Meta:
         model = DebugGuide
         fields = ('slug', 'topic', 'label', 'title', 'summary', 'steps')
+
+
+# Blueprints
+class BlueprintCodeSerializer(serializers.ModelSerializer):
+    code = serializers.JSONField(source='os_code', read_only=True)
+
+    class Meta:
+        model = BlueprintCode
+        fields = ('language', 'code')
+
+
+class BlueprintStepSerializer(OptionalFieldsSerializer):
+    code = BlueprintCodeSerializer(source='codes', many=True, read_only=True)
+    optional_fields = ('note',)
+
+    class Meta:
+        model = BlueprintStep
+        fields = ('slug', 'title', 'why', 'code', 'note')
+
+
+class BlueprintSerializer(serializers.ModelSerializer):
+    topic = serializers.CharField(source='topic.slug', read_only=True)
+    steps = BlueprintStepSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Blueprint
+        fields = ('slug', 'topic', 'title', 'summary', 'steps')

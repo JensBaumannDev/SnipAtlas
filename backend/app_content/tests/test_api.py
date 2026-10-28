@@ -9,6 +9,7 @@ from rest_framework.throttling import AnonRateThrottle
 
 from app_accounts.models import User
 from app_content.models import (
+    Blueprint,
     Concept,
     DebugGuide,
     Entry,
@@ -408,6 +409,7 @@ AREAS = {
     'concept': ('concept', 'for-schleife'),
     'error': ('error_message', 'module-not-found'),
     'debug-guide': ('debug_guide', 'vorgehen'),
+    'blueprint': ('blueprint', 'django-projekt-anlegen'),
 }
 ROUTES = ['list', 'detail']
 HACKED = {'slug': 'neu', 'title': 'Hacked', 'message': 'Hacked', 'code': 'rm -rf /'}
@@ -526,7 +528,7 @@ def test_public_content_allows_only_reading_methods(
     assert response['Allow'] == 'GET, HEAD, OPTIONS'
 
 
-@pytest.mark.parametrize('path', ['entries', 'concepts', 'errors', 'debug-guides'])
+@pytest.mark.parametrize('path', ['entries', 'concepts', 'errors', 'debug-guides', 'blueprints'])
 @pytest.mark.parametrize('slug', ['for.schleife', 'for%20schleife', 'f%C3%BCr', '%00'])
 def test_detail_with_invalid_characters_returns_404(
     api_client: APIClient,
@@ -534,6 +536,7 @@ def test_detail_with_invalid_characters_returns_404(
     concept: Concept,
     error_message: ErrorMessage,
     debug_guide: DebugGuide,
+    blueprint: Blueprint,
     path: str,
     slug: str,
 ) -> None:
@@ -968,3 +971,223 @@ def test_errors_list_ignores_general_param(
     api_client: APIClient, error_message: ErrorMessage
 ) -> None:
     assert list_slugs(api_client, 'error', general='true') == ['module-not-found']
+
+
+# Blueprints
+BLUEPRINT_JSON = {
+    'slug': 'django-projekt-anlegen',
+    'topic': 'python',
+    'title': 'Neues Django-Projekt anlegen',
+    'summary': 'Vom leeren Ordner bis zum ersten Model.',
+    'steps': [
+        {
+            'slug': 'ordner-anlegen',
+            'title': 'Projektordner anlegen',
+            'why': 'Alles liegt in einem Ordner.',
+            'code': [
+                {'language': 'terminal', 'code': 'mkdir {{project}}'},
+                {'language': 'terminal', 'code': 'cd {{project}}'},
+            ],
+        },
+        {
+            'slug': 'virtuelle-umgebung',
+            'title': 'Virtuelle Umgebung einrichten',
+            'why': 'Jedes Projekt bekommt eigene Pakete.',
+            'code': [
+                {
+                    'language': 'terminal',
+                    'code': {'win': 'python -m venv env', 'unix': 'python3 -m venv env'},
+                }
+            ],
+            'note': 'Danach steht (env) vor der Eingabezeile.',
+        },
+    ],
+}
+
+
+def create_blueprint(topic: Topic, slug: str, **fields: object) -> Blueprint:
+    data = {'topic': topic, 'slug': slug, 'title_de': slug, 'summary_de': slug}
+    return Blueprint.objects.create(**(data | fields))
+
+
+def test_blueprints_list_is_public(api_client: APIClient, blueprint: Blueprint) -> None:
+    response = api_client.get(reverse('blueprint-list'))
+    assert response.status_code == 200
+    assert response.json() == [BLUEPRINT_JSON]
+
+
+def test_blueprint_detail_is_public(api_client: APIClient, blueprint: Blueprint) -> None:
+    response = api_client.get(reverse('blueprint-detail', args=['django-projekt-anlegen']))
+    assert response.status_code == 200
+    assert response.json() == BLUEPRINT_JSON
+
+
+def test_blueprint_step_without_code_and_note(api_client: APIClient, blueprint: Blueprint) -> None:
+    blueprint.steps.create(slug='fertig', title_de='Fertig', why_de='Alles läuft.', position=9)
+    url = reverse('blueprint-detail', args=['django-projekt-anlegen'])
+    step = api_client.get(url).json()['steps'][-1]
+    assert step == {'slug': 'fertig', 'title': 'Fertig', 'why': 'Alles läuft.', 'code': []}
+
+
+def test_blueprint_without_steps_has_empty_steps(api_client: APIClient, topic: Topic) -> None:
+    create_blueprint(topic, 'leer')
+    assert api_client.get(reverse('blueprint-detail', args=['leer'])).json()['steps'] == []
+
+
+@pytest.mark.parametrize('header', ['en', 'en-US,en;q=0.9,de;q=0.8'])
+def test_blueprint_detail_uses_accept_language(
+    api_client: APIClient, blueprint: Blueprint, header: str
+) -> None:
+    venv = blueprint.steps.get(slug='virtuelle-umgebung')
+    venv.why_en, venv.note_en = 'Each project gets its own packages.', 'Then (env) appears.'
+    venv.save()
+    venv.codes.update(code_en='py -m venv env', code_unix_en='python3 -m venv .venv')
+    url = reverse('blueprint-detail', args=['django-projekt-anlegen'])
+    data = api_client.get(url, HTTP_ACCEPT_LANGUAGE=header).json()
+    folder, step = data['steps']
+    assert [data['title'], data['summary']] == [
+        'Create a new Django project',
+        'From an empty folder to the first model.',
+    ]
+    assert [folder['title'], step['title']] == [
+        'Projektordner anlegen',
+        'Set up a virtual environment',
+    ]
+    assert [step['why'], step['note']] == [
+        'Each project gets its own packages.',
+        'Then (env) appears.',
+    ]
+    assert step['code'] == [
+        {'language': 'terminal', 'code': {'win': 'py -m venv env', 'unix': 'python3 -m venv .venv'}}
+    ]
+
+
+@pytest.mark.parametrize(
+    ('header', 'titles'),
+    [
+        ('en', ['Create a new Django project', 'Set up a virtual environment']),
+        ('fr', ['Neues Django-Projekt anlegen', 'Virtuelle Umgebung einrichten']),
+    ],
+)
+def test_blueprints_list_uses_accept_language(
+    api_client: APIClient, blueprint: Blueprint, header: str, titles: list[str]
+) -> None:
+    data = api_client.get(reverse('blueprint-list'), HTTP_ACCEPT_LANGUAGE=header).json()
+    assert [data[0]['title'], data[0]['steps'][1]['title']] == titles
+
+
+def test_blueprints_list_keeps_steps_and_codes_together(
+    api_client: APIClient, blueprint: Blueprint, git_alltag: Subtopic
+) -> None:
+    repo = create_blueprint(git_alltag.topic, 'repo')
+    init = repo.steps.create(slug='init', title_de='init', why_de='x')
+    init.codes.create(language='terminal', code_de='git init')
+    repo.steps.create(slug='ordner-anlegen', title_de='Ordner', why_de='x')
+    create_blueprint(git_alltag.topic, 'leer', position=1)
+    data = api_client.get(reverse('blueprint-list')).json()
+    codes = {
+        item['slug']: {
+            step['slug']: [code['code'] for code in step['code']] for step in item['steps']
+        }
+        for item in data
+    }
+    assert codes == {
+        'repo': {'init': ['git init'], 'ordner-anlegen': []},
+        'leer': {},
+        'django-projekt-anlegen': {
+            'ordner-anlegen': ['mkdir {{project}}', 'cd {{project}}'],
+            'virtuelle-umgebung': [{'win': 'python -m venv env', 'unix': 'python3 -m venv env'}],
+        },
+    }
+
+
+def test_blueprints_list_filters_by_topic(
+    api_client: APIClient, blueprint: Blueprint, git_alltag: Subtopic
+) -> None:
+    create_blueprint(git_alltag.topic, 'repo')
+    assert list_slugs(api_client, 'blueprint', topic='python') == ['django-projekt-anlegen']
+    assert list_slugs(api_client, 'blueprint', topic='git') == ['repo']
+
+
+@pytest.mark.parametrize(
+    'params', [{}, {'topic': ''}, {'page': '2', 'search': 'x'}, {'general': 'true'}]
+)
+def test_blueprints_list_without_topic_returns_all_in_order(
+    api_client: APIClient, topic: Topic, git_alltag: Subtopic, params: dict
+) -> None:
+    create_blueprint(topic, 'spaet', position=2)
+    create_blueprint(topic, 'frueh', position=1)
+    create_blueprint(git_alltag.topic, 'repo', position=9)
+    assert list_slugs(api_client, 'blueprint', **params) == ['repo', 'frueh', 'spaet']
+
+
+@pytest.mark.parametrize('value', BROKEN_TOPICS)
+def test_blueprints_list_with_unknown_topic_is_empty(
+    api_client: APIClient, blueprint: Blueprint, value: str
+) -> None:
+    assert list_slugs(api_client, 'blueprint', topic=value) == []
+
+
+def test_blueprints_list_for_topic_without_blueprints_is_empty(
+    api_client: APIClient, blueprint: Blueprint, git_alltag: Subtopic
+) -> None:
+    assert list_slugs(api_client, 'blueprint', topic='git') == []
+
+
+def test_blueprints_list_is_empty_without_blueprints(api_client: APIClient, db: None) -> None:
+    assert list_slugs(api_client, 'blueprint') == []
+
+
+@pytest.mark.parametrize('params', [{}, {'topic': 'python'}])
+def test_blueprints_list_loads_in_three_queries(
+    api_client: APIClient,
+    blueprint: Blueprint,
+    params: dict,
+    django_assert_num_queries: DjangoAssertNumQueries,
+) -> None:
+    create_blueprint(blueprint.topic, 'zweite').steps.create(slug='a', title_de='a', why_de='a')
+    with django_assert_num_queries(3):
+        api_client.get(reverse('blueprint-list'), params)
+
+
+def test_blueprint_detail_loads_in_three_queries(
+    api_client: APIClient, blueprint: Blueprint, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    with django_assert_num_queries(3):
+        api_client.get(reverse('blueprint-detail', args=['django-projekt-anlegen']))
+
+
+@pytest.mark.parametrize(
+    'slug',
+    ['cobol', 'DJANGO-PROJEKT-ANLEGEN', 'django_projekt_anlegen', 'python', 'ordner-anlegen'],
+)
+def test_blueprint_detail_unknown_slug_returns_404(
+    api_client: APIClient, blueprint: Blueprint, slug: str
+) -> None:
+    response = api_client.get(reverse('blueprint-detail', args=[slug]))
+    assert response.status_code == 404
+    assert response.json() == {'code': 'not_found'}
+
+
+def test_blueprint_detail_ignores_slug_of_other_area(api_client: APIClient, entry: Entry) -> None:
+    assert api_client.get(reverse('blueprint-detail', args=['for-schleife'])).status_code == 404
+
+
+def test_blueprint_returns_text_unchanged_as_json(api_client: APIClient, topic: Topic) -> None:
+    script = '<script>alert(1)</script>'
+    blueprint = create_blueprint(topic, 'xss', title_de=script)
+    step = blueprint.steps.create(slug='s', title_de=script, why_de=script, note_de=script)
+    step.codes.create(language='html', code_de=script)
+    response = api_client.get(reverse('blueprint-detail', args=['xss']))
+    data = response.json()
+    assert response['Content-Type'] == 'application/json'
+    assert data['title'] == script
+    assert data['steps'] == [
+        {
+            'slug': 's',
+            'title': script,
+            'why': script,
+            'note': script,
+            'code': [{'language': 'html', 'code': script}],
+        }
+    ]
