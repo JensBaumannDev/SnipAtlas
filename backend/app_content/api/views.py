@@ -3,6 +3,7 @@ from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny
 
 from app_content.models import (
+    Blueprint,
     Concept,
     DebugGuide,
     DebugGuideQuerySet,
@@ -14,6 +15,7 @@ from app_content.models import (
 )
 
 from .serializers import (
+    BlueprintSerializer,
     ConceptSerializer,
     DebugGuideSerializer,
     EntrySerializer,
@@ -76,3 +78,8 @@ class DebugGuideViewSet(PublicContentViewSet):
         if params.get('general') == 'true':
             return queryset.general()
         return super().filter_list(queryset, params)
+
+
+class BlueprintViewSet(PublicContentViewSet):
+    queryset = Blueprint.objects.select_related('topic').prefetch_related('steps__codes')
+    serializer_class = BlueprintSerializer
