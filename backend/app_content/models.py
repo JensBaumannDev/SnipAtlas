@@ -117,6 +117,11 @@ class ContentItemQuerySet(TopicQuerySet):
     topic_lookup = 'subtopic__topic__slug'
 
 
+class DebugGuideQuerySet(TopicQuerySet):
+    def general(self) -> DebugGuideQuerySet:
+        return self.filter(topic__isnull=True)
+
+
 class ContentItem(models.Model):
     subtopic = models.ForeignKey(Subtopic, on_delete=models.PROTECT, related_name='+')
     slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
@@ -220,6 +225,8 @@ class DebugGuide(models.Model):
     title = models.CharField(max_length=120)
     summary = models.TextField()
     position = models.IntegerField(default=0)
+
+    objects = DebugGuideQuerySet.as_manager()
 
     class Meta:
         ordering = (

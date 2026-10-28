@@ -1,10 +1,21 @@
+from django.http import QueryDict
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny
 
-from app_content.models import Concept, Entry, ErrorMessage, Group, Topic, TopicQuerySet
+from app_content.models import (
+    Concept,
+    DebugGuide,
+    DebugGuideQuerySet,
+    Entry,
+    ErrorMessage,
+    Group,
+    Topic,
+    TopicQuerySet,
+)
 
 from .serializers import (
     ConceptSerializer,
+    DebugGuideSerializer,
     EntrySerializer,
     ErrorMessageSerializer,
     GroupSerializer,
@@ -33,10 +44,13 @@ class PublicContentViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self) -> TopicQuerySet:
         queryset = super().get_queryset()
-        topic = self.request.query_params.get('topic')
-        if topic and self.action == 'list':
-            return queryset.for_topic(topic)
+        if self.action == 'list':
+            return self.filter_list(queryset, self.request.query_params)
         return queryset
+
+    def filter_list(self, queryset: TopicQuerySet, params: QueryDict) -> TopicQuerySet:
+        topic = params.get('topic')
+        return queryset.for_topic(topic) if topic else queryset
 
 
 class EntryViewSet(PublicContentViewSet):
@@ -52,3 +66,13 @@ class ConceptViewSet(PublicContentViewSet):
 class ErrorMessageViewSet(PublicContentViewSet):
     queryset = ErrorMessage.objects.select_related('topic').prefetch_related('steps')
     serializer_class = ErrorMessageSerializer
+
+
+class DebugGuideViewSet(PublicContentViewSet):
+    queryset = DebugGuide.objects.select_related('topic').prefetch_related('steps')
+    serializer_class = DebugGuideSerializer
+
+    def filter_list(self, queryset: DebugGuideQuerySet, params: QueryDict) -> TopicQuerySet:
+        if params.get('general') == 'true':
+            return queryset.general()
+        return super().filter_list(queryset, params)

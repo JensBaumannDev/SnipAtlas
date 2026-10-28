@@ -8,7 +8,15 @@ from rest_framework.test import APIClient
 from rest_framework.throttling import AnonRateThrottle
 
 from app_accounts.models import User
-from app_content.models import Concept, Entry, ErrorMessage, Group, Subtopic, Topic
+from app_content.models import (
+    Concept,
+    DebugGuide,
+    Entry,
+    ErrorMessage,
+    Group,
+    Subtopic,
+    Topic,
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -399,6 +407,7 @@ AREAS = {
     'entry': ('entry', 'for-schleife'),
     'concept': ('concept', 'for-schleife'),
     'error': ('error_message', 'module-not-found'),
+    'debug-guide': ('debug_guide', 'vorgehen'),
 }
 ROUTES = ['list', 'detail']
 HACKED = {'slug': 'neu', 'title': 'Hacked', 'message': 'Hacked', 'code': 'rm -rf /'}
@@ -517,13 +526,14 @@ def test_public_content_allows_only_reading_methods(
     assert response['Allow'] == 'GET, HEAD, OPTIONS'
 
 
-@pytest.mark.parametrize('path', ['entries', 'concepts', 'errors'])
+@pytest.mark.parametrize('path', ['entries', 'concepts', 'errors', 'debug-guides'])
 @pytest.mark.parametrize('slug', ['for.schleife', 'for%20schleife', 'f%C3%BCr', '%00'])
 def test_detail_with_invalid_characters_returns_404(
     api_client: APIClient,
     entry: Entry,
     concept: Concept,
     error_message: ErrorMessage,
+    debug_guide: DebugGuide,
     path: str,
     slug: str,
 ) -> None:
@@ -709,3 +719,252 @@ def test_errors_list_uses_accept_language(
 ) -> None:
     data = api_client.get(reverse('error-list'), HTTP_ACCEPT_LANGUAGE=header).json()
     assert [item['meaning'] for item in data] == [meaning]
+
+
+# Debug guides
+GUIDE_JSON = {
+    'slug': 'vorgehen',
+    'label': 'Vorgehen',
+    'title': 'Der Ablauf bei jedem Fehler',
+    'summary': 'Vier Schritte für jeden Fehler.',
+    'steps': [
+        {'title': 'Die Meldung lesen', 'text': 'Die wichtige Zeile steht unten.'},
+        {
+            'title': 'Änderungen ansehen',
+            'text': 'git diff zeigt sie.',
+            'code': {'language': 'terminal', 'code': 'git diff'},
+        },
+    ],
+}
+TOPIC_GUIDE_JSON = {
+    'slug': 'python-debuggen',
+    'topic': 'python',
+    'title': 'Python debuggen',
+    'summary': 'Mit Tests und Ausgaben.',
+    'steps': [
+        {
+            'title': 'Tests starten',
+            'text': 'Startet alle Tests.',
+            'code': {
+                'language': 'terminal',
+                'code': {'win': 'python manage.py test', 'unix': 'python3 manage.py test'},
+            },
+        }
+    ],
+}
+
+
+def create_guide(topic: Topic | None, slug: str, **fields: object) -> DebugGuide:
+    label = {} if topic else {'label_de': slug}
+    data = {'topic': topic, 'slug': slug, 'title_de': slug, 'summary_de': slug} | label
+    return DebugGuide.objects.create(**(data | fields))
+
+
+@pytest.fixture
+def guides(debug_guide: DebugGuide, topic_guide: DebugGuide) -> None:
+    pass
+
+
+def test_debug_guides_list_is_public(api_client: APIClient, guides: None) -> None:
+    response = api_client.get(reverse('debug-guide-list'))
+    assert response.status_code == 200
+    assert response.json() == [GUIDE_JSON, TOPIC_GUIDE_JSON]
+
+
+@pytest.mark.parametrize(
+    ('slug', 'expected'),
+    [('vorgehen', GUIDE_JSON), ('python-debuggen', TOPIC_GUIDE_JSON)],
+)
+def test_debug_guide_detail_is_public(
+    api_client: APIClient, guides: None, slug: str, expected: dict
+) -> None:
+    response = api_client.get(reverse('debug-guide-detail', args=[slug]))
+    assert response.status_code == 200
+    assert response.json() == expected
+
+
+def test_debug_guide_without_steps_has_empty_steps(
+    api_client: APIClient, debug_guide: DebugGuide
+) -> None:
+    debug_guide.steps.all().delete()
+    data = api_client.get(reverse('debug-guide-detail', args=['vorgehen'])).json()
+    assert data['steps'] == []
+
+
+@pytest.mark.parametrize(
+    ('params', 'expected'),
+    [
+        ({'general': 'true'}, ['vorgehen']),
+        ({'general': 'true', 'topic': 'python'}, ['vorgehen']),
+        ({'topic': 'python'}, ['python-debuggen']),
+        ({'topic': 'python', 'general': 'false'}, ['python-debuggen']),
+        ({'topic': ''}, ['vorgehen', 'python-debuggen']),
+    ],
+)
+def test_debug_guides_list_filters(
+    api_client: APIClient, guides: None, params: dict, expected: list[str]
+) -> None:
+    assert list_slugs(api_client, 'debug-guide', **params) == expected
+
+
+@pytest.mark.parametrize('value', ['false', '1', 'TRUE', 'True', 'yes', '', 'true\n'])
+def test_debug_guides_list_ignores_other_general_values(
+    api_client: APIClient, guides: None, value: str
+) -> None:
+    assert list_slugs(api_client, 'debug-guide', general=value) == ['vorgehen', 'python-debuggen']
+
+
+@pytest.mark.parametrize('value', BROKEN_TOPICS)
+def test_debug_guides_list_with_unknown_topic_is_empty(
+    api_client: APIClient, guides: None, value: str
+) -> None:
+    assert list_slugs(api_client, 'debug-guide', topic=value) == []
+
+
+def test_debug_guides_list_is_empty_without_guides(api_client: APIClient, db: None) -> None:
+    assert list_slugs(api_client, 'debug-guide') == []
+    assert list_slugs(api_client, 'debug-guide', general='true') == []
+
+
+def test_general_list_is_empty_without_general_guides(
+    api_client: APIClient, topic_guide: DebugGuide
+) -> None:
+    assert list_slugs(api_client, 'debug-guide', general='true') == []
+
+
+def test_debug_guides_list_starts_with_general_ones_in_order(
+    api_client: APIClient, topic: Topic, git_alltag: Subtopic
+) -> None:
+    create_guide(topic, 'python-debuggen', position=-9)
+    create_guide(git_alltag.topic, 'git-debuggen', position=9)
+    create_guide(None, 'browser', position=2)
+    create_guide(None, 'vorgehen', position=1)
+    expected = ['vorgehen', 'browser', 'git-debuggen', 'python-debuggen']
+    assert list_slugs(api_client, 'debug-guide') == expected
+
+
+@pytest.mark.parametrize('header', ['en', 'en-US,en;q=0.9,de;q=0.8'])
+def test_debug_guide_detail_uses_accept_language(
+    api_client: APIClient, debug_guide: DebugGuide, header: str
+) -> None:
+    debug_guide.steps.filter(code_de='git diff').update(code_en='git diff --stat')
+    url = reverse('debug-guide-detail', args=['vorgehen'])
+    data = api_client.get(url, HTTP_ACCEPT_LANGUAGE=header).json()
+    assert [data['label'], data['title']] == ['Approach', 'The process for every error']
+    assert [step['title'] for step in data['steps']] == ['Die Meldung lesen', 'Änderungen ansehen']
+    assert data['steps'][1]['code'] == {'language': 'terminal', 'code': 'git diff --stat'}
+
+
+@pytest.mark.parametrize('route', ROUTES)
+def test_debug_guides_use_german_for_unknown_language(
+    api_client: APIClient, debug_guide: DebugGuide, route: str
+) -> None:
+    args = ['vorgehen'] if route == 'detail' else []
+    data = api_client.get(reverse(f'debug-guide-{route}', args=args), HTTP_ACCEPT_LANGUAGE='fr')
+    assert data.json() == (GUIDE_JSON if route == 'detail' else [GUIDE_JSON])
+
+
+def test_debug_guides_list_uses_accept_language(
+    api_client: APIClient, debug_guide: DebugGuide
+) -> None:
+    data = api_client.get(reverse('debug-guide-list'), HTTP_ACCEPT_LANGUAGE='en').json()
+    assert [item['label'] for item in data] == ['Approach']
+
+
+def test_debug_guides_list_keeps_steps_with_their_guide(
+    api_client: APIClient, guides: None
+) -> None:
+    create_guide(None, 'leer')
+    data = api_client.get(reverse('debug-guide-list')).json()
+    assert {item['slug']: [step['title'] for step in item['steps']] for item in data} == {
+        'vorgehen': ['Die Meldung lesen', 'Änderungen ansehen'],
+        'leer': [],
+        'python-debuggen': ['Tests starten'],
+    }
+
+
+@pytest.mark.parametrize('params', [{}, {'general': 'true'}, {'topic': 'python'}])
+def test_debug_guides_list_loads_in_two_queries(
+    api_client: APIClient,
+    guides: None,
+    params: dict,
+    django_assert_num_queries: DjangoAssertNumQueries,
+) -> None:
+    with django_assert_num_queries(2):
+        api_client.get(reverse('debug-guide-list'), params)
+
+
+def test_debug_guide_detail_loads_in_two_queries(
+    api_client: APIClient, guides: None, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    with django_assert_num_queries(2):
+        api_client.get(reverse('debug-guide-detail', args=['python-debuggen']))
+
+
+@pytest.mark.parametrize('slug', ['cobol', 'VORGEHEN', 'python_debuggen', 'python', 'debuggen'])
+def test_debug_guide_detail_unknown_slug_returns_404(
+    api_client: APIClient, guides: None, slug: str
+) -> None:
+    response = api_client.get(reverse('debug-guide-detail', args=[slug]))
+    assert response.status_code == 404
+    assert response.json() == {'code': 'not_found'}
+
+
+def test_debug_guide_detail_ignores_slug_of_other_area(
+    api_client: APIClient, error_message: ErrorMessage
+) -> None:
+    url = reverse('debug-guide-detail', args=['module-not-found'])
+    assert api_client.get(url).status_code == 404
+
+
+@pytest.mark.parametrize('slug', ['vorgehen', 'python-debuggen'])
+def test_debug_guide_detail_ignores_general_param(
+    api_client: APIClient, guides: None, slug: str
+) -> None:
+    url = reverse('debug-guide-detail', args=[slug])
+    assert api_client.get(url, {'general': 'true'}).status_code == 200
+
+
+def test_debug_guide_returns_text_unchanged_as_json(api_client: APIClient, db: None) -> None:
+    script = '<script>alert(1)</script>'
+    guide = create_guide(None, 'xss', label_de=script, title_de=script)
+    guide.steps.create(title_de=script, text_de=script, language='html', code_de=script)
+    response = api_client.get(reverse('debug-guide-detail', args=['xss']))
+    data = response.json()
+    assert response['Content-Type'] == 'application/json'
+    assert [data['label'], data['title']] == [script, script]
+    assert data['steps'] == [
+        {'title': script, 'text': script, 'code': {'language': 'html', 'code': script}}
+    ]
+
+
+def test_debug_guide_steps_use_english_texts_and_os_code(
+    api_client: APIClient, topic_guide: DebugGuide
+) -> None:
+    topic_guide.steps.update(
+        title_en='Run tests',
+        text_en='Runs all tests.',
+        code_en='py manage.py test',
+        code_unix_en='python3 -m pytest',
+    )
+    url = reverse('debug-guide-detail', args=['python-debuggen'])
+    step = api_client.get(url, HTTP_ACCEPT_LANGUAGE='en').json()['steps'][0]
+    assert step == {
+        'title': 'Run tests',
+        'text': 'Runs all tests.',
+        'code': {
+            'language': 'terminal',
+            'code': {'win': 'py manage.py test', 'unix': 'python3 -m pytest'},
+        },
+    }
+
+
+@pytest.mark.parametrize('value', BROKEN_TOPICS)
+def test_general_wins_over_broken_topic(api_client: APIClient, guides: None, value: str) -> None:
+    assert list_slugs(api_client, 'debug-guide', general='true', topic=value) == ['vorgehen']
+
+
+def test_errors_list_ignores_general_param(
+    api_client: APIClient, error_message: ErrorMessage
+) -> None:
+    assert list_slugs(api_client, 'error', general='true') == ['module-not-found']
