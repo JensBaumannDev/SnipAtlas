@@ -10,7 +10,7 @@ import { TopicLogo } from '../topic-logo/topic-logo';
   templateUrl: './topic-header.html',
 })
 export class TopicHeader {
-  readonly topic = input.required<Topic>();
+  readonly topic = input<Topic>();
   readonly heading = input.required<string>();
   readonly parentLabel = input<string>();
   readonly parentLink = input<string | string[]>();

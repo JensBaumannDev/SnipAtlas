@@ -4,58 +4,40 @@ import { ContentIndex, buildIndex } from './content-index';
 import { DebugGuide } from './debug-guide';
 
 const GUIDES: DebugGuide[] = [
-  // General
+  // Ways to debug
   {
-    slug: 'fehlermeldung-lesen',
-    title: 'Eine Fehlermeldung richtig lesen',
-    summary: 'Immer der erste Schritt: Die Meldung sagt meist schon, was los ist und wo.',
+    slug: 'vorgehen',
+    label: 'Vorgehen',
+    title: 'Der Ablauf bei jedem Fehler',
+    summary: 'Diese vier Schritte helfen bei jedem Fehler, egal in welcher Sprache.',
     steps: [
       {
-        title: 'Die eigentliche Meldung finden',
-        text: 'Fehlerausgaben sind oft lang. Die wichtige Zeile nennt die Art des Fehlers und eine kurze Beschreibung, zum Beispiel TypeError: … oder ModuleNotFoundError: …. In Python steht sie ganz unten, in der Browser-Konsole ganz oben.',
+        title: 'Die Meldung lesen',
+        text: 'Die wichtige Zeile nennt die Art des Fehlers und eine kurze Beschreibung, zum Beispiel TypeError: … oder ModuleNotFoundError: …. In Python steht sie ganz unten, in der Browser-Konsole ganz oben. Daneben stehen meist Datei und Zeile. Such die erste Datei, die zu deinem eigenen Projekt gehört, und überspring Zeilen aus Paketen wie django oder node_modules.',
       },
       {
-        title: 'Datei und Zeile suchen',
-        text: 'Fast jede Meldung nennt eine Datei und eine Zeilennummer. Such in der Ausgabe nach der ersten Datei, die zu deinem eigenen Projekt gehört. Zeilen aus Paketen wie django oder node_modules überspringst du.',
-      },
-      {
-        title: 'Die Meldung nachschlagen',
-        text: 'Kopiere die Meldung ohne deine eigenen Pfade und Namen in die Suche von SnipAtlas oder in eine Suchmaschine. Sehr häufige Fehler findest du hier unter dem passenden Thema.',
-      },
-    ],
-  },
-  {
-    slug: 'fehler-eingrenzen',
-    title: 'Den Fehler eingrenzen',
-    summary: 'Wenn unklar ist, an welcher Stelle etwas schiefgeht.',
-    steps: [
-      {
-        title: 'Den Fehler gezielt auslösen',
+        title: 'Den Fehler nachstellen',
         text: 'Finde die genauen Schritte, nach denen der Fehler jedes Mal auftritt. Erst wenn du ihn wiederholen kannst, kannst du prüfen, ob eine Änderung hilft.',
       },
       {
-        title: 'Die letzte Änderung ansehen',
-        text: 'Hat es vorher funktioniert, steckt der Fehler meist in dem, was du seitdem geändert hast. git diff zeigt alle Änderungen seit dem letzten Commit. Mit git stash legst du sie kurz beiseite und prüfst, ob der Fehler dann weg ist.',
+        title: 'Den Fehler eingrenzen',
+        text: 'Hat es vorher funktioniert, steckt der Fehler meist in deiner letzten Änderung. git diff zeigt sie dir, mit git stash legst du sie kurz beiseite. Hilft das nicht, kommentierst du die Hälfte des verdächtigen Codes aus und prüfst, in welcher Hälfte der Fehler steckt.',
         code: {
           language: 'terminal',
           code: 'git diff\n\n# Änderungen kurz beiseitelegen und wieder holen\ngit stash\ngit stash pop',
         },
       },
       {
-        title: 'Werte ausgeben',
-        text: 'Gib an verdächtigen Stellen aus, was wirklich in einer Variable steht. Oft ist ein Wert leer, hat einen anderen Typ oder kommt später an als gedacht.',
-        code: { language: 'javascript', code: "console.log('task', task);" },
-      },
-      {
-        title: 'Den Bereich halbieren',
-        text: 'Kommentiere die Hälfte des verdächtigen Codes aus und prüfe, ob der Fehler bleibt. So weißt du, in welcher Hälfte er steckt, und wiederholst das, bis nur noch wenige Zeilen übrig sind.',
+        title: 'Beheben und prüfen',
+        text: 'Ändere immer nur eine Sache und prüf danach, ob der Fehler weg ist und alles andere noch funktioniert. Kommst du nicht weiter, schlag die Meldung ohne deine eigenen Pfade und Namen nach, hier in der Suche oder unter dem passenden Thema.',
       },
     ],
   },
   {
-    slug: 'browser-entwicklertools',
+    slug: 'browser',
+    label: 'Browser',
     title: 'Mit den Entwicklertools im Browser debuggen',
-    summary: 'Wenn die Seite nicht anzeigt oder lädt, was sie soll.',
+    summary: 'Wenn die Seite falsch aussieht, nicht lädt oder Daten fehlen.',
     steps: [
       {
         title: 'Entwicklertools öffnen',
@@ -72,6 +54,96 @@ const GUIDES: DebugGuide[] = [
       {
         title: 'HTML und CSS live ansehen',
         text: 'Im Reiter Elemente siehst du das HTML so, wie der Browser es gerade anzeigt, und daneben alle CSS-Regeln. Änderungen dort wirken sofort, verschwinden aber beim Neuladen.',
+      },
+    ],
+  },
+  {
+    slug: 'terminal',
+    label: 'Terminal',
+    title: 'Mit Ausgaben im Terminal debuggen',
+    summary: 'Wenn der Server abbricht oder du sehen willst, was eine Variable enthält.',
+    steps: [
+      {
+        title: 'Die Ausgabe des Servers lesen',
+        text: 'Das Terminal, in dem ng serve oder runserver läuft, zeigt Fehler beim Starten und bei jeder Anfrage. Scroll nach oben bis zur ersten roten Meldung. Alles danach sind oft nur Folgefehler.',
+      },
+      {
+        title: 'Werte ausgeben',
+        text: 'Gib an der verdächtigen Stelle aus, was wirklich in einer Variable steht. Oft ist ein Wert leer, hat einen anderen Typ oder kommt später an als gedacht. print landet im Terminal des Servers, console.log in der Browser-Konsole.',
+        code: { language: 'python', code: "print('task', task)" },
+      },
+      {
+        title: 'Ausgaben wieder entfernen',
+        text: 'Lösch die Ausgaben, sobald du den Fehler gefunden hast. Sonst füllen sie später das Terminal und zeigen unter Umständen Daten, die dort nichts zu suchen haben.',
+      },
+    ],
+  },
+  {
+    slug: 'debugger',
+    label: 'Debugger',
+    title: 'Mit Haltepunkten debuggen',
+    summary: 'Wenn du Zeile für Zeile sehen willst, was der Code macht.',
+    steps: [
+      {
+        title: 'Einen Haltepunkt setzen',
+        text: 'Ein Haltepunkt hält das Programm an einer Zeile an. In VS Code und in den Entwicklertools im Reiter Quellen klickst du dafür links neben die Zeilennummer. In Python schreibst du breakpoint() an die Stelle.',
+        code: { language: 'python', code: 'breakpoint()' },
+      },
+      {
+        title: 'Werte ansehen',
+        text: 'Steht das Programm, siehst du alle Variablen mit ihrem aktuellen Wert. Im Python-Debugger gibst du dafür einfach den Namen der Variable ein.',
+      },
+      {
+        title: 'Schritt für Schritt weiter',
+        text: 'Von dort gehst du Zeile für Zeile weiter und siehst, wo ein Wert anders wird als erwartet.',
+        code: {
+          language: 'python',
+          code: 'n  # nächste Zeile\nc  # weiterlaufen lassen\nq  # Debugger beenden',
+        },
+      },
+    ],
+  },
+  {
+    slug: 'tests',
+    label: 'Tests',
+    title: 'Mit Tests debuggen',
+    summary: 'Wenn ein Fehler nicht wiederkommen soll.',
+    steps: [
+      {
+        title: 'Den Fehler in einem Test nachstellen',
+        text: 'Schreib einen Test, der genau das prüft, was gerade falsch läuft. Er muss zuerst fehlschlagen. Dann weißt du, dass er den Fehler wirklich erwischt.',
+      },
+      {
+        title: 'Den Fehler beheben',
+        text: 'Ändere den Code, bis der Test durchläuft. Du musst dafür nicht jedes Mal im Browser klicken, der Test prüft es in Sekunden.',
+        code: {
+          language: 'terminal',
+          code: { win: 'python manage.py test', unix: 'python3 manage.py test' },
+        },
+      },
+      {
+        title: 'Den Test behalten',
+        text: 'Der Test bleibt im Projekt. Taucht der Fehler durch eine spätere Änderung wieder auf, schlägt er sofort an.',
+      },
+    ],
+  },
+  {
+    slug: 'ki',
+    label: 'KI',
+    title: 'Die KI richtig fragen',
+    summary: 'Wenn du nicht weiterkommst, die Lösung aber verstehen willst.',
+    steps: [
+      {
+        title: 'Genug Zusammenhang mitgeben',
+        text: 'Gib die vollständige Fehlermeldung, den passenden Code-Ausschnitt und dazu, was du erwartet hast und was stattdessen passiert. Je genauer die Frage, desto besser die Antwort.',
+      },
+      {
+        title: 'Keine geheimen Daten einfügen',
+        text: 'Passwörter, API-Schlüssel und den Inhalt deiner .env-Datei gibst du nie weiter. Ersetze sie vorher durch Platzhalter.',
+      },
+      {
+        title: 'Die Antwort prüfen',
+        text: 'Eine KI klingt auch dann sicher, wenn sie falsch liegt. Lass dir erklären, warum die Lösung funktioniert, und übernimm nur Code, den du verstehst. Danach prüfst du wie immer, ob der Fehler wirklich weg ist.',
       },
     ],
   },
@@ -272,6 +344,10 @@ export class DebugGuideApi {
 
   getGeneral(): Observable<DebugGuide[]> {
     return of(GUIDES.filter((guide) => !guide.topic));
+  }
+
+  getWay(slug: string): Observable<DebugGuide | undefined> {
+    return of(GUIDES.find((guide) => !guide.topic && guide.slug === slug));
   }
 
   getByTopic(topic: string): Observable<DebugGuide[]> {

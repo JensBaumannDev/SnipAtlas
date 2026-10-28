@@ -1,0 +1,14 @@
+<ol class="debug-guide-steps">
+  @for (step of steps(); track $index) {
+    <li class="debug-guide-steps__step">
+      <span class="debug-guide-steps__number" aria-hidden="true">{{ $index + 1 }}</span>
+      <div class="debug-guide-steps__body">
+        <h4 class="debug-guide-steps__title">{{ step.title }}</h4>
+        <app-term-text class="debug-guide-steps__text" [text]="step.text" />
+        @if (step.resolved; as code) {
+          <app-code-block [code]="code.code" [language]="code.language" [os]="code.os" />
+        }
+      </div>
+    </li>
+  }
+</ol>

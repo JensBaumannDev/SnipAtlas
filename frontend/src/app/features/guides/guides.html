@@ -34,30 +34,6 @@
     [summary]="'guides.summary' | translate: summary()"
     [icon]="icon"
   >
-    <section aria-labelledby="guides-all">
-      <h2 class="guides__section-title" id="guides-all">{{ 'guides.all' | translate }}</h2>
-      <ul class="guides__overview" role="list">
-        @for (blueprint of blueprints(); track blueprint.slug) {
-          <li class="guides__row">
-            <a
-              class="guides__row-link"
-              [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]"
-            >
-              <span class="guides__row-text">
-                <span class="guides__row-title">{{ blueprint.title }}</span>
-                <span class="guides__summary">{{ blueprint.summary }}</span>
-              </span>
-              <svg [lucideIcon]="chevronRightIcon" class="icon guides__chevron"></svg>
-            </a>
-            <app-progress-bar
-              class="guides__row-progress"
-              [done]="progress.doneCount(blueprint)"
-              [total]="blueprint.steps.length"
-              [label]="'guides.progressOf' | translate: { title: blueprint.title }"
-            />
-          </li>
-        }
-      </ul>
-    </section>
+    <app-area-info area="guides" [sections]="infoSections" />
   </app-area-intro>
 }

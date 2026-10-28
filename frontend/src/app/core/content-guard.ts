@@ -64,6 +64,13 @@ export function itemExists(find: FindBySlug<PlacedItem>): CanActivateFn {
   };
 }
 
+export function slugExists(find: FindBySlug<unknown>): CanActivateFn {
+  return (route) => {
+    const missing = notFound();
+    return findInRoute(find, route).pipe(map((item) => (item ? true : missing)));
+  };
+}
+
 export function itemTitle<T>(
   find: FindBySlug<T>,
   title: (item: T) => string,

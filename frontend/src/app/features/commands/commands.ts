@@ -8,13 +8,13 @@ import { terminalIcon } from '../../core/icons';
 import { syncOutline } from '../../core/page-outline';
 import { Preferences } from '../../core/preferences';
 import { findSubtopic, groupBySubtopic, injectTopic } from '../../core/topic-resource';
+import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
-import { TopicIndex } from '../../shared/topic-index/topic-index';
 import { EntryCard } from './entry-card/entry-card';
 
 @Component({
-  imports: [AreaIntro, EntryCard, RouterLink, TopicHeader, TopicIndex, TranslatePipe],
+  imports: [AreaInfo, AreaIntro, EntryCard, RouterLink, TopicHeader, TranslatePipe],
   selector: 'app-commands',
   styleUrl: './commands.scss',
   templateUrl: './commands.html',
@@ -27,6 +27,7 @@ export class Commands {
 
   protected readonly os = inject(Preferences).os;
   protected readonly icon = terminalIcon;
+  protected readonly infoSections = ['what', 'why', 'memorize'];
   protected readonly expanded = new ExpandedSet();
   protected readonly summary = toSignal(this.entryApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },

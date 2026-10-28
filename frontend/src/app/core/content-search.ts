@@ -5,7 +5,7 @@ import { Blueprint } from './blueprint';
 import { BlueprintApi } from './blueprint-api';
 import { Concept, conceptLink } from './concept';
 import { ConceptApi } from './concept-api';
-import { DebugGuide } from './debug-guide';
+import { DebugGuide, debugWayLink } from './debug-guide';
 import { DebugGuideApi } from './debug-guide-api';
 import { Entry, entryLink } from './entry';
 import { EntryApi } from './entry-api';
@@ -71,13 +71,10 @@ function fromError(error: ErrorMessage): SearchItem {
 }
 
 function fromGuide(guide: DebugGuide): SearchItem {
-  return toItem({
-    area: 'debugging',
-    title: guide.title,
-    text: guide.summary,
-    link: guide.topic ? ['/fehler', guide.topic] : ['/fehler'],
-    fragment: guide.slug,
-  });
+  const target = guide.topic
+    ? { link: ['/fehler', guide.topic], fragment: guide.slug }
+    : { link: debugWayLink(guide.slug) };
+  return toItem({ area: 'debugging', title: guide.title, text: guide.summary, ...target });
 }
 
 function fromBlueprint(blueprint: Blueprint): SearchItem {

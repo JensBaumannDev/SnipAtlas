@@ -1,0 +1,27 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  width: 100%;
+  max-width: 70ch;
+  margin-inline: auto;
+}
+
+// Section
+.area-info__section {
+  @include accent-block;
+
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.area-info__title {
+  font-size: $font-size-lg;
+}
+
+.area-info__text {
+  color: var(--muted);
+}

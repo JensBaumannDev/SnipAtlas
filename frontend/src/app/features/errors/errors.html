@@ -38,11 +38,6 @@
     [summary]="'debugging.summary' | translate: summary()"
     [icon]="icon"
   >
-    <section class="errors__section errors__section--intro" aria-labelledby="errors-basics">
-      <h2 class="errors__section-title" id="errors-basics">{{ 'debugging.basics' | translate }}</h2>
-      @for (guide of generalGuides(); track guide.slug) {
-        <app-debug-guide-card [guide]="guide" />
-      }
-    </section>
+    <app-area-info area="debugging" [sections]="infoSections" />
   </app-area-intro>
 }

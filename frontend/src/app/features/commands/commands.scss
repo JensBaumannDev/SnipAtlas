@@ -6,8 +6,7 @@
 
 // Header
 .commands__header {
-  padding-bottom: $space-lg;
-  border-bottom: 1px solid var(--line);
+  @include page-header;
 }
 
 .commands__meta {

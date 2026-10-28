@@ -1,5 +1,14 @@
 import { LucideIconData } from '@lucide/angular';
-import { arrowRightLeftIcon, folderIcon, terminalIcon } from './icons';
+import {
+  appWindowIcon,
+  arrowRightLeftIcon,
+  bugIcon,
+  flaskConicalIcon,
+  folderIcon,
+  listOrderedIcon,
+  sparklesIcon,
+  terminalIcon,
+} from './icons';
 
 const BRAND_LOGOS: Readonly<Partial<Record<string, string>>> = {
   angular: 'angular',
@@ -18,7 +27,12 @@ const BRAND_LOGOS: Readonly<Partial<Record<string, string>>> = {
 
 const TOPIC_ICONS: Readonly<Partial<Record<string, LucideIconData>>> = {
   'django-rest-framework': arrowRightLeftIcon,
+  browser: appWindowIcon,
+  debugger: bugIcon,
+  ki: sparklesIcon,
   terminal: terminalIcon,
+  tests: flaskConicalIcon,
+  vorgehen: listOrderedIcon,
 };
 
 export function topicLogo(slug: string): string | undefined {

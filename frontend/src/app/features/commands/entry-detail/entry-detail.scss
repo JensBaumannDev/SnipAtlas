@@ -6,16 +6,12 @@
 
 // Header
 .entry-detail__header {
-  padding-bottom: $space-lg;
-  border-bottom: 1px solid var(--line);
+  @include page-header;
 }
 
 // Body
 .entry-detail__body {
-  display: flex;
-  flex-direction: column;
-  gap: $space-md;
-  padding-top: $space-lg;
+  @include page-body;
 }
 
 .entry-detail__description {

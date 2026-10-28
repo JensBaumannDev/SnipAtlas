@@ -1,0 +1,19 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Header
+.debug-way__header {
+  @include page-header;
+}
+
+.debug-way__summary {
+  color: var(--muted);
+}
+
+// Body
+.debug-way__body {
+  @include page-body($space-lg);
+}

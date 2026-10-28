@@ -6,8 +6,7 @@
 
 // Header
 .error-detail__header {
-  padding-bottom: $space-lg;
-  border-bottom: 1px solid var(--line);
+  @include page-header;
 }
 
 .error-detail__meaning {
@@ -16,8 +15,5 @@
 
 // Body
 .error-detail__body {
-  display: flex;
-  flex-direction: column;
-  gap: $space-lg;
-  padding-top: $space-lg;
+  @include page-body($space-lg);
 }
