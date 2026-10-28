@@ -154,20 +154,47 @@
     "summary": "{{entries}} entries in {{topics}} topics",
     "empty": "There are no entries for this topic yet.",
     "entryCount": "{{count}} entries",
-    "entryCountOne": "1 entry"
+    "entryCountOne": "1 entry",
+    "info": {
+      "what": {
+        "title": "What are commands?",
+        "text": "A command is a line of text you type into the terminal. Instead of clicking through menus, you tell the computer directly what to do: create a folder, install a package, save a state with Git or start a server."
+      },
+      "why": {
+        "title": "Why do they matter?",
+        "text": "Many web development tools have no interface to click. You use Git, npm, the Angular CLI, Django and Docker in the terminal. Knowing the most important commands helps you set up projects faster and understand guides and error messages better."
+      },
+      "memorize": {
+        "title": "Do you need to know them all by heart?",
+        "text": "No. Nobody knows every command by heart, experienced developers look them up too. What matters is that you understand what a command does before you run it. That is why every entry says in one sentence what you need it for."
+      }
+    }
   },
   "concepts": {
-    "lead": "Terms and basics explained in plain words, each with a short example and what to remember.",
+    "lead": "The ideas behind the code explained in plain words, each with a short example and what to remember.",
     "summary": "{{entries}} explanations in {{topics}} topics",
     "empty": "There are no explanations for this topic yet.",
     "conceptCount": "{{count}} explanations",
     "conceptCountOne": "1 explanation",
-    "note": "Remember"
+    "note": "Remember",
+    "info": {
+      "what": {
+        "title": "What are basics?",
+        "text": "Basics explain the ideas behind the code: what a loop is, how Flexbox arranges elements, what Docker actually does or why CSS classes are named after BEM. Each explanation is short and comes with an example and what you should remember."
+      },
+      "why": {
+        "title": "Why do they matter?",
+        "text": "Anyone can copy code. You can only adapt it, find bugs and explain your decisions once you understand how it works. That is exactly what job interviews ask about."
+      },
+      "difference": {
+        "title": "How are they different from terms?",
+        "text": "Terms give you a short definition to look up. Basics go one step further: they use an example to show how something works and when to use it."
+      }
+    }
   },
   "guides": {
-    "lead": "Step-by-step workflows: what to do, why, and the code to copy. From an empty folder to a finished project.",
+    "lead": "Set up projects cleanly step by step: with the recommended folder structure, an explanation for every step and the code to copy.",
     "summary": "{{blueprints}} guides with {{steps}} steps",
-    "all": "All guides",
     "progress": "{{done}} of {{total}} steps done",
     "progressComplete": "All {{total}} steps done",
     "progressLabel": "Progress",
@@ -175,7 +202,21 @@
     "markDone": "Step {{number}} done: {{title}}",
     "reset": "Reset",
     "note": "Note",
-    "empty": "There are no guides for this topic yet."
+    "empty": "There are no guides for this topic yet.",
+    "info": {
+      "purpose": {
+        "title": "What do the guides help you with?",
+        "text": "They help you set up a project cleanly from the start. Not just create and run it, but right away with the folder structure and settings recommended for Angular, Django and the other tools."
+      },
+      "structure": {
+        "title": "Why does a good structure matter?",
+        "text": "A project grows. When folders, files and settings are in the right place from the start, you find your way around faster later, others understand your code, and you do not have to rearrange everything halfway through."
+      },
+      "steps": {
+        "title": "How is a guide structured?",
+        "text": "Each step says what you do and why, and gives you the code to copy. In the end you have a project with a structure you can also explain in a job interview."
+      }
+    }
   },
   "debugging": {
     "lead": "Understand and fix common error messages: what the message means, where it comes from and how to fix it.",
@@ -183,11 +224,28 @@
     "errorCount": "{{count}} error messages",
     "errorCountOne": "1 error message",
     "empty": "There are no error messages for this topic yet.",
-    "basics": "How to approach it",
     "topicGuides": "How to debug {{topic}}",
     "commonErrors": "Common error messages",
     "cause": "Why does this happen?",
-    "fix": "How to fix it"
+    "fix": "How to fix it",
+    "nav": {
+      "debug": "Debugging",
+      "errors": "Common errors"
+    },
+    "info": {
+      "message": {
+        "title": "What does an error message tell me?",
+        "text": "Almost always three things: the kind of error, the file and the line. That usually tells you where to look."
+      },
+      "start": {
+        "title": "Where do I start?",
+        "text": "With the most important line of the message. Jump to the place it names in your own code and skip lines from packages like node_modules."
+      },
+      "stuck": {
+        "title": "What if I get stuck?",
+        "text": "Look up the message under your topic in the common errors. If that does not help, narrow the error down with one of the ways under Debugging."
+      }
+    }
   },
   "item": {
     "expandAll": "Expand all",

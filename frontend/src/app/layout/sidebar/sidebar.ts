@@ -26,6 +26,7 @@ import { AreaContent } from '../../core/area-content';
 import { ContentArea, filterGroups, isContentArea } from '../../core/content-index';
 import { ExpandedSet } from '../../core/expanded-set';
 import { chevronDownIcon, chevronRightIcon } from '../../core/icons';
+import { activeNavGroup, navGroupSlugs, navGroups } from '../../core/nav-groups';
 import { TopicApi } from '../../core/topic-api';
 import { Collection } from '../../shared/collection/collection';
 import { TopicLogo } from '../../shared/topic-logo/topic-logo';
@@ -94,9 +95,19 @@ export class Sidebar {
     return area ? AREA_LABELS[area] : undefined;
   });
 
+  private readonly debugWays = rxResource({
+    params: () => (this.area() === 'debugging' ? true : undefined),
+    stream: () => this.areaContent.getDebugWays(),
+    defaultValue: [],
+  });
+
   protected readonly visibleGroups = computed(() => {
     const index = this.index.value();
-    return index ? filterGroups(this.groups(), index) : [];
+    if (!index) {
+      return [];
+    }
+    const groups = filterGroups(this.groups(), index);
+    return navGroups(this.area(), this.basePath(), groups, this.debugWays.value());
   });
 
   protected readonly activeTopic = computed(() =>
@@ -145,9 +156,10 @@ export class Sidebar {
     const segments = this.urlSegments();
     const mode = deepestData(root, 'sidebar', isSidebarMode);
     const slug = mode ? segments[1]?.path : undefined;
-    this.openActiveGroup(slug, !this.mode());
+    const area = deepestData(root, 'area', isContentArea);
+    this.openActiveGroup(slug, area, !this.mode());
     this.mode.set(mode);
-    this.area.set(deepestData(root, 'area', isContentArea));
+    this.area.set(area);
     this.basePath.set(`/${segments[0]?.path ?? ''}`);
     this.activeSlug.set(slug);
     this.menuOpen.set(false);
@@ -160,12 +172,16 @@ export class Sidebar {
     return this.router.parseUrl(this.router.url).root.children[PRIMARY_OUTLET]?.segments ?? [];
   }
 
-  private openActiveGroup(slug: string | undefined, entering: boolean): void {
-    const group = this.groups().find((item) => item.topics.some((topic) => topic.slug === slug));
+  private openActiveGroup(
+    slug: string | undefined,
+    area: ContentArea | undefined,
+    entering: boolean,
+  ): void {
+    const active = activeNavGroup(area, slug, this.groups());
     if (entering) {
-      this.openGroups.replace(group ? [group.slug] : this.groups().map((item) => item.slug));
-    } else if (group) {
-      this.openGroups.set(group.slug, true);
+      this.openGroups.replace(active ? [active] : navGroupSlugs(area, this.groups()));
+    } else if (active) {
+      this.openGroups.set(active, true);
     }
   }
 }

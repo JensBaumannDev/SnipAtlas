@@ -6,10 +6,9 @@
 
 // Note
 .note {
+  @include accent-block;
+
   max-width: 70ch;
-  padding: $space-xs $space-md;
-  overflow-wrap: anywhere;
-  border-left: 2px solid var(--accent);
 }
 
 .note__label {

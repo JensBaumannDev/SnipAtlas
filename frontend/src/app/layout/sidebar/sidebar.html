@@ -49,7 +49,7 @@
           [attr.aria-controls]="'sidebar-group-list-' + group.slug"
           (click)="openGroups.toggle(group.slug)"
         >
-          {{ group.name }}
+          {{ group.translate ? (group.name | translate) : group.name }}
           <svg [lucideIcon]="chevronRightIcon" class="icon sidebar__chevron"></svg>
         </button>
       </h2>
@@ -67,7 +67,7 @@
                 <div class="sidebar__row">
                   <a
                     class="sidebar__link"
-                    [routerLink]="[basePath(), topic.slug]"
+                    [routerLink]="[group.path, topic.slug]"
                     routerLinkActive
                     [routerLinkActiveOptions]="{ exact: true }"
                     ariaCurrentWhenActive="page"
@@ -106,7 +106,7 @@
                           <li>
                             <a
                               class="sidebar__sublink"
-                              [routerLink]="[basePath(), topic.slug, subtopic.slug]"
+                              [routerLink]="[group.path, topic.slug, subtopic.slug]"
                               routerLinkActive
                               ariaCurrentWhenActive="page"
                             >

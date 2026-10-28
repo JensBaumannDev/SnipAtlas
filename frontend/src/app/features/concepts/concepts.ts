@@ -7,13 +7,13 @@ import { ExpandedSet } from '../../core/expanded-set';
 import { bookTextIcon } from '../../core/icons';
 import { syncOutline } from '../../core/page-outline';
 import { findSubtopic, groupBySubtopic, injectTopic } from '../../core/topic-resource';
+import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
-import { TopicIndex } from '../../shared/topic-index/topic-index';
 import { ConceptCard } from './concept-card/concept-card';
 
 @Component({
-  imports: [AreaIntro, ConceptCard, RouterLink, TopicHeader, TopicIndex, TranslatePipe],
+  imports: [AreaInfo, AreaIntro, ConceptCard, RouterLink, TopicHeader, TranslatePipe],
   selector: 'app-concepts',
   styleUrl: './concepts.scss',
   templateUrl: './concepts.html',
@@ -25,6 +25,7 @@ export class Concepts {
   readonly subtopic = input<string>();
 
   protected readonly icon = bookTextIcon;
+  protected readonly infoSections = ['what', 'why', 'difference'];
   protected readonly expanded = new ExpandedSet();
   protected readonly summary = toSignal(this.conceptApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },

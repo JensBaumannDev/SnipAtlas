@@ -6,8 +6,7 @@
 
 // Header
 .errors__header {
-  padding-bottom: $space-lg;
-  border-bottom: 1px solid var(--line);
+  @include page-header;
 }
 
 .errors__meta {
@@ -19,10 +18,6 @@
   @include section-heading;
 
   margin-top: $space-xxl;
-}
-
-.errors__section--intro .errors__section-title {
-  margin-top: 0;
 }
 
 .errors__empty {

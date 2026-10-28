@@ -83,6 +83,25 @@
   }
 }
 
+@mixin accent-block {
+  padding: $space-xs $space-md;
+  overflow-wrap: anywhere;
+  border-left: 2px solid var(--accent);
+}
+
+// Pages
+@mixin page-header {
+  padding-bottom: $space-lg;
+  border-bottom: 1px solid var(--line);
+}
+
+@mixin page-body($gap: $space-md) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  padding-top: $space-lg;
+}
+
 // Backgrounds
 @mixin dot-grid($shape: ellipse 60% 70% at 50% 45%) {
   position: absolute;

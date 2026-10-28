@@ -6,8 +6,7 @@
 
 // Header
 .concept-detail__header {
-  padding-bottom: $space-lg;
-  border-bottom: 1px solid var(--line);
+  @include page-header;
 }
 
 .concept-detail__summary {
@@ -16,10 +15,7 @@
 
 // Body
 .concept-detail__body {
-  display: flex;
-  flex-direction: column;
-  gap: $space-md;
-  padding-top: $space-lg;
+  @include page-body;
 }
 
 .concept-detail__explanation {

@@ -1,0 +1,9 @@
+@for (section of sections(); track section) {
+  @let key = area() + '.info.' + section;
+  @let id = area() + '-info-' + section;
+
+  <section class="area-info__section" [attr.aria-labelledby]="id">
+    <h2 class="area-info__title" [id]="id">{{ key + '.title' | translate }}</h2>
+    <p class="area-info__text">{{ key + '.text' | translate }}</p>
+  </section>
+}

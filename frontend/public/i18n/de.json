@@ -154,20 +154,47 @@
     "summary": "{{entries}} Einträge in {{topics}} Themen",
     "empty": "Zu diesem Thema gibt es noch keine Einträge.",
     "entryCount": "{{count}} Einträge",
-    "entryCountOne": "1 Eintrag"
+    "entryCountOne": "1 Eintrag",
+    "info": {
+      "what": {
+        "title": "Was sind Befehle?",
+        "text": "Ein Befehl ist eine Zeile Text, die du im Terminal eingibst. Statt dich durch Menüs zu klicken, sagst du dem Rechner direkt, was er tun soll: einen Ordner anlegen, ein Paket installieren, einen Stand mit Git sichern oder einen Server starten."
+      },
+      "why": {
+        "title": "Warum sind sie wichtig?",
+        "text": "Viele Werkzeuge der Webentwicklung haben keine Oberfläche zum Klicken. Git, npm, die Angular CLI, Django und Docker bedienst du im Terminal. Wer die wichtigsten Befehle kennt, richtet Projekte schneller ein und versteht Anleitungen und Fehlermeldungen besser."
+      },
+      "memorize": {
+        "title": "Musst du alle auswendig können?",
+        "text": "Nein. Niemand kennt alle Befehle auswendig, auch erfahrene Entwickler schlagen nach. Wichtig ist, dass du verstehst, was ein Befehl tut, bevor du ihn ausführst. Deshalb steht bei jedem Eintrag ein Satz dazu, wofür du ihn brauchst."
+      }
+    }
   },
   "concepts": {
-    "lead": "Begriffe und Grundlagen in einfachen Worten erklärt, jeweils mit einem kurzen Beispiel und dem, was man sich merken sollte.",
+    "lead": "Die Ideen hinter dem Code in einfachen Worten erklärt, jeweils mit einem kurzen Beispiel und dem, was man sich merken sollte.",
     "summary": "{{entries}} Erklärungen in {{topics}} Themen",
     "empty": "Zu diesem Thema gibt es noch keine Erklärungen.",
     "conceptCount": "{{count}} Erklärungen",
     "conceptCountOne": "1 Erklärung",
-    "note": "Merke"
+    "note": "Merke",
+    "info": {
+      "what": {
+        "title": "Was sind Grundlagen?",
+        "text": "Grundlagen erklären die Ideen hinter dem Code: was eine Schleife ist, wie Flexbox Elemente anordnet, was Docker eigentlich macht oder warum man CSS-Klassen nach BEM benennt. Jede Erklärung ist kurz und hat ein Beispiel und das, was du dir merken solltest."
+      },
+      "why": {
+        "title": "Warum sind sie wichtig?",
+        "text": "Code kopieren kann jeder. Anpassen, Fehler finden und deine Entscheidungen erklären kannst du erst, wenn du verstehst, wie er funktioniert. Genau danach wird auch im Bewerbungsgespräch gefragt."
+      },
+      "difference": {
+        "title": "Was ist der Unterschied zu Begriffen?",
+        "text": "Begriffe geben dir eine kurze Definition zum Nachschlagen. Grundlagen gehen einen Schritt weiter: Sie zeigen an einem Beispiel, wie etwas funktioniert und wann du es einsetzt."
+      }
+    }
   },
   "guides": {
-    "lead": "Abläufe Schritt für Schritt: was du tust, warum, und den Code zum Kopieren. Vom leeren Ordner bis zum fertigen Projekt.",
+    "lead": "Projekte Schritt für Schritt sauber aufsetzen: mit der empfohlenen Ordnerstruktur, einer Erklärung zu jedem Schritt und dem Code zum Kopieren.",
     "summary": "{{blueprints}} Anleitungen mit {{steps}} Schritten",
-    "all": "Alle Anleitungen",
     "progress": "{{done}} von {{total}} Schritten erledigt",
     "progressComplete": "Alle {{total}} Schritte erledigt",
     "progressLabel": "Fortschritt",
@@ -175,7 +202,21 @@
     "markDone": "Schritt {{number}} erledigt: {{title}}",
     "reset": "Zurücksetzen",
     "note": "Hinweis",
-    "empty": "Zu diesem Thema gibt es noch keine Anleitungen."
+    "empty": "Zu diesem Thema gibt es noch keine Anleitungen.",
+    "info": {
+      "purpose": {
+        "title": "Wobei helfen dir die Anleitungen?",
+        "text": "Sie helfen dir, ein Projekt von Anfang an sauber aufzusetzen. Nicht nur anlegen und starten, sondern gleich mit der Ordnerstruktur und den Einstellungen, die für Angular, Django und die anderen Werkzeuge empfohlen werden."
+      },
+      "structure": {
+        "title": "Warum ist ein guter Aufbau so wichtig?",
+        "text": "Ein Projekt wächst. Liegen Ordner, Dateien und Einstellungen von Anfang an an der richtigen Stelle, findest du dich später schneller zurecht, andere verstehen deinen Code, und du musst nicht mitten im Projekt alles umräumen."
+      },
+      "steps": {
+        "title": "Wie ist eine Anleitung aufgebaut?",
+        "text": "Jeder Schritt sagt, was du tust und warum, und gibt dir den Code zum Kopieren. Am Ende hast du ein Projekt mit einem Aufbau, den du auch im Bewerbungsgespräch erklären kannst."
+      }
+    }
   },
   "debugging": {
     "lead": "Häufige Fehlermeldungen verstehen und lösen: was die Meldung bedeutet, woher sie kommt und wie du sie behebst.",
@@ -183,11 +224,28 @@
     "errorCount": "{{count}} Fehlermeldungen",
     "errorCountOne": "1 Fehlermeldung",
     "empty": "Zu diesem Thema gibt es noch keine Fehlermeldungen.",
-    "basics": "So gehst du vor",
     "topicGuides": "So debuggst du {{topic}}",
     "commonErrors": "Häufige Fehlermeldungen",
     "cause": "Warum passiert das?",
-    "fix": "So behebst du es"
+    "fix": "So behebst du es",
+    "nav": {
+      "debug": "Debuggen",
+      "errors": "Häufige Fehler"
+    },
+    "info": {
+      "message": {
+        "title": "Was sagt mir eine Fehlermeldung?",
+        "text": "Fast immer drei Dinge: die Art des Fehlers, die Datei und die Zeile. Damit weißt du meist schon, wo du suchen musst."
+      },
+      "start": {
+        "title": "Wo fange ich an?",
+        "text": "Bei der wichtigsten Zeile der Meldung. Spring zur genannten Stelle in deinem eigenen Code und überspring Zeilen aus Paketen wie node_modules."
+      },
+      "stuck": {
+        "title": "Was, wenn ich nicht weiterkomme?",
+        "text": "Such die Meldung unter deinem Thema bei den häufigen Fehlern. Hilft das nicht, grenz den Fehler mit einem der Wege unter Debuggen ein."
+      }
+    }
   },
   "item": {
     "expandAll": "Alle aufklappen",

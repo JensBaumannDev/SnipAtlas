@@ -1,0 +1,43 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Steps
+.debug-guide-steps {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.debug-guide-steps__step {
+  display: grid;
+  grid-template-columns: rem(32) minmax(0, 1fr);
+  gap: $space-sm;
+}
+
+.debug-guide-steps__number {
+  font-family: $font-mono;
+  color: var(--accent);
+}
+
+.debug-guide-steps__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  min-width: 0;
+}
+
+.debug-guide-steps__title {
+  font-size: $font-size-base;
+}
+
+.debug-guide-steps__text {
+  max-width: 70ch;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}

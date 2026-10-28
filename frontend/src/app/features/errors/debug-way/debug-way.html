@@ -1,0 +1,15 @@
+@if (guide(); as guide) {
+  <app-topic-header
+    class="debug-way__header"
+    [heading]="guide.title"
+    [parentLabel]="'pages.debugging' | translate"
+    parentLink="/fehler"
+  >
+    <p class="debug-way__summary">{{ guide.summary }}</p>
+  </app-topic-header>
+
+  <div class="debug-way__body">
+    <app-debug-guide-steps [guide]="guide" />
+    <app-report-link [subject]="('report.guide' | translate) + ': ' + guide.title" />
+  </div>
+}

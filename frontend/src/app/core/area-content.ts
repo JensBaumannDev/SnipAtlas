@@ -1,9 +1,22 @@
 import { Injector, Service, Type, inject } from '@angular/core';
 import { Observable, combineLatest, from, map, switchMap } from 'rxjs';
 import { ContentArea, ContentIndex, mergeIndex } from './content-index';
+import { DebugGuide } from './debug-guide';
+import { Topic } from './topic';
+
+const loadDebugGuideApi = () => import('./debug-guide-api').then((m) => m.DebugGuideApi);
 
 interface IndexSource {
   getIndex(): Observable<ContentIndex>;
+}
+
+function toWayTopic(guide: DebugGuide): Topic {
+  return {
+    slug: guide.slug,
+    name: guide.label ?? guide.title,
+    color: 'currentColor',
+    subtopics: [],
+  };
 }
 
 @Service()
@@ -21,9 +34,16 @@ export class AreaContent {
       case 'debugging':
         return combineLatest([
           this.load(() => import('./error-api').then((m) => m.ErrorApi)),
-          this.load(() => import('./debug-guide-api').then((m) => m.DebugGuideApi)),
+          this.load(loadDebugGuideApi),
         ]).pipe(map((indexes) => mergeIndex(...indexes)));
     }
+  }
+
+  getDebugWays(): Observable<Topic[]> {
+    return from(loadDebugGuideApi()).pipe(
+      switchMap((type) => this.injector.get(type).getGeneral()),
+      map((guides) => guides.map(toWayTopic)),
+    );
   }
 
   private load(source: () => Promise<Type<IndexSource>>): Observable<ContentIndex> {
