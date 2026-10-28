@@ -105,3 +105,49 @@ def test_groups_list_rejects_writes(api_client: APIClient, group: Group, method:
     assert response.status_code == 405
     assert response.json() == {'code': 'method_not_allowed'}
     assert Group.objects.count() == 1
+
+
+# Topic
+def test_topic_detail_is_public(api_client: APIClient, subtopic: Subtopic) -> None:
+    response = api_client.get(reverse('topic-detail', args=['python']))
+    assert response.status_code == 200
+    assert response.json() == {
+        'slug': 'python',
+        'name': 'Python',
+        'color': '#3776ab',
+        'subtopics': [{'slug': 'schleifen', 'name': 'Schleifen'}],
+    }
+
+
+def test_topic_detail_uses_accept_language(api_client: APIClient, subtopic: Subtopic) -> None:
+    url = reverse('topic-detail', args=['python'])
+    data = api_client.get(url, HTTP_ACCEPT_LANGUAGE='en').json()
+    assert data['subtopics'] == [{'slug': 'schleifen', 'name': 'Loops'}]
+
+
+def test_topic_detail_unknown_slug_returns_404(api_client: APIClient, topic: Topic) -> None:
+    response = api_client.get(reverse('topic-detail', args=['cobol']))
+    assert response.status_code == 404
+    assert response.json() == {'code': 'not_found'}
+
+
+def test_topic_detail_slug_is_case_sensitive(api_client: APIClient, topic: Topic) -> None:
+    response = api_client.get(reverse('topic-detail', args=['PYTHON']))
+    assert response.status_code == 404
+
+
+def test_topic_detail_loads_in_two_queries(
+    api_client: APIClient, subtopic: Subtopic, django_assert_num_queries: DjangoAssertNumQueries
+) -> None:
+    with django_assert_num_queries(2):
+        api_client.get(reverse('topic-detail', args=['python']))
+
+
+@pytest.mark.parametrize('method', WRITE_METHODS)
+def test_topic_detail_rejects_writes(api_client: APIClient, topic: Topic, method: str) -> None:
+    url = reverse('topic-detail', args=['python'])
+    response = getattr(api_client, method)(url, {'name': 'Hacked'})
+    topic.refresh_from_db()
+    assert response.status_code == 405
+    assert response.json() == {'code': 'method_not_allowed'}
+    assert topic.name == 'Python'
