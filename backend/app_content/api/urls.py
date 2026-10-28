@@ -1,3 +1,7 @@
-from django.urls import URLPattern
+from django.urls import URLPattern, path
 
-urlpatterns: list[URLPattern] = []
+from .views import GroupListView
+
+urlpatterns: list[URLPattern] = [
+    path('groups/', GroupListView.as_view(), name='group-list'),
+]
