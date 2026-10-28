@@ -63,7 +63,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 DATABASES = {'default': env.db('DATABASE_URL')}
 
-# Passwords
+# Users and passwords
+AUTH_USER_MODEL = 'app_accounts.User'
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+]
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
