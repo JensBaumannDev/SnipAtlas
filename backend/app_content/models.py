@@ -75,6 +75,35 @@ class CodeLanguage(models.TextChoices):
     ENV = 'env', '.env'
 
 
+def language_constraint(*, optional: bool = False) -> models.CheckConstraint:
+    values = [*CodeLanguage.values, ''] if optional else CodeLanguage.values
+    return models.CheckConstraint(
+        condition=models.Q(language__in=values), name='%(class)s_language_valid'
+    )
+
+
+def slug_constraint() -> models.CheckConstraint:
+    return models.CheckConstraint(
+        condition=models.Q(slug__regex=validate_clean_slug.regex.pattern),
+        name='%(class)s_slug_clean',
+    )
+
+
+def field_error(field: str, code: str, message: str) -> ValidationError:
+    return ValidationError({field: ValidationError(message, code=code)})
+
+
+def require_german(obj: models.Model, field: str) -> None:
+    if getattr(obj, f'{field}_en') and not getattr(obj, f'{field}_de'):
+        raise field_error(f'{field}_de', 'required', 'Add the German text first.')
+
+
+def split_os_code(code: str, code_unix: str) -> str | dict[str, str]:
+    if not code_unix:
+        return code
+    return {'win': code, 'unix': code_unix}
+
+
 class ContentItemQuerySet(models.QuerySet):
     def for_topic(self, slug: str) -> ContentItemQuerySet:
         if not validate_clean_slug.regex.fullmatch(slug):
@@ -102,16 +131,7 @@ class ContentItem(models.Model):
             'position',
             'pk',
         )
-        constraints = [
-            models.CheckConstraint(
-                condition=models.Q(language__in=CodeLanguage.values),
-                name='%(class)s_language_valid',
-            ),
-            models.CheckConstraint(
-                condition=models.Q(slug__regex=validate_clean_slug.regex.pattern),
-                name='%(class)s_slug_clean',
-            ),
-        ]
+        constraints = [language_constraint(), slug_constraint()]
 
     def __str__(self) -> str:
         return self.title
@@ -126,18 +146,114 @@ class Entry(ContentItem):
 
     def clean(self) -> None:
         super().clean()
-        if self.code_unix_en and not self.code_unix_de:
-            error = ValidationError('Add the German unix code first.', code='required')
-            raise ValidationError({'code_unix_de': error})
+        require_german(self, 'code_unix')
 
     @property
     def os_code(self) -> str | dict[str, str]:
-        if not self.code_unix:
-            return self.code
-        return {'win': self.code, 'unix': self.code_unix}
+        return split_os_code(self.code, self.code_unix)
 
 
 class Concept(ContentItem):
     summary = models.TextField()
     explanation = models.TextField()
     note = models.TextField(blank=True)
+
+
+# Errors and debug guides
+class OptionalCode(models.Model):
+    language = models.CharField(max_length=20, choices=CodeLanguage.choices, blank=True)
+    code = models.TextField(blank=True)
+
+    class Meta:
+        abstract = True
+
+    def clean(self) -> None:
+        super().clean()
+        if (self.language or self.code_en) and not self.code_de:
+            raise field_error('code_de', 'required', 'Add the German code.')
+        if self.code_de and not self.language:
+            raise field_error('language', 'required', 'Choose the code language.')
+
+
+class ErrorMessage(OptionalCode):
+    topic = models.ForeignKey(Topic, on_delete=models.PROTECT, related_name='+')
+    slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
+    message = models.CharField(max_length=300)
+    meaning = models.TextField()
+    cause = models.TextField()
+    position = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ('topic__position', 'topic_id', 'position', 'pk')
+        constraints = [language_constraint(optional=True), slug_constraint()]
+
+    def __str__(self) -> str:
+        return self.message
+
+
+class ErrorStep(models.Model):
+    error = models.ForeignKey(ErrorMessage, on_delete=models.CASCADE, related_name='steps')
+    text = models.TextField()
+    position = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ('position', 'pk')
+
+    def __str__(self) -> str:
+        return self.text
+
+
+class DebugGuide(models.Model):
+    topic = models.ForeignKey(
+        Topic, on_delete=models.PROTECT, null=True, blank=True, related_name='+'
+    )
+    slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
+    label = models.CharField(max_length=30, blank=True)
+    title = models.CharField(max_length=120)
+    summary = models.TextField()
+    position = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = (
+            models.F('topic__position').asc(nulls_first=True),
+            'topic_id',
+            'position',
+            'pk',
+        )
+        constraints = [slug_constraint()]
+
+    def __str__(self) -> str:
+        return self.title
+
+    def clean(self) -> None:
+        super().clean()
+        if self.topic_id is None and not self.label_de:
+            raise field_error('label_de', 'required', 'General guides need a label.')
+        labels = [field for field in ('label_de', 'label_en') if getattr(self, field)]
+        if self.topic_id is not None and labels:
+            raise field_error(labels[0], 'invalid', 'Only general guides have a label.')
+
+
+class DebugGuideStep(OptionalCode):
+    guide = models.ForeignKey(DebugGuide, on_delete=models.CASCADE, related_name='steps')
+    title = models.CharField(max_length=120)
+    text = models.TextField()
+    code_unix = models.TextField(blank=True)
+    position = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ('position', 'pk')
+        constraints = [language_constraint(optional=True)]
+
+    def __str__(self) -> str:
+        return self.title
+
+    def clean(self) -> None:
+        super().clean()
+        if self.code_unix_de and not self.code_de:
+            raise field_error('code_de', 'required', 'Add the Windows code first.')
+        require_german(self, 'code_unix')
+
+    @property
+    def os_code(self) -> str | dict[str, str]:
+        return split_os_code(self.code, self.code_unix)

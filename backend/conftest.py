@@ -5,7 +5,7 @@ from django.test import Client
 from rest_framework.test import APIClient
 
 from app_accounts.models import User
-from app_content.models import Concept, Entry, Group, Subtopic, Topic
+from app_content.models import Concept, DebugGuide, Entry, ErrorMessage, Group, Subtopic, Topic
 
 
 @pytest.fixture(autouse=True)
@@ -98,3 +98,61 @@ def concept(subtopic: Subtopic) -> Concept:
         code_de='for item in items: print(item)',
         note_de='Nicht die Liste in der Schleife ändern.',
     )
+
+
+@pytest.fixture
+def error_message(topic: Topic) -> ErrorMessage:
+    error = ErrorMessage.objects.create(
+        topic=topic,
+        slug='module-not-found',
+        message="ModuleNotFoundError: No module named 'django'",
+        meaning_de='Python findet das Paket nicht.',
+        meaning_en='Python cannot find the package.',
+        cause_de='Die virtuelle Umgebung ist nicht aktiv.',
+        cause_en='The virtual environment is not active.',
+        language='terminal',
+        code_de='pip install django',
+    )
+    error.steps.create(text_de='Paket installieren.', position=1)
+    error.steps.create(text_de='Umgebung aktivieren.', text_en='Activate the environment.')
+    return error
+
+
+@pytest.fixture
+def debug_guide(db: None) -> DebugGuide:
+    guide = DebugGuide.objects.create(
+        slug='vorgehen',
+        label_de='Vorgehen',
+        label_en='Approach',
+        title_de='Der Ablauf bei jedem Fehler',
+        title_en='The process for every error',
+        summary_de='Vier Schritte für jeden Fehler.',
+        summary_en='Four steps for every error.',
+    )
+    guide.steps.create(
+        title_de='Änderungen ansehen',
+        text_de='git diff zeigt sie.',
+        language='terminal',
+        code_de='git diff',
+        position=1,
+    )
+    guide.steps.create(title_de='Die Meldung lesen', text_de='Die wichtige Zeile steht unten.')
+    return guide
+
+
+@pytest.fixture
+def topic_guide(topic: Topic) -> DebugGuide:
+    guide = DebugGuide.objects.create(
+        topic=topic,
+        slug='python-debuggen',
+        title_de='Python debuggen',
+        summary_de='Mit Tests und Ausgaben.',
+    )
+    guide.steps.create(
+        title_de='Tests starten',
+        text_de='Startet alle Tests.',
+        language='terminal',
+        code_de='python manage.py test',
+        code_unix_de='python3 manage.py test',
+    )
+    return guide

@@ -2,9 +2,24 @@ from django import forms
 from django.contrib import admin
 from django.db.models import ForeignKey
 from django.http import HttpRequest
-from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
+from modeltranslation.admin import (
+    TabbedTranslationAdmin,
+    TranslationStackedInline,
+    TranslationTabularInline,
+)
 
-from .models import Concept, ContentItem, Entry, Group, Subtopic, Topic
+from .models import (
+    Concept,
+    ContentItem,
+    DebugGuide,
+    DebugGuideStep,
+    Entry,
+    ErrorMessage,
+    ErrorStep,
+    Group,
+    Subtopic,
+    Topic,
+)
 
 
 @admin.register(Group)
@@ -69,3 +84,39 @@ class EntryAdmin(ContentItemAdmin):
 @admin.register(Concept)
 class ConceptAdmin(ContentItemAdmin):
     pass
+
+
+# Errors
+class ErrorStepInline(TranslationTabularInline):
+    model = ErrorStep
+    extra = 1
+
+
+@admin.register(ErrorMessage)
+class ErrorMessageAdmin(TabbedTranslationAdmin):
+    fields = ('topic', 'slug', 'message', 'meaning', 'cause', 'language', 'code', 'position')
+    list_display = ('message', 'topic', 'slug', 'position')
+    list_editable = ('position',)
+    list_filter = ('topic',)
+    search_fields = ('message',)
+    list_select_related = ('topic',)
+    prepopulated_fields = {'slug': ('message',)}
+    inlines = (ErrorStepInline,)
+
+
+# Debug guides
+class DebugGuideStepInline(TranslationStackedInline):
+    model = DebugGuideStep
+    extra = 1
+
+
+@admin.register(DebugGuide)
+class DebugGuideAdmin(TabbedTranslationAdmin):
+    fields = ('topic', 'label', 'slug', 'title', 'summary', 'position')
+    list_display = ('title', 'topic', 'label', 'slug', 'position')
+    list_editable = ('position',)
+    list_filter = ('topic',)
+    search_fields = ('title',)
+    list_select_related = ('topic',)
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = (DebugGuideStepInline,)
