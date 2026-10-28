@@ -1,0 +1,720 @@
+[
+  {
+    "model": "app_content.errormessage",
+    "pk": 1,
+    "fields": {
+      "topic": 6,
+      "slug": "module-not-found-django",
+      "message": "ModuleNotFoundError: No module named 'django'",
+      "language": "terminal",
+      "position": 1,
+      "meaning_de": "Python findet das Paket django nicht.",
+      "cause_de": "Meist ist die virtuelle Umgebung nicht aktiviert, oder django wurde in einer anderen Umgebung installiert.",
+      "code_de": "pip install django"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 1,
+    "fields": {
+      "error": 1,
+      "position": 1,
+      "text_de": "Virtuelle Umgebung aktivieren, erkennbar an (env) vor der Eingabezeile."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 2,
+    "fields": {
+      "error": 1,
+      "position": 2,
+      "text_de": "Falls es dann noch fehlt: das Paket in der aktiven Umgebung installieren."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 2,
+    "fields": {
+      "topic": 6,
+      "slug": "python-not-recognized",
+      "message": "'python' is not recognized as an internal or external command",
+      "language": "terminal",
+      "position": 2,
+      "meaning_de": "Windows kennt den Befehl python nicht.",
+      "cause_de": "Python ist nicht installiert, oder bei der Installation wurde „Add Python to PATH“ nicht angehakt.",
+      "code_de": "py --version"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 3,
+    "fields": {
+      "error": 2,
+      "position": 1,
+      "text_de": "Statt python den Windows-Starter py ausprobieren."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 4,
+    "fields": {
+      "error": 2,
+      "position": 2,
+      "text_de": "Oder Python neu installieren und dabei „Add Python to PATH“ anhaken."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 5,
+    "fields": {
+      "error": 2,
+      "position": 3,
+      "text_de": "Danach das Terminal neu öffnen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 3,
+    "fields": {
+      "topic": 6,
+      "slug": "scripts-disabled",
+      "message": "running scripts is disabled on this system",
+      "language": "terminal",
+      "position": 3,
+      "meaning_de": "PowerShell blockiert das Ausführen von Skripten, z. B. beim Aktivieren der virtuellen Umgebung oder bei ng.",
+      "cause_de": "Die Ausführungsrichtlinie von Windows erlaubt standardmäßig keine Skripte.",
+      "code_de": "Set-ExecutionPolicy -Scope CurrentUser RemoteSigned"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 6,
+    "fields": {
+      "error": 3,
+      "position": 1,
+      "text_de": "Einmalig für deinen Benutzer lokale Skripte erlauben."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 7,
+    "fields": {
+      "error": 3,
+      "position": 2,
+      "text_de": "Das Terminal neu öffnen und den Befehl erneut ausführen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 4,
+    "fields": {
+      "topic": 7,
+      "slug": "no-such-table",
+      "message": "django.db.utils.OperationalError: no such table: tasks_task",
+      "language": "terminal",
+      "position": 1,
+      "meaning_de": "Die Datenbanktabelle für ein Model existiert noch nicht.",
+      "cause_de": "Nach dem Anlegen oder Ändern eines Models wurden die Migrationen nicht erstellt oder nicht angewendet.",
+      "code_de": "python manage.py makemigrations\npython manage.py migrate"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 8,
+    "fields": {
+      "error": 4,
+      "position": 1,
+      "text_de": "Migrationen erstellen und anwenden."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 9,
+    "fields": {
+      "error": 4,
+      "position": 2,
+      "text_de": "Prüfen, ob die App in INSTALLED_APPS eingetragen ist."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 5,
+    "fields": {
+      "topic": 7,
+      "slug": "unapplied-migrations",
+      "message": "You have 18 unapplied migration(s).",
+      "language": "terminal",
+      "position": 2,
+      "meaning_de": "Es gibt Migrationen, die noch nicht auf die Datenbank angewendet wurden.",
+      "cause_de": "Typisch bei einem frischen Projekt oder nach einem git pull.",
+      "code_de": "python manage.py migrate"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 10,
+    "fields": {
+      "error": 5,
+      "position": 1,
+      "text_de": "Die Migrationen anwenden."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 6,
+    "fields": {
+      "topic": 7,
+      "slug": "django-port-in-use",
+      "message": "Error: That port is already in use.",
+      "language": "terminal",
+      "position": 3,
+      "meaning_de": "Port 8000 ist schon belegt.",
+      "cause_de": "Ein anderer Entwicklungsserver läuft noch, oft in einem zweiten Terminal-Fenster.",
+      "code_de": "python manage.py runserver 8001"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 11,
+    "fields": {
+      "error": 6,
+      "position": 1,
+      "text_de": "Den anderen Server mit Strg + C beenden."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 12,
+    "fields": {
+      "error": 6,
+      "position": 2,
+      "text_de": "Oder einen anderen Port verwenden."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 7,
+    "fields": {
+      "topic": 7,
+      "slug": "secret-key-empty",
+      "message": "ImproperlyConfigured: The SECRET_KEY setting must not be empty.",
+      "language": "env",
+      "position": 4,
+      "meaning_de": "Django hat keinen geheimen Schlüssel.",
+      "cause_de": "Der Schlüssel wird aus einer .env-Datei gelesen, die fehlt oder nicht geladen wird.",
+      "code_de": "SECRET_KEY=hier-ein-langer-zufaelliger-wert"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 13,
+    "fields": {
+      "error": 7,
+      "position": 1,
+      "text_de": "Im Projektordner eine .env-Datei anlegen und SECRET_KEY eintragen."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 14,
+    "fields": {
+      "error": 7,
+      "position": 2,
+      "text_de": "Prüfen, ob settings.py die .env-Datei wirklich lädt."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 8,
+    "fields": {
+      "topic": 8,
+      "slug": "cors-blocked",
+      "message": "Access to fetch at 'http://127.0.0.1:8000/api/tasks/' from origin 'http://localhost:4200' has been blocked by CORS policy",
+      "language": "python",
+      "position": 1,
+      "meaning_de": "Der Browser blockiert die Anfrage vom Frontend an das Backend.",
+      "cause_de": "Frontend und Backend laufen auf verschiedenen Ports. Das Backend muss solche Anfragen ausdrücklich erlauben.",
+      "code_de": "CORS_ALLOWED_ORIGINS = ['http://localhost:4200']"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 15,
+    "fields": {
+      "error": 8,
+      "position": 1,
+      "text_de": "django-cors-headers installieren und einrichten."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 16,
+    "fields": {
+      "error": 8,
+      "position": 2,
+      "text_de": "Die Adresse des Frontends in CORS_ALLOWED_ORIGINS eintragen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 9,
+    "fields": {
+      "topic": 8,
+      "slug": "credentials-not-provided",
+      "message": "{\"detail\": \"Authentication credentials were not provided.\"}",
+      "language": "",
+      "position": 2,
+      "meaning_de": "Der Endpunkt verlangt einen Login, aber die Anfrage hat keinen mitgeschickt.",
+      "cause_de": "Der Token fehlt im Header der Anfrage oder ist falsch geschrieben.",
+      "code_de": ""
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 17,
+    "fields": {
+      "error": 9,
+      "position": 1,
+      "text_de": "Den Token im Header Authorization mitschicken, mit dem Wort Token davor."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 18,
+    "fields": {
+      "error": 9,
+      "position": 2,
+      "text_de": "In Angular am besten über einen Interceptor, dann passiert es bei jeder Anfrage automatisch."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 10,
+    "fields": {
+      "topic": 8,
+      "slug": "csrf-failed",
+      "message": "{\"detail\": \"CSRF Failed: CSRF token missing.\"}",
+      "language": "",
+      "position": 3,
+      "meaning_de": "Django erwartet einen Schutz-Token gegen gefälschte Anfragen.",
+      "cause_de": "Die API nutzt Login per Sitzung (SessionAuthentication). Dann verlangt Django bei POST, PUT und DELETE einen CSRF-Token.",
+      "code_de": ""
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 19,
+    "fields": {
+      "error": 10,
+      "position": 1,
+      "text_de": "Für ein getrenntes Frontend Login per Token verwenden."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 20,
+    "fields": {
+      "error": 10,
+      "position": 2,
+      "text_de": "SessionAuthentication aus DEFAULT_AUTHENTICATION_CLASSES entfernen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 11,
+    "fields": {
+      "topic": 3,
+      "slug": "cannot-read-undefined",
+      "message": "TypeError: Cannot read properties of undefined (reading 'title')",
+      "language": "javascript",
+      "position": 1,
+      "meaning_de": "Du greifst auf .title von etwas zu, das es (noch) nicht gibt.",
+      "cause_de": "Meist sind die Daten vom Backend noch nicht geladen, oder der Name der Variable ist falsch.",
+      "code_de": "console.log(task?.title);"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 21,
+    "fields": {
+      "error": 11,
+      "position": 1,
+      "text_de": "Mit console.log prüfen, was wirklich in der Variable steht."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 22,
+    "fields": {
+      "error": 11,
+      "position": 2,
+      "text_de": "Mit ?. absichern, dann gibt es undefined statt eines Fehlers."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 12,
+    "fields": {
+      "topic": 3,
+      "slug": "unexpected-token-json",
+      "message": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON",
+      "language": "",
+      "position": 2,
+      "meaning_de": "Dein Code erwartet JSON, bekommt aber eine HTML-Seite.",
+      "cause_de": "Die Adresse stimmt nicht, und der Server liefert eine Fehlerseite (z. B. 404) statt Daten.",
+      "code_de": ""
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 23,
+    "fields": {
+      "error": 12,
+      "position": 1,
+      "text_de": "Die Adresse direkt im Browser öffnen und ansehen, was zurückkommt."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 24,
+    "fields": {
+      "error": 12,
+      "position": 2,
+      "text_de": "Auf den Schrägstrich am Ende achten, Django erwartet ihn meist: /api/tasks/"
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 13,
+    "fields": {
+      "topic": 5,
+      "slug": "no-provider-httpclient",
+      "message": "NullInjectorError: No provider for HttpClient!",
+      "language": "typescript",
+      "position": 1,
+      "meaning_de": "Angular kann den HttpClient nicht bereitstellen.",
+      "cause_de": "provideHttpClient() fehlt in app.config.ts.",
+      "code_de": "providers: [provideHttpClient()]"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 25,
+    "fields": {
+      "error": 13,
+      "position": 1,
+      "text_de": "provideHttpClient() bei providers in app.config.ts eintragen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 14,
+    "fields": {
+      "topic": 5,
+      "slug": "not-a-known-element",
+      "message": "NG8001: 'app-task-list' is not a known element",
+      "language": "typescript",
+      "position": 2,
+      "meaning_de": "Angular kennt die Komponente im Template nicht.",
+      "cause_de": "Bei Standalone-Komponenten muss jede verwendete Komponente im imports-Array stehen.",
+      "code_de": "imports: [TaskListComponent]"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 26,
+    "fields": {
+      "error": 14,
+      "position": 1,
+      "text_de": "Die Komponente bei imports der Komponente eintragen, in deren Template sie verwendet wird."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 27,
+    "fields": {
+      "error": 14,
+      "position": 2,
+      "text_de": "Den Selektor auf Tippfehler prüfen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 15,
+    "fields": {
+      "topic": 5,
+      "slug": "ng-not-recognized",
+      "message": "ng : The term 'ng' is not recognized",
+      "language": "terminal",
+      "position": 3,
+      "meaning_de": "Das Terminal kennt den Angular-Befehl ng nicht.",
+      "cause_de": "Die Angular CLI ist nicht global installiert, oder das Terminal wurde danach nicht neu geöffnet.",
+      "code_de": "npm install -g @angular/cli"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 28,
+    "fields": {
+      "error": 15,
+      "position": 1,
+      "text_de": "Die Angular CLI global installieren und das Terminal neu öffnen."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 29,
+    "fields": {
+      "error": 15,
+      "position": 2,
+      "text_de": "Alternativ npx ng verwenden."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 16,
+    "fields": {
+      "topic": 5,
+      "slug": "angular-port-in-use",
+      "message": "Port 4200 is already in use.",
+      "language": "terminal",
+      "position": 4,
+      "meaning_de": "Auf Port 4200 läuft schon etwas, meist ein anderes ng serve.",
+      "cause_de": "Ein zweiter Entwicklungsserver läuft noch.",
+      "code_de": "ng serve --port 4300"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 30,
+    "fields": {
+      "error": 16,
+      "position": 1,
+      "text_de": "Den anderen Server mit Strg + C beenden."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 31,
+    "fields": {
+      "error": 16,
+      "position": 2,
+      "text_de": "Oder einen anderen Port nehmen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 17,
+    "fields": {
+      "topic": 11,
+      "slug": "not-a-git-repository",
+      "message": "fatal: not a git repository (or any of the parent directories): .git",
+      "language": "terminal",
+      "position": 1,
+      "meaning_de": "Der aktuelle Ordner ist kein Git-Repository.",
+      "cause_de": "Du bist im falschen Ordner, oder git init wurde noch nicht ausgeführt.",
+      "code_de": "git init"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 32,
+    "fields": {
+      "error": 17,
+      "position": 1,
+      "text_de": "Mit cd in den Projektordner wechseln."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 33,
+    "fields": {
+      "error": 17,
+      "position": 2,
+      "text_de": "Bei einem neuen Projekt zuerst git init ausführen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 18,
+    "fields": {
+      "topic": 11,
+      "slug": "push-rejected",
+      "message": "! [rejected] main -> main (fetch first)",
+      "language": "terminal",
+      "position": 2,
+      "meaning_de": "GitHub lehnt deinen Push ab.",
+      "cause_de": "Auf GitHub gibt es Änderungen, die du lokal noch nicht hast, z. B. eine README, die dort angelegt wurde.",
+      "code_de": "git pull --rebase\ngit push"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 34,
+    "fields": {
+      "error": 18,
+      "position": 1,
+      "text_de": "Erst die Änderungen holen, dann erneut pushen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 19,
+    "fields": {
+      "topic": 11,
+      "slug": "refspec-main",
+      "message": "error: src refspec main does not match any",
+      "language": "terminal",
+      "position": 3,
+      "meaning_de": "Git findet keinen Branch namens main.",
+      "cause_de": "Es gibt noch keinen Commit, oder der Branch heißt master.",
+      "code_de": "git branch -M main"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 35,
+    "fields": {
+      "error": 19,
+      "position": 1,
+      "text_de": "Prüfen, ob es schon einen Commit gibt."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 36,
+    "fields": {
+      "error": 19,
+      "position": 2,
+      "text_de": "Den Branch in main umbenennen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 20,
+    "fields": {
+      "topic": 11,
+      "slug": "permission-denied-publickey",
+      "message": "git@github.com: Permission denied (publickey).",
+      "language": "terminal",
+      "position": 4,
+      "meaning_de": "GitHub erkennt deinen Rechner nicht.",
+      "cause_de": "Für die SSH-Adresse des Repos ist kein SSH-Schlüssel bei GitHub hinterlegt.",
+      "code_de": "ssh-keygen -t ed25519 -C \"deine@mail.de\""
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 37,
+    "fields": {
+      "error": 20,
+      "position": 1,
+      "text_de": "Einen SSH-Schlüssel erzeugen und den öffentlichen Teil auf GitHub unter Settings → SSH and GPG keys eintragen."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 38,
+    "fields": {
+      "error": 20,
+      "position": 2,
+      "text_de": "Oder die HTTPS-Adresse des Repos verwenden."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 21,
+    "fields": {
+      "topic": 11,
+      "slug": "merge-conflict",
+      "message": "CONFLICT (content): Merge conflict in src/app/app.component.ts",
+      "language": "terminal",
+      "position": 5,
+      "meaning_de": "Zwei Änderungen betreffen dieselben Zeilen, Git kann sie nicht allein zusammenführen.",
+      "cause_de": "Dieselbe Stelle wurde in zwei Branches unterschiedlich geändert.",
+      "code_de": "git add .\ngit commit"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 39,
+    "fields": {
+      "error": 21,
+      "position": 1,
+      "text_de": "Die Datei öffnen und die Bereiche zwischen <<<<<<< und >>>>>>> von Hand auflösen."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 40,
+    "fields": {
+      "error": 21,
+      "position": 2,
+      "text_de": "Danach die Datei vormerken und committen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 22,
+    "fields": {
+      "topic": 14,
+      "slug": "bad-gateway",
+      "message": "502 Bad Gateway",
+      "language": "terminal",
+      "position": 1,
+      "meaning_de": "Nginx erreicht die Django-Anwendung dahinter nicht.",
+      "cause_de": "Gunicorn läuft nicht oder ist abgestürzt, oft wegen eines Fehlers in den Einstellungen.",
+      "code_de": "sudo systemctl status gunicorn\nsudo journalctl -u gunicorn -n 50"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 41,
+    "fields": {
+      "error": 22,
+      "position": 1,
+      "text_de": "Den Status von Gunicorn prüfen."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 42,
+    "fields": {
+      "error": 22,
+      "position": 2,
+      "text_de": "In den Logs nach der eigentlichen Fehlermeldung suchen."
+    }
+  },
+  {
+    "model": "app_content.errormessage",
+    "pk": 23,
+    "fields": {
+      "topic": 13,
+      "slug": "docker-permission-denied",
+      "message": "permission denied while trying to connect to the Docker daemon socket",
+      "language": "terminal",
+      "position": 1,
+      "meaning_de": "Dein Benutzer darf Docker nicht steuern.",
+      "cause_de": "Der Benutzer ist nicht in der Gruppe docker.",
+      "code_de": "sudo usermod -aG docker $USER"
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 43,
+    "fields": {
+      "error": 23,
+      "position": 1,
+      "text_de": "Den Benutzer zur Gruppe docker hinzufügen."
+    }
+  },
+  {
+    "model": "app_content.errorstep",
+    "pk": 44,
+    "fields": {
+      "error": 23,
+      "position": 2,
+      "text_de": "Ab- und wieder anmelden, damit es wirkt."
+    }
+  }
+]

@@ -1,0 +1,1253 @@
+[
+  {
+    "model": "app_content.group",
+    "pk": 1,
+    "fields": {
+      "slug": "frontend",
+      "name_de": "Frontend",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 1,
+    "fields": {
+      "group": 1,
+      "slug": "html",
+      "name_de": "HTML",
+      "color": "#e34f26",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 1,
+    "fields": {
+      "topic": 1,
+      "slug": "grundgeruest",
+      "name_de": "Grundgerüst",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 2,
+    "fields": {
+      "topic": 1,
+      "slug": "elemente",
+      "name_de": "Elemente",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 3,
+    "fields": {
+      "topic": 1,
+      "slug": "formulare",
+      "name_de": "Formulare",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 4,
+    "fields": {
+      "topic": 1,
+      "slug": "barrierefreiheit",
+      "name_de": "Barrierefreiheit",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 5,
+    "fields": {
+      "topic": 1,
+      "slug": "seo",
+      "name_de": "SEO & Meta-Tags",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 2,
+    "fields": {
+      "group": 1,
+      "slug": "css",
+      "name_de": "CSS",
+      "color": "#1572b6",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 6,
+    "fields": {
+      "topic": 2,
+      "slug": "selektoren",
+      "name_de": "Selektoren",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 7,
+    "fields": {
+      "topic": 2,
+      "slug": "box-modell",
+      "name_de": "Box-Modell",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 8,
+    "fields": {
+      "topic": 2,
+      "slug": "flexbox",
+      "name_de": "Flexbox",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 9,
+    "fields": {
+      "topic": 2,
+      "slug": "grid",
+      "name_de": "Grid",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 10,
+    "fields": {
+      "topic": 2,
+      "slug": "responsive",
+      "name_de": "Responsive",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 11,
+    "fields": {
+      "topic": 2,
+      "slug": "variablen",
+      "name_de": "Variablen",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 12,
+    "fields": {
+      "topic": 2,
+      "slug": "scss",
+      "name_de": "SCSS",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 3,
+    "fields": {
+      "group": 1,
+      "slug": "javascript",
+      "name_de": "JavaScript",
+      "color": "#d9a400",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 13,
+    "fields": {
+      "topic": 3,
+      "slug": "variablen-datentypen",
+      "name_de": "Variablen & Datentypen",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 14,
+    "fields": {
+      "topic": 3,
+      "slug": "schleifen",
+      "name_de": "Schleifen",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 15,
+    "fields": {
+      "topic": 3,
+      "slug": "arrays",
+      "name_de": "Arrays",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 16,
+    "fields": {
+      "topic": 3,
+      "slug": "strings",
+      "name_de": "Strings",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 17,
+    "fields": {
+      "topic": 3,
+      "slug": "objekte",
+      "name_de": "Objekte",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 18,
+    "fields": {
+      "topic": 3,
+      "slug": "funktionen",
+      "name_de": "Funktionen",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 19,
+    "fields": {
+      "topic": 3,
+      "slug": "dom-events",
+      "name_de": "DOM & Events",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 20,
+    "fields": {
+      "topic": 3,
+      "slug": "async",
+      "name_de": "Async & Promises",
+      "position": 8
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 21,
+    "fields": {
+      "topic": 3,
+      "slug": "daten-laden",
+      "name_de": "Daten laden",
+      "position": 9
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 22,
+    "fields": {
+      "topic": 3,
+      "slug": "fehlerbehandlung",
+      "name_de": "Fehlerbehandlung",
+      "position": 10
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 4,
+    "fields": {
+      "group": 1,
+      "slug": "typescript",
+      "name_de": "TypeScript",
+      "color": "#3178c6",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 23,
+    "fields": {
+      "topic": 4,
+      "slug": "typen",
+      "name_de": "Typen",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 24,
+    "fields": {
+      "topic": 4,
+      "slug": "interfaces",
+      "name_de": "Interfaces",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 25,
+    "fields": {
+      "topic": 4,
+      "slug": "funktionen",
+      "name_de": "Funktionen",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 26,
+    "fields": {
+      "topic": 4,
+      "slug": "generics",
+      "name_de": "Generics",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 27,
+    "fields": {
+      "topic": 4,
+      "slug": "tsconfig",
+      "name_de": "tsconfig",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 5,
+    "fields": {
+      "group": 1,
+      "slug": "angular",
+      "name_de": "Angular",
+      "color": "#dd0031",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 28,
+    "fields": {
+      "topic": 5,
+      "slug": "cli",
+      "name_de": "Projekt & CLI",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 29,
+    "fields": {
+      "topic": 5,
+      "slug": "komponenten",
+      "name_de": "Komponenten",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 30,
+    "fields": {
+      "topic": 5,
+      "slug": "templates",
+      "name_de": "Templates",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 31,
+    "fields": {
+      "topic": 5,
+      "slug": "signals",
+      "name_de": "Signals",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 32,
+    "fields": {
+      "topic": 5,
+      "slug": "routing",
+      "name_de": "Routing",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 33,
+    "fields": {
+      "topic": 5,
+      "slug": "formulare",
+      "name_de": "Formulare",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 34,
+    "fields": {
+      "topic": 5,
+      "slug": "services-http",
+      "name_de": "Services & HTTP",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 35,
+    "fields": {
+      "topic": 5,
+      "slug": "interceptor",
+      "name_de": "Interceptor",
+      "position": 8
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 36,
+    "fields": {
+      "topic": 5,
+      "slug": "rxjs",
+      "name_de": "RxJS",
+      "position": 9
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 37,
+    "fields": {
+      "topic": 5,
+      "slug": "tests",
+      "name_de": "Tests",
+      "position": 10
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 38,
+    "fields": {
+      "topic": 5,
+      "slug": "build",
+      "name_de": "Build & Deployment",
+      "position": 11
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 39,
+    "fields": {
+      "topic": 5,
+      "slug": "updates",
+      "name_de": "Updates",
+      "position": 12
+    }
+  },
+  {
+    "model": "app_content.group",
+    "pk": 2,
+    "fields": {
+      "slug": "backend",
+      "name_de": "Backend",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 6,
+    "fields": {
+      "group": 2,
+      "slug": "python",
+      "name_de": "Python",
+      "color": "#3776ab",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 40,
+    "fields": {
+      "topic": 6,
+      "slug": "umgebung-pakete",
+      "name_de": "Umgebung & Pakete",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 41,
+    "fields": {
+      "topic": 6,
+      "slug": "variablen-datentypen",
+      "name_de": "Variablen & Datentypen",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 42,
+    "fields": {
+      "topic": 6,
+      "slug": "schleifen",
+      "name_de": "Schleifen",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 43,
+    "fields": {
+      "topic": 6,
+      "slug": "listen",
+      "name_de": "Listen",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 44,
+    "fields": {
+      "topic": 6,
+      "slug": "dictionaries",
+      "name_de": "Dictionaries",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 45,
+    "fields": {
+      "topic": 6,
+      "slug": "strings",
+      "name_de": "Strings",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 46,
+    "fields": {
+      "topic": 6,
+      "slug": "funktionen",
+      "name_de": "Funktionen",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 47,
+    "fields": {
+      "topic": 6,
+      "slug": "klassen",
+      "name_de": "Klassen",
+      "position": 8
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 48,
+    "fields": {
+      "topic": 6,
+      "slug": "dateien",
+      "name_de": "Dateien",
+      "position": 9
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 49,
+    "fields": {
+      "topic": 6,
+      "slug": "fehlerbehandlung",
+      "name_de": "Fehlerbehandlung",
+      "position": 10
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 7,
+    "fields": {
+      "group": 2,
+      "slug": "django",
+      "name_de": "Django",
+      "color": "#2ba36b",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 50,
+    "fields": {
+      "topic": 7,
+      "slug": "projekt",
+      "name_de": "Projekt einrichten",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 51,
+    "fields": {
+      "topic": 7,
+      "slug": "models-migrationen",
+      "name_de": "Models & Migrationen",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 52,
+    "fields": {
+      "topic": 7,
+      "slug": "admin",
+      "name_de": "Admin",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 53,
+    "fields": {
+      "topic": 7,
+      "slug": "urls-views",
+      "name_de": "URLs & Views",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 54,
+    "fields": {
+      "topic": 7,
+      "slug": "einstellungen",
+      "name_de": "Einstellungen & .env",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 55,
+    "fields": {
+      "topic": 7,
+      "slug": "statische-dateien",
+      "name_de": "Statische Dateien",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 56,
+    "fields": {
+      "topic": 7,
+      "slug": "e-mail",
+      "name_de": "E-Mail",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 57,
+    "fields": {
+      "topic": 7,
+      "slug": "tests",
+      "name_de": "Tests",
+      "position": 8
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 58,
+    "fields": {
+      "topic": 7,
+      "slug": "deployment",
+      "name_de": "Deployment",
+      "position": 9
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 8,
+    "fields": {
+      "group": 2,
+      "slug": "django-rest-framework",
+      "name_de": "Django REST Framework",
+      "color": "#c9573a",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 59,
+    "fields": {
+      "topic": 8,
+      "slug": "einrichtung",
+      "name_de": "Einrichtung",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 60,
+    "fields": {
+      "topic": 8,
+      "slug": "serializer",
+      "name_de": "Serializer",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 61,
+    "fields": {
+      "topic": 8,
+      "slug": "views-viewsets",
+      "name_de": "Views & ViewSets",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 62,
+    "fields": {
+      "topic": 8,
+      "slug": "router-urls",
+      "name_de": "Router & URLs",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 63,
+    "fields": {
+      "topic": 8,
+      "slug": "authentifizierung",
+      "name_de": "Authentifizierung",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 64,
+    "fields": {
+      "topic": 8,
+      "slug": "berechtigungen",
+      "name_de": "Berechtigungen",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 65,
+    "fields": {
+      "topic": 8,
+      "slug": "pagination-filter",
+      "name_de": "Pagination & Filter",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 66,
+    "fields": {
+      "topic": 8,
+      "slug": "cors",
+      "name_de": "CORS",
+      "position": 8
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 67,
+    "fields": {
+      "topic": 8,
+      "slug": "tests",
+      "name_de": "Tests",
+      "position": 9
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 9,
+    "fields": {
+      "group": 2,
+      "slug": "postgresql",
+      "name_de": "PostgreSQL",
+      "color": "#4169e1",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 68,
+    "fields": {
+      "topic": 9,
+      "slug": "installation",
+      "name_de": "Installation",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 69,
+    "fields": {
+      "topic": 9,
+      "slug": "psql",
+      "name_de": "psql",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 70,
+    "fields": {
+      "topic": 9,
+      "slug": "datenbank-benutzer",
+      "name_de": "Datenbank & Benutzer",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 71,
+    "fields": {
+      "topic": 9,
+      "slug": "django-verbinden",
+      "name_de": "Mit Django verbinden",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 72,
+    "fields": {
+      "topic": 9,
+      "slug": "backup",
+      "name_de": "Backup & Restore",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.group",
+    "pk": 3,
+    "fields": {
+      "slug": "tools",
+      "name_de": "Tools",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 10,
+    "fields": {
+      "group": 3,
+      "slug": "terminal",
+      "name_de": "Terminal",
+      "color": "#5b6b7f",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 73,
+    "fields": {
+      "topic": 10,
+      "slug": "navigieren",
+      "name_de": "Navigieren",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 74,
+    "fields": {
+      "topic": 10,
+      "slug": "dateien-ordner",
+      "name_de": "Dateien & Ordner",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 75,
+    "fields": {
+      "topic": 10,
+      "slug": "umgebungsvariablen",
+      "name_de": "Umgebungsvariablen",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 76,
+    "fields": {
+      "topic": 10,
+      "slug": "prozesse-ports",
+      "name_de": "Prozesse & Ports",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 77,
+    "fields": {
+      "topic": 10,
+      "slug": "tastenkuerzel",
+      "name_de": "Tastenkürzel",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 11,
+    "fields": {
+      "group": 3,
+      "slug": "git",
+      "name_de": "Git & GitHub",
+      "color": "#f05032",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 78,
+    "fields": {
+      "topic": 11,
+      "slug": "einrichten",
+      "name_de": "Einrichten",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 79,
+    "fields": {
+      "topic": 11,
+      "slug": "alltag",
+      "name_de": "Alltag",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 80,
+    "fields": {
+      "topic": 11,
+      "slug": "branches",
+      "name_de": "Branches",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 81,
+    "fields": {
+      "topic": 11,
+      "slug": "merge-konflikte",
+      "name_de": "Merge & Konflikte",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 82,
+    "fields": {
+      "topic": 11,
+      "slug": "pull-requests",
+      "name_de": "Pull Requests",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 83,
+    "fields": {
+      "topic": 11,
+      "slug": "stash",
+      "name_de": "Stash",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 84,
+    "fields": {
+      "topic": 11,
+      "slug": "rueckgaengig",
+      "name_de": "Rückgängig machen",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 85,
+    "fields": {
+      "topic": 11,
+      "slug": "gitignore",
+      "name_de": ".gitignore",
+      "position": 8
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 86,
+    "fields": {
+      "topic": 11,
+      "slug": "ssh-schluessel",
+      "name_de": "SSH-Schlüssel",
+      "position": 9
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 12,
+    "fields": {
+      "group": 3,
+      "slug": "npm",
+      "name_de": "Node & npm",
+      "color": "#cb3837",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 87,
+    "fields": {
+      "topic": 12,
+      "slug": "node-versionen",
+      "name_de": "Node-Versionen",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 88,
+    "fields": {
+      "topic": 12,
+      "slug": "pakete",
+      "name_de": "Pakete",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 89,
+    "fields": {
+      "topic": 12,
+      "slug": "skripte",
+      "name_de": "Skripte",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 90,
+    "fields": {
+      "topic": 12,
+      "slug": "package-json",
+      "name_de": "package.json",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 91,
+    "fields": {
+      "topic": 12,
+      "slug": "fehlersuche",
+      "name_de": "Fehlersuche",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 13,
+    "fields": {
+      "group": 3,
+      "slug": "docker",
+      "name_de": "Docker",
+      "color": "#1d9bd7",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 92,
+    "fields": {
+      "topic": 13,
+      "slug": "container",
+      "name_de": "Container steuern",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 93,
+    "fields": {
+      "topic": 13,
+      "slug": "images-dockerfile",
+      "name_de": "Images & Dockerfile",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 94,
+    "fields": {
+      "topic": 13,
+      "slug": "compose",
+      "name_de": "Compose",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 95,
+    "fields": {
+      "topic": 13,
+      "slug": "volumes",
+      "name_de": "Volumes",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 96,
+    "fields": {
+      "topic": 13,
+      "slug": "umgebungsvariablen",
+      "name_de": "Umgebungsvariablen",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 97,
+    "fields": {
+      "topic": 13,
+      "slug": "fehlersuche",
+      "name_de": "Fehlersuche",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 98,
+    "fields": {
+      "topic": 13,
+      "slug": "aufraeumen",
+      "name_de": "Aufräumen",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.topic",
+    "pk": 14,
+    "fields": {
+      "group": 3,
+      "slug": "server",
+      "name_de": "Server & Linux",
+      "color": "#5b6b7f",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 99,
+    "fields": {
+      "topic": 14,
+      "slug": "verbindung",
+      "name_de": "Verbindung",
+      "position": 1
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 100,
+    "fields": {
+      "topic": 14,
+      "slug": "benutzer-rechte",
+      "name_de": "Benutzer & Rechte",
+      "position": 2
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 101,
+    "fields": {
+      "topic": 14,
+      "slug": "dateien-uebertragen",
+      "name_de": "Dateien übertragen",
+      "position": 3
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 102,
+    "fields": {
+      "topic": 14,
+      "slug": "pakete",
+      "name_de": "Pakete",
+      "position": 4
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 103,
+    "fields": {
+      "topic": 14,
+      "slug": "dienste-logs",
+      "name_de": "Dienste & Logs",
+      "position": 5
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 104,
+    "fields": {
+      "topic": 14,
+      "slug": "firewall",
+      "name_de": "Firewall",
+      "position": 6
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 105,
+    "fields": {
+      "topic": 14,
+      "slug": "nginx",
+      "name_de": "Nginx",
+      "position": 7
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 106,
+    "fields": {
+      "topic": 14,
+      "slug": "https",
+      "name_de": "HTTPS",
+      "position": 8
+    }
+  },
+  {
+    "model": "app_content.subtopic",
+    "pk": 107,
+    "fields": {
+      "topic": 14,
+      "slug": "domain-dns",
+      "name_de": "Domain & DNS",
+      "position": 9
+    }
+  }
+]
