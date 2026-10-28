@@ -23,7 +23,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken',
     'app_accounts',
     'app_content',
     'app_feedback',
@@ -89,7 +88,7 @@ MODELTRANSLATION_FALLBACK_LANGUAGES = ('de',)
 
 # API
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['config.authentication.SessionAuthentication'],
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
     'DEFAULT_RENDERER_CLASSES': ['djangorestframework_camel_case.render.CamelCaseJSONRenderer'],
     'DEFAULT_PARSER_CLASSES': ['djangorestframework_camel_case.parser.CamelCaseJSONParser'],
@@ -107,6 +106,16 @@ REST_FRAMEWORK = {
         'requests': '5/hour',
     },
 }
+
+# Sessions and CSRF
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 14
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = env.bool('SECURE_COOKIES', default=False)
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = SESSION_COOKIE_SECURE
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
 
 # CORS
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])

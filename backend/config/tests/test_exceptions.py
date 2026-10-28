@@ -68,13 +68,13 @@ def test_validation_error_with_plain_message_is_listed_under_non_field() -> None
 
 
 # Authentication
-def test_missing_token_returns_not_authenticated() -> None:
+def test_guest_returns_not_authenticated() -> None:
     status, body = call(make_view(Exception(), permission=IsAuthenticated))
     assert status == 401
     assert body == {'code': 'not_authenticated'}
 
 
-def test_invalid_token_returns_authentication_failed() -> None:
+def test_failed_authentication_returns_authentication_failed() -> None:
     status, body = call(make_view(AuthenticationFailed()))
     assert status == 401
     assert body == {'code': 'authentication_failed'}

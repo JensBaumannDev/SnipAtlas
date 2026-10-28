@@ -50,6 +50,11 @@ def api_client() -> APIClient:
     return APIClient()
 
 
+@pytest.fixture
+def csrf_client() -> APIClient:
+    return APIClient(enforce_csrf_checks=True)
+
+
 # Content
 @pytest.fixture
 def group(db: None) -> Group:

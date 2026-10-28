@@ -5,7 +5,6 @@ from django.db.models import Model
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from pytest_django import DjangoAssertNumQueries
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from rest_framework.throttling import AnonRateThrottle
 
@@ -103,17 +102,14 @@ def test_groups_list_loads_in_three_queries(
         api_client.get(reverse('group-list'))
 
 
-def test_groups_list_works_with_token(api_client: APIClient, user: User, group: Group) -> None:
-    token = Token.objects.create(user=user)
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+def test_groups_list_works_when_logged_in(api_client: APIClient, user: User, group: Group) -> None:
+    api_client.force_login(user)
     assert api_client.get(reverse('group-list')).status_code == 200
 
 
-def test_groups_list_rejects_invalid_token(api_client: APIClient, group: Group) -> None:
-    api_client.credentials(HTTP_AUTHORIZATION='Token invalid')
-    response = api_client.get(reverse('group-list'))
-    assert response.status_code == 401
-    assert response.json() == {'code': 'authentication_failed'}
+def test_groups_list_treats_unknown_session_as_guest(api_client: APIClient, group: Group) -> None:
+    api_client.cookies['sessionid'] = 'invalid'
+    assert api_client.get(reverse('group-list')).status_code == 200
 
 
 def test_groups_list_is_throttled(
@@ -449,37 +445,31 @@ def test_detail_ignores_topic_param(
 
 
 @pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
-def test_public_content_works_with_token(
+def test_public_content_works_when_logged_in(
     api_client: APIClient, user: User, request: pytest.FixtureRequest, area: str, route: str
 ) -> None:
     url = area_url(request, area, route)[1]
-    token = Token.objects.create(user=user)
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+    api_client.force_login(user)
     assert api_client.get(url).status_code == 200
 
 
 @pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
-def test_public_content_rejects_invalid_token(
+def test_public_content_treats_unknown_session_as_guest(
     api_client: APIClient, request: pytest.FixtureRequest, area: str, route: str
 ) -> None:
     url = area_url(request, area, route)[1]
-    api_client.credentials(HTTP_AUTHORIZATION='Token invalid')
-    response = api_client.get(url)
-    assert response.status_code == 401
-    assert response.json() == {'code': 'authentication_failed'}
+    api_client.cookies['sessionid'] = 'invalid'
+    assert api_client.get(url).status_code == 200
 
 
 @pytest.mark.parametrize('area', AREAS)
-def test_public_content_rejects_token_of_inactive_user(
+def test_public_content_treats_inactive_user_as_guest(
     api_client: APIClient, user: User, request: pytest.FixtureRequest, area: str
 ) -> None:
     url = area_url(request, area, 'list')[1]
-    token = Token.objects.create(user=user)
+    api_client.force_login(user)
     User.objects.filter(pk=user.pk).update(is_active=False)
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
-    response = api_client.get(url)
-    assert response.status_code == 401
-    assert response.json() == {'code': 'authentication_failed'}
+    assert api_client.get(url).status_code == 200
 
 
 @pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
@@ -513,7 +503,7 @@ def test_public_content_rejects_writes(
 
 @pytest.mark.parametrize(('area', 'route'), ENDPOINTS)
 @pytest.mark.parametrize('method', WRITE_METHODS)
-def test_public_content_rejects_writes_with_admin_token(
+def test_public_content_rejects_writes_from_admin(
     api_client: APIClient,
     admin_user: User,
     request: pytest.FixtureRequest,
@@ -522,8 +512,7 @@ def test_public_content_rejects_writes_with_admin_token(
     method: str,
 ) -> None:
     obj, url = area_url(request, area, route)
-    token = Token.objects.create(user=admin_user)
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+    api_client.force_login(admin_user)
     before = stored(obj)
     response = getattr(api_client, method)(url, HACKED)
     assert response.status_code == 405
