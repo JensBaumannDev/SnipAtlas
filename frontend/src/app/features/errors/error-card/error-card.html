@@ -2,20 +2,10 @@
   <code disclosure-title class="error-card__message">{{ error().message }}</code>
   <span disclosure-summary>{{ error().meaning }}</span>
 
-  <section class="error-card__section">
-    <h4 class="error-card__label">{{ 'debugging.cause' | translate }}</h4>
-    <app-term-text [text]="error().cause" />
-  </section>
-  <section class="error-card__section">
-    <h4 class="error-card__label">{{ 'debugging.fix' | translate }}</h4>
-    <ol class="error-card__steps">
-      @for (step of error().steps; track $index) {
-        <li><app-term-text [text]="step" /></li>
-      }
-    </ol>
-  </section>
-  @if (error().solution; as solution) {
-    <app-code-block [code]="solution.code" [language]="solution.language" />
-  }
-  <app-report-link [subject]="('report.error' | translate) + ': ' + error().message" />
+  <app-error-body [error]="error()" />
+  <app-item-links
+    [link]="link()"
+    [title]="error().message"
+    [report]="('report.error' | translate) + ': ' + error().message"
+  />
 </app-disclosure>

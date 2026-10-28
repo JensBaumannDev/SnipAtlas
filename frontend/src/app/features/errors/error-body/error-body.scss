@@ -1,0 +1,29 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+// Sections
+.error-body__section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  max-width: 70ch;
+  overflow-wrap: anywhere;
+}
+
+.error-body__label {
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight;
+}
+
+.error-body__steps {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  padding-left: $space-lg;
+  margin: 0;
+}

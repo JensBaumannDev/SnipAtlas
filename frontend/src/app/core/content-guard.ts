@@ -13,7 +13,6 @@ import { ContentIndex, isContentArea } from './content-index';
 interface PlacedItem {
   topic: string;
   subtopic?: string;
-  title: string;
 }
 
 type FindBySlug<T> = (slug: string) => Observable<T | undefined>;
@@ -65,6 +64,10 @@ export function itemExists(find: FindBySlug<PlacedItem>): CanActivateFn {
   };
 }
 
-export function itemTitle(find: FindBySlug<PlacedItem>, fallback: string): ResolveFn<string> {
-  return (route) => findInRoute(find, route).pipe(map((item) => item?.title ?? fallback));
+export function itemTitle<T>(
+  find: FindBySlug<T>,
+  title: (item: T) => string,
+  fallback: string,
+): ResolveFn<string> {
+  return (route) => findInRoute(find, route).pipe(map((item) => (item ? title(item) : fallback)));
 }

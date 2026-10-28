@@ -306,6 +306,10 @@ export class ErrorApi {
     return of(ERRORS.filter((error) => error.topic === topic));
   }
 
+  getBySlug(slug: string): Observable<ErrorMessage | undefined> {
+    return of(ERRORS.find((error) => error.slug === slug));
+  }
+
   getSummary(): Observable<{ entries: number; topics: number }> {
     return of({
       entries: ERRORS.length,

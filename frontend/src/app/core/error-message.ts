@@ -9,3 +9,7 @@ export interface ErrorMessage {
   steps: string[];
   solution?: { language: CodeLanguage; code: string };
 }
+
+export function errorLink({ topic, slug }: ErrorMessage): string[] {
+  return ['/fehler', topic, slug];
+}

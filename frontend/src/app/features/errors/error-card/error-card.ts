@@ -1,13 +1,12 @@
-import { Component, input, model } from '@angular/core';
+import { Component, computed, input, model } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ErrorMessage } from '../../../core/error-message';
-import { CodeBlock } from '../../../shared/code-block/code-block';
+import { ErrorMessage, errorLink } from '../../../core/error-message';
 import { Disclosure } from '../../../shared/disclosure/disclosure';
-import { ReportLink } from '../../../shared/report-link/report-link';
-import { TermText } from '../../../shared/term-text/term-text';
+import { ItemLinks } from '../../../shared/item-links/item-links';
+import { ErrorBody } from '../error-body/error-body';
 
 @Component({
-  imports: [CodeBlock, Disclosure, ReportLink, TermText, TranslatePipe],
+  imports: [Disclosure, ErrorBody, ItemLinks, TranslatePipe],
   selector: 'app-error-card',
   styleUrl: './error-card.scss',
   templateUrl: './error-card.html',
@@ -15,4 +14,6 @@ import { TermText } from '../../../shared/term-text/term-text';
 export class ErrorCard {
   readonly error = input.required<ErrorMessage>();
   readonly expanded = model(false);
+
+  protected readonly link = computed(() => errorLink(this.error()));
 }

@@ -10,7 +10,7 @@ import { DebugGuideApi } from './debug-guide-api';
 import { Entry, entryLink } from './entry';
 import { EntryApi } from './entry-api';
 import { ErrorApi } from './error-api';
-import { ErrorMessage } from './error-message';
+import { ErrorMessage, errorLink } from './error-message';
 import { SearchResult } from './search-result';
 
 const MAX_RESULTS = 8;
@@ -66,8 +66,7 @@ function fromError(error: ErrorMessage): SearchItem {
     area: 'debugging',
     title: error.message,
     text: error.meaning,
-    link: ['/fehler', error.topic],
-    fragment: error.slug,
+    link: errorLink(error),
   });
 }
 

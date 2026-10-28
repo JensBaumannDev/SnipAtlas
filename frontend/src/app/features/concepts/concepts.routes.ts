@@ -18,7 +18,7 @@ export const CONCEPTS_ROUTES: Routes = [
   {
     path: ':topic/:subtopic/:slug',
     component: ConceptDetail,
-    title: itemTitle(findConcept, 'pages.concepts'),
+    title: itemTitle(findConcept, (concept) => concept.title, 'pages.concepts'),
     canActivate: [itemExists(findConcept)],
   },
 ];

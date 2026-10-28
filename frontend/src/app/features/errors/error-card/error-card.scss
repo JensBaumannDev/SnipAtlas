@@ -10,24 +10,3 @@
 .error-card__message {
   line-height: $line-height-base;
 }
-
-// Body
-.error-card__section {
-  display: flex;
-  flex-direction: column;
-  gap: $space-xs;
-  max-width: 70ch;
-  overflow-wrap: anywhere;
-}
-
-.error-card__label {
-  font-size: $font-size-base;
-}
-
-.error-card__steps {
-  display: flex;
-  flex-direction: column;
-  gap: $space-xs;
-  padding-left: $space-lg;
-  margin: 0;
-}
