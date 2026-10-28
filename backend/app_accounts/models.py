@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 
+from app_content.models import BlueprintStep, Entry
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -37,11 +39,50 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+# Settings
 class Accent(models.TextChoices):
     BLUE = 'blue'
     TEAL = 'teal'
     RASPBERRY = 'raspberry'
     FUCHSIA = 'fuchsia'
+
+
+class OperatingSystem(models.TextChoices):
+    WIN = 'win'
+    UNIX = 'unix'
+
+
+class Theme(models.TextChoices):
+    LIGHT = 'light'
+    DARK = 'dark'
+    SYSTEM = 'system'
+
+
+class Language(models.TextChoices):
+    AUTO = 'auto'
+    DE = 'de'
+    EN = 'en'
+
+
+SETTING_CHOICES = {
+    'accent': Accent,
+    'os': OperatingSystem,
+    'theme': Theme,
+    'language': Language,
+}
+
+PROJECT_VALUE_MAX_LENGTH = 100
+
+
+def choice_constraint(field: str, choices: type[models.TextChoices]) -> models.CheckConstraint:
+    return models.CheckConstraint(
+        condition=models.Q(**{f'{field}__in': choices.values}),
+        name=f'user_{field}_valid',
+    )
+
+
+def project_value_field() -> models.CharField:
+    return models.CharField(max_length=PROJECT_VALUE_MAX_LENGTH, blank=True)
 
 
 class User(AbstractUser):
@@ -51,11 +92,25 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     notify_by_mail = models.BooleanField(default=True)
     accent = models.CharField(max_length=20, choices=Accent, default=Accent.BLUE)
+    os = models.CharField(max_length=10, choices=OperatingSystem, default=OperatingSystem.WIN)
+    theme = models.CharField(max_length=10, choices=Theme, default=Theme.SYSTEM)
+    language = models.CharField(max_length=10, choices=Language, default=Language.AUTO)
+    project_name = project_value_field()
+    project_github_user = project_value_field()
+    project_repo = project_value_field()
+    project_domain = project_value_field()
+    project_server_user = project_value_field()
+    project_server_ip = project_value_field()
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    class Meta(AbstractUser.Meta):
+        constraints = [
+            choice_constraint(field, choices) for field, choices in SETTING_CHOICES.items()
+        ]
 
     def __str__(self) -> str:
         return self.email
@@ -67,3 +122,34 @@ class User(AbstractUser):
     def save(self, *args: object, **kwargs: object) -> None:
         self.email = UserManager.normalize_email(self.email)
         super().save(*args, **kwargs)
+
+
+# User data
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    entry = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name='+')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('created_at', 'pk')
+        constraints = [
+            models.UniqueConstraint(fields=('user', 'entry'), name='favorite_unique_per_user'),
+        ]
+
+    def __str__(self) -> str:
+        return f'{self.user}: {self.entry}'
+
+
+class CompletedStep(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='completed_steps')
+    step = models.ForeignKey(BlueprintStep, on_delete=models.CASCADE, related_name='+')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('step__blueprint_id', 'step__position', 'step_id')
+        constraints = [
+            models.UniqueConstraint(fields=('user', 'step'), name='completedstep_unique_per_user'),
+        ]
+
+    def __str__(self) -> str:
+        return f'{self.user}: {self.step}'
