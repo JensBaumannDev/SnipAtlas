@@ -1,0 +1,551 @@
+[
+  {
+    "model": "app_content.blueprint",
+    "pk": 1,
+    "fields": {
+      "topic": 7,
+      "slug": "django-projekt-anlegen",
+      "position": 1,
+      "title_de": "Neues Django-Projekt anlegen",
+      "summary_de": "Vom leeren Ordner bis zum ersten Model in der Datenbank, mit sauberem Start auf GitHub."
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 1,
+    "fields": {
+      "blueprint": 1,
+      "slug": "ordner-anlegen",
+      "position": 1,
+      "title_de": "Projektordner anlegen",
+      "why_de": "Alles, was zum Projekt gehört, liegt in einem Ordner. Diesen Ordner öffnest du später in VS Code.",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 1,
+    "fields": {
+      "step": 1,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "mkdir {{project}}\ncd {{project}}",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 2,
+    "fields": {
+      "blueprint": 1,
+      "slug": "virtuelle-umgebung",
+      "position": 2,
+      "title_de": "Virtuelle Umgebung einrichten",
+      "why_de": "Jedes Projekt bekommt seine eigenen Pakete in eigenen Versionen. So stören sich zwei Projekte auf deinem Rechner nicht gegenseitig.",
+      "note_de": "Danach steht (env) vor der Eingabezeile. Fehlt es, ist die Umgebung nicht aktiv und pip installiert die Pakete für den ganzen Rechner."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 2,
+    "fields": {
+      "step": 2,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "python -m venv env\nenv\\Scripts\\activate",
+      "code_unix_de": "python3 -m venv env\nsource env/bin/activate"
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 3,
+    "fields": {
+      "blueprint": 1,
+      "slug": "django-installieren",
+      "position": 3,
+      "title_de": "Django installieren",
+      "why_de": "pip installiert Django in die aktive Umgebung. Die Datei requirements.txt hält fest, welche Pakete das Projekt in welcher Version braucht, damit andere es genauso einrichten können.",
+      "note_de": "pip freeze ohne > zeigt dir nur an, was gerade installiert ist."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 3,
+    "fields": {
+      "step": 3,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "pip install django\npip freeze > requirements.txt",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 4,
+    "fields": {
+      "blueprint": 1,
+      "slug": "projekt-erstellen",
+      "position": 4,
+      "title_de": "Django-Projekt erstellen",
+      "why_de": "Legt manage.py und den Ordner core mit settings.py und urls.py an. Über manage.py steuerst du ab jetzt das Projekt.",
+      "note_de": "Der Punkt am Ende legt das Projekt im aktuellen Ordner an. Ohne ihn bekommst du einen zusätzlichen Unterordner."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 4,
+    "fields": {
+      "step": 4,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "django-admin startproject core .",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 5,
+    "fields": {
+      "blueprint": 1,
+      "slug": "gitignore-und-erster-commit",
+      "position": 5,
+      "title_de": ".gitignore anlegen und erster Commit",
+      "why_de": "Die .gitignore legt fest, was nicht ins Repository gehört: die virtuelle Umgebung, Cache-Dateien, die lokale Datenbank und Geheimnisse wie die .env.",
+      "note_de": "Erst committen, wenn die .gitignore da ist. Was einmal auf GitHub liegt, bleibt in der Historie, auch wenn du es später löschst."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 5,
+    "fields": {
+      "step": 5,
+      "language": "gitignore",
+      "position": 1,
+      "code_de": "env/\n__pycache__/\n*.pyc\ndb.sqlite3\n.env",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 6,
+    "fields": {
+      "step": 5,
+      "language": "terminal",
+      "position": 2,
+      "code_de": "git init\ngit add .\ngit commit -m \"chore: initial django setup\"",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 6,
+    "fields": {
+      "blueprint": 1,
+      "slug": "app-erstellen",
+      "position": 6,
+      "title_de": "Django-App erstellen",
+      "why_de": "Eine App bündelt einen Bereich deines Projekts, zum Beispiel Aufgaben oder Benutzer, mit eigenen Models, Views und URLs.",
+      "note_de": "Überleg vorher, welche Bereiche dein Projekt hat. Für ein kleines Projekt reicht oft eine App."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 7,
+    "fields": {
+      "step": 6,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "python manage.py startapp tasks",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 7,
+    "fields": {
+      "blueprint": 1,
+      "slug": "app-registrieren",
+      "position": 7,
+      "title_de": "App in settings.py eintragen",
+      "why_de": "Erst wenn die App in INSTALLED_APPS steht, findet Django ihre Models und Migrationen.",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 8,
+    "fields": {
+      "step": 7,
+      "language": "python",
+      "position": 1,
+      "code_de": "# core/settings.py\nINSTALLED_APPS = [\n    # ...\n    'tasks',\n]",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 8,
+    "fields": {
+      "blueprint": 1,
+      "slug": "model-und-migration",
+      "position": 8,
+      "title_de": "Model schreiben und migrieren",
+      "why_de": "Das Model beschreibt eine Tabelle. makemigrations schreibt die Änderung als Datei, migrate legt die Tabelle in der Datenbank an.",
+      "note_de": "Nach jeder Änderung an models.py brauchst du beide Befehle noch einmal."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 9,
+    "fields": {
+      "step": 8,
+      "language": "python",
+      "position": 1,
+      "code_de": "# tasks/models.py\nfrom django.db import models\n\n\nclass Task(models.Model):\n    title = models.CharField(max_length=200)\n    done = models.BooleanField(default=False)",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 10,
+    "fields": {
+      "step": 8,
+      "language": "terminal",
+      "position": 2,
+      "code_de": "python manage.py makemigrations\npython manage.py migrate",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 9,
+    "fields": {
+      "blueprint": 1,
+      "slug": "server-starten",
+      "position": 9,
+      "title_de": "Entwicklungsserver starten",
+      "why_de": "Der Server zeigt dein Projekt unter http://127.0.0.1:8000 im Browser. Siehst du die Startseite von Django, läuft alles.",
+      "note_de": "Strg + C beendet den Server."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 11,
+    "fields": {
+      "step": 9,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "python manage.py runserver",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 10,
+    "fields": {
+      "blueprint": 1,
+      "slug": "regelmaessig-committen",
+      "position": 10,
+      "title_de": "Regelmäßig committen",
+      "why_de": "Kleine Commits zeigen, wie dein Projekt gewachsen ist, und lassen sich leichter rückgängig machen als ein großer.",
+      "note_de": "Neues Paket installiert? Dann requirements.txt neu schreiben, bevor du committest."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 12,
+    "fields": {
+      "step": 10,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "pip freeze > requirements.txt\ngit add .\ngit commit -m \"feat: add task model\"\ngit push",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprint",
+    "pk": 2,
+    "fields": {
+      "topic": 7,
+      "slug": "django-projekt-klonen",
+      "position": 2,
+      "title_de": "Bestehendes Django-Projekt einrichten",
+      "summary_de": "Ein Django-Projekt von GitHub holen und auf dem eigenen Rechner zum Laufen bringen."
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 11,
+    "fields": {
+      "blueprint": 2,
+      "slug": "repo-klonen",
+      "position": 1,
+      "title_de": "Repository klonen",
+      "why_de": "Holt das Projekt mit seiner ganzen Historie auf deinen Rechner.",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 13,
+    "fields": {
+      "step": 11,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "git clone https://github.com/{{githubUser}}/{{repo}}.git\ncd {{repo}}",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 12,
+    "fields": {
+      "blueprint": 2,
+      "slug": "virtuelle-umgebung",
+      "position": 2,
+      "title_de": "Virtuelle Umgebung einrichten",
+      "why_de": "Die Umgebung liegt nicht im Repository. Jeder legt sie auf seinem Rechner selbst an.",
+      "note_de": "Danach steht (env) vor der Eingabezeile."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 14,
+    "fields": {
+      "step": 12,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "python -m venv env\nenv\\Scripts\\activate",
+      "code_unix_de": "python3 -m venv env\nsource env/bin/activate"
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 13,
+    "fields": {
+      "blueprint": 2,
+      "slug": "pakete-installieren",
+      "position": 3,
+      "title_de": "Pakete installieren",
+      "why_de": "requirements.txt enthält alle Pakete in genau den Versionen, mit denen das Projekt gebaut wurde.",
+      "note_de": "pip freeze sollte danach dieselben Pakete zeigen, die in requirements.txt stehen."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 15,
+    "fields": {
+      "step": 13,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "pip install -r requirements.txt\npip freeze",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 14,
+    "fields": {
+      "blueprint": 2,
+      "slug": "migrieren",
+      "position": 4,
+      "title_de": "Migrationen ausführen",
+      "why_de": "Legt die Tabellen in deiner lokalen Datenbank an. Die Migrationsdateien liegen schon im Repository.",
+      "note_de": "makemigrations brauchst du hier nicht. Das ist nur nötig, wenn du selbst Models änderst."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 16,
+    "fields": {
+      "step": 14,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "python manage.py migrate",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 15,
+    "fields": {
+      "blueprint": 2,
+      "slug": "server-starten",
+      "position": 5,
+      "title_de": "Entwicklungsserver starten",
+      "why_de": "Läuft der Server ohne Fehler, ist das Projekt fertig eingerichtet.",
+      "note_de": "Startet er nicht, fehlt oft die .env. Liegt eine .env.template im Projekt, kopiere sie nach .env und trag deine Werte ein."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 17,
+    "fields": {
+      "step": 15,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "python manage.py runserver",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprint",
+    "pk": 3,
+    "fields": {
+      "topic": 7,
+      "slug": "secret-key-in-env",
+      "position": 3,
+      "title_de": "SECRET_KEY in eine .env auslagern",
+      "summary_de": "Den geheimen Schlüssel aus settings.py holen, damit er nie auf GitHub landet."
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 16,
+    "fields": {
+      "blueprint": 3,
+      "slug": "env-anlegen",
+      "position": 1,
+      "title_de": ".env im Projektordner anlegen",
+      "why_de": "Der SECRET_KEY sichert unter anderem Sitzungen und Links zum Zurücksetzen von Passwörtern. Er gehört nicht in den Code. Die .env liegt neben manage.py.",
+      "note_de": "Stand der Schlüssel schon einmal auf GitHub, nimm einen neuen. Der erste Befehl erzeugt dir einen."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 18,
+    "fields": {
+      "step": 16,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "python -c \"from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())\"",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 19,
+    "fields": {
+      "step": 16,
+      "language": "env",
+      "position": 2,
+      "code_de": "SECRET_KEY=hier-den-erzeugten-schluessel-einsetzen",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 17,
+    "fields": {
+      "blueprint": 3,
+      "slug": "env-ignorieren",
+      "position": 2,
+      "title_de": ".env in die .gitignore eintragen",
+      "why_de": "So kann Git die Datei nie mit committen, auch nicht aus Versehen mit git add .",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 20,
+    "fields": {
+      "step": 17,
+      "language": "gitignore",
+      "position": 1,
+      "code_de": ".env",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 18,
+    "fields": {
+      "blueprint": 3,
+      "slug": "dotenv-installieren",
+      "position": 3,
+      "title_de": "python-dotenv installieren",
+      "why_de": "Das Paket liest die .env beim Start und stellt ihre Werte als Umgebungsvariablen bereit.",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 21,
+    "fields": {
+      "step": 18,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "pip install python-dotenv\npip freeze > requirements.txt",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 19,
+    "fields": {
+      "blueprint": 3,
+      "slug": "settings-anpassen",
+      "position": 4,
+      "title_de": "Schlüssel in settings.py laden",
+      "why_de": "settings.py holt den Schlüssel jetzt aus der Umgebung statt aus dem Code. Fehlt er, startet Django gar nicht erst.",
+      "note_de": "Die alte Zeile SECRET_KEY = \"django-insecure-…\" löschst du."
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 22,
+    "fields": {
+      "step": 19,
+      "language": "python",
+      "position": 1,
+      "code_de": "# core/settings.py\nimport os\nfrom pathlib import Path\n\nfrom dotenv import load_dotenv\n\nBASE_DIR = Path(__file__).resolve().parent.parent\nload_dotenv(BASE_DIR / '.env')\n\nSECRET_KEY = os.getenv('SECRET_KEY')\nif not SECRET_KEY:\n    raise RuntimeError('SECRET_KEY fehlt in der .env')",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 20,
+    "fields": {
+      "blueprint": 3,
+      "slug": "vorlage-anlegen",
+      "position": 5,
+      "title_de": ".env.template für das Repository anlegen",
+      "why_de": "Die Vorlage darf ins Repository. Sie zeigt allen, die das Projekt klonen, welche Werte sie brauchen, ohne die echten zu verraten.",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 23,
+    "fields": {
+      "step": 20,
+      "language": "env",
+      "position": 1,
+      "code_de": "SECRET_KEY=hier-deinen-schluessel-eintragen",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintstep",
+    "pk": 21,
+    "fields": {
+      "blueprint": 3,
+      "slug": "env-aus-vorlage",
+      "position": 6,
+      "title_de": "Nach dem Klonen: .env aus der Vorlage erstellen",
+      "why_de": "In einem frisch geklonten Projekt fehlt die .env. Kopiere die Vorlage und trag deinen eigenen Schlüssel ein.",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.blueprintcode",
+    "pk": 24,
+    "fields": {
+      "step": 21,
+      "language": "terminal",
+      "position": 1,
+      "code_de": "copy .env.template .env",
+      "code_unix_de": "cp .env.template .env"
+    }
+  }
+]

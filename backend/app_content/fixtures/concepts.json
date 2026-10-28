@@ -1,0 +1,617 @@
+[
+  {
+    "model": "app_content.concept",
+    "pk": 1,
+    "fields": {
+      "subtopic": 1,
+      "slug": "grundgeruest-einer-seite",
+      "language": "html",
+      "position": 1,
+      "title_de": "Grundgerüst einer Seite",
+      "summary_de": "Der Rahmen, den jede HTML-Seite braucht.",
+      "explanation_de": "DOCTYPE sagt dem Browser, dass es sich um modernes HTML handelt. In head stehen Angaben über die Seite wie Zeichensatz, Titel und eingebundene Dateien, in body der sichtbare Inhalt. Das Script steht am Ende von body, damit zuerst die Seite geladen wird.",
+      "code_de": "<!DOCTYPE html>\n<html lang=\"de\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Meine Seite</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+      "note_de": "Ohne meta viewport zeigt das Handy die Seite verkleinert an, als wäre es ein großer Bildschirm."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 2,
+    "fields": {
+      "subtopic": 1,
+      "slug": "semantische-struktur",
+      "language": "html",
+      "position": 2,
+      "title_de": "Semantische Struktur",
+      "summary_de": "Bereiche der Seite mit passenden Elementen auszeichnen.",
+      "explanation_de": "header, nav, main, section und footer sagen, welche Aufgabe ein Bereich hat. Screenreader und Suchmaschinen verstehen die Seite dadurch besser als bei lauter div-Elementen.",
+      "code_de": "<header>…</header>\n<nav>…</nav>\n<main>\n  <section>…</section>\n</main>\n<footer>…</footer>",
+      "note_de": "main gibt es nur einmal pro Seite."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 3,
+    "fields": {
+      "subtopic": 2,
+      "slug": "link-und-bild",
+      "language": "html",
+      "position": 1,
+      "title_de": "Link und Bild",
+      "summary_de": "Auf andere Seiten verweisen und Bilder einbinden.",
+      "explanation_de": "href gibt das Ziel des Links an. Beim Bild steht die Datei in src. alt beschreibt das Bild für Screenreader und erscheint, wenn das Bild nicht lädt.",
+      "code_de": "<a href=\"https://example.com\" target=\"_blank\">Zur Seite</a>\n\n<img src=\"bild.jpg\" alt=\"Beschreibung des Bildes\">",
+      "note_de": "target=\"_blank\" öffnet einen neuen Tab. Rein dekorative Bilder bekommen ein leeres alt=\"\"."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 4,
+    "fields": {
+      "subtopic": 3,
+      "slug": "formular-mit-label",
+      "language": "html",
+      "position": 1,
+      "title_de": "Formular mit Label",
+      "summary_de": "Eingabefelder richtig beschriften.",
+      "explanation_de": "for beim label und id beim Feld gehören zusammen. Ein Klick auf das Label setzt dann den Cursor ins Feld, und Screenreader lesen die Beschriftung vor.",
+      "code_de": "<form>\n  <label for=\"email\">E-Mail</label>\n  <input id=\"email\" type=\"email\" required>\n  <button type=\"submit\">Senden</button>\n</form>",
+      "note_de": "Ein Platzhalter ersetzt kein Label. Er verschwindet, sobald man tippt."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 5,
+    "fields": {
+      "subtopic": 8,
+      "slug": "mittig-zentrieren",
+      "language": "css",
+      "position": 1,
+      "title_de": "Mittig zentrieren mit Flexbox",
+      "summary_de": "Ein Element waagerecht und senkrecht in die Mitte setzen.",
+      "explanation_de": "display: flex macht die Box zum Flex-Container. justify-content richtet die Kinder auf der Hauptachse aus, align-items auf der Querachse.",
+      "code_de": ".box {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 300px;\n}",
+      "note_de": "Senkrecht zentrieren klappt nur, wenn der Container höher ist als sein Inhalt, zum Beispiel mit min-height."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 6,
+    "fields": {
+      "subtopic": 9,
+      "slug": "responsives-raster",
+      "language": "css",
+      "position": 1,
+      "title_de": "Responsives Raster",
+      "summary_de": "So viele Spalten wie passen, ohne Media Query.",
+      "explanation_de": "repeat(auto-fill, …) legt so viele Spalten an, wie in die Breite passen. minmax(250px, 1fr) sorgt dafür, dass jede Spalte mindestens 250px breit ist und sich den restlichen Platz teilt.",
+      "code_de": ".grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));\n  gap: 16px;\n}",
+      "note_de": "Mit auto-fit statt auto-fill dehnen sich wenige Elemente über die ganze Breite."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 7,
+    "fields": {
+      "subtopic": 10,
+      "slug": "media-query",
+      "language": "css",
+      "position": 1,
+      "title_de": "Media Query",
+      "summary_de": "Regeln nur für bestimmte Bildschirmbreiten.",
+      "explanation_de": "Was in @media (max-width: 600px) steht, gilt nur, solange das Fenster höchstens 600px breit ist. So passt du das Layout ans Handy an.",
+      "code_de": ".menu {\n  display: flex;\n}\n\n@media (max-width: 600px) {\n  .menu {\n    flex-direction: column;\n  }\n}",
+      "note_de": "Die Media Query steht unter den normalen Regeln, sonst überschreiben diese sie wieder."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 8,
+    "fields": {
+      "subtopic": 14,
+      "slug": "for-of",
+      "language": "javascript",
+      "position": 1,
+      "title_de": "for...of-Schleife",
+      "summary_de": "Jedes Element eines Arrays durchlaufen.",
+      "explanation_de": "for...of nimmt nacheinander jeden Wert aus einem Array und führt den Block in den geschweiften Klammern einmal pro Wert aus. Mit const bekommt jeder Durchlauf eine eigene Variable.",
+      "code_de": "const namen = ['Anna', 'Ben', 'Cem'];\n\nfor (const name of namen) {\n  console.log(`Hallo ${name}`);\n}",
+      "note_de": "for...in durchläuft die Schlüssel, bei Arrays also die Indizes als Text. Für die Werte eines Arrays nimmst du for...of."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 9,
+    "fields": {
+      "subtopic": 15,
+      "slug": "map-foreach",
+      "language": "javascript",
+      "position": 1,
+      "title_de": "map und forEach",
+      "summary_de": "Mit jedem Element etwas tun oder ein neues Array bauen.",
+      "explanation_de": "Beide rufen eine Funktion für jedes Element auf. map sammelt die Rückgabewerte in einem neuen Array, das alte bleibt unverändert. forEach gibt nichts zurück und eignet sich für Ausgaben oder Nebenwirkungen.",
+      "code_de": "const preise = [10, 20, 30];\n\nconst brutto = preise.map((preis) => preis * 1.19);\npreise.forEach((preis) => console.log(preis));",
+      "note_de": "Brauchst du ein Ergebnis, nimm map. Ein forEach mit push in ein leeres Array ist fast immer ein map."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 10,
+    "fields": {
+      "subtopic": 20,
+      "slug": "async-await",
+      "language": "javascript",
+      "position": 1,
+      "title_de": "async und await",
+      "summary_de": "Auf eine Antwort warten, ohne die Seite zu blockieren.",
+      "explanation_de": "Eine async-Funktion gibt immer ein Promise zurück. Mit await wartet sie an dieser Stelle, bis das Promise fertig ist, und arbeitet dann mit dem Ergebnis weiter. Fehler fängst du wie gewohnt mit try und catch.",
+      "code_de": "async function ladeAufgaben() {\n  try {\n    const antwort = await fetch('/api/tasks/');\n    if (!antwort.ok) {\n      throw new Error(`Status ${antwort.status}`);\n    }\n    return await antwort.json();\n  } catch (fehler) {\n    console.error(fehler);\n  }\n}",
+      "note_de": "fetch wirft bei 404 oder 500 keinen Fehler. Prüfe deshalb immer antwort.ok."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 11,
+    "fields": {
+      "subtopic": 14,
+      "slug": "for-mit-zaehler",
+      "language": "javascript",
+      "position": 2,
+      "title_de": "for-Schleife mit Zähler",
+      "summary_de": "Eine Schleife, bei der du den Index brauchst.",
+      "explanation_de": "Die drei Teile in der Klammer sind Start, Bedingung und Schritt. Die Schleife läuft, solange die Bedingung wahr ist, und erhöht i nach jedem Durchlauf.",
+      "code_de": "for (let i = 0; i < 5; i++) {\n  console.log(i);\n}",
+      "note_de": "Brauchst du nur die Werte eines Arrays, ist for...of lesbarer."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 12,
+    "fields": {
+      "subtopic": 15,
+      "slug": "filter-find",
+      "language": "javascript",
+      "position": 2,
+      "title_de": "filter und find",
+      "summary_de": "Elemente aussortieren oder das erste passende finden.",
+      "explanation_de": "filter gibt ein neues Array mit allen Elementen zurück, für die die Funktion true liefert. find gibt nur das erste passende Element zurück.",
+      "code_de": "const preise = [10, 20, 30];\n\nconst teuer = preise.filter((preis) => preis > 15); // [20, 30]\nconst erstes = preise.find((preis) => preis > 15); // 20",
+      "note_de": "Findet find nichts, ist das Ergebnis undefined."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 13,
+    "fields": {
+      "subtopic": 16,
+      "slug": "template-strings",
+      "language": "javascript",
+      "position": 1,
+      "title_de": "Template-Strings",
+      "summary_de": "Variablen direkt in Text einsetzen.",
+      "explanation_de": "Text in Backticks darf Platzhalter mit ${…} enthalten. Darin kann jede Variable oder Rechnung stehen.",
+      "code_de": "const name = 'Jens';\nconsole.log(`Hallo ${name}, du hast ${3 + 2} Aufgaben.`);",
+      "note_de": "Template-Strings dürfen auch über mehrere Zeilen gehen."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 14,
+    "fields": {
+      "subtopic": 17,
+      "slug": "objekt-durchlaufen",
+      "language": "javascript",
+      "position": 1,
+      "title_de": "Über ein Objekt laufen",
+      "summary_de": "Schlüssel und Wert eines Objekts gemeinsam durchgehen.",
+      "explanation_de": "Object.entries macht aus einem Objekt ein Array aus Paaren [Schlüssel, Wert]. for...of mit eckigen Klammern zerlegt jedes Paar direkt in zwei Variablen.",
+      "code_de": "const user = { name: 'Jens', role: 'dev' };\n\nfor (const [key, value] of Object.entries(user)) {\n  console.log(key, value);\n}",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 15,
+    "fields": {
+      "subtopic": 24,
+      "slug": "interface",
+      "language": "typescript",
+      "position": 1,
+      "title_de": "Interface",
+      "summary_de": "Festlegen, welche Felder ein Objekt hat.",
+      "explanation_de": "Ein Interface beschreibt die Form eines Objekts: welche Felder es gibt und welchen Typ sie haben. Fehlt ein Feld oder hat es den falschen Typ, meldet der Editor das schon beim Schreiben.",
+      "code_de": "interface Task {\n  id: number;\n  title: string;\n  done: boolean;\n  dueDate?: string;\n}\n\nconst task: Task = { id: 1, title: 'Lernen', done: false };",
+      "note_de": "Das ? macht ein Feld optional. Im fertigen JavaScript gibt es keine Interfaces mehr, sie helfen nur beim Entwickeln."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 16,
+    "fields": {
+      "subtopic": 23,
+      "slug": "typen-fuer-variablen",
+      "language": "typescript",
+      "position": 1,
+      "title_de": "Typen für Variablen",
+      "summary_de": "Festlegen, welche Art Wert eine Variable hat.",
+      "explanation_de": "Der Typ steht nach dem Doppelpunkt. Weist du später einen falschen Wert zu, meldet der Editor das sofort.",
+      "code_de": "let title: string = 'Einkaufen';\nlet count: number = 3;\nlet done: boolean = false;\nlet tags: string[] = ['haus', 'dringend'];",
+      "note_de": "Ist der Typ offensichtlich, erkennt TypeScript ihn selbst: let count = 3 ist schon number."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 17,
+    "fields": {
+      "subtopic": 23,
+      "slug": "union-typ",
+      "language": "typescript",
+      "position": 2,
+      "title_de": "Union-Typ",
+      "summary_de": "Nur bestimmte Werte erlauben.",
+      "explanation_de": "Mit | zählst du die erlaubten Werte auf. Ein Tippfehler wie \"erledig\" fällt so schon im Editor auf.",
+      "code_de": "type Status = 'offen' | 'erledigt' | 'archiviert';\n\nlet status: Status = 'offen';",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 18,
+    "fields": {
+      "subtopic": 25,
+      "slug": "funktion-mit-typen",
+      "language": "typescript",
+      "position": 1,
+      "title_de": "Funktion mit Typen",
+      "summary_de": "Typen für Parameter und Rückgabewert.",
+      "explanation_de": "Jeder Parameter bekommt seinen Typ, der Rückgabetyp steht nach der Klammer. Rufst du die Funktion mit falschen Werten auf, meldet der Editor den Fehler.",
+      "code_de": "function add(a: number, b: number): number {\n  return a + b;\n}\n\nconst greet = (name: string): string => `Hallo ${name}`;",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 19,
+    "fields": {
+      "subtopic": 29,
+      "slug": "input-output",
+      "language": "typescript",
+      "position": 1,
+      "title_de": "input und output",
+      "summary_de": "Daten in eine Komponente geben und Ereignisse zurückmelden.",
+      "explanation_de": "Die Eltern-Komponente gibt Daten über ein input hinein und hört über ein output auf Ereignisse. Im Template der Eltern sieht das so aus: <app-task-item [title]=\"task.title\" (removed)=\"remove(task)\" />.",
+      "code_de": "import { Component, input, output } from '@angular/core';\n\n@Component({\n  selector: 'app-task-item',\n  templateUrl: './task-item.html',\n})\nexport class TaskItem {\n  readonly title = input.required<string>();\n  readonly removed = output<void>();\n}",
+      "note_de": "Ein input ist ein Signal. Im Template schreibst du deshalb title(), nicht title."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 20,
+    "fields": {
+      "subtopic": 31,
+      "slug": "signal-computed",
+      "language": "typescript",
+      "position": 1,
+      "title_de": "signal und computed",
+      "summary_de": "Zustand speichern und davon abgeleitete Werte berechnen.",
+      "explanation_de": "Ein signal hält einen Wert. Mit set ersetzt du ihn, mit update berechnest du ihn aus dem alten Wert. computed leitet einen Wert aus anderen Signals ab und rechnet automatisch neu, wenn sich einer davon ändert.",
+      "code_de": "import { computed, signal } from '@angular/core';\n\nconst anzahl = signal(0);\nconst doppelt = computed(() => anzahl() * 2);\n\nanzahl.set(5);\nanzahl.update((wert) => wert + 1);\nconsole.log(doppelt()); // 12",
+      "note_de": "Ein Signal liest du mit Klammern: anzahl(). Ohne Klammern bekommst du das Signal selbst, nicht seinen Wert."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 21,
+    "fields": {
+      "subtopic": 30,
+      "slug": "for-im-template",
+      "language": "html",
+      "position": 1,
+      "title_de": "@for im Template",
+      "summary_de": "Eine Liste im Template ausgeben.",
+      "explanation_de": "@for wiederholt den Block für jedes Element. track sagt Angular, woran es ein Element wiedererkennt, damit nur geänderte Einträge neu gezeichnet werden. @empty erscheint, wenn die Liste leer ist.",
+      "code_de": "@for (task of tasks; track task.id) {\n  <li>{{ task.title }}</li>\n} @empty {\n  <li>Keine Aufgaben</li>\n}",
+      "note_de": "track ist Pflicht. Hat jedes Element eine id, nimm sie."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 22,
+    "fields": {
+      "subtopic": 30,
+      "slug": "if-im-template",
+      "language": "html",
+      "position": 2,
+      "title_de": "@if im Template",
+      "summary_de": "Etwas nur unter einer Bedingung anzeigen.",
+      "explanation_de": "@if zeigt den Block nur, wenn die Bedingung wahr ist, sonst den @else-Block. Es ersetzt das ältere *ngIf.",
+      "code_de": "@if (isLoggedIn) {\n  <app-dashboard />\n} @else {\n  <app-login />\n}",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 23,
+    "fields": {
+      "subtopic": 34,
+      "slug": "httpclient-im-service",
+      "language": "typescript",
+      "position": 1,
+      "title_de": "HttpClient im Service",
+      "summary_de": "Daten vom Backend laden.",
+      "explanation_de": "provideHttpClient stellt den HttpClient einmal für die ganze App bereit. Ein Service holt ihn mit inject und gibt die Anfrage als Observable zurück.",
+      "code_de": "// app.config.ts\nproviders: [provideHttpClient()]\n\n// task.service.ts\n@Injectable({ providedIn: 'root' })\nexport class TaskService {\n  private http = inject(HttpClient);\n\n  getTasks() {\n    return this.http.get<Task[]>('http://127.0.0.1:8000/api/tasks/');\n  }\n}",
+      "note_de": "Die Anfrage startet erst, wenn jemand das Observable abonniert, zum Beispiel mit subscribe oder toSignal."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 24,
+    "fields": {
+      "subtopic": 42,
+      "slug": "for-schleife",
+      "language": "python",
+      "position": 1,
+      "title_de": "for-Schleife",
+      "summary_de": "Jedes Element einer Liste durchlaufen.",
+      "explanation_de": "Die for-Schleife nimmt nacheinander jedes Element aus einer Liste und führt den eingerückten Block einmal pro Element aus. Die Variable nach for enthält dabei das aktuelle Element.",
+      "code_de": "namen = [\"Anna\", \"Ben\", \"Cem\"]\n\nfor name in namen:\n    print(f\"Hallo {name}\")",
+      "note_de": "Was zur Schleife gehört, erkennt Python an der Einrückung. Fehlt sie, gibt es einen IndentationError."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 25,
+    "fields": {
+      "subtopic": 42,
+      "slug": "range",
+      "language": "python",
+      "position": 2,
+      "title_de": "Zählen mit range()",
+      "summary_de": "Eine Schleife eine bestimmte Anzahl Male laufen lassen.",
+      "explanation_de": "range(stop) erzeugt die Zahlen von 0 bis vor stop. Mit range(start, stop, schritt) legst du Anfang und Schrittweite selbst fest.",
+      "code_de": "for i in range(5):\n    print(i)  # 0, 1, 2, 3, 4\n\nfor i in range(2, 10, 2):\n    print(i)  # 2, 4, 6, 8",
+      "note_de": "range(5) zählt von 0 bis 4. Die 5 selbst ist nicht dabei."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 26,
+    "fields": {
+      "subtopic": 42,
+      "slug": "while-schleife",
+      "language": "python",
+      "position": 3,
+      "title_de": "while-Schleife",
+      "summary_de": "Wiederholen, solange eine Bedingung gilt.",
+      "explanation_de": "Die while-Schleife prüft vor jedem Durchlauf ihre Bedingung. Ist sie wahr, läuft der Block noch einmal. Sie passt, wenn du vorher nicht weißt, wie oft wiederholt werden muss.",
+      "code_de": "versuche = 0\n\nwhile versuche < 3:\n    print(f\"Versuch {versuche + 1}\")\n    versuche += 1",
+      "note_de": "Wird die Bedingung nie falsch, läuft die Schleife endlos. Im Terminal brichst du mit Strg + C ab."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 27,
+    "fields": {
+      "subtopic": 42,
+      "slug": "break-continue",
+      "language": "python",
+      "position": 4,
+      "title_de": "break und continue",
+      "summary_de": "Eine Schleife abbrechen oder einen Durchlauf überspringen.",
+      "explanation_de": "break beendet die Schleife sofort. continue springt zum nächsten Durchlauf, der Rest des Blocks wird übersprungen.",
+      "code_de": "for zahl in [3, 8, -1, 5]:\n    if zahl < 0:\n        break\n    if zahl % 2 == 0:\n        continue\n    print(zahl)  # nur 3",
+      "note_de": "break und continue wirken nur auf die innerste Schleife."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 28,
+    "fields": {
+      "subtopic": 42,
+      "slug": "enumerate",
+      "language": "python",
+      "position": 5,
+      "title_de": "Mitzählen mit enumerate()",
+      "summary_de": "Beim Durchlaufen auch die Nummer des Elements bekommen.",
+      "explanation_de": "enumerate liefert bei jedem Durchlauf zwei Werte: die Nummer und das Element. So brauchst du keinen eigenen Zähler.",
+      "code_de": "aufgaben = [\"Einkaufen\", \"Sport\", \"Lernen\"]\n\nfor nummer, aufgabe in enumerate(aufgaben, start=1):\n    print(f\"{nummer}. {aufgabe}\")",
+      "note_de": "Ohne start beginnt enumerate bei 0."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 29,
+    "fields": {
+      "subtopic": 43,
+      "slug": "liste-aendern",
+      "language": "python",
+      "position": 1,
+      "title_de": "Listen anlegen und ändern",
+      "summary_de": "Mehrere Werte in einer Variable sammeln.",
+      "explanation_de": "Eine Liste steht in eckigen Klammern. Mit append hängst du ein Element hinten an, mit remove entfernst du eins, len gibt die Anzahl zurück.",
+      "code_de": "farben = [\"rot\", \"grün\"]\nfarben.append(\"blau\")\nfarben.remove(\"rot\")\n\nprint(farben)       # ['grün', 'blau']\nprint(len(farben))  # 2",
+      "note_de": "remove löscht nur das erste passende Element und wirft einen ValueError, wenn es fehlt."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 30,
+    "fields": {
+      "subtopic": 43,
+      "slug": "index-slicing",
+      "language": "python",
+      "position": 2,
+      "title_de": "Index und Slicing",
+      "summary_de": "Einzelne Elemente oder Ausschnitte einer Liste holen.",
+      "explanation_de": "Mit einer Zahl in eckigen Klammern holst du ein Element, negative Zahlen zählen von hinten. Mit start:stop bekommst du einen Ausschnitt als neue Liste, stop ist dabei nicht enthalten.",
+      "code_de": "zahlen = [10, 20, 30, 40, 50]\n\nprint(zahlen[0])    # 10\nprint(zahlen[-1])   # 50\nprint(zahlen[1:3])  # [20, 30]",
+      "note_de": "Der Index beginnt bei 0. Ein Index außerhalb der Liste führt zu einem IndexError."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 31,
+    "fields": {
+      "subtopic": 43,
+      "slug": "list-comprehension",
+      "language": "python",
+      "position": 3,
+      "title_de": "List Comprehension",
+      "summary_de": "Eine neue Liste in einer Zeile aus einer anderen bauen.",
+      "explanation_de": "Eine List Comprehension ist eine kurze Schreibweise für eine for-Schleife, die eine neue Liste füllt. Mit if am Ende kommen nur passende Elemente hinein.",
+      "code_de": "zahlen = [1, 2, 3, 4, 5]\n\nquadrate = [z * z for z in zahlen]\ngerade = [z for z in zahlen if z % 2 == 0]",
+      "note_de": "Wird die Zeile lang oder verschachtelt, ist eine normale for-Schleife besser lesbar."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 32,
+    "fields": {
+      "subtopic": 46,
+      "slug": "def-return",
+      "language": "python",
+      "position": 1,
+      "title_de": "Funktionen mit def und return",
+      "summary_de": "Code einmal schreiben und mit anderen Werten wiederverwenden.",
+      "explanation_de": "Mit def legst du eine Funktion an. Die Werte in den Klammern heißen Parameter, ein Parameter mit = hat einen Standardwert. return gibt das Ergebnis an die Stelle zurück, an der die Funktion aufgerufen wurde.",
+      "code_de": "def brutto(netto, steuer=0.19):\n    return round(netto * (1 + steuer), 2)\n\nprint(brutto(100))        # 119.0\nprint(brutto(100, 0.07))  # 107.0",
+      "note_de": "Ohne return gibt eine Funktion None zurück."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 33,
+    "fields": {
+      "subtopic": 44,
+      "slug": "dictionary-durchlaufen",
+      "language": "python",
+      "position": 1,
+      "title_de": "Dictionary durchlaufen",
+      "summary_de": "Schlüssel und Wert gemeinsam durchgehen.",
+      "explanation_de": ".items() liefert bei jedem Durchlauf ein Paar aus Schlüssel und Wert. Die for-Schleife verteilt es direkt auf zwei Variablen.",
+      "code_de": "user = {'name': 'Jens', 'role': 'dev'}\n\nfor key, value in user.items():\n    print(key, value)",
+      "note_de": "Ohne .items() bekommst du nur die Schlüssel."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 34,
+    "fields": {
+      "subtopic": 45,
+      "slug": "f-strings",
+      "language": "python",
+      "position": 1,
+      "title_de": "f-Strings",
+      "summary_de": "Variablen in Text einsetzen.",
+      "explanation_de": "Ein f vor den Anführungszeichen macht aus dem Text einen f-String. In geschweiften Klammern kann jede Variable oder Rechnung stehen.",
+      "code_de": "name = 'Jens'\nprint(f'Hallo {name}, du hast {3 + 2} Aufgaben.')",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 35,
+    "fields": {
+      "subtopic": 51,
+      "slug": "model-definieren",
+      "language": "python",
+      "position": 1,
+      "title_de": "Model definieren",
+      "summary_de": "Eine Datenbanktabelle als Python-Klasse beschreiben.",
+      "explanation_de": "Jede Klasse, die von models.Model erbt, wird zu einer Tabelle. Jedes Feld der Klasse wird zu einer Spalte. Django legt die Spalte id automatisch an.",
+      "code_de": "from django.db import models\n\n\nclass Task(models.Model):\n    title = models.CharField(max_length=200)\n    done = models.BooleanField(default=False)\n    created_at = models.DateTimeField(auto_now_add=True)",
+      "note_de": "Nach jeder Änderung am Model: python manage.py makemigrations und danach python manage.py migrate."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 36,
+    "fields": {
+      "subtopic": 50,
+      "slug": "gitignore-fuer-django",
+      "language": "gitignore",
+      "position": 1,
+      "title_de": ".gitignore für Django",
+      "summary_de": "Was nicht ins Repository gehört.",
+      "explanation_de": "Die virtuelle Umgebung, Cache-Dateien, die lokale Datenbank und die .env bleiben auf deinem Rechner. Wer das Projekt klont, erzeugt sie selbst neu.",
+      "code_de": "env/\n__pycache__/\n*.pyc\ndb.sqlite3\n.env",
+      "note_de": "Lege die .gitignore vor dem ersten Commit an. Was einmal auf GitHub liegt, bleibt in der Historie."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 37,
+    "fields": {
+      "subtopic": 60,
+      "slug": "model-serializer",
+      "language": "python",
+      "position": 1,
+      "title_de": "ModelSerializer",
+      "summary_de": "Ein Model in JSON umwandeln und eingehende Daten prüfen.",
+      "explanation_de": "Ein ModelSerializer baut die Felder aus deinem Model selbst auf. In der inneren Klasse Meta legst du fest, welches Model und welche Felder er verwendet.",
+      "code_de": "from rest_framework import serializers\n\nfrom .models import Task\n\n\nclass TaskSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Task\n        fields = ['id', 'title', 'done', 'created_at']\n        read_only_fields = ['created_at']",
+      "note_de": "fields = '__all__' gibt auch Felder heraus, die du vielleicht nicht zeigen willst. Nenne die Felder lieber einzeln."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 38,
+    "fields": {
+      "subtopic": 61,
+      "slug": "viewset-und-router",
+      "language": "python",
+      "position": 1,
+      "title_de": "ViewSet und Router",
+      "summary_de": "Alle Endpunkte für ein Model auf einmal.",
+      "explanation_de": "Ein ModelViewSet bringt Liste, Detail, Anlegen, Ändern und Löschen mit. Der Router erzeugt dazu die passenden URLs, zum Beispiel /tasks/ und /tasks/1/.",
+      "code_de": "# views.py\nfrom rest_framework import viewsets\n\nclass TaskViewSet(viewsets.ModelViewSet):\n    queryset = Task.objects.all()\n    serializer_class = TaskSerializer\n\n# urls.py\nfrom rest_framework.routers import DefaultRouter\n\nrouter = DefaultRouter()\nrouter.register('tasks', TaskViewSet)\nurlpatterns = router.urls",
+      "note_de": ""
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 39,
+    "fields": {
+      "subtopic": 63,
+      "slug": "login-per-token",
+      "language": "python",
+      "position": 1,
+      "title_de": "Login per Token",
+      "summary_de": "Benutzer über einen Token erkennen.",
+      "explanation_de": "Nach migrate kann jeder Benutzer einen Token bekommen. Das Frontend schickt ihn bei jeder Anfrage im Header mit, und Django REST Framework erkennt daran den Benutzer.",
+      "code_de": "# settings.py\nINSTALLED_APPS += ['rest_framework.authtoken']\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
+      "note_de": "Der Header sieht so aus: Authorization: Token <dein-token>"
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 40,
+    "fields": {
+      "subtopic": 66,
+      "slug": "cors-erlauben",
+      "language": "python",
+      "position": 1,
+      "title_de": "CORS für das Frontend erlauben",
+      "summary_de": "Anfragen vom Angular-Frontend zulassen.",
+      "explanation_de": "Der Browser blockiert Anfragen von localhost:4200 an localhost:8000, solange das Backend sie nicht ausdrücklich erlaubt. Das Paket django-cors-headers setzt dafür die nötigen Header.",
+      "code_de": "pip install django-cors-headers\n\n# settings.py\nINSTALLED_APPS += ['corsheaders']\nMIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE\nCORS_ALLOWED_ORIGINS = ['http://localhost:4200']",
+      "note_de": "Die CorsMiddleware muss möglichst weit oben in MIDDLEWARE stehen."
+    }
+  },
+  {
+    "model": "app_content.concept",
+    "pk": 41,
+    "fields": {
+      "subtopic": 80,
+      "slug": "branch-anlegen",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Mit einem Branch arbeiten",
+      "summary_de": "An einem Feature arbeiten, ohne main zu verändern.",
+      "explanation_de": "Ein Branch ist ein eigener Entwicklungszweig. Du legst ihn an, speicherst dort deine Commits und schickst ihn zu GitHub. Über einen Pull Request kommt er später in main.",
+      "code_de": "git switch -c feat/login\ngit add .\ngit commit -m \"feat: add login form\"\ngit push -u origin feat/login",
+      "note_de": "Wechsle vor dem neuen Branch auf main und führe git pull aus, sonst fehlen dir neue Änderungen."
+    }
+  }
+]

@@ -1,0 +1,450 @@
+[
+  {
+    "model": "app_content.entry",
+    "pk": 1,
+    "fields": {
+      "subtopic": 78,
+      "slug": "projekt-mit-github-verbinden",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Neues Projekt mit GitHub verbinden",
+      "description_de": "Einmal am Anfang: Ordner zum Git-Repo machen und mit einem leeren GitHub-Repo verknüpfen.",
+      "code_de": "git init\ngit add .\ngit commit -m \"Erster Commit\"\ngit branch -M main\ngit remote add origin https://github.com/{{githubUser}}/{{repo}}.git\ngit push -u origin main",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 2,
+    "fields": {
+      "subtopic": 78,
+      "slug": "repo-herunterladen",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "Repo herunterladen",
+      "description_de": "Ein bestehendes Projekt von GitHub auf den Rechner holen.",
+      "code_de": "git clone https://github.com/{{githubUser}}/{{repo}}.git",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 3,
+    "fields": {
+      "subtopic": 79,
+      "slug": "speichern-und-hochladen",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Täglicher Ablauf: speichern und hochladen",
+      "description_de": "Änderungen vormerken, mit Nachricht speichern und zu GitHub schicken.",
+      "code_de": "git status\ngit add .\ngit commit -m \"Was ich geändert habe\"\ngit push",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 4,
+    "fields": {
+      "subtopic": 79,
+      "slug": "neueste-aenderungen-holen",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "Neueste Änderungen holen",
+      "description_de": "Bevor du anfängst zu arbeiten, besonders wenn mehrere am Repo arbeiten.",
+      "code_de": "git pull",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 5,
+    "fields": {
+      "subtopic": 79,
+      "slug": "verlauf-anzeigen",
+      "language": "terminal",
+      "position": 3,
+      "title_de": "Verlauf kompakt anzeigen",
+      "description_de": "Wer hat wann was committet, als Baum.",
+      "code_de": "git log --oneline --graph --all",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 6,
+    "fields": {
+      "subtopic": 80,
+      "slug": "branch-anlegen-und-wechseln",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Neuen Branch anlegen und wechseln",
+      "description_de": "Für ein neues Feature, ohne main zu verändern.",
+      "code_de": "git switch -c feature/login\n\n# zurück zu main\ngit switch main",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 7,
+    "fields": {
+      "subtopic": 84,
+      "slug": "commit-nachricht-aendern",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Letzte Commit-Nachricht ändern",
+      "description_de": "Nur solange der Commit noch nicht gepusht ist.",
+      "code_de": "git commit --amend -m \"Neue Nachricht\"",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 8,
+    "fields": {
+      "subtopic": 84,
+      "slug": "datei-aus-staging-nehmen",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "Datei wieder aus „git add“ herausnehmen",
+      "description_de": "Die Änderung bleibt erhalten, wird nur nicht mit committet.",
+      "code_de": "git restore --staged datei.py",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 9,
+    "fields": {
+      "subtopic": 40,
+      "slug": "virtuelle-umgebung",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Virtuelle Umgebung anlegen und aktivieren",
+      "description_de": "Jedes Projekt bekommt seine eigenen Pakete. Danach steht (env) vor der Eingabezeile.",
+      "code_de": "python -m venv env\nenv\\Scripts\\activate",
+      "code_unix_de": "python3 -m venv env\nsource env/bin/activate"
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 10,
+    "fields": {
+      "subtopic": 40,
+      "slug": "requirements-txt",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "Pakete festhalten und wieder installieren",
+      "description_de": "requirements.txt gehört ins Repo, der env-Ordner nicht.",
+      "code_de": "pip freeze > requirements.txt\n\n# auf einem anderen Rechner\npip install -r requirements.txt",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 11,
+    "fields": {
+      "subtopic": 50,
+      "slug": "django-projekt-anlegen",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Django installieren und Projekt anlegen",
+      "description_de": "Der Punkt am Ende legt das Projekt im aktuellen Ordner an, ohne zusätzlichen Unterordner.",
+      "code_de": "pip install django\ndjango-admin startproject core .",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 12,
+    "fields": {
+      "subtopic": 50,
+      "slug": "neue-app-anlegen",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "Neue App anlegen",
+      "description_de": "Danach den App-Namen in settings.py bei INSTALLED_APPS eintragen.",
+      "code_de": "python manage.py startapp tasks",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 13,
+    "fields": {
+      "subtopic": 50,
+      "slug": "entwicklungsserver-starten",
+      "language": "terminal",
+      "position": 3,
+      "title_de": "Entwicklungsserver starten",
+      "description_de": "Läuft dann unter http://127.0.0.1:8000",
+      "code_de": "python manage.py runserver",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 14,
+    "fields": {
+      "subtopic": 51,
+      "slug": "migrationen",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Migrationen erstellen und anwenden",
+      "description_de": "Immer nach Änderungen an models.py.",
+      "code_de": "python manage.py makemigrations\npython manage.py migrate",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 15,
+    "fields": {
+      "subtopic": 52,
+      "slug": "admin-benutzer-anlegen",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Admin-Benutzer anlegen",
+      "description_de": "Für den Login unter /admin.",
+      "code_de": "python manage.py createsuperuser",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 16,
+    "fields": {
+      "subtopic": 59,
+      "slug": "rest-framework-installieren",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "REST Framework installieren",
+      "description_de": "Danach in settings.py bei INSTALLED_APPS eintragen.",
+      "code_de": "pip install djangorestframework",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 17,
+    "fields": {
+      "subtopic": 28,
+      "slug": "angular-cli-installieren",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Angular CLI installieren",
+      "description_de": "Einmalig pro Rechner.",
+      "code_de": "npm install -g @angular/cli",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 18,
+    "fields": {
+      "subtopic": 28,
+      "slug": "projekt-anlegen-und-starten",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "Neues Projekt anlegen und starten",
+      "description_de": "-o öffnet direkt den Browser auf localhost:4200.",
+      "code_de": "ng new {{project}}\ncd {{project}}\nng serve -o",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 19,
+    "fields": {
+      "subtopic": 28,
+      "slug": "komponente-und-service-erzeugen",
+      "language": "terminal",
+      "position": 3,
+      "title_de": "Komponente und Service erzeugen",
+      "description_de": "g c und g s sind die Kurzformen.",
+      "code_de": "ng g c components/task-list\nng g s services/task",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 20,
+    "fields": {
+      "subtopic": 38,
+      "slug": "fuer-veroeffentlichung-bauen",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Für die Veröffentlichung bauen",
+      "description_de": "Ergebnis liegt in dist/ und kann auf den Server.",
+      "code_de": "ng build",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 21,
+    "fields": {
+      "subtopic": 99,
+      "slug": "per-ssh-verbinden",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Per SSH verbinden",
+      "description_de": "Ab Windows 10 direkt im Terminal möglich.",
+      "code_de": "ssh {{serverUser}}@{{serverIp}}",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 22,
+    "fields": {
+      "subtopic": 101,
+      "slug": "datei-auf-server-kopieren",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Datei auf den Server kopieren",
+      "description_de": "Vom eigenen Rechner aus ausführen, nicht auf dem Server.",
+      "code_de": "scp {{project}}.zip {{serverUser}}@{{serverIp}}:/home/{{serverUser}}/",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 23,
+    "fields": {
+      "subtopic": 102,
+      "slug": "server-aktualisieren",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Server aktualisieren",
+      "description_de": "Regelmäßig, und als Erstes auf einem neuen Server.",
+      "code_de": "sudo apt update && sudo apt upgrade -y",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 24,
+    "fields": {
+      "subtopic": 103,
+      "slug": "dienst-neu-starten",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Dienst neu starten und Status prüfen",
+      "description_de": "Zum Beispiel nach einer Änderung an der Nginx-Konfiguration.",
+      "code_de": "sudo nginx -t\nsudo systemctl restart nginx\nsudo systemctl status nginx",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 25,
+    "fields": {
+      "subtopic": 103,
+      "slug": "logs-live-mitlesen",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "Logs live mitlesen",
+      "description_de": "Strg + C beendet die Ausgabe.",
+      "code_de": "sudo journalctl -u gunicorn -f",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 26,
+    "fields": {
+      "subtopic": 104,
+      "slug": "firewall-einrichten",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Firewall einrichten",
+      "description_de": "SSH zuerst erlauben, sonst sperrst du dich aus.",
+      "code_de": "sudo ufw allow OpenSSH\nsudo ufw allow 'Nginx Full'\nsudo ufw enable",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 27,
+    "fields": {
+      "subtopic": 106,
+      "slug": "https-mit-lets-encrypt",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "HTTPS-Zertifikat mit Let’s Encrypt",
+      "description_de": "Die Domain muss vorher auf den Server zeigen.",
+      "code_de": "sudo apt install certbot python3-certbot-nginx\nsudo certbot --nginx -d {{domain}}",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 28,
+    "fields": {
+      "subtopic": 92,
+      "slug": "projekt-starten",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Projekt starten",
+      "description_de": "Baut die Images neu und startet im Hintergrund.",
+      "code_de": "docker compose up -d --build",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 29,
+    "fields": {
+      "subtopic": 92,
+      "slug": "laufende-container",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "Laufende Container anzeigen",
+      "description_de": "Name, Status und Ports.",
+      "code_de": "docker ps",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 30,
+    "fields": {
+      "subtopic": 92,
+      "slug": "alles-stoppen",
+      "language": "terminal",
+      "position": 3,
+      "title_de": "Alles stoppen",
+      "description_de": "Die Daten in Volumes bleiben erhalten.",
+      "code_de": "docker compose down",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 31,
+    "fields": {
+      "subtopic": 97,
+      "slug": "logs-ansehen",
+      "language": "terminal",
+      "position": 1,
+      "title_de": "Logs ansehen",
+      "description_de": "-f folgt der Ausgabe live.",
+      "code_de": "docker compose logs -f",
+      "code_unix_de": ""
+    }
+  },
+  {
+    "model": "app_content.entry",
+    "pk": 32,
+    "fields": {
+      "subtopic": 97,
+      "slug": "in-container-hineinschauen",
+      "language": "terminal",
+      "position": 2,
+      "title_de": "In einen Container hineinschauen",
+      "description_de": "Zum Beispiel, um dort migrate auszuführen.",
+      "code_de": "docker compose exec web bash\n\n# oder direkt\ndocker compose exec web python manage.py migrate",
+      "code_unix_de": ""
+    }
+  }
+]
