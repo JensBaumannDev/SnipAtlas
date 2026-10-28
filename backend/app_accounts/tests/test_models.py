@@ -1,3 +1,5 @@
+from datetime import UTC, date, datetime
+
 import pytest
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
@@ -175,3 +177,9 @@ def test_authenticate_inactive_user_fails(user: User) -> None:
     user.is_active = False
     user.save()
     assert authenticate(email='ada@example.com', password=PASSWORD) is None
+
+
+# Since
+def test_since_is_join_date_in_local_time(user: User) -> None:
+    user.date_joined = datetime(2026, 10, 27, 23, 30, tzinfo=UTC)
+    assert user.since == date(2026, 10, 28)

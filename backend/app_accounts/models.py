@@ -1,5 +1,8 @@
+from datetime import date
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
@@ -56,6 +59,10 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return self.email
+
+    @property
+    def since(self) -> date:
+        return timezone.localdate(self.date_joined)
 
     def save(self, *args: object, **kwargs: object) -> None:
         self.email = UserManager.normalize_email(self.email)
