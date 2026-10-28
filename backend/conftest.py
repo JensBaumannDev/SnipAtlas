@@ -5,7 +5,17 @@ from django.test import Client
 from rest_framework.test import APIClient
 
 from app_accounts.models import User
-from app_content.models import Concept, DebugGuide, Entry, ErrorMessage, Group, Subtopic, Topic
+from app_content.models import (
+    Blueprint,
+    BlueprintStep,
+    Concept,
+    DebugGuide,
+    Entry,
+    ErrorMessage,
+    Group,
+    Subtopic,
+    Topic,
+)
 
 
 @pytest.fixture(autouse=True)
@@ -156,3 +166,39 @@ def topic_guide(topic: Topic) -> DebugGuide:
         code_unix_de='python3 manage.py test',
     )
     return guide
+
+
+@pytest.fixture
+def blueprint(topic: Topic) -> Blueprint:
+    blueprint = Blueprint.objects.create(
+        topic=topic,
+        slug='django-projekt-anlegen',
+        title_de='Neues Django-Projekt anlegen',
+        title_en='Create a new Django project',
+        summary_de='Vom leeren Ordner bis zum ersten Model.',
+        summary_en='From an empty folder to the first model.',
+    )
+    venv = blueprint.steps.create(
+        slug='virtuelle-umgebung',
+        title_de='Virtuelle Umgebung einrichten',
+        title_en='Set up a virtual environment',
+        why_de='Jedes Projekt bekommt eigene Pakete.',
+        note_de='Danach steht (env) vor der Eingabezeile.',
+        position=1,
+    )
+    venv.codes.create(
+        language='terminal', code_de='python -m venv env', code_unix_de='python3 -m venv env'
+    )
+    folder = blueprint.steps.create(
+        slug='ordner-anlegen',
+        title_de='Projektordner anlegen',
+        why_de='Alles liegt in einem Ordner.',
+    )
+    folder.codes.create(language='terminal', code_de='cd {{project}}', position=1)
+    folder.codes.create(language='terminal', code_de='mkdir {{project}}')
+    return blueprint
+
+
+@pytest.fixture
+def venv_step(blueprint: Blueprint) -> BlueprintStep:
+    return blueprint.steps.get(slug='virtuelle-umgebung')

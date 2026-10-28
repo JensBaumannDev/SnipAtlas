@@ -5,6 +5,9 @@ from django.db.models import Model, ProtectedError
 from django.utils import translation
 
 from app_content.models import (
+    Blueprint,
+    BlueprintCode,
+    BlueprintStep,
     CodeLanguage,
     Concept,
     DebugGuide,
@@ -618,3 +621,180 @@ def test_steps_with_same_position_keep_creation_order(
     step_second = debug_guide.steps.create(title_de='Zweiter', position=5)
     assert list(error_message.steps.all())[-2:] == [first, second]
     assert list(debug_guide.steps.all())[-2:] == [step_first, step_second]
+
+
+# Blueprints
+@pytest.fixture
+def venv_code(venv_step: BlueprintStep) -> BlueprintCode:
+    return venv_step.codes.get()
+
+
+def test_blueprint_parts_str(
+    blueprint: Blueprint, venv_step: BlueprintStep, venv_code: BlueprintCode
+) -> None:
+    assert [str(blueprint), str(venv_step), str(venv_code)] == [
+        'Neues Django-Projekt anlegen',
+        'Virtuelle Umgebung einrichten',
+        'Terminal',
+    ]
+
+
+def test_blueprint_texts_follow_active_language(
+    blueprint: Blueprint, venv_step: BlueprintStep, venv_code: BlueprintCode
+) -> None:
+    with translation.override('en'):
+        assert [blueprint.title, blueprint.summary] == [
+            'Create a new Django project',
+            'From an empty folder to the first model.',
+        ]
+        assert [venv_step.title, venv_step.why, venv_step.note] == [
+            'Set up a virtual environment',
+            'Jedes Projekt bekommt eigene Pakete.',
+            'Danach steht (env) vor der Eingabezeile.',
+        ]
+        assert venv_code.os_code == {'win': 'python -m venv env', 'unix': 'python3 -m venv env'}
+
+
+def test_blueprint_parts_are_valid(
+    blueprint: Blueprint, venv_step: BlueprintStep, venv_code: BlueprintCode
+) -> None:
+    for obj in (blueprint, venv_step, venv_code):
+        obj.full_clean()
+
+
+def test_blueprint_requires_all_fields(db: None) -> None:
+    assert set(all_error_codes(Blueprint())) == {'topic', 'slug', 'title', 'summary'}
+
+
+def test_blueprint_step_requires_all_fields_except_note(blueprint: Blueprint) -> None:
+    assert set(all_error_codes(BlueprintStep(blueprint=blueprint))) == {'slug', 'title', 'why'}
+
+
+def test_blueprint_step_without_note_is_valid(venv_step: BlueprintStep) -> None:
+    venv_step.note_de = ''
+    venv_step.full_clean()
+
+
+def test_blueprint_code_requires_language_and_code(venv_step: BlueprintStep) -> None:
+    assert set(all_error_codes(BlueprintCode(step=venv_step))) == {'language', 'code'}
+
+
+@pytest.mark.parametrize('fixture', ['blueprint', 'venv_step'])
+def test_blueprint_and_step_title_is_limited(request: pytest.FixtureRequest, fixture: str) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.title_de = 'x' * 121
+    assert error_codes(obj, 'title_de') == ['max_length']
+
+
+@pytest.mark.parametrize('fixture', ['blueprint', 'venv_step'])
+def test_blueprint_and_step_slug_is_limited(request: pytest.FixtureRequest, fixture: str) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.slug = 'x' * 81
+    assert error_codes(obj, 'slug') == ['max_length']
+
+
+@pytest.mark.parametrize('fixture', ['blueprint', 'venv_step'])
+@pytest.mark.parametrize('slug', ['Ordner', 'ordner_anlegen', 'ordner-', 'ordner anlegen'])
+def test_blueprint_and_step_reject_invalid_slug(
+    request: pytest.FixtureRequest, fixture: str, slug: str
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    obj.slug = slug
+    assert 'invalid' in error_codes(obj, 'slug')
+
+
+def test_blueprint_code_rejects_unknown_language(venv_code: BlueprintCode) -> None:
+    venv_code.language = 'cobol'
+    assert error_codes(venv_code, 'language') == ['invalid_choice']
+
+
+def test_blueprint_slug_is_unique(blueprint: Blueprint) -> None:
+    with pytest.raises(IntegrityError):
+        Blueprint.objects.create(topic=blueprint.topic, slug='django-projekt-anlegen')
+
+
+def test_blueprint_step_slug_is_unique_per_blueprint(blueprint: Blueprint) -> None:
+    with pytest.raises(IntegrityError):
+        blueprint.steps.create(slug='ordner-anlegen', title_de='Doppelt')
+
+
+def test_blueprint_step_slug_is_checked_by_full_clean(blueprint: Blueprint) -> None:
+    step = BlueprintStep(blueprint=blueprint, slug='ordner-anlegen', title_de='x', why_de='x')
+    assert error_codes(step, '__all__') == ['unique_together']
+
+
+def test_other_blueprint_may_reuse_step_slug(blueprint: Blueprint) -> None:
+    other = Blueprint.objects.create(topic=blueprint.topic, slug='angular-projekt')
+    assert other.steps.create(slug='ordner-anlegen', title_de='Ordner').pk
+
+
+@pytest.mark.parametrize('slug', ['', 'Ordner', 'ordner_anlegen', 'ordner-', 'ordner\n', 'a/b'])
+def test_blueprint_step_slug_is_checked_in_database(blueprint: Blueprint, slug: str) -> None:
+    with pytest.raises(IntegrityError):
+        blueprint.steps.create(slug=slug, title_de='Neu')
+
+
+@pytest.mark.parametrize('slug', ['', 'Django', 'django_projekt', 'a/b'])
+def test_blueprint_slug_is_checked_in_database(topic: Topic, slug: str) -> None:
+    with pytest.raises(IntegrityError):
+        Blueprint.objects.create(topic=topic, slug=slug)
+
+
+@pytest.mark.parametrize('language', ['', 'cobol', 'Python'])
+def test_blueprint_code_language_is_checked_in_database(
+    venv_step: BlueprintStep, language: str
+) -> None:
+    with pytest.raises(IntegrityError):
+        venv_step.codes.create(language=language, code_de='ls')
+
+
+def test_blueprint_code_is_text_without_unix_code(blueprint: Blueprint) -> None:
+    codes = BlueprintCode.objects.filter(step__slug='ordner-anlegen')
+    assert [code.os_code for code in codes] == ['mkdir {{project}}', 'cd {{project}}']
+
+
+def test_blueprint_unix_code_in_english_needs_german(venv_code: BlueprintCode) -> None:
+    venv_code.code_unix_de = ''
+    venv_code.code_unix_en = 'ls'
+    assert error_codes(venv_code, 'code_unix_de') == ['required']
+
+
+def test_blueprints_are_ordered_by_topic_and_position(group: Group, topic: Topic) -> None:
+    git = Topic.objects.create(group=group, slug='git', name_de='Git', position=-1)
+    late = Blueprint.objects.create(topic=topic, slug='spaet', position=2)
+    early = Blueprint.objects.create(topic=topic, slug='frueh', position=1)
+    same = Blueprint.objects.create(topic=topic, slug='gleich', position=1)
+    git_blueprint = Blueprint.objects.create(topic=git, slug='repo', position=9)
+    assert list(Blueprint.objects.all()) == [git_blueprint, early, same, late]
+
+
+def test_blueprint_steps_are_ordered_by_position(blueprint: Blueprint) -> None:
+    same = blueprint.steps.create(slug='gleich', title_de='Gleich', position=1)
+    slugs = [step.slug for step in blueprint.steps.all()]
+    assert slugs == ['ordner-anlegen', 'virtuelle-umgebung', same.slug]
+
+
+def test_blueprint_codes_are_ordered_by_position(venv_step: BlueprintStep) -> None:
+    first = venv_step.codes.get()
+    second = venv_step.codes.create(language='python', code_de='pass')
+    early = venv_step.codes.create(language='python', code_de='pass', position=-1)
+    assert list(venv_step.codes.all()) == [early, first, second]
+
+
+def test_deleting_blueprint_deletes_steps_and_codes(blueprint: Blueprint) -> None:
+    blueprint.delete()
+    assert not BlueprintStep.objects.exists()
+    assert not BlueprintCode.objects.exists()
+
+
+def test_deleting_step_deletes_only_its_codes(venv_step: BlueprintStep) -> None:
+    venv_step.delete()
+    assert list(BlueprintCode.objects.values_list('step__slug', flat=True)) == [
+        'ordner-anlegen',
+        'ordner-anlegen',
+    ]
+
+
+def test_topic_with_blueprints_cannot_be_deleted(blueprint: Blueprint) -> None:
+    with pytest.raises(ProtectedError):
+        blueprint.topic.delete()

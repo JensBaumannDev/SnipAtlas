@@ -6,7 +6,18 @@ from django.test import Client
 from django.urls import reverse
 
 from app_accounts.models import User
-from app_content.models import Concept, DebugGuide, Entry, ErrorMessage, Group, Subtopic, Topic
+from app_content.models import (
+    Blueprint,
+    BlueprintCode,
+    BlueprintStep,
+    Concept,
+    DebugGuide,
+    Entry,
+    ErrorMessage,
+    Group,
+    Subtopic,
+    Topic,
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -39,7 +50,16 @@ def form_error_codes(response: HttpResponse, field: str) -> list[str]:
 
 
 # Access
-CONTENT_ADMINS = ['group', 'topic', 'entry', 'concept', 'errormessage', 'debugguide']
+CONTENT_ADMINS = [
+    'group',
+    'topic',
+    'entry',
+    'concept',
+    'errormessage',
+    'debugguide',
+    'blueprint',
+    'blueprintstep',
+]
 
 
 @pytest.mark.parametrize('model', CONTENT_ADMINS)
@@ -917,3 +937,346 @@ def test_change_page_escapes_html_in_steps(
     content = admin_client.get(url).content.decode()
     assert SCRIPT not in content
     assert ESCAPED in content
+
+
+# Blueprints
+BLUEPRINT_ADMINS = {'blueprint': 'blueprint', 'blueprintstep': 'venv_step'}
+
+
+def blueprint_data(topic: Topic, /, **changes: str) -> dict:
+    data = {
+        'topic': topic.pk,
+        'slug': 'angular-projekt',
+        'title_de': 'Neues Angular-Projekt',
+        'title_en': '',
+        'summary_de': 'Vom leeren Ordner bis zur ersten Komponente.',
+        'summary_en': '',
+        'position': 0,
+        'steps-TOTAL_FORMS': 2,
+        'steps-INITIAL_FORMS': 0,
+    }
+    for index, (slug, position) in enumerate([('cli-installieren', 1), ('ordner-anlegen', 0)]):
+        prefix = f'steps-{index}-'
+        data |= {f'{prefix}slug': slug, f'{prefix}title_de': slug, f'{prefix}title_en': ''}
+        data |= {f'{prefix}why_de': 'Weil.', f'{prefix}why_en': '', f'{prefix}note_de': ''}
+        data |= {f'{prefix}note_en': '', f'{prefix}position': position}
+    return data | changes
+
+
+def step_data(blueprint: Blueprint, /, **changes: str) -> dict:
+    data = {
+        'blueprint': blueprint.pk,
+        'slug': 'server-starten',
+        'title_de': 'Server starten',
+        'title_en': '',
+        'why_de': 'Zeigt die Seite im Browser.',
+        'why_en': '',
+        'note_de': '',
+        'note_en': '',
+        'position': 5,
+        'codes-TOTAL_FORMS': 1,
+        'codes-INITIAL_FORMS': 0,
+        'codes-0-language': 'terminal',
+        'codes-0-code_de': 'python manage.py runserver',
+        'codes-0-code_en': '',
+        'codes-0-code_unix_de': '',
+        'codes-0-code_unix_en': '',
+        'codes-0-position': 0,
+    }
+    return data | changes
+
+
+def add_blueprint(admin_client: Client, topic: Topic, /, **changes: str) -> HttpResponse:
+    url = reverse('admin:app_content_blueprint_add')
+    return admin_client.post(url, blueprint_data(topic, **changes))
+
+
+def add_step(admin_client: Client, blueprint: Blueprint, /, **changes: str) -> HttpResponse:
+    url = reverse('admin:app_content_blueprintstep_add')
+    return admin_client.post(url, step_data(blueprint, **changes))
+
+
+def test_admin_adds_blueprint_with_steps(admin_client: Client, topic: Topic) -> None:
+    response = add_blueprint(admin_client, topic)
+    blueprint = Blueprint.objects.get(slug='angular-projekt')
+    assert response.status_code == 302
+    assert blueprint.topic == topic
+    assert [step.slug for step in blueprint.steps.all()] == ['ordner-anlegen', 'cli-installieren']
+
+
+@pytest.mark.parametrize(
+    ('field', 'value', 'code'),
+    [
+        ('slug', 'Angular_Projekt', 'invalid'),
+        ('topic', '999999', 'invalid_choice'),
+        ('title_de', '', 'required'),
+        ('title_de', 'x' * 121, 'max_length'),
+        ('summary_de', '', 'required'),
+    ],
+)
+def test_admin_rejects_invalid_blueprint_values(
+    admin_client: Client, topic: Topic, field: str, value: str, code: str
+) -> None:
+    response = add_blueprint(admin_client, topic, **{field: value})
+    assert form_error_codes(response, field) == [code]
+    assert not Blueprint.objects.exists()
+
+
+def test_admin_rejects_duplicate_blueprint_slug(admin_client: Client, blueprint: Blueprint) -> None:
+    response = add_blueprint(admin_client, blueprint.topic, slug='django-projekt-anlegen')
+    assert form_error_codes(response, 'slug') == ['unique']
+    assert Blueprint.objects.count() == 1
+
+
+@pytest.mark.parametrize(
+    ('field', 'value', 'code'),
+    [('slug', 'Ordner_Anlegen', 'invalid'), ('why_de', '', 'required')],
+)
+def test_admin_checks_blueprint_steps(
+    admin_client: Client, topic: Topic, field: str, value: str, code: str
+) -> None:
+    response = add_blueprint(admin_client, topic, **{f'steps-0-{field}': value})
+    assert step_error_codes(response, field) == [code]
+    assert not Blueprint.objects.exists()
+
+
+def test_admin_rejects_duplicate_step_slugs_in_blueprint(
+    admin_client: Client, topic: Topic
+) -> None:
+    response = add_blueprint(admin_client, topic, **{'steps-1-slug': 'cli-installieren'})
+    formset = response.context['inline_admin_formsets'][0].formset
+    assert formset.non_form_errors()
+    assert not Blueprint.objects.exists()
+
+
+def test_blueprint_change_page_links_to_steps(
+    admin_client: Client, blueprint: Blueprint, venv_step: BlueprintStep
+) -> None:
+    response = admin_client.get(reverse('admin:app_content_blueprint_change', args=[blueprint.pk]))
+    step_url = reverse('admin:app_content_blueprintstep_change', args=[venv_step.pk])
+    assert response.status_code == 200
+    assert step_url in response.content.decode()
+
+
+def test_admin_changes_blueprint(admin_client: Client, blueprint: Blueprint) -> None:
+    changes = {'slug': blueprint.slug, 'title_de': 'Django-Projekt', 'steps-TOTAL_FORMS': 0}
+    url = reverse('admin:app_content_blueprint_change', args=[blueprint.pk])
+    response = admin_client.post(url, blueprint_data(blueprint.topic, **changes))
+    blueprint.refresh_from_db()
+    assert response.status_code == 302
+    assert (blueprint.title_de, blueprint.steps.count()) == ('Django-Projekt', 2)
+
+
+def test_admin_adds_step_with_code(admin_client: Client, blueprint: Blueprint) -> None:
+    response = add_step(admin_client, blueprint, **{'codes-0-code_unix_de': 'python3 -m venv'})
+    step = blueprint.steps.get(slug='server-starten')
+    assert response.status_code == 302
+    assert step.codes.get().os_code == {
+        'win': 'python manage.py runserver',
+        'unix': 'python3 -m venv',
+    }
+
+
+def test_admin_adds_step_without_code(admin_client: Client, blueprint: Blueprint) -> None:
+    response = add_step(admin_client, blueprint, **{'codes-0-language': '', 'codes-0-code_de': ''})
+    assert response.status_code == 302
+    assert not blueprint.steps.get(slug='server-starten').codes.exists()
+
+
+@pytest.mark.parametrize(
+    ('field', 'value', 'code'),
+    [
+        ('slug', 'Server_Starten', 'invalid'),
+        ('blueprint', '999999', 'invalid_choice'),
+        ('title_de', '', 'required'),
+        ('why_de', '', 'required'),
+    ],
+)
+def test_admin_rejects_invalid_step_values(
+    admin_client: Client, blueprint: Blueprint, field: str, value: str, code: str
+) -> None:
+    response = add_step(admin_client, blueprint, **{field: value})
+    assert form_error_codes(response, field) == [code]
+    assert not blueprint.steps.filter(position=5).exists()
+
+
+def test_admin_rejects_duplicate_step_slug(admin_client: Client, blueprint: Blueprint) -> None:
+    response = add_step(admin_client, blueprint, slug='ordner-anlegen')
+    assert form_error_codes(response, '__all__') == ['unique_together']
+    assert blueprint.steps.count() == 2
+
+
+@pytest.mark.parametrize(
+    ('changes', 'field'),
+    [
+        ({'codes-0-language': ''}, 'language'),
+        ({'codes-0-code_de': ''}, 'code_de'),
+        ({'codes-0-code_unix_en': 'ls'}, 'code_unix_de'),
+    ],
+)
+def test_admin_checks_step_codes(
+    admin_client: Client, blueprint: Blueprint, changes: dict, field: str
+) -> None:
+    response = add_step(admin_client, blueprint, **changes)
+    assert step_error_codes(response, field) == ['required']
+    assert not blueprint.steps.filter(slug='server-starten').exists()
+
+
+def test_admin_changes_step(admin_client: Client, venv_step: BlueprintStep) -> None:
+    changes = {'slug': venv_step.slug, 'title_de': 'venv anlegen', 'codes-TOTAL_FORMS': 0}
+    url = reverse('admin:app_content_blueprintstep_change', args=[venv_step.pk])
+    response = admin_client.post(url, step_data(venv_step.blueprint, **changes))
+    venv_step.refresh_from_db()
+    assert response.status_code == 302
+    assert (venv_step.title_de, venv_step.codes.count()) == ('venv anlegen', 1)
+
+
+def test_admin_deletes_step_but_keeps_blueprint(
+    admin_client: Client, venv_step: BlueprintStep
+) -> None:
+    url = reverse('admin:app_content_blueprintstep_delete', args=[venv_step.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    assert response.status_code == 302
+    assert list(venv_step.blueprint.steps.values_list('slug', flat=True)) == ['ordner-anlegen']
+
+
+def test_admin_deletes_blueprint_with_steps_and_codes(
+    admin_client: Client, blueprint: Blueprint
+) -> None:
+    url = reverse('admin:app_content_blueprint_delete', args=[blueprint.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    assert response.status_code == 302
+    assert not Blueprint.objects.exists()
+    assert not BlueprintCode.objects.exists()
+
+
+def test_admin_keeps_topic_with_blueprints(admin_client: Client, blueprint: Blueprint) -> None:
+    url = reverse('admin:app_content_topic_delete', args=[blueprint.topic.pk])
+    response = admin_client.post(url, {'post': 'yes'})
+    assert response.context['protected']
+    assert Topic.objects.filter(pk=blueprint.topic.pk).exists()
+
+
+@pytest.mark.parametrize(('model', 'fixture'), BLUEPRINT_ADMINS.items())
+def test_blueprint_lists_save_position(
+    admin_client: Client, request: pytest.FixtureRequest, model: str, fixture: str
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    data = {
+        'form-TOTAL_FORMS': 1,
+        'form-INITIAL_FORMS': 1,
+        'form-0-id': obj.pk,
+        'form-0-position': 8,
+        '_save': 'Save',
+    }
+    response = admin_client.post(reverse(f'admin:app_content_{model}_changelist'), data)
+    obj.refresh_from_db()
+    assert response.status_code == 302
+    assert obj.position == 8
+
+
+@pytest.mark.parametrize(('model', 'fixture'), BLUEPRINT_ADMINS.items())
+def test_staff_with_view_permission_cannot_change_blueprint_parts(
+    staff_client: Client,
+    staff_user: User,
+    request: pytest.FixtureRequest,
+    model: str,
+    fixture: str,
+) -> None:
+    obj = request.getfixturevalue(fixture)
+    staff_user.user_permissions.add(Permission.objects.get(codename=f'view_{model}'))
+    url = reverse(f'admin:app_content_{model}_change', args=[obj.pk])
+    assert staff_client.get(url).status_code == 200
+    assert staff_client.post(url, {'slug': 'neu'}).status_code == 403
+    assert type(obj).objects.get(pk=obj.pk).slug == obj.slug
+
+
+def test_blueprint_list_filters_and_searches(
+    admin_client: Client, group: Group, blueprint: Blueprint
+) -> None:
+    git = Topic.objects.create(group=group, slug='git', name_de='Git')
+    Blueprint.objects.create(topic=git, slug='repo', title_de='Repository anlegen')
+    url = reverse('admin:app_content_blueprint_changelist')
+    by_topic = admin_client.get(url, {'topic__id__exact': blueprint.topic.pk})
+    by_search = admin_client.get(url, {'q': 'django-projekt'})
+    assert list(by_topic.context['cl'].result_list) == [blueprint]
+    assert list(by_search.context['cl'].result_list) == [blueprint]
+
+
+def test_step_list_shows_blueprint_and_filters(
+    admin_client: Client, blueprint: Blueprint, venv_step: BlueprintStep
+) -> None:
+    other = Blueprint.objects.create(topic=blueprint.topic, slug='andere', title_de='Andere')
+    other.steps.create(slug='umgebung', title_de='Umgebung')
+    url = reverse('admin:app_content_blueprintstep_changelist')
+    by_blueprint = admin_client.get(url, {'blueprint__id__exact': blueprint.pk})
+    by_search = admin_client.get(url, {'q': 'virtuelle'})
+    assert 'Neues Django-Projekt anlegen' in by_blueprint.content.decode()
+    assert len(by_blueprint.context['cl'].result_list) == 2
+    assert list(by_search.context['cl'].result_list) == [venv_step]
+
+
+@pytest.mark.parametrize('model', BLUEPRINT_ADMINS)
+def test_blueprint_lists_escape_html_in_title(
+    admin_client: Client, blueprint: Blueprint, model: str
+) -> None:
+    Blueprint.objects.filter(pk=blueprint.pk).update(title_de=SCRIPT)
+    blueprint.steps.update(title_de=SCRIPT)
+    content = admin_client.get(reverse(f'admin:app_content_{model}_changelist')).content.decode()
+    assert SCRIPT not in content
+    assert ESCAPED in content
+
+
+def test_step_change_page_escapes_html_in_code(
+    admin_client: Client, venv_step: BlueprintStep
+) -> None:
+    venv_step.codes.update(code_de=SCRIPT)
+    url = reverse('admin:app_content_blueprintstep_change', args=[venv_step.pk])
+    content = admin_client.get(url).content.decode()
+    assert SCRIPT not in content
+    assert ESCAPED in content
+
+
+def test_admin_deletes_single_step_code(admin_client: Client, blueprint: Blueprint) -> None:
+    step = blueprint.steps.get(slug='ordner-anlegen')
+    data = {'slug': step.slug, 'codes-TOTAL_FORMS': 2, 'codes-INITIAL_FORMS': 2}
+    for index, code in enumerate(step.codes.all()):
+        prefix = f'codes-{index}-'
+        data |= {f'{prefix}id': code.pk, f'{prefix}step': step.pk, f'{prefix}language': 'terminal'}
+        data |= {f'{prefix}code_de': code.code_de, f'{prefix}position': code.position}
+    data['codes-0-DELETE'] = 'on'
+    url = reverse('admin:app_content_blueprintstep_change', args=[step.pk])
+    response = admin_client.post(url, step_data(blueprint, **data))
+    assert response.status_code == 302
+    assert [code.code for code in step.codes.all()] == ['cd {{project}}']
+    assert blueprint.steps.get(slug='virtuelle-umgebung').codes.count() == 1
+
+
+def test_admin_deletes_single_step_in_blueprint(admin_client: Client, blueprint: Blueprint) -> None:
+    data = {'slug': blueprint.slug, 'steps-TOTAL_FORMS': 2, 'steps-INITIAL_FORMS': 2}
+    for index, step in enumerate(blueprint.steps.all()):
+        prefix = f'steps-{index}-'
+        data |= {f'{prefix}id': step.pk, f'{prefix}blueprint': blueprint.pk}
+        data |= {f'{prefix}slug': step.slug, f'{prefix}title_de': step.title_de}
+        data |= {f'{prefix}why_de': step.why_de, f'{prefix}position': step.position}
+    data['steps-0-DELETE'] = 'on'
+    url = reverse('admin:app_content_blueprint_change', args=[blueprint.pk])
+    response = admin_client.post(url, blueprint_data(blueprint.topic, **data))
+    assert response.status_code == 302
+    assert list(blueprint.steps.values_list('slug', flat=True)) == ['virtuelle-umgebung']
+    assert list(BlueprintCode.objects.values_list('step__slug', flat=True)) == [
+        'virtuelle-umgebung'
+    ]
+
+
+def test_admin_rejects_moving_step_to_blueprint_with_same_slug(
+    admin_client: Client, blueprint: Blueprint, venv_step: BlueprintStep
+) -> None:
+    other = Blueprint.objects.create(topic=blueprint.topic, slug='andere', title_de='Andere')
+    other.steps.create(slug='virtuelle-umgebung', title_de='Umgebung')
+    changes = {'slug': venv_step.slug, 'codes-TOTAL_FORMS': 0}
+    url = reverse('admin:app_content_blueprintstep_change', args=[venv_step.pk])
+    response = admin_client.post(url, step_data(other, **changes))
+    venv_step.refresh_from_db()
+    assert form_error_codes(response, '__all__') == ['unique_together']
+    assert venv_step.blueprint == blueprint

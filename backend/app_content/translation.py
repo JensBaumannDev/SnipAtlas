@@ -1,6 +1,9 @@
 from modeltranslation.translator import TranslationOptions, register
 
 from .models import (
+    Blueprint,
+    BlueprintCode,
+    BlueprintStep,
     Concept,
     DebugGuide,
     DebugGuideStep,
@@ -56,3 +59,18 @@ class DebugGuideTranslation(TranslationOptions):
 @register(DebugGuideStep)
 class DebugGuideStepTranslation(TranslationOptions):
     fields = ('title', 'text', 'code', 'code_unix')
+
+
+@register(Blueprint)
+class BlueprintTranslation(TranslationOptions):
+    fields = ('title', 'summary')
+
+
+@register(BlueprintStep)
+class BlueprintStepTranslation(TranslationOptions):
+    fields = ('title', 'why', 'note')
+
+
+@register(BlueprintCode)
+class BlueprintCodeTranslation(TranslationOptions):
+    fields = ('code', 'code_unix')
