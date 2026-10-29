@@ -27,6 +27,11 @@
   color: var(--muted);
 }
 
+.profile-section__field {
+  width: 100%;
+  max-width: rem(400);
+}
+
 // Rows
 .profile-row {
   display: flex;

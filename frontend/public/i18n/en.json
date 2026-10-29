@@ -89,6 +89,7 @@
       "currentPassword": "Current password",
       "newPassword": "New password",
       "passwordSubmit": "Change password",
+      "passwordSaved": "Your password has been changed. You are now signed out on other devices.",
       "data": "Your data",
       "dataText": "Downloads your account, your progress and your requests as a file.",
       "dataSubmit": "Download data",

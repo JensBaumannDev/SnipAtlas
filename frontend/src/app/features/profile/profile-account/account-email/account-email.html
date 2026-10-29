@@ -1,0 +1,44 @@
+<form class="profile-section__block" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="field profile-section__field">
+    <label class="field__label" for="account-email-input">{{ 'auth.email' | translate }}</label>
+    <input
+      class="input"
+      id="account-email-input"
+      type="email"
+      autocomplete="email"
+      formControlName="email"
+      [attr.aria-invalid]="emailError() || !!emailServerError()"
+      [attr.aria-describedby]="emailError() || emailServerError() ? 'account-email-error' : null"
+    />
+    @if (emailError()) {
+      <p class="field__error" id="account-email-error">
+        {{ 'auth.errors.emailFormat' | translate }}
+      </p>
+    } @else if (emailServerError(); as key) {
+      <p class="field__error" id="account-email-error">{{ key | translate }}</p>
+    }
+  </div>
+  <div class="field profile-section__field">
+    <label class="field__label" for="account-email-password">{{
+      'profile.account.currentPassword' | translate
+    }}</label>
+    <app-password-field>
+      <input
+        class="input input--action"
+        id="account-email-password"
+        type="password"
+        autocomplete="current-password"
+        formControlName="password"
+      />
+    </app-password-field>
+  </div>
+  @if (errorText(); as message) {
+    <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
+  }
+  @if (saved()) {
+    <p class="auth-form__note" role="status">{{ 'profile.account.emailSaved' | translate }}</p>
+  }
+  <button class="btn btn--ghost" type="submit" [disabled]="!filled() || pending()">
+    {{ 'profile.account.emailSubmit' | translate }}
+  </button>
+</form>

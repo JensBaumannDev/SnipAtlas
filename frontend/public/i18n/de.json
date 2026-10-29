@@ -89,6 +89,7 @@
       "currentPassword": "Aktuelles Passwort",
       "newPassword": "Neues Passwort",
       "passwordSubmit": "Passwort ändern",
+      "passwordSaved": "Dein Passwort ist geändert. Auf anderen Geräten bist du jetzt abgemeldet.",
       "data": "Deine Daten",
       "dataText": "Lädt dein Konto, deinen Fortschritt und deine Anfragen als Datei herunter.",
       "dataSubmit": "Daten herunterladen",

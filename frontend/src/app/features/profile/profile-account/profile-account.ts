@@ -1,20 +1,20 @@
-import { Component, DOCUMENT, computed, inject, signal } from '@angular/core';
+import { Component, DOCUMENT, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
 import { Favorites } from '../../../core/favorites';
 import { downloadJson } from '../../../core/file-download';
-import { PASSWORD_MIN_LENGTH } from '../../../core/password-rules';
 import { Session } from '../../../core/session';
 import { UserRequestApi } from '../../../core/user-request-api';
-import { PasswordField } from '../../../shared/password-field/password-field';
+import { AccountDelete } from './account-delete/account-delete';
+import { AccountEmail } from './account-email/account-email';
+import { AccountPassword } from './account-password/account-password';
 
 const EXPORT_FILE = 'snipatlas-daten.json';
 
 @Component({
-  imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
+  imports: [AccountDelete, AccountEmail, AccountPassword, TranslatePipe],
   selector: 'app-profile-account',
   styleUrl: './profile-account.scss',
   templateUrl: './profile-account.html',
@@ -26,66 +26,6 @@ export class ProfileAccount {
   private readonly progress = inject(BlueprintProgress);
   private readonly favorites = inject(Favorites);
   private readonly requests = toSignal(inject(UserRequestApi).getMine(), { initialValue: [] });
-  private readonly formBuilder = inject(FormBuilder).nonNullable;
-
-  protected readonly minLength = PASSWORD_MIN_LENGTH;
-  protected readonly emailSaved = signal(false);
-  protected readonly passwordSent = signal(false);
-  protected readonly confirmDelete = signal(false);
-
-  protected readonly emailForm = this.formBuilder.group({
-    email: [this.session.user()?.email ?? '', [Validators.required, Validators.email]],
-  });
-
-  protected readonly passwordForm = this.formBuilder.group({
-    current: ['', Validators.required],
-    next: ['', [Validators.required, Validators.minLength(PASSWORD_MIN_LENGTH)]],
-  });
-
-  private readonly emailValue = toSignal(this.emailForm.controls.email.valueChanges, {
-    initialValue: this.emailForm.controls.email.value,
-  });
-
-  private readonly passwordValues = toSignal(this.passwordForm.valueChanges, {
-    initialValue: this.passwordForm.getRawValue(),
-  });
-
-  protected readonly emailChanged = computed(
-    () =>
-      this.emailValue().trim() !== '' && this.emailValue().trim() !== this.session.user()?.email,
-  );
-
-  protected readonly passwordFilled = computed(() => {
-    const { current, next } = this.passwordValues();
-    return !!current && !!next;
-  });
-
-  protected emailError(): boolean {
-    const control = this.emailForm.controls.email;
-    return control.hasError('email') && control.touched;
-  }
-
-  protected passwordError(): boolean {
-    const control = this.passwordForm.controls.next;
-    return control.hasError('minlength') && control.touched;
-  }
-
-  protected saveEmail(): void {
-    this.emailForm.markAllAsTouched();
-    if (this.emailForm.invalid) {
-      return;
-    }
-    this.session.update({ email: this.emailForm.controls.email.value.trim() });
-    this.emailSaved.set(true);
-  }
-
-  protected changePassword(): void {
-    this.passwordForm.markAllAsTouched();
-    if (this.passwordForm.invalid) {
-      return;
-    }
-    this.passwordSent.set(true);
-  }
 
   protected download(): void {
     downloadJson(this.document, EXPORT_FILE, {
@@ -97,11 +37,6 @@ export class ProfileAccount {
   }
 
   protected logout(): void {
-    this.session.logout();
-    this.router.navigateByUrl('/');
-  }
-
-  protected deleteAccount(): void {
     this.session.logout();
     this.router.navigateByUrl('/');
   }
