@@ -5,3 +5,9 @@ class InvalidCredentials(APIException):
     status_code = 400
     default_detail = 'Email or password is wrong.'
     default_code = 'invalid_credentials'
+
+
+class WrongPassword(APIException):
+    status_code = 400
+    default_detail = 'The current password is wrong.'
+    default_code = 'wrong_password'

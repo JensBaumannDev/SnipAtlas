@@ -14,6 +14,7 @@ from config.permissions import CsrfProtected
 from config.throttling import AuthRateThrottle
 
 from .serializers import (
+    EmailChangeSerializer,
     FavoriteSerializer,
     LoginSerializer,
     RegisterSerializer,
@@ -66,6 +67,18 @@ class MeView(generics.RetrieveUpdateAPIView):
 
     def get_object(self) -> User:
         return self.request.user
+
+
+# Account
+class EmailView(generics.GenericAPIView):
+    serializer_class = EmailChangeSerializer
+    throttle_classes = AUTH_THROTTLES
+
+    def post(self, request: Request) -> Response:
+        serializer = self.get_serializer(request.user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 # Favorites
