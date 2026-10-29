@@ -19,6 +19,7 @@ from .serializers import (
     FavoriteSerializer,
     LoginSerializer,
     PasswordChangeSerializer,
+    PasswordResetConfirmSerializer,
     PasswordResetSerializer,
     RegisterSerializer,
     SettingsSerializer,
@@ -119,6 +120,11 @@ class PasswordResetView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PasswordResetConfirmView(PasswordResetView):
+    serializer_class = PasswordResetConfirmSerializer
+    throttle_classes = AUTH_THROTTLES
 
 
 # Favorites
