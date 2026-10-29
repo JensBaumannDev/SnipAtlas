@@ -24,7 +24,7 @@ def reset_link(user: User) -> str:
 
 
 def send_reset_mail(user: User) -> None:
-    body = render_to_string('emails/password_reset.txt', {'link': reset_link(user)})
+    body = render_to_string('app_accounts/emails/password_reset.txt', {'link': reset_link(user)})
     try:
         EmailMessage(RESET_SUBJECT, body, to=[user.email]).send()
     except SMTPException, OSError:
