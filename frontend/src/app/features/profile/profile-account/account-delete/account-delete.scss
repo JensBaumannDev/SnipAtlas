@@ -1,0 +1,24 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Confirm
+.account-delete__form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.account-delete__confirm {
+  font-weight: $font-weight-medium;
+}
+
+.account-delete__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+}

@@ -15,6 +15,11 @@ export interface Credentials {
   password: string;
 }
 
+export interface PasswordChange {
+  current: string;
+  next: string;
+}
+
 export type AccountSettings = Partial<Pick<SessionUser, 'notifyByMail' | 'accent'>>;
 
 export type AuthEvent = 'restore' | 'login' | 'logout';
@@ -77,6 +82,24 @@ export class Session {
       next: (user) => this.user.set(user),
       error: () => this.user.set(previous),
     });
+  }
+
+  changeEmail(credentials: Credentials): Observable<void> {
+    return this.http
+      .post<SessionUser>(`${URL}email/`, credentials)
+      .pipe(map((user) => this.user.set(user)));
+  }
+
+  changePassword(change: PasswordChange): Observable<void> {
+    return this.http
+      .post<SessionUser>(`${URL}password/`, change)
+      .pipe(map((user) => this.user.set(user)));
+  }
+
+  deleteAccount(password: string): Observable<void> {
+    return this.http
+      .post<void>(`${URL}delete-account/`, { password })
+      .pipe(map(() => this.clear()));
   }
 
   private signIn(user: SessionUser, event: AuthEvent): void {

@@ -1,0 +1,39 @@
+<div class="profile-section__block">
+  <p class="profile-section__text">{{ 'profile.account.deleteText' | translate }}</p>
+  @if (confirming()) {
+    <form class="account-delete__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <p class="account-delete__confirm" role="alert">
+        {{ 'profile.account.deleteConfirm' | translate }}
+      </p>
+      <div class="field profile-section__field">
+        <label class="field__label" for="account-delete-password">{{
+          'profile.account.currentPassword' | translate
+        }}</label>
+        <app-password-field>
+          <input
+            class="input input--action"
+            id="account-delete-password"
+            type="password"
+            autocomplete="current-password"
+            formControlName="password"
+          />
+        </app-password-field>
+      </div>
+      @if (errorText(); as message) {
+        <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
+      }
+      <div class="account-delete__actions">
+        <button class="btn btn--danger" type="submit" [disabled]="form.invalid || pending()">
+          {{ 'profile.account.deleteSubmit' | translate }}
+        </button>
+        <button class="btn btn--ghost" type="button" (click)="cancel()">
+          {{ 'profile.account.cancel' | translate }}
+        </button>
+      </div>
+    </form>
+  } @else {
+    <button class="btn btn--danger" type="button" (click)="confirming.set(true)">
+      {{ 'profile.account.delete' | translate }}
+    </button>
+  }
+</div>
