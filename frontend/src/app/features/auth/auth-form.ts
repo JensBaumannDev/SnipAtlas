@@ -1,5 +1,14 @@
-import { ElementRef, Injector, afterNextRender, inject } from '@angular/core';
+import {
+  ElementRef,
+  Injector,
+  WritableSignal,
+  afterNextRender,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl } from '@angular/forms';
+import { ApiError } from '../../core/api-error';
 
 export function hasVisibleError(
   control: AbstractControl,
@@ -16,4 +25,10 @@ export function injectFocusInvalid(): () => void {
     afterNextRender(() => host.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(), {
       injector,
     });
+}
+
+export function injectApiError(form: AbstractControl): WritableSignal<ApiError | undefined> {
+  const error = signal<ApiError | undefined>(undefined);
+  form.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => error.set(undefined));
+  return error;
 }

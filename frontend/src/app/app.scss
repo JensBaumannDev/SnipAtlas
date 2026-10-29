@@ -64,6 +64,10 @@
   }
 }
 
+.shell__notice {
+  margin-bottom: $space-xl;
+}
+
 /* #region RESPONSIVE */
 @include desktop {
   :host {

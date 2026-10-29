@@ -6,6 +6,14 @@
 <div class="shell">
   <app-sidebar />
   <main class="shell__content" id="main" tabindex="-1">
+    @if (serverStatus.unreachable()) {
+      <app-note
+        class="shell__notice"
+        role="alert"
+        [label]="'apiErrors.unreachableLabel' | translate"
+        [text]="'apiErrors.network_error' | translate"
+      />
+    }
     <router-outlet />
   </main>
   <app-outline />

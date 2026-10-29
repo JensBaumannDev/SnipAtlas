@@ -8,10 +8,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { finalize } from 'rxjs';
+import { fieldErrorKey, formErrorText, toApiError } from '../../../core/api-error';
 import { PASSWORD_MIN_LENGTH } from '../../../core/password-rules';
 import { Session } from '../../../core/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
-import { hasVisibleError, injectFocusInvalid } from '../auth-form';
+import { hasVisibleError, injectApiError, injectFocusInvalid } from '../auth-form';
 
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const { password, repeat } = group.getRawValue() as { password: string; repeat: string };
@@ -43,6 +45,12 @@ export class Register {
     { validators: passwordsMatch },
   );
 
+  protected readonly pending = signal(false);
+  protected readonly error = injectApiError(this.form);
+  protected readonly errorText = computed(() => formErrorText(this.error()));
+  protected readonly emailServerError = computed(() => fieldErrorKey(this.error(), 'email'));
+  protected readonly passwordServerError = computed(() => fieldErrorKey(this.error(), 'password'));
+
   private readonly values = toSignal(this.form.valueChanges, {
     initialValue: this.form.getRawValue(),
   });
@@ -73,7 +81,21 @@ export class Register {
       this.focusInvalid();
       return;
     }
-    this.session.login(this.form.controls.email.value);
-    this.done.emit();
+    this.send();
+  }
+
+  private send(): void {
+    const { email, password } = this.form.getRawValue();
+    this.pending.set(true);
+    this.session
+      .register({ email: email.trim(), password })
+      .pipe(finalize(() => this.pending.set(false)))
+      .subscribe({
+        next: () => this.done.emit(),
+        error: (error: unknown) => {
+          this.error.set(toApiError(error));
+          this.focusInvalid();
+        },
+      });
   }
 }

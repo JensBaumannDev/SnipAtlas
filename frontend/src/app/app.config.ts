@@ -15,9 +15,11 @@ import {
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
+import { apiErrorInterceptor } from './core/api-error-interceptor';
 import { languageInterceptor } from './core/language-interceptor';
 import { PageTitle } from './core/page-title';
 import { Preferences } from './core/preferences';
+import { Session } from './core/session';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,7 +31,7 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
     provideHttpClient(
-      withInterceptors([languageInterceptor]),
+      withInterceptors([languageInterceptor, apiErrorInterceptor]),
       withXsrfConfiguration({ cookieName: 'csrftoken', headerName: 'X-CSRFToken' }),
     ),
     provideTranslateService({
@@ -40,6 +42,7 @@ export const appConfig: ApplicationConfig = {
       }),
     }),
     provideAppInitializer(() => inject(TranslateService).use(inject(Preferences).language())),
+    provideAppInitializer(() => inject(Session).restore()),
     { provide: TitleStrategy, useExisting: PageTitle },
   ],
 };

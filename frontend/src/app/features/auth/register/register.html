@@ -10,13 +10,15 @@
       type="email"
       autocomplete="email"
       formControlName="email"
-      [attr.aria-invalid]="emailError()"
-      [attr.aria-describedby]="emailError() ? 'register-email-error' : null"
+      [attr.aria-invalid]="emailError() || !!emailServerError()"
+      [attr.aria-describedby]="emailError() || emailServerError() ? 'register-email-error' : null"
     />
     @if (emailError()) {
       <p class="field__error" id="register-email-error">
         {{ 'auth.errors.emailFormat' | translate }}
       </p>
+    } @else if (emailServerError(); as key) {
+      <p class="field__error" id="register-email-error">{{ key | translate }}</p>
     }
   </div>
 
@@ -30,13 +32,15 @@
         autocomplete="new-password"
         formControlName="password"
         aria-describedby="register-password-message"
-        [attr.aria-invalid]="passwordError()"
+        [attr.aria-invalid]="passwordError() || !!passwordServerError()"
       />
     </app-password-field>
     @if (passwordError()) {
       <p class="field__error" id="register-password-message">
         {{ 'auth.errors.passwordLength' | translate: { min: minLength } }}
       </p>
+    } @else if (passwordServerError(); as key) {
+      <p class="field__error" id="register-password-message">{{ key | translate }}</p>
     } @else {
       <p class="field__hint" id="register-password-message">
         {{ 'auth.passwordHint' | translate: { min: minLength } }}
@@ -66,7 +70,15 @@
     }
   </div>
 
-  <button class="btn btn--primary auth-form__submit" type="submit" [disabled]="!filled()">
+  @if (errorText(); as message) {
+    <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
+  }
+
+  <button
+    class="btn btn--primary auth-form__submit"
+    type="submit"
+    [disabled]="!filled() || pending()"
+  >
     {{ 'auth.registerSubmit' | translate }}
   </button>
 </form>
