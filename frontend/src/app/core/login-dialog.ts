@@ -13,7 +13,7 @@ export class LoginDialog {
     ]);
     return this.injector.get(Dialog).open(AuthDialog, {
       ariaLabelledBy: 'auth-title',
-      autoFocus: '#login-email',
+      autoFocus: '#auth-title',
       backdropClass: 'dialog-backdrop',
       disableClose: true,
     });
