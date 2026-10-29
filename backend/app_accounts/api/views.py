@@ -1,4 +1,4 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.db.models import QuerySet
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
@@ -17,6 +17,7 @@ from .serializers import (
     EmailChangeSerializer,
     FavoriteSerializer,
     LoginSerializer,
+    PasswordChangeSerializer,
     RegisterSerializer,
     SettingsSerializer,
     UserSerializer,
@@ -78,6 +79,17 @@ class EmailView(generics.GenericAPIView):
         serializer = self.get_serializer(request.user, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        return Response(serializer.data)
+
+
+class PasswordView(generics.GenericAPIView):
+    serializer_class = PasswordChangeSerializer
+    throttle_classes = AUTH_THROTTLES
+
+    def post(self, request: Request) -> Response:
+        serializer = self.get_serializer(request.user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        update_session_auth_hash(request, serializer.save())
         return Response(serializer.data)
 
 
