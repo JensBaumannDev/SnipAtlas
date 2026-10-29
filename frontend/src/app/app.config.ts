@@ -17,6 +17,7 @@ import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 import { apiErrorInterceptor } from './core/http/api-error-interceptor';
+import { forwardedForInterceptor } from './core/http/forwarded-for-interceptor';
 import { languageInterceptor } from './core/http/language-interceptor';
 import { PageTitle } from './core/ui/page-title';
 import { Preferences } from './core/user-data/preferences';
@@ -34,7 +35,7 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
     provideHttpClient(
-      withInterceptors([languageInterceptor, apiErrorInterceptor]),
+      withInterceptors([languageInterceptor, forwardedForInterceptor, apiErrorInterceptor]),
       withXsrfConfiguration({ cookieName: 'csrftoken', headerName: 'X-CSRFToken' }),
     ),
     provideTranslateService({
