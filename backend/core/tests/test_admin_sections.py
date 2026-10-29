@@ -147,7 +147,7 @@ def test_index_shows_section_headings(superuser_client: Client, language: str) -
     response = superuser_client.get(INDEX_URL, HTTP_ACCEPT_LANGUAGE=language)
     content = response.content.decode()
     for name, _ in SECTIONS[language]:
-        assert f'class="section">{name.replace("&", "&amp;")}</a>' in content
+        assert f'">{name.replace("&", "&amp;")}</span>' in content
     assert 'App_' not in content
 
 
