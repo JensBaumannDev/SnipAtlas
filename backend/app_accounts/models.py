@@ -119,6 +119,13 @@ class User(AbstractUser):
     def since(self) -> date:
         return timezone.localdate(self.date_joined)
 
+    def progress(self) -> dict[str, list[str]]:
+        steps = self.completed_steps.values_list('step__blueprint__slug', 'step__slug')
+        progress: dict[str, list[str]] = {}
+        for blueprint, step in steps:
+            progress.setdefault(blueprint, []).append(step)
+        return progress
+
     def save(self, *args: object, **kwargs: object) -> None:
         self.email = UserManager.normalize_email(self.email)
         super().save(*args, **kwargs)
