@@ -57,6 +57,22 @@ class BugSuggestionSerializer(SuggestionSerializer):
         }
 
 
+# My requests
+class MyRequestSerializer(serializers.ModelSerializer):
+    date = serializers.DateField(source='created_on', read_only=True)
+
+    class Meta:
+        model = Suggestion
+        fields = ('id', 'kind', 'subject', 'date', 'status', 'answer')
+        read_only_fields = fields
+
+    def to_representation(self, instance: Suggestion) -> dict:
+        data = super().to_representation(instance)
+        if not instance.answer:
+            del data['answer']
+        return data
+
+
 KIND_SERIALIZERS = {
     Kind.ENTRY: EntrySuggestionSerializer,
     Kind.IMPROVEMENT: ImprovementSuggestionSerializer,
