@@ -64,13 +64,17 @@ class LoginSerializer(serializers.Serializer):
 
 
 # Account
+def check_current_password(user: User, value: str) -> str:
+    if not user.check_password(value):
+        raise WrongPassword
+    return value
+
+
 class CurrentPasswordSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True, trim_whitespace=False)
 
     def validate_password(self, value: str) -> str:
-        if not self.instance.check_password(value):
-            raise WrongPassword
-        return value
+        return check_current_password(self.instance, value)
 
 
 class EmailChangeSerializer(CurrentPasswordSerializer):
@@ -82,6 +86,26 @@ class EmailChangeSerializer(CurrentPasswordSerializer):
     def update(self, user: User, validated_data: dict) -> User:
         user.email = validated_data['email']
         user.save(update_fields=['email'])
+        return user
+
+    def to_representation(self, user: User) -> dict:
+        return UserSerializer(user).data
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    current = serializers.CharField(write_only=True, trim_whitespace=False)
+    next = serializers.CharField(write_only=True, trim_whitespace=False)
+
+    def validate_current(self, value: str) -> str:
+        return check_current_password(self.instance, value)
+
+    def validate_next(self, value: str) -> str:
+        password_validation.validate_password(value, self.instance)
+        return value
+
+    def update(self, user: User, validated_data: dict) -> User:
+        user.set_password(validated_data['next'])
+        user.save(update_fields=['password'])
         return user
 
     def to_representation(self, user: User) -> dict:
