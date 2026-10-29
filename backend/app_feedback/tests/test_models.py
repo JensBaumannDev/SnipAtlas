@@ -1,3 +1,5 @@
+from datetime import UTC, date, datetime
+
 import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
@@ -53,6 +55,12 @@ def test_short_improvement_subject_is_whole_idea() -> None:
     assert improvement(idea='Eine Suche über alle Bereiche.').subject == (
         'Eine Suche über alle Bereiche.'
     )
+
+
+# Date
+def test_created_on_is_local_day_of_creation(entry_suggestion: Suggestion) -> None:
+    entry_suggestion.created_at = datetime(2026, 10, 20, 22, 30, tzinfo=UTC)
+    assert entry_suggestion.created_on == date(2026, 10, 21)
 
 
 # Contact

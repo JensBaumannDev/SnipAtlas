@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.conf import settings
 from django.core.validators import MaxLengthValidator, MinLengthValidator, URLValidator
 from django.db import models
@@ -153,6 +155,10 @@ class Suggestion(models.Model):
         if self.kind == Kind.BUG:
             return self.location
         return shorten(self.idea)
+
+    @property
+    def created_on(self) -> date:
+        return timezone.localdate(self.created_at)
 
     @property
     def contact_email(self) -> str:

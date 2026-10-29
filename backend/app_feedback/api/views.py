@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
@@ -6,7 +7,7 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from config.throttling import RequestRateThrottle
 
-from .serializers import KIND_SERIALIZERS, SuggestionSerializer
+from .serializers import KIND_SERIALIZERS, MyRequestSerializer, SuggestionSerializer
 
 
 def sent_kind(data: object) -> object:
@@ -35,3 +36,10 @@ class RequestCreateView(generics.CreateAPIView):
     def perform_create(self, serializer: SuggestionSerializer) -> None:
         user = self.request.user
         serializer.save(user=user if user.is_authenticated else None)
+
+
+class MyRequestListView(generics.ListAPIView):
+    serializer_class = MyRequestSerializer
+
+    def get_queryset(self) -> QuerySet:
+        return self.request.user.suggestions.all()
