@@ -1,3 +1,5 @@
+"""Mails sent to users of the accounts app."""
+
 import logging
 from smtplib import SMTPException
 from urllib.parse import urlencode
@@ -18,12 +20,14 @@ RESET_PATH = '/passwort-zuruecksetzen'
 
 
 def reset_link(user: User) -> str:
+    """Return the frontend link with uid and token for a password reset."""
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     query = urlencode({'uid': uid, 'token': default_token_generator.make_token(user)})
     return f'{settings.FRONTEND_URL}{RESET_PATH}?{query}'
 
 
 def send_reset_mail(user: User) -> None:
+    """Send the password reset mail and log errors instead of raising them."""
     body = render_to_string('app_accounts/emails/password_reset.txt', {'link': reset_link(user)})
     try:
         EmailMessage(RESET_SUBJECT, body, to=[user.email]).send()

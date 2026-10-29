@@ -1,3 +1,5 @@
+"""Admin for answering requests."""
+
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.forms import ModelForm
@@ -35,6 +37,8 @@ SUBMITTED_FIELDS = (
 
 @admin.register(Suggestion)
 class SuggestionAdmin(admin.ModelAdmin):
+    """Admin for requests that shows only the fields of their kind."""
+
     list_display = ('id', 'kind', 'subject', 'contact_email', 'status', 'created_at')
     list_display_links = ('id', 'subject')
     list_filter = ('status', 'kind')
@@ -53,6 +57,7 @@ class SuggestionAdmin(admin.ModelAdmin):
     actions = ('mark_done',)
 
     def get_fieldsets(self, request: HttpRequest, obj: Suggestion | None = None) -> list:
+        """Return the fieldsets for the kind of request."""
         fieldsets = [(None, {'fields': ('kind', 'contact_email', 'created_at')})]
         if obj:
             name, fields = KIND_FIELDSETS[obj.kind]
@@ -61,11 +66,13 @@ class SuggestionAdmin(admin.ModelAdmin):
         return fieldsets
 
     def has_add_permission(self, request: HttpRequest) -> bool:
+        """Forbid adding requests in the admin."""
         return False
 
     def save_model(
         self, request: HttpRequest, obj: Suggestion, form: ModelForm, change: bool
     ) -> None:
+        """Save the request and send the mail for the first answer."""
         first_answer = bool(obj.answer) and obj.answered_at is None
         super().save_model(request, obj, form, change)
         if first_answer:
@@ -73,4 +80,5 @@ class SuggestionAdmin(admin.ModelAdmin):
 
     @admin.action(description='Als erledigt markieren', permissions=('change',))
     def mark_done(self, request: HttpRequest, queryset: QuerySet[Suggestion]) -> None:
+        """Mark the selected requests as done."""
         queryset.update(status=Status.DONE)

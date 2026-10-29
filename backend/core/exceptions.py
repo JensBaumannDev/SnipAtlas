@@ -1,3 +1,5 @@
+"""Shared error format for all API responses."""
+
 import logging
 
 from django.core.exceptions import PermissionDenied
@@ -11,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def api_exception_handler(exc: Exception, context: dict) -> Response:
+    """Turn any exception into a response in the shared error format."""
     response = exception_handler(exc, context)
     if response is None:
         return server_error(exc)
@@ -19,6 +22,7 @@ def api_exception_handler(exc: Exception, context: dict) -> Response:
 
 
 def as_api_exception(exc: Exception) -> exceptions.APIException:
+    """Convert Django's 404 and 403 errors into their DRF counterparts."""
     if isinstance(exc, Http404):
         return exceptions.NotFound()
     if isinstance(exc, PermissionDenied):
@@ -27,6 +31,7 @@ def as_api_exception(exc: Exception) -> exceptions.APIException:
 
 
 def error_body(exc: exceptions.APIException) -> dict:
+    """Build the error body with a code and field codes or a retry time."""
     if isinstance(exc, exceptions.ValidationError):
         return {'code': 'validation_error', 'fields': field_codes(exc)}
     body = {'code': exc.get_codes()}
@@ -36,6 +41,7 @@ def error_body(exc: exceptions.APIException) -> dict:
 
 
 def field_codes(exc: exceptions.ValidationError) -> dict:
+    """Return the error codes of a validation error grouped by field."""
     codes = exc.get_codes()
     if isinstance(codes, dict):
         return codes
@@ -43,6 +49,7 @@ def field_codes(exc: exceptions.ValidationError) -> dict:
 
 
 def server_error(exc: Exception) -> Response:
+    """Log an unhandled error and answer with a plain 500 response."""
     logger.error('Unhandled API error', exc_info=exc)
     set_rollback()
     return Response({'code': 'server_error'}, status=500)

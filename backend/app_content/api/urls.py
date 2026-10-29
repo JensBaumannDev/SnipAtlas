@@ -1,3 +1,5 @@
+"""URLs for groups, topics and all content."""
+
 from django.urls import URLPattern, path
 from rest_framework.routers import SimpleRouter
 

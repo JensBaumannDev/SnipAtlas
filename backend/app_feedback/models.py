@@ -1,3 +1,5 @@
+"""Model for requests sent by users and guests."""
+
 from datetime import date, timedelta
 
 from django.conf import settings
@@ -23,23 +25,31 @@ LIMITS = {
 
 # Choices
 class Kind(models.TextChoices):
+    """Kinds of requests."""
+
     ENTRY = 'entry'
     IMPROVEMENT = 'improvement'
     BUG = 'bug'
 
 
 class Status(models.TextChoices):
+    """Processing states of a request."""
+
     OPEN = 'open'
     DONE = 'done'
 
 
 class EntryArea(models.TextChoices):
+    """Areas a new entry can be suggested for."""
+
     COMMAND = 'command'
     CONCEPT = 'concept'
     ERROR = 'error'
 
 
 class ImprovementArea(models.TextChoices):
+    """Areas an improvement can be about."""
+
     CONTENT = 'content'
     USABILITY = 'usability'
     DESIGN = 'design'
@@ -48,6 +58,8 @@ class ImprovementArea(models.TextChoices):
 
 
 class BugType(models.TextChoices):
+    """Types of reported bugs."""
+
     WRONG = 'wrong'
     OUTDATED = 'outdated'
     BROKEN = 'broken'
@@ -56,6 +68,7 @@ class BugType(models.TextChoices):
 
 # Fields
 def text_field(max_length: int, *, min_length: int = 0) -> models.TextField:
+    """Return an optional text field with length limits."""
     validators = [MaxLengthValidator(max_length)]
     if min_length:
         validators.append(MinLengthValidator(min_length))
@@ -63,10 +76,12 @@ def text_field(max_length: int, *, min_length: int = 0) -> models.TextField:
 
 
 def char_field(max_length: int) -> models.CharField:
+    """Return an optional short text field."""
     return models.CharField(max_length=max_length, blank=True)
 
 
 def shorten(text: str) -> str:
+    """Return the text cut at a word boundary to fit the subject length."""
     if len(text) <= SUBJECT_LENGTH:
         return text
     return text[:SUBJECT_LENGTH].rsplit(' ', 1)[0] + '…'
@@ -74,6 +89,7 @@ def shorten(text: str) -> str:
 
 # Constraints
 def filled(*fields: str) -> Q:
+    """Return a condition that requires all given fields to be filled."""
     condition = Q()
     for field in fields:
         condition &= ~Q(**{field: ''})
@@ -81,6 +97,7 @@ def filled(*fields: str) -> Q:
 
 
 def kind_constraint() -> models.CheckConstraint:
+    """Return a database constraint that requires the fields of each kind."""
     entry = Q(kind=Kind.ENTRY, area__in=EntryArea.values, topic__isnull=False)
     improvement = Q(kind=Kind.IMPROVEMENT, area__in=ImprovementArea.values)
     bug = Q(kind=Kind.BUG, bug_type__in=BugType.values)
@@ -93,6 +110,8 @@ def kind_constraint() -> models.CheckConstraint:
 
 
 class Suggestion(models.Model):
+    """Request from a user or guest, handled as a ticket in the admin."""
+
     kind = models.CharField(max_length=20, choices=Kind)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -144,6 +163,7 @@ class Suggestion(models.Model):
         return self.subject
 
     def save(self, *args: object, **kwargs: object) -> None:
+        """Mark the request as done when it gets its first answer."""
         if self.answer and not self.answered_at:
             self.status = Status.DONE
             self.answered_at = timezone.now()
@@ -151,6 +171,7 @@ class Suggestion(models.Model):
 
     @classmethod
     def delete_old_guest_tickets(cls) -> int:
+        """Delete old done guest requests and return the count."""
         cutoff = timezone.now() - timedelta(days=GUEST_TICKET_DAYS)
         old = cls.objects.filter(user__isnull=True, status=Status.DONE, created_at__lt=cutoff)
         count, _ = old.delete()
@@ -158,6 +179,7 @@ class Suggestion(models.Model):
 
     @property
     def subject(self) -> str:
+        """Return a short subject that fits the kind of request."""
         if self.kind == Kind.ENTRY:
             return self.title
         if self.kind == Kind.BUG:
@@ -166,14 +188,17 @@ class Suggestion(models.Model):
 
     @property
     def created_on(self) -> date:
+        """Return the local date the request was sent."""
         return timezone.localdate(self.created_at)
 
     @property
     def contact_email(self) -> str:
+        """Return the email of the user or the guest."""
         return self.user.email if self.user else self.email
 
     @property
     def notify_email(self) -> str:
+        """Return the address for the answer mail, or empty if unwanted."""
         if self.user and not self.user.notify_by_mail:
             return ''
         return self.contact_email
