@@ -1,0 +1,16 @@
+{% autoescape off %}Hallo,
+
+danke für deine Anfrage bei SnipAtlas. Ich habe sie mir angesehen und dir geantwortet.
+
+Deine Anfrage: {{ suggestion.subject }}
+
+Meine Antwort:
+{{ suggestion.answer }}
+{% if suggestion.user %}
+Du findest die Antwort auch in deinem Profil unter „Anfragen“.
+{% endif %}
+Wenn du noch Fragen hast, antworte einfach auf diese Mail.
+
+Viele Grüße
+Jens von SnipAtlas
+{% endautoescape %}
