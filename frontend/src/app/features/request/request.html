@@ -13,7 +13,9 @@
     <section class="request__done" role="status">
       <svg [lucideIcon]="circleCheckIcon" class="icon request__done-icon"></svg>
       <h2 class="request__heading">{{ 'request.done.title' | translate }}</h2>
-      <p class="request__hint">{{ 'request.done.text' | translate }}</p>
+      <p class="request__hint">
+        {{ (loggedIn() ? 'request.done.textAccount' : 'request.done.text') | translate }}
+      </p>
       <button class="btn btn--ghost" type="button" (click)="startOver()">
         {{ 'request.done.again' | translate }}
       </button>
@@ -79,29 +81,43 @@
         }
       }
 
-      <div class="field">
-        <label class="field__label" for="request-email">
-          {{ 'request.emailLabel' | translate }} <span aria-hidden="true">*</span>
-        </label>
+      @if (!loggedIn()) {
+        <div class="field">
+          <label class="field__label" for="request-email">
+            {{ 'request.emailLabel' | translate }} <span aria-hidden="true">*</span>
+          </label>
+          <input
+            id="request-email"
+            class="input"
+            type="email"
+            name="email"
+            autocomplete="email"
+            formControlName="email"
+            [placeholder]="'request.emailPlaceholder' | translate"
+            aria-required="true"
+            [attr.aria-invalid]="!!emailError"
+            [attr.aria-describedby]="emailError ? 'request-email-error' : 'request-email-hint'"
+          />
+          @if (emailError) {
+            <p class="field__error" id="request-email-error">
+              {{ emailError.key | translate: emailError.params }}
+            </p>
+          } @else {
+            <p class="field__hint" id="request-email-hint">{{ 'request.emailHint' | translate }}</p>
+          }
+        </div>
+      }
+
+      <div class="request__trap" aria-hidden="true">
+        <label for="request-website">{{ 'request.websiteLabel' | translate }}</label>
         <input
-          id="request-email"
-          class="input"
-          type="email"
-          name="email"
-          autocomplete="email"
-          formControlName="email"
-          [placeholder]="'request.emailPlaceholder' | translate"
-          aria-required="true"
-          [attr.aria-invalid]="!!emailError"
-          [attr.aria-describedby]="emailError ? 'request-email-error' : 'request-email-hint'"
+          id="request-website"
+          type="text"
+          name="website"
+          tabindex="-1"
+          autocomplete="off"
+          formControlName="website"
         />
-        @if (emailError) {
-          <p class="field__error" id="request-email-error">
-            {{ emailError.key | translate: emailError.params }}
-          </p>
-        } @else {
-          <p class="field__hint" id="request-email-hint">{{ 'request.emailHint' | translate }}</p>
-        }
       </div>
 
       <div class="field">
@@ -130,7 +146,14 @@
       </div>
 
       @if (status() === 'error') {
-        <p class="field__error" role="alert">{{ 'request.errors.send' | translate }}</p>
+        @let errorText = sendError();
+        <p class="field__error" role="alert">
+          @if (errorText) {
+            {{ errorText.key | translate: errorText.params }}
+          } @else {
+            {{ 'request.errors.send' | translate }}
+          }
+        </p>
       }
 
       <div class="request__actions">

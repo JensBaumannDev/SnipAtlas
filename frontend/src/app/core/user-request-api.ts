@@ -1,28 +1,13 @@
-import { Service } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
+import { Observable, catchError, of } from 'rxjs';
 import { UserRequest } from './user-request';
-
-const REQUESTS: UserRequest[] = [
-  {
-    id: 2,
-    kind: 'entry',
-    subject: 'git rebase -i erklären',
-    date: '2026-10-21',
-    status: 'open',
-  },
-  {
-    id: 1,
-    kind: 'bug',
-    subject: 'Tippfehler bei „Virtuelle Umgebung anlegen“',
-    date: '2026-10-12',
-    status: 'done',
-    answer: 'Danke für den Hinweis, ist korrigiert.',
-  },
-];
 
 @Service()
 export class UserRequestApi {
+  private readonly http = inject(HttpClient);
+
   getMine(): Observable<UserRequest[]> {
-    return of(REQUESTS);
+    return this.http.get<UserRequest[]>('/api/me/requests/').pipe(catchError(() => of([])));
   }
 }

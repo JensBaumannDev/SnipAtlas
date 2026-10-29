@@ -5,6 +5,7 @@ import {
   ElementRef,
   Injector,
   afterNextRender,
+  computed,
   effect,
   inject,
   input,
@@ -15,9 +16,11 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon, LucideIconData } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ApiError, ErrorText, formErrorText, toApiError } from '../../core/api-error';
 import { ContactRequest, RequestKind } from '../../core/contact-request';
 import { bugIcon, circleCheckIcon, filePlusIcon, lightbulbIcon } from '../../core/icons';
 import { RequestApi } from '../../core/request-api';
+import { Session } from '../../core/session';
 import { describeEnvironment } from '../../core/user-environment';
 import { BugFields } from './bug-fields/bug-fields';
 import { EntryFields } from './entry-fields/entry-fields';
@@ -76,6 +79,7 @@ const KINDS: KindOption[] = [
 })
 export class Request {
   private readonly api = inject(RequestApi);
+  private readonly session = inject(Session);
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
@@ -89,9 +93,12 @@ export class Request {
   protected readonly submitted = signal(false);
   protected readonly kind = signal<RequestKind | ''>('');
   protected readonly form = createRequestForm(inject(NonNullableFormBuilder));
+  protected readonly loggedIn = computed(() => !!this.session.user());
+  protected readonly sendError = signal<ErrorText | undefined>(undefined);
 
   constructor() {
     this.prepareForm();
+    effect(() => this.toggleEmail(this.loggedIn()));
     this.form.controls.kind.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe((kind) => this.selectKind(kind));
@@ -123,12 +130,26 @@ export class Request {
   private send(request: ContactRequest): void {
     this.status.set('sending');
     this.api
-      .send(request)
+      .send(request, this.form.controls.website.value)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => this.status.set('sent'),
-        error: () => this.status.set('error'),
+        error: (error: unknown) => this.fail(toApiError(error)),
       });
+  }
+
+  private fail(error: ApiError): void {
+    this.sendError.set(error.code === 'throttled' ? formErrorText(error) : undefined);
+    this.status.set('error');
+  }
+
+  private toggleEmail(loggedIn: boolean): void {
+    const { email } = this.form.controls;
+    if (loggedIn) {
+      email.disable({ emitEvent: false });
+    } else {
+      email.enable({ emitEvent: false });
+    }
   }
 
   protected startOver(): void {

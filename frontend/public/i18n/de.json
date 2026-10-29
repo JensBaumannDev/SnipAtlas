@@ -573,6 +573,7 @@
     "emailLabel": "E-Mail für die Antwort",
     "emailPlaceholder": "name@beispiel.de",
     "emailHint": "Nur für die Antwort, keine Werbung.",
+    "websiteLabel": "Website",
     "privacyBefore": "Ich habe die",
     "privacyLink": "Datenschutzerklärung",
     "privacyAfter": "gelesen und bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden.",
@@ -593,6 +594,7 @@
     "done": {
       "title": "Danke für deine Anfrage!",
       "text": "Sie ist angekommen. Du bekommst eine Antwort an deine E-Mail-Adresse.",
+      "textAccount": "Sie ist angekommen. Die Antwort findest du in deinem Profil unter „Anfragen“.",
       "again": "Weitere Anfrage schreiben"
     },
     "info": {
