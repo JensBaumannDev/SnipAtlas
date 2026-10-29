@@ -1,6 +1,6 @@
 import { Component, computed, input, model } from '@angular/core';
 import { LucideDynamicIcon } from '@lucide/angular';
-import { chevronDownIcon } from '../../core/icons';
+import { chevronDownIcon } from '../../core/ui/icons';
 
 @Component({
   imports: [LucideDynamicIcon],

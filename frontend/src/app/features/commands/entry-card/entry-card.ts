@@ -1,10 +1,10 @@
 import { Component, computed, inject, input, model } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { firstCodeLine } from '../../../core/code-highlight';
-import { Entry } from '../../../core/entry';
-import { resolveOsCode } from '../../../core/os-code';
-import { Preferences } from '../../../core/preferences';
-import { ProjectValues, fillPlaceholders } from '../../../core/project-values';
+import { firstCodeLine } from '../../../core/content/code-highlight';
+import { Entry } from '../../../core/models/entry';
+import { resolveOsCode } from '../../../core/content/os-code';
+import { Preferences } from '../../../core/user-data/preferences';
+import { ProjectValues, fillPlaceholders } from '../../../core/user-data/project-values';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { Disclosure } from '../../../shared/disclosure/disclosure';
 import { ItemLinks } from '../../../shared/item-links/item-links';

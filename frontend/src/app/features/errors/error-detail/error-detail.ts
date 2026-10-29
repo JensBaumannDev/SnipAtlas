@@ -1,9 +1,9 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ErrorApi } from '../../../core/error-api';
-import { errorLink } from '../../../core/error-message';
-import { injectTopic } from '../../../core/topic-resource';
+import { ErrorApi } from '../../../core/api/error-api';
+import { errorLink } from '../../../core/models/error-message';
+import { injectTopic } from '../../../core/content/topic-resource';
 import { RelatedList } from '../../../shared/related-list/related-list';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { TopicHeader } from '../../../shared/topic-header/topic-header';

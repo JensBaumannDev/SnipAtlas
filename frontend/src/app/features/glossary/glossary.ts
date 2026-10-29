@@ -4,10 +4,10 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { GlossaryApi } from '../../core/glossary-api';
-import { GlossaryTerm } from '../../core/glossary-term';
-import { bookAIcon, searchIcon } from '../../core/icons';
-import { syncOutline } from '../../core/page-outline';
+import { GlossaryApi } from '../../core/api/glossary-api';
+import { GlossaryTerm } from '../../core/models/glossary-term';
+import { bookAIcon, searchIcon } from '../../core/ui/icons';
+import { syncOutline } from '../../core/ui/page-outline';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { ReportLink } from '../../shared/report-link/report-link';
 

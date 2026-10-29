@@ -2,9 +2,9 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { BlueprintApi } from '../../../core/blueprint-api';
-import { BlueprintProgress } from '../../../core/blueprint-progress';
-import { UserRequestApi } from '../../../core/user-request-api';
+import { BlueprintApi } from '../../../core/api/blueprint-api';
+import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
+import { UserRequestApi } from '../../../core/api/user-request-api';
 import { Collection } from '../../../shared/collection/collection';
 import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
 

@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { ConceptApi } from '../../core/concept-api';
-import { contentExists, itemExists, itemTitle } from '../../core/content-guard';
+import { ConceptApi } from '../../core/api/concept-api';
+import { contentExists, itemExists, itemTitle } from '../../core/content/content-guard';
 import { ConceptDetail } from './concept-detail/concept-detail';
 import { Concepts } from './concepts';
 

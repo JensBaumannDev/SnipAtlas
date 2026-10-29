@@ -5,11 +5,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
-import { ApiError, fieldErrorKey, formErrorText, toApiError } from '../../../core/api-error';
-import { LoginDialog } from '../../../core/login-dialog';
-import { PASSWORD_MIN_LENGTH } from '../../../core/password-rules';
-import { PasswordReset } from '../../../core/password-reset';
-import { Session } from '../../../core/session';
+import { ApiError, fieldErrorKey, formErrorText, toApiError } from '../../../core/http/api-error';
+import { LoginDialog } from '../../../core/auth/login-dialog';
+import { PASSWORD_MIN_LENGTH } from '../../../core/auth/password-rules';
+import { PasswordReset } from '../../../core/auth/password-reset';
+import { Session } from '../../../core/auth/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
 import { hasVisibleError, injectApiError, injectFocusInvalid, passwordsMatch } from '../auth-form';
 

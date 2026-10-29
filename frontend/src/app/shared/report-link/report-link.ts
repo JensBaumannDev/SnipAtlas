@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { flagIcon } from '../../core/icons';
+import { flagIcon } from '../../core/ui/icons';
 
 @Component({
   imports: [RouterLink, TranslatePipe, LucideDynamicIcon],

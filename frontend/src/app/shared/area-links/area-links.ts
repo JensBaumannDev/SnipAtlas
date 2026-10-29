@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon, LucideIconData } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { bookTextIcon, routeIcon, terminalIcon, triangleAlertIcon } from '../../core/icons';
+import { bookTextIcon, routeIcon, terminalIcon, triangleAlertIcon } from '../../core/ui/icons';
 
 interface Area {
   path: string;

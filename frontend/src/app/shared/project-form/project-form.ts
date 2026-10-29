@@ -7,7 +7,7 @@ import {
   ProjectKey,
   ProjectValueMap,
   ProjectValues,
-} from '../../core/project-values';
+} from '../../core/user-data/project-values';
 
 let nextId = 0;
 

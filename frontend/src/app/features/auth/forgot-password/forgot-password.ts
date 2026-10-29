@@ -4,9 +4,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
-import { fieldErrorKey, formErrorText, toApiError } from '../../../core/api-error';
-import { arrowLeftIcon } from '../../../core/icons';
-import { PasswordReset } from '../../../core/password-reset';
+import { fieldErrorKey, formErrorText, toApiError } from '../../../core/http/api-error';
+import { arrowLeftIcon } from '../../../core/ui/icons';
+import { PasswordReset } from '../../../core/auth/password-reset';
 import { hasVisibleError, injectApiError, injectFocusInvalid } from '../auth-form';
 
 @Component({

@@ -1,8 +1,8 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { GlossaryTerm } from '../../core/glossary-term';
-import { TermLinker } from '../../core/term-linker';
+import { GlossaryTerm } from '../../core/models/glossary-term';
+import { TermLinker } from '../../core/content/term-linker';
 
 let nextId = 0;
 

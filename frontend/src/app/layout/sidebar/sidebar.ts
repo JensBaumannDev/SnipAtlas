@@ -22,12 +22,12 @@ import {
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
-import { AreaContent } from '../../core/area-content';
-import { ContentArea, filterGroups, isContentArea } from '../../core/content-index';
-import { ExpandedSet } from '../../core/expanded-set';
-import { chevronDownIcon, chevronRightIcon } from '../../core/icons';
-import { activeNavGroup, navGroupSlugs, navGroups } from '../../core/nav-groups';
-import { TopicApi } from '../../core/topic-api';
+import { AreaContent } from '../../core/content/area-content';
+import { ContentArea, filterGroups, isContentArea } from '../../core/content/content-index';
+import { ExpandedSet } from '../../core/ui/expanded-set';
+import { chevronDownIcon, chevronRightIcon } from '../../core/ui/icons';
+import { activeNavGroup, navGroupSlugs, navGroups } from '../../core/content/nav-groups';
+import { TopicApi } from '../../core/api/topic-api';
 import { Collection } from '../../shared/collection/collection';
 import { TopicLogo } from '../../shared/topic-logo/topic-logo';
 import { SidebarMode, isSidebarMode } from './sidebar-mode';

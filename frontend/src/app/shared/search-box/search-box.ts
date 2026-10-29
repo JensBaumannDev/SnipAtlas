@@ -11,9 +11,9 @@ import {
 import { Router } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { ContentSearch } from '../../core/content-search';
-import { searchIcon } from '../../core/icons';
-import { SearchResult } from '../../core/search-result';
+import type { ContentSearch } from '../../core/content/content-search';
+import { searchIcon } from '../../core/ui/icons';
+import { SearchResult } from '../../core/models/search-result';
 
 @Component({
   imports: [TranslatePipe, LucideDynamicIcon],
@@ -79,7 +79,7 @@ export class SearchBox {
     if (this.engine()) {
       return;
     }
-    const { ContentSearch } = await import('../../core/content-search');
+    const { ContentSearch } = await import('../../core/content/content-search');
     this.engine.set(this.injector.get(ContentSearch));
   }
 

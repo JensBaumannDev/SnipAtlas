@@ -1,7 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { DebugGuideApi } from '../../../core/debug-guide-api';
+import { DebugGuideApi } from '../../../core/api/debug-guide-api';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { TopicHeader } from '../../../shared/topic-header/topic-header';
 import { DebugGuideSteps } from '../debug-guide-steps/debug-guide-steps';

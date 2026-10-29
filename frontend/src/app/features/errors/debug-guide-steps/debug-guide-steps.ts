@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { DebugGuide } from '../../../core/debug-guide';
-import { resolveOsCode } from '../../../core/os-code';
-import { Preferences } from '../../../core/preferences';
+import { DebugGuide } from '../../../core/models/debug-guide';
+import { resolveOsCode } from '../../../core/content/os-code';
+import { Preferences } from '../../../core/user-data/preferences';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { TermText } from '../../../shared/term-text/term-text';
 

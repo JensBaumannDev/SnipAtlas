@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ImprovementArea } from '../../../core/contact-request';
+import { ImprovementArea } from '../../../core/models/contact-request';
 import { FieldError, ImprovementForm, visibleError } from '../request-form';
 
 @Component({

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, Routes } from '@angular/router';
-import { Session } from '../../core/session';
+import { Session } from '../../core/auth/session';
 import { Profile } from './profile';
 import { ProfileAccount } from './profile-account/profile-account';
 import { ProfileOverview } from './profile-overview/profile-overview';

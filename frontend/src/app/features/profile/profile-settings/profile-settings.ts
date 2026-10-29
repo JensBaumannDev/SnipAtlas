@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Session } from '../../../core/session';
+import { Session } from '../../../core/auth/session';
 import { Settings } from '../../settings/settings';
 
 @Component({
