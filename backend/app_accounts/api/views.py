@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from app_accounts.models import User
-from app_content.models import Entry
+from app_content.models import Blueprint, BlueprintStep, Entry
 from config.permissions import CsrfProtected
 from config.throttling import AuthRateThrottle
 
@@ -80,4 +80,32 @@ class FavoriteView(generics.GenericAPIView):
 
     def delete(self, request: Request, entry: str) -> Response:
         request.user.favorites.filter(entry=self.get_entry()).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Progress
+class ProgressListView(generics.GenericAPIView):
+    def get(self, request: Request) -> Response:
+        return Response(request.user.progress())
+
+
+class ProgressBlueprintView(generics.GenericAPIView):
+    def delete(self, request: Request, blueprint: str) -> Response:
+        found = get_object_or_404(Blueprint, slug=blueprint)
+        request.user.completed_steps.filter(step__blueprint=found).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProgressStepView(generics.GenericAPIView):
+    def get_step(self) -> BlueprintStep:
+        return get_object_or_404(
+            BlueprintStep, blueprint__slug=self.kwargs['blueprint'], slug=self.kwargs['step']
+        )
+
+    def put(self, request: Request, blueprint: str, step: str) -> Response:
+        request.user.completed_steps.get_or_create(step=self.get_step())
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def delete(self, request: Request, blueprint: str, step: str) -> Response:
+        request.user.completed_steps.filter(step=self.get_step()).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
