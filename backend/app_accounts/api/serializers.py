@@ -9,7 +9,7 @@ from app_accounts.models import (
     UserManager,
 )
 
-from .exceptions import InvalidCredentials
+from .exceptions import InvalidCredentials, WrongPassword
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,16 +21,23 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('email',)
 
 
+def unique_email(value: str, user: User | None = None) -> str:
+    email = UserManager.normalize_email(value)
+    taken = User.objects.filter(email=email)
+    if user:
+        taken = taken.exclude(pk=user.pk)
+    if taken.exists():
+        raise serializers.ValidationError('Email is taken.', code='unique')
+    return email
+
+
 # Register
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=254)
     password = serializers.CharField(write_only=True, trim_whitespace=False)
 
     def validate_email(self, value: str) -> str:
-        email = UserManager.normalize_email(value)
-        if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError('Email is taken.', code='unique')
-        return email
+        return unique_email(value)
 
     def validate_password(self, value: str) -> str:
         password_validation.validate_password(value, User(email=self.initial_data.get('email')))
@@ -54,6 +61,31 @@ class LoginSerializer(serializers.Serializer):
         if user is None:
             raise InvalidCredentials
         return {'user': user}
+
+
+# Account
+class CurrentPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True, trim_whitespace=False)
+
+    def validate_password(self, value: str) -> str:
+        if not self.instance.check_password(value):
+            raise WrongPassword
+        return value
+
+
+class EmailChangeSerializer(CurrentPasswordSerializer):
+    email = serializers.EmailField(max_length=254)
+
+    def validate_email(self, value: str) -> str:
+        return unique_email(value, self.instance)
+
+    def update(self, user: User, validated_data: dict) -> User:
+        user.email = validated_data['email']
+        user.save(update_fields=['email'])
+        return user
+
+    def to_representation(self, user: User) -> dict:
+        return UserSerializer(user).data
 
 
 # Favorites
