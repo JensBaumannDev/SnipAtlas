@@ -5,6 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import {
   TitleStrategy,
   provideRouter,
@@ -25,6 +26,7 @@ import { SettingsSync } from './core/user-data/settings-sync';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideClientHydration(withEventReplay()),
     provideRouter(
       routes,
       withComponentInputBinding(),

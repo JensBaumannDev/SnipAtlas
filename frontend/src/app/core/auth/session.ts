@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Service, computed, inject, signal } from '@angular/core';
+import { PLATFORM_ID, Service, computed, inject, signal } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 import { Observable, catchError, firstValueFrom, map, of, switchMap } from 'rxjs';
 import type { AccentTheme } from '../user-data/preferences';
 
@@ -29,12 +30,16 @@ const URL = '/api/auth/';
 @Service()
 export class Session {
   private readonly http = inject(HttpClient);
+  private readonly isServer = isPlatformServer(inject(PLATFORM_ID));
 
   readonly user = signal<SessionUser | undefined>(undefined);
   readonly authEvent = signal<AuthEvent | undefined>(undefined);
   readonly initial = computed(() => this.user()?.email.charAt(0).toUpperCase() ?? '');
 
   restore(): Promise<void> {
+    if (this.isServer) {
+      return Promise.resolve();
+    }
     const restored = this.refreshCsrf().pipe(
       switchMap(() => this.http.get<SessionUser>(`${URL}me/`)),
       map((user) => this.signIn(user, 'restore')),
