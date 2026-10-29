@@ -7,6 +7,7 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator, URLVa
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from app_content.models import Topic
 
@@ -27,57 +28,57 @@ LIMITS = {
 class Kind(models.TextChoices):
     """Kinds of requests."""
 
-    ENTRY = 'entry'
-    IMPROVEMENT = 'improvement'
-    BUG = 'bug'
+    ENTRY = 'entry', _('New entry')
+    IMPROVEMENT = 'improvement', _('Improvement')
+    BUG = 'bug', _('Bug')
 
 
 class Status(models.TextChoices):
     """Processing states of a request."""
 
-    OPEN = 'open'
-    DONE = 'done'
+    OPEN = 'open', _('Open')
+    DONE = 'done', _('Done')
 
 
 class EntryArea(models.TextChoices):
     """Areas a new entry can be suggested for."""
 
-    COMMAND = 'command'
-    CONCEPT = 'concept'
-    ERROR = 'error'
+    COMMAND = 'command', _('Command')
+    CONCEPT = 'concept', _('Concept')
+    ERROR = 'error', _('Error message')
 
 
 class ImprovementArea(models.TextChoices):
     """Areas an improvement can be about."""
 
-    CONTENT = 'content'
-    USABILITY = 'usability'
-    DESIGN = 'design'
-    FEATURE = 'feature'
-    OTHER = 'other'
+    CONTENT = 'content', _('Content')
+    USABILITY = 'usability', _('Usability')
+    DESIGN = 'design', _('Design')
+    FEATURE = 'feature', _('Feature')
+    OTHER = 'other', _('Other')
 
 
 class BugType(models.TextChoices):
     """Types of reported bugs."""
 
-    WRONG = 'wrong'
-    OUTDATED = 'outdated'
-    BROKEN = 'broken'
-    TYPO = 'typo'
+    WRONG = 'wrong', _('Wrong')
+    OUTDATED = 'outdated', _('Outdated')
+    BROKEN = 'broken', _('Broken')
+    TYPO = 'typo', _('Typo')
 
 
 # Fields
-def text_field(max_length: int, *, min_length: int = 0) -> models.TextField:
+def text_field(verbose_name: str, max_length: int, *, min_length: int = 0) -> models.TextField:
     """Return an optional text field with length limits."""
     validators = [MaxLengthValidator(max_length)]
     if min_length:
         validators.append(MinLengthValidator(min_length))
-    return models.TextField(max_length=max_length, blank=True, validators=validators)
+    return models.TextField(verbose_name, max_length=max_length, blank=True, validators=validators)
 
 
-def char_field(max_length: int) -> models.CharField:
+def char_field(verbose_name: str, max_length: int) -> models.CharField:
     """Return an optional short text field."""
-    return models.CharField(max_length=max_length, blank=True)
+    return models.CharField(verbose_name, max_length=max_length, blank=True)
 
 
 def shorten(text: str) -> str:
@@ -112,42 +113,58 @@ def kind_constraint() -> models.CheckConstraint:
 class Suggestion(models.Model):
     """Request from a user or guest, handled as a ticket in the admin."""
 
-    kind = models.CharField(max_length=20, choices=Kind)
+    kind = models.CharField(max_length=20, choices=Kind, verbose_name=_('kind'))
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name='suggestions',
+        verbose_name=_('user'),
     )
-    email = models.EmailField(blank=True)
-    status = models.CharField(max_length=10, choices=Status, default=Status.OPEN)
-    answer = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    answered_at = models.DateTimeField(null=True, blank=True)
+    email = models.EmailField(blank=True, verbose_name=_('email'))
+    status = models.CharField(
+        max_length=10, choices=Status, default=Status.OPEN, verbose_name=_('status')
+    )
+    answer = models.TextField(blank=True, verbose_name=_('answer'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('received at'))
+    answered_at = models.DateTimeField(null=True, blank=True, verbose_name=_('answered at'))
     area = models.CharField(
-        max_length=20, choices=[*EntryArea.choices, *ImprovementArea.choices], blank=True
+        max_length=20,
+        choices=[*EntryArea.choices, *ImprovementArea.choices],
+        blank=True,
+        verbose_name=_('area'),
     )
     topic = models.ForeignKey(
-        Topic, on_delete=models.PROTECT, null=True, blank=True, related_name='+'
+        Topic,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name='+',
+        verbose_name=_('topic'),
     )
-    title = char_field(LIMITS['title'])
-    reason = text_field(LIMITS['note'], min_length=LIMITS['short'])
-    example = text_field(LIMITS['text'])
+    title = char_field(_('title'), LIMITS['title'])
+    reason = text_field(_('reason'), LIMITS['note'], min_length=LIMITS['short'])
+    example = text_field(_('example'), LIMITS['text'])
     source = models.CharField(
         max_length=LIMITS['source'],
         blank=True,
         validators=[URLValidator(schemes=['http', 'https'])],
+        verbose_name=_('source'),
     )
-    idea = text_field(LIMITS['text'], min_length=LIMITS['short'])
-    benefit = text_field(LIMITS['note'])
-    bug_type = models.CharField(max_length=20, choices=BugType, blank=True)
-    location = char_field(LIMITS['location'])
-    problem = text_field(LIMITS['text'], min_length=LIMITS['short'])
-    correction = text_field(LIMITS['note'])
-    environment = char_field(LIMITS['location'])
+    idea = text_field(_('idea'), LIMITS['text'], min_length=LIMITS['short'])
+    benefit = text_field(_('benefit'), LIMITS['note'])
+    bug_type = models.CharField(
+        max_length=20, choices=BugType, blank=True, verbose_name=_('bug type')
+    )
+    location = char_field(_('location'), LIMITS['location'])
+    problem = text_field(_('problem'), LIMITS['text'], min_length=LIMITS['short'])
+    correction = text_field(_('correction'), LIMITS['note'])
+    environment = char_field(_('environment'), LIMITS['location'])
 
     class Meta:
+        verbose_name = _('request')
+        verbose_name_plural = _('requests')
         ordering = ('-created_at', '-pk')
         constraints = [
             kind_constraint(),
