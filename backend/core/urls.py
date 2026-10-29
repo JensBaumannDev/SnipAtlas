@@ -5,6 +5,9 @@ from django.urls import include, path, re_path
 
 from .views import ApiNotFoundView
 
+admin.site.site_header = 'SnipAtlas Admin'
+admin.site.site_title = 'SnipAtlas Admin'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('app_accounts.api.urls')),
