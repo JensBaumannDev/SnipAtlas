@@ -12,5 +12,9 @@ class AuthRateThrottle(IpRateThrottle):
     scope = 'auth'
 
 
+class PasswordResetRateThrottle(IpRateThrottle):
+    scope = 'password_reset'
+
+
 class RequestRateThrottle(IpRateThrottle):
     scope = 'requests'
