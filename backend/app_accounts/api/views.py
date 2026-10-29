@@ -14,6 +14,7 @@ from config.permissions import CsrfProtected
 from config.throttling import AuthRateThrottle
 
 from .serializers import (
+    CurrentPasswordSerializer,
     EmailChangeSerializer,
     FavoriteSerializer,
     LoginSerializer,
@@ -91,6 +92,19 @@ class PasswordView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         update_session_auth_hash(request, serializer.save())
         return Response(serializer.data)
+
+
+class DeleteAccountView(generics.GenericAPIView):
+    serializer_class = CurrentPasswordSerializer
+    throttle_classes = AUTH_THROTTLES
+
+    def post(self, request: Request) -> Response:
+        serializer = self.get_serializer(request.user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        logout(request)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # Favorites

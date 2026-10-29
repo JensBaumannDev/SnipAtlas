@@ -2,6 +2,7 @@ from django.urls import URLPattern, path
 
 from .views import (
     CsrfView,
+    DeleteAccountView,
     EmailView,
     FavoriteListView,
     FavoriteView,
@@ -24,6 +25,7 @@ urlpatterns: list[URLPattern] = [
     path('auth/me/', MeView.as_view(), name='auth-me'),
     path('auth/email/', EmailView.as_view(), name='auth-email'),
     path('auth/password/', PasswordView.as_view(), name='auth-password'),
+    path('auth/delete-account/', DeleteAccountView.as_view(), name='auth-delete-account'),
     path('me/favorites/', FavoriteListView.as_view(), name='favorite-list'),
     path('me/favorites/<slug:entry>/', FavoriteView.as_view(), name='favorite-detail'),
     path('me/progress/', ProgressListView.as_view(), name='progress-list'),
