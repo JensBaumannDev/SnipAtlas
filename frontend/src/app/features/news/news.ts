@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { NewsApi } from '../../core/news-api';
+import { NewsApi } from '../../core/api/news-api';
 import { NewsLog } from '../../shared/news-log/news-log';
 
 @Component({

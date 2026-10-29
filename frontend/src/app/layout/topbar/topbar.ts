@@ -13,9 +13,9 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
-import { settingsIcon } from '../../core/icons';
-import { LoginDialog } from '../../core/login-dialog';
-import { Session } from '../../core/session';
+import { settingsIcon } from '../../core/ui/icons';
+import { LoginDialog } from '../../core/auth/login-dialog';
+import { Session } from '../../core/auth/session';
 import { SearchBox } from '../../shared/search-box/search-box';
 import { UserMenu } from '../user-menu/user-menu';
 

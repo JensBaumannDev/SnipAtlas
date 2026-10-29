@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Topic } from '../../core/topic';
+import { Topic } from '../../core/models/topic';
 import { TopicLogo } from '../topic-logo/topic-logo';
 
 @Component({

@@ -1,8 +1,8 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { BlueprintStep } from '../../../core/blueprint';
-import { resolveOsCode } from '../../../core/os-code';
-import { Preferences } from '../../../core/preferences';
+import { BlueprintStep } from '../../../core/models/blueprint';
+import { resolveOsCode } from '../../../core/content/os-code';
+import { Preferences } from '../../../core/user-data/preferences';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { Note } from '../../../shared/note/note';
 import { ReportLink } from '../../../shared/report-link/report-link';

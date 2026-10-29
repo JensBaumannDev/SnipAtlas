@@ -1,6 +1,6 @@
 import { Component, computed, input, model } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Concept } from '../../../core/concept';
+import { Concept } from '../../../core/models/concept';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { Disclosure } from '../../../shared/disclosure/disclosure';
 import { ItemLinks } from '../../../shared/item-links/item-links';

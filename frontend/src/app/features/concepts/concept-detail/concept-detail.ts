@@ -1,9 +1,9 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { conceptLink } from '../../../core/concept';
-import { ConceptApi } from '../../../core/concept-api';
-import { findSubtopic, injectTopic } from '../../../core/topic-resource';
+import { conceptLink } from '../../../core/models/concept';
+import { ConceptApi } from '../../../core/api/concept-api';
+import { findSubtopic, injectTopic } from '../../../core/content/topic-resource';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { Note } from '../../../shared/note/note';
 import { RelatedList } from '../../../shared/related-list/related-list';

@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ErrorMessage } from '../../../core/error-message';
+import { ErrorMessage } from '../../../core/models/error-message';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { TermText } from '../../../shared/term-text/term-text';
 

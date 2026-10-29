@@ -6,8 +6,8 @@ import {
   OperatingSystem,
   Preferences,
   ThemeMode,
-} from '../../core/preferences';
-import { Session } from '../../core/session';
+} from '../../core/user-data/preferences';
+import { Session } from '../../core/auth/session';
 
 interface Option<T> {
   value: T;

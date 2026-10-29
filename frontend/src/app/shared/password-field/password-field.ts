@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, signal } from '@angular/core';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { eyeIcon, eyeOffIcon } from '../../core/icons';
+import { eyeIcon, eyeOffIcon } from '../../core/ui/icons';
 
 @Component({
   imports: [TranslatePipe, LucideDynamicIcon],

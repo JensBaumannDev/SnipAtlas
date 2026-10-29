@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { BlueprintApi } from '../../core/blueprint-api';
-import { contentExists, itemExists } from '../../core/content-guard';
+import { BlueprintApi } from '../../core/api/blueprint-api';
+import { contentExists, itemExists } from '../../core/content/content-guard';
 import { GuideDetail } from './guide-detail/guide-detail';
 import { Guides } from './guides';
 

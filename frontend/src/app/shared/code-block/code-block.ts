@@ -2,10 +2,10 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { TokenKind, highlight } from '../../core/code-highlight';
-import { CodeLanguage } from '../../core/entry';
-import { checkIcon, copyIcon } from '../../core/icons';
-import { OperatingSystem } from '../../core/preferences';
+import { TokenKind, highlight } from '../../core/content/code-highlight';
+import { CodeLanguage } from '../../core/models/entry';
+import { checkIcon, copyIcon } from '../../core/ui/icons';
+import { OperatingSystem } from '../../core/user-data/preferences';
 import {
   ProjectKey,
   ProjectValues,
@@ -13,7 +13,7 @@ import {
   markPlaceholders,
   placeholderKeys,
   splitMarkers,
-} from '../../core/project-values';
+} from '../../core/user-data/project-values';
 import { ProjectForm } from '../project-form/project-form';
 
 const COPIED_DURATION = 2000;

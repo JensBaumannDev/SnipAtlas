@@ -3,8 +3,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
-import { formErrorText, toApiError } from '../../../../core/api-error';
-import { Session } from '../../../../core/session';
+import { formErrorText, toApiError } from '../../../../core/http/api-error';
+import { Session } from '../../../../core/auth/session';
 import { PasswordField } from '../../../../shared/password-field/password-field';
 import { injectApiError } from '../../../auth/auth-form';
 

@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { NewsItem } from '../../core/news';
+import { NewsItem } from '../../core/models/news';
 import { TerminalLine, TerminalWindow } from '../terminal-window/terminal-window';
 
 const FRESH_DAYS = 14;

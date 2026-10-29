@@ -3,8 +3,8 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Preferences } from '../../../core/preferences';
-import { UserRequestApi } from '../../../core/user-request-api';
+import { Preferences } from '../../../core/user-data/preferences';
+import { UserRequestApi } from '../../../core/api/user-request-api';
 
 @Component({
   imports: [DatePipe, RouterLink, TranslatePipe],

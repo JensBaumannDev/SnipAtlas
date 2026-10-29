@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { map } from 'rxjs';
-import { NewsApi } from '../../core/news-api';
+import { NewsApi } from '../../core/api/news-api';
 import { NewsLog } from '../../shared/news-log/news-log';
 import { SearchBox } from '../../shared/search-box/search-box';
 import { Offer } from './offer/offer';

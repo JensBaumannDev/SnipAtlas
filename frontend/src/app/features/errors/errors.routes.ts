@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { contentExists, itemExists, itemTitle, slugExists } from '../../core/content-guard';
-import { DEBUG_PATH } from '../../core/debug-guide';
-import { DebugGuideApi } from '../../core/debug-guide-api';
-import { ErrorApi } from '../../core/error-api';
+import { contentExists, itemExists, itemTitle, slugExists } from '../../core/content/content-guard';
+import { DEBUG_PATH } from '../../core/models/debug-guide';
+import { DebugGuideApi } from '../../core/api/debug-guide-api';
+import { ErrorApi } from '../../core/api/error-api';
 import { DebugWay } from './debug-way/debug-way';
 import { ErrorDetail } from './error-detail/error-detail';
 import { Errors } from './errors';

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
-import { ApiError } from '../../core/api-error';
+import { ApiError } from '../../core/http/api-error';
 
 export function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const { password, repeat } = group.getRawValue() as { password: string; repeat: string };

@@ -1,11 +1,11 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { entryLink } from '../../../core/entry';
-import { EntryApi } from '../../../core/entry-api';
-import { resolveOsCode } from '../../../core/os-code';
-import { Preferences } from '../../../core/preferences';
-import { findSubtopic, injectTopic } from '../../../core/topic-resource';
+import { entryLink } from '../../../core/models/entry';
+import { EntryApi } from '../../../core/api/entry-api';
+import { resolveOsCode } from '../../../core/content/os-code';
+import { Preferences } from '../../../core/user-data/preferences';
+import { findSubtopic, injectTopic } from '../../../core/content/topic-resource';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { RelatedList } from '../../../shared/related-list/related-list';
 import { ReportLink } from '../../../shared/report-link/report-link';

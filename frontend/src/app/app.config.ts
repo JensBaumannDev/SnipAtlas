@@ -15,12 +15,12 @@ import {
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
-import { apiErrorInterceptor } from './core/api-error-interceptor';
-import { languageInterceptor } from './core/language-interceptor';
-import { PageTitle } from './core/page-title';
-import { Preferences } from './core/preferences';
-import { Session } from './core/session';
-import { SettingsSync } from './core/settings-sync';
+import { apiErrorInterceptor } from './core/http/api-error-interceptor';
+import { languageInterceptor } from './core/http/language-interceptor';
+import { PageTitle } from './core/ui/page-title';
+import { Preferences } from './core/user-data/preferences';
+import { Session } from './core/auth/session';
+import { SettingsSync } from './core/user-data/settings-sync';
 
 export const appConfig: ApplicationConfig = {
   providers: [

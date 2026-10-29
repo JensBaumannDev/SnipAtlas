@@ -1,6 +1,6 @@
 import { Component, computed, input, model } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ErrorMessage, errorLink } from '../../../core/error-message';
+import { ErrorMessage, errorLink } from '../../../core/models/error-message';
 import { Disclosure } from '../../../shared/disclosure/disclosure';
 import { ItemLinks } from '../../../shared/item-links/item-links';
 import { ErrorBody } from '../error-body/error-body';

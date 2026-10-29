@@ -2,8 +2,8 @@ import { Component, ElementRef, inject, output, signal, viewChild } from '@angul
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { logOutIcon, messageSquareIcon, settingsIcon, userIcon } from '../../core/icons';
-import { Session } from '../../core/session';
+import { logOutIcon, messageSquareIcon, settingsIcon, userIcon } from '../../core/ui/icons';
+import { Session } from '../../core/auth/session';
 
 @Component({
   imports: [RouterLink, TranslatePipe, LucideDynamicIcon],

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { chevronDownIcon } from '../../core/icons';
+import { chevronDownIcon } from '../../core/ui/icons';
 
 interface FaqGroup {
   id: string;

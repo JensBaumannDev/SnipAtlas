@@ -1,6 +1,6 @@
 import { Component, input, model } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { DebugGuide } from '../../../core/debug-guide';
+import { DebugGuide } from '../../../core/models/debug-guide';
 import { Disclosure } from '../../../shared/disclosure/disclosure';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { DebugGuideSteps } from '../debug-guide-steps/debug-guide-steps';

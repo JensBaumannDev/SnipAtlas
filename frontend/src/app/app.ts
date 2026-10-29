@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ServerStatus } from './core/server-status';
+import { ServerStatus } from './core/http/server-status';
 import { Footer } from './layout/footer/footer';
 import { Outline } from './layout/outline/outline';
 import { Rail } from './layout/rail/rail';

@@ -1,7 +1,7 @@
 import { Component, DOCUMENT, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { PageOutline } from '../../core/page-outline';
+import { PageOutline } from '../../core/ui/page-outline';
 
 const ACTIVE_OFFSET = 160;
 

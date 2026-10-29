@@ -3,7 +3,7 @@ import { Component, ElementRef, Injector, afterNextRender, inject, signal } from
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { checkIcon, xIcon } from '../../../core/icons';
+import { checkIcon, xIcon } from '../../../core/ui/icons';
 import { ForgotPassword } from '../forgot-password/forgot-password';
 import { Login } from '../login/login';
 import { Register } from '../register/register';

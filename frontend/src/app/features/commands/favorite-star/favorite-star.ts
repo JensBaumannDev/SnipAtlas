@@ -11,11 +11,11 @@ import {
 } from '@angular/core';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Entry } from '../../../core/entry';
-import { Favorites } from '../../../core/favorites';
-import { starIcon } from '../../../core/icons';
-import { LoginDialog } from '../../../core/login-dialog';
-import { Session } from '../../../core/session';
+import { Entry } from '../../../core/models/entry';
+import { Favorites } from '../../../core/user-data/favorites';
+import { starIcon } from '../../../core/ui/icons';
+import { LoginDialog } from '../../../core/auth/login-dialog';
+import { Session } from '../../../core/auth/session';
 
 @Component({
   imports: [TranslatePipe, LucideDynamicIcon],

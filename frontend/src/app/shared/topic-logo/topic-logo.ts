@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { LucideDynamicIcon } from '@lucide/angular';
-import { Topic } from '../../core/topic';
-import { topicIcon, topicLogo } from '../../core/topic-logos';
+import { Topic } from '../../core/models/topic';
+import { topicIcon, topicLogo } from '../../core/ui/topic-logos';
 
 @Component({
   imports: [LucideDynamicIcon],

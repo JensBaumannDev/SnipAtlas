@@ -3,8 +3,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
-import { formErrorText, toApiError } from '../../../core/api-error';
-import { Session } from '../../../core/session';
+import { formErrorText, toApiError } from '../../../core/http/api-error';
+import { Session } from '../../../core/auth/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
 import { hasVisibleError, injectApiError, injectFocusInvalid } from '../auth-form';
 

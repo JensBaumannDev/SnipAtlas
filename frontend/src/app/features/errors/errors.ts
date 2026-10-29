@@ -1,11 +1,11 @@
 import { Component, inject, input } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { DebugGuideApi } from '../../core/debug-guide-api';
-import { ErrorApi } from '../../core/error-api';
-import { triangleAlertIcon } from '../../core/icons';
-import { syncOutline } from '../../core/page-outline';
-import { injectTopic } from '../../core/topic-resource';
+import { DebugGuideApi } from '../../core/api/debug-guide-api';
+import { ErrorApi } from '../../core/api/error-api';
+import { triangleAlertIcon } from '../../core/ui/icons';
+import { syncOutline } from '../../core/ui/page-outline';
+import { injectTopic } from '../../core/content/topic-resource';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';

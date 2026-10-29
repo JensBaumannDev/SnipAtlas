@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { contentExists, itemExists, itemTitle } from '../../core/content-guard';
-import { EntryApi } from '../../core/entry-api';
+import { contentExists, itemExists, itemTitle } from '../../core/content/content-guard';
+import { EntryApi } from '../../core/api/entry-api';
 import { Commands } from './commands';
 import { EntryDetail } from './entry-detail/entry-detail';
 

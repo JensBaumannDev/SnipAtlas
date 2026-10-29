@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CodeToken, highlight } from '../../core/code-highlight';
-import { CodeLanguage } from '../../core/entry';
+import { CodeToken, highlight } from '../../core/content/code-highlight';
+import { CodeLanguage } from '../../core/models/entry';
 
 export type TerminalLineKind =
   'command' | 'code' | 'output' | 'comment' | 'error' | 'success' | 'done' | 'todo';

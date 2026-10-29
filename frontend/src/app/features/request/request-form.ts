@@ -8,7 +8,7 @@ import {
   ImprovementArea,
   ImprovementRequest,
   RequestKind,
-} from '../../core/contact-request';
+} from '../../core/models/contact-request';
 
 export const LIMITS = {
   title: 120,

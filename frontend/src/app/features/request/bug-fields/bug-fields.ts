@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
-import { BugType } from '../../../core/contact-request';
+import { BugType } from '../../../core/models/contact-request';
 import { BugForm, FieldError, LIMITS, visibleError } from '../request-form';
 
 @Component({

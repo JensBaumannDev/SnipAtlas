@@ -3,11 +3,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, map } from 'rxjs';
-import { BlueprintApi } from '../../../core/blueprint-api';
-import { ConceptApi } from '../../../core/concept-api';
-import { DebugGuideApi } from '../../../core/debug-guide-api';
-import { EntryApi } from '../../../core/entry-api';
-import { ErrorApi } from '../../../core/error-api';
+import { BlueprintApi } from '../../../core/api/blueprint-api';
+import { ConceptApi } from '../../../core/api/concept-api';
+import { DebugGuideApi } from '../../../core/api/debug-guide-api';
+import { EntryApi } from '../../../core/api/entry-api';
+import { ErrorApi } from '../../../core/api/error-api';
 import { TerminalWindow } from '../../../shared/terminal-window/terminal-window';
 import { OFFER_TABS, OfferArea } from './offer-tabs';
 

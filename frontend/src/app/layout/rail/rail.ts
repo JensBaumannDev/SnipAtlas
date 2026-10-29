@@ -11,7 +11,7 @@ import {
   settingsIcon,
   terminalIcon,
   triangleAlertIcon,
-} from '../../core/icons';
+} from '../../core/ui/icons';
 
 @Component({
   imports: [RouterLink, RouterLinkActive, TranslatePipe, LucideDynamicIcon],

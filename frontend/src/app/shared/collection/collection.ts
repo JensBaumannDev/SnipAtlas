@@ -11,10 +11,10 @@ import {
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Favorites } from '../../core/favorites';
-import { starIcon } from '../../core/icons';
-import { LoginDialog } from '../../core/login-dialog';
-import { Session } from '../../core/session';
+import { Favorites } from '../../core/user-data/favorites';
+import { starIcon } from '../../core/ui/icons';
+import { LoginDialog } from '../../core/auth/login-dialog';
+import { Session } from '../../core/auth/session';
 
 @Component({
   imports: [RouterLink, TranslatePipe, LucideDynamicIcon],
