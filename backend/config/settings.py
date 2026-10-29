@@ -68,6 +68,8 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
 ]
+PASSWORD_RESET_TIMEOUT = 60 * 60
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -139,3 +141,6 @@ MAILERS = {
 }
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='noreply@snipatlas.jensbaumann.com')
 REPLY_TO_EMAIL = env('REPLY_TO_EMAIL')
+
+# Frontend
+FRONTEND_URL = env('FRONTEND_URL', default='http://localhost:4200')

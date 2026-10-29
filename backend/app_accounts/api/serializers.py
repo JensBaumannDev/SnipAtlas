@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, password_validation
 from rest_framework import serializers
 
+from app_accounts.emails import send_reset_mail
 from app_accounts.models import (
     PROJECT_VALUE_FIELDS,
     PROJECT_VALUE_MAX_LENGTH,
@@ -110,6 +111,16 @@ class PasswordChangeSerializer(serializers.Serializer):
 
     def to_representation(self, user: User) -> dict:
         return UserSerializer(user).data
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=254)
+
+    def save(self) -> None:
+        email = UserManager.normalize_email(self.validated_data['email'])
+        user = User.objects.filter(email=email, is_active=True).first()
+        if user and user.has_usable_password():
+            send_reset_mail(user)
 
 
 # Favorites

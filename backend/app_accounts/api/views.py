@@ -11,7 +11,7 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from app_accounts.models import User
 from app_content.models import Blueprint, BlueprintStep, Entry
 from config.permissions import CsrfProtected
-from config.throttling import AuthRateThrottle
+from config.throttling import AuthRateThrottle, PasswordResetRateThrottle
 
 from .serializers import (
     CurrentPasswordSerializer,
@@ -19,12 +19,14 @@ from .serializers import (
     FavoriteSerializer,
     LoginSerializer,
     PasswordChangeSerializer,
+    PasswordResetSerializer,
     RegisterSerializer,
     SettingsSerializer,
     UserSerializer,
 )
 
 AUTH_THROTTLES = (AnonRateThrottle, UserRateThrottle, AuthRateThrottle)
+RESET_THROTTLES = (AnonRateThrottle, UserRateThrottle, PasswordResetRateThrottle)
 
 
 class CsrfView(generics.GenericAPIView):
@@ -104,6 +106,18 @@ class DeleteAccountView(generics.GenericAPIView):
         user = request.user
         logout(request)
         user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PasswordResetView(generics.GenericAPIView):
+    serializer_class = PasswordResetSerializer
+    permission_classes = (CsrfProtected,)
+    throttle_classes = RESET_THROTTLES
+
+    def post(self, request: Request) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
