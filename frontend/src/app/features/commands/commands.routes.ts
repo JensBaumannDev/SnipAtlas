@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { contentExists, itemExists, itemTitle } from '../../core/content/content-guard';
+import { contentExists, itemExists, itemText } from '../../core/content/content-guard';
 import { EntryApi } from '../../core/api/entry-api';
 import { Commands } from './commands';
 import { EntryDetail } from './entry-detail/entry-detail';
@@ -18,7 +18,10 @@ export const COMMANDS_ROUTES: Routes = [
   {
     path: ':topic/:subtopic/:slug',
     component: EntryDetail,
-    title: itemTitle(findEntry, (entry) => entry.title, 'pages.commands'),
+    title: itemText(findEntry, (entry) => entry.title, 'pages.commands'),
+    resolve: {
+      description: itemText(findEntry, (entry) => entry.description, 'meta.commands'),
+    },
     canActivate: [itemExists(findEntry)],
   },
 ];

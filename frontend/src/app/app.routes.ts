@@ -9,42 +9,45 @@ export const routes: Routes = [
   {
     path: 'befehle',
     title: 'pages.commands',
-    data: { sidebar: 'subtopics', area: 'commands' },
+    data: { sidebar: 'subtopics', area: 'commands', description: 'meta.commands' },
     loadChildren: () =>
       import('./features/commands/commands.routes').then((m) => m.COMMANDS_ROUTES),
   },
   {
     path: 'grundlagen',
     title: 'pages.concepts',
-    data: { sidebar: 'subtopics', area: 'concepts' },
+    data: { sidebar: 'subtopics', area: 'concepts', description: 'meta.concepts' },
     loadChildren: () =>
       import('./features/concepts/concepts.routes').then((m) => m.CONCEPTS_ROUTES),
   },
   {
     path: 'anleitungen',
     title: 'pages.blueprints',
-    data: { sidebar: 'topics', area: 'blueprints' },
+    data: { sidebar: 'topics', area: 'blueprints', description: 'meta.blueprints' },
     loadChildren: () => import('./features/guides/guides.routes').then((m) => m.GUIDES_ROUTES),
   },
   {
     path: 'fehler',
     title: 'pages.debugging',
-    data: { sidebar: 'topics', area: 'debugging' },
+    data: { sidebar: 'topics', area: 'debugging', description: 'meta.debugging' },
     loadChildren: () => import('./features/errors/errors.routes').then((m) => m.ERRORS_ROUTES),
   },
   {
     path: 'begriffe',
     title: 'pages.glossary',
+    data: { description: 'meta.glossary' },
     loadComponent: () => import('./features/glossary/glossary').then((m) => m.Glossary),
   },
   {
     path: 'neu',
     title: 'pages.news',
+    data: { description: 'meta.news' },
     loadComponent: () => import('./features/news/news').then((m) => m.News),
   },
   {
     path: 'anfrage',
     title: 'pages.request',
+    data: { description: 'meta.request' },
     loadComponent: () => import('./features/request/request').then((m) => m.Request),
   },
   {
@@ -60,16 +63,19 @@ export const routes: Routes = [
   {
     path: 'faq',
     title: 'pages.faq',
+    data: { description: 'meta.faq' },
     loadComponent: () => import('./features/faq/faq').then((m) => m.Faq),
   },
   {
     path: 'impressum',
     title: 'pages.imprint',
+    data: { description: 'meta.imprint' },
     loadComponent: () => import('./features/legal/imprint/imprint').then((m) => m.Imprint),
   },
   {
     path: 'datenschutz',
     title: 'pages.privacy',
+    data: { description: 'meta.privacy' },
     loadComponent: () => import('./features/legal/privacy/privacy').then((m) => m.Privacy),
   },
   {

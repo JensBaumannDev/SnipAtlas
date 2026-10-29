@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { contentExists, itemExists, itemTitle, slugExists } from '../../core/content/content-guard';
+import { contentExists, itemExists, itemText, slugExists } from '../../core/content/content-guard';
 import { DEBUG_PATH } from '../../core/models/debug-guide';
 import { DebugGuideApi } from '../../core/api/debug-guide-api';
 import { ErrorApi } from '../../core/api/error-api';
@@ -16,14 +16,16 @@ export const ERRORS_ROUTES: Routes = [
   {
     path: `${DEBUG_PATH}/:slug`,
     component: DebugWay,
-    title: itemTitle(findWay, (guide) => guide.title, 'pages.debugging'),
+    title: itemText(findWay, (guide) => guide.title, 'pages.debugging'),
+    resolve: { description: itemText(findWay, (guide) => guide.summary, 'meta.debugging') },
     canActivate: [slugExists(findWay)],
   },
   { path: ':topic', component: Errors, canActivate: [contentExists] },
   {
     path: ':topic/:slug',
     component: ErrorDetail,
-    title: itemTitle(findError, (error) => error.message, 'pages.debugging'),
+    title: itemText(findError, (error) => error.message, 'pages.debugging'),
+    resolve: { description: itemText(findError, (error) => error.meaning, 'meta.debugging') },
     canActivate: [itemExists(findError)],
   },
 ];
