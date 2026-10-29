@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintProgress } from '../../../core/blueprint-progress';
+import { Favorites } from '../../../core/favorites';
 import { downloadJson } from '../../../core/file-download';
 import { PASSWORD_MIN_LENGTH } from '../../../core/password-rules';
 import { Session } from '../../../core/session';
@@ -23,6 +24,7 @@ export class ProfileAccount {
   private readonly router = inject(Router);
   private readonly session = inject(Session);
   private readonly progress = inject(BlueprintProgress);
+  private readonly favorites = inject(Favorites);
   private readonly requests = toSignal(inject(UserRequestApi).getMine(), { initialValue: [] });
   private readonly formBuilder = inject(FormBuilder).nonNullable;
 
@@ -88,6 +90,7 @@ export class ProfileAccount {
   protected download(): void {
     downloadJson(this.document, EXPORT_FILE, {
       account: this.session.user(),
+      favorites: this.favorites.list(),
       progress: this.progress.done(),
       requests: this.requests(),
     });

@@ -3,27 +3,19 @@ import { Service, computed, inject, signal } from '@angular/core';
 import { Observable, catchError, firstValueFrom, map, of, switchMap } from 'rxjs';
 import type { AccentTheme } from './preferences';
 
-export interface Favorite {
-  topic: string;
-  subtopic: string;
-  slug: string;
-  title: string;
-}
-
 export interface SessionUser {
   email: string;
   since: string;
   notifyByMail: boolean;
   accent: AccentTheme;
-  favorites: Favorite[];
 }
-
-export type AccountUser = Omit<SessionUser, 'favorites'>;
 
 export interface Credentials {
   email: string;
   password: string;
 }
+
+export type AuthEvent = 'restore' | 'login' | 'logout';
 
 const URL = '/api/auth/';
 
@@ -32,12 +24,13 @@ export class Session {
   private readonly http = inject(HttpClient);
 
   readonly user = signal<SessionUser | undefined>(undefined);
+  readonly authEvent = signal<AuthEvent | undefined>(undefined);
   readonly initial = computed(() => this.user()?.email.charAt(0).toUpperCase() ?? '');
 
   restore(): Promise<void> {
     const restored = this.refreshCsrf().pipe(
-      switchMap(() => this.http.get<AccountUser>(`${URL}me/`)),
-      map((user) => this.signIn(user)),
+      switchMap(() => this.http.get<SessionUser>(`${URL}me/`)),
+      map((user) => this.signIn(user, 'restore')),
       catchError(() => of(undefined)),
     );
     return firstValueFrom(restored);
@@ -49,14 +42,14 @@ export class Session {
 
   login(credentials: Credentials): Observable<void> {
     return this.http
-      .post<AccountUser>(`${URL}login/`, credentials)
-      .pipe(map((user) => this.signIn(user)));
+      .post<SessionUser>(`${URL}login/`, credentials)
+      .pipe(map((user) => this.signIn(user, 'login')));
   }
 
   register(credentials: Credentials): Observable<void> {
     return this.http
-      .post<AccountUser>(`${URL}register/`, credentials)
-      .pipe(map((user) => this.signIn(user)));
+      .post<SessionUser>(`${URL}register/`, credentials)
+      .pipe(map((user) => this.signIn(user, 'login')));
   }
 
   logout(): void {
@@ -65,6 +58,9 @@ export class Session {
   }
 
   clear(): void {
+    if (this.user()) {
+      this.authEvent.set('logout');
+    }
     this.user.set(undefined);
   }
 
@@ -72,7 +68,8 @@ export class Session {
     this.user.update((user) => (user ? { ...user, ...changes } : user));
   }
 
-  private signIn(user: AccountUser): void {
-    this.user.set({ ...user, favorites: [] });
+  private signIn(user: SessionUser, event: AuthEvent): void {
+    this.user.set(user);
+    this.authEvent.set(event);
   }
 }
