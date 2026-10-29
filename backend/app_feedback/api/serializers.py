@@ -1,3 +1,5 @@
+"""Serializers for sending and reading requests."""
+
 from rest_framework import serializers
 
 from app_content.models import Topic
@@ -8,6 +10,8 @@ REQUIRED = {'required': True, 'allow_blank': False}
 
 
 class SuggestionSerializer(serializers.ModelSerializer):
+    """Shared fields of all requests, with email only for guests."""
+
     kind = serializers.ChoiceField(choices=Kind.choices)
 
     class Meta:
@@ -17,16 +21,20 @@ class SuggestionSerializer(serializers.ModelSerializer):
         extra_kwargs = {'email': REQUIRED}
 
     def get_fields(self) -> dict:
+        """Remove the email field for logged-in users."""
         fields = super().get_fields()
         if self.context['request'].user.is_authenticated:
             del fields['email']
         return fields
 
     def to_representation(self, instance: Suggestion) -> dict:
+        """Return only the id of the new request."""
         return {'id': instance.pk}
 
 
 class EntrySuggestionSerializer(SuggestionSerializer):
+    """Request for a new entry."""
+
     area = serializers.ChoiceField(choices=EntryArea.choices)
     topic = serializers.SlugRelatedField(slug_field='slug', queryset=Topic.objects.all())
 
@@ -39,6 +47,8 @@ class EntrySuggestionSerializer(SuggestionSerializer):
 
 
 class ImprovementSuggestionSerializer(SuggestionSerializer):
+    """Request for an improvement."""
+
     area = serializers.ChoiceField(choices=ImprovementArea.choices)
 
     class Meta(SuggestionSerializer.Meta):
@@ -47,6 +57,8 @@ class ImprovementSuggestionSerializer(SuggestionSerializer):
 
 
 class BugSuggestionSerializer(SuggestionSerializer):
+    """Report of a bug in the content."""
+
     type = serializers.ChoiceField(source='bug_type', choices=BugType.choices)
 
     class Meta(SuggestionSerializer.Meta):
@@ -59,6 +71,8 @@ class BugSuggestionSerializer(SuggestionSerializer):
 
 # My requests
 class MyRequestSerializer(serializers.ModelSerializer):
+    """Request as shown to the user who sent it."""
+
     date = serializers.DateField(source='created_on', read_only=True)
 
     class Meta:
@@ -67,6 +81,7 @@ class MyRequestSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def to_representation(self, instance: Suggestion) -> dict:
+        """Return the data without an empty answer."""
         data = super().to_representation(instance)
         if not instance.answer:
             del data['answer']

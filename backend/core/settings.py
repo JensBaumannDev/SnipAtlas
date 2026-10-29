@@ -1,3 +1,5 @@
+"""Project settings, read from environment variables."""
+
 from pathlib import Path
 
 import environ

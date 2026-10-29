@@ -1,3 +1,5 @@
+"""Models for all content shown in SnipAtlas."""
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -11,11 +13,14 @@ validate_clean_slug = RegexValidator(r'^[a-z0-9]+(-[a-z0-9]+)*$', code='invalid'
 
 
 def validate_topic_slug(value: str) -> None:
+    """Reject the slug reserved for the debug guides."""
     if value == RESERVED_TOPIC_SLUG:
         raise ValidationError('This slug is reserved.', code='reserved')
 
 
 class Group(models.Model):
+    """Group of topics in the sidebar, such as frontend or backend."""
+
     slug = models.SlugField(unique=True, validators=[validate_clean_slug])
     name = models.CharField(max_length=60)
     position = models.IntegerField(default=0)
@@ -28,6 +33,8 @@ class Group(models.Model):
 
 
 class Topic(models.Model):
+    """Topic such as Git or Angular with its own color."""
+
     group = models.ForeignKey(Group, on_delete=models.PROTECT, related_name='topics')
     slug = models.SlugField(unique=True, validators=[validate_clean_slug, validate_topic_slug])
     name = models.CharField(max_length=60)
@@ -48,6 +55,8 @@ class Topic(models.Model):
 
 
 class Subtopic(models.Model):
+    """Section within a topic that groups commands and concepts."""
+
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='subtopics')
     slug = models.SlugField(validators=[validate_clean_slug])
     name = models.CharField(max_length=80)
@@ -67,6 +76,8 @@ class Subtopic(models.Model):
 
 # Entries and concepts
 class CodeLanguage(models.TextChoices):
+    """Languages used for syntax highlighting."""
+
     TERMINAL = 'terminal', 'Terminal'
     PYTHON = 'python', 'Python'
     JAVASCRIPT = 'javascript', 'JavaScript'
@@ -78,6 +89,7 @@ class CodeLanguage(models.TextChoices):
 
 
 def language_constraint(*, optional: bool = False) -> models.CheckConstraint:
+    """Return a database constraint that only allows known languages."""
     values = [*CodeLanguage.values, ''] if optional else CodeLanguage.values
     return models.CheckConstraint(
         condition=models.Q(language__in=values), name='%(class)s_language_valid'
@@ -85,6 +97,7 @@ def language_constraint(*, optional: bool = False) -> models.CheckConstraint:
 
 
 def slug_constraint() -> models.CheckConstraint:
+    """Return a database constraint that only allows clean slugs."""
     return models.CheckConstraint(
         condition=models.Q(slug__regex=validate_clean_slug.regex.pattern),
         name='%(class)s_slug_clean',
@@ -92,39 +105,52 @@ def slug_constraint() -> models.CheckConstraint:
 
 
 def field_error(field: str, code: str, message: str) -> ValidationError:
+    """Return a validation error for a single field."""
     return ValidationError({field: ValidationError(message, code=code)})
 
 
 def require_german(obj: models.Model, field: str) -> None:
+    """Raise an error if a field has an English text but no German one."""
     if getattr(obj, f'{field}_en') and not getattr(obj, f'{field}_de'):
         raise field_error(f'{field}_de', 'required', 'Add the German text first.')
 
 
 def split_os_code(code: str, code_unix: str) -> str | dict[str, str]:
+    """Return the code, or Windows and Unix code if they differ."""
     if not code_unix:
         return code
     return {'win': code, 'unix': code_unix}
 
 
 class TopicQuerySet(models.QuerySet):
+    """Query set that filters content by topic slug."""
+
     topic_lookup = 'topic__slug'
 
     def for_topic(self, slug: str) -> TopicQuerySet:
+        """Return the items of a topic, or none for a broken slug."""
         if not validate_clean_slug.regex.fullmatch(slug):
             return self.none()
         return self.filter(**{self.topic_lookup: slug})
 
 
 class ContentItemQuerySet(TopicQuerySet):
+    """Query set that filters content by the topic of its subtopic."""
+
     topic_lookup = 'subtopic__topic__slug'
 
 
 class DebugGuideQuerySet(TopicQuerySet):
+    """Query set for debug guides."""
+
     def general(self) -> DebugGuideQuerySet:
+        """Return the general guides without a topic."""
         return self.filter(topic__isnull=True)
 
 
 class ContentItem(models.Model):
+    """Shared fields of commands and concepts."""
+
     subtopic = models.ForeignKey(Subtopic, on_delete=models.PROTECT, related_name='+')
     slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
     title = models.CharField(max_length=120)
@@ -151,6 +177,8 @@ class ContentItem(models.Model):
 
 
 class Entry(ContentItem):
+    """Command or snippet to copy, optionally with separate Unix code."""
+
     description = models.TextField()
     code_unix = models.TextField(blank=True)
 
@@ -158,15 +186,19 @@ class Entry(ContentItem):
         verbose_name_plural = 'entries'
 
     def clean(self) -> None:
+        """Require the German Unix code before the English one."""
         super().clean()
         require_german(self, 'code_unix')
 
     @property
     def os_code(self) -> str | dict[str, str]:
+        """Return the code, split by operating system if needed."""
         return split_os_code(self.code, self.code_unix)
 
 
 class Concept(ContentItem):
+    """Concept that explains the idea behind the code."""
+
     summary = models.TextField()
     explanation = models.TextField()
     note = models.TextField(blank=True)
@@ -174,6 +206,8 @@ class Concept(ContentItem):
 
 # Errors and debug guides
 class OptionalCode(models.Model):
+    """Shared optional code with its language."""
+
     language = models.CharField(max_length=20, choices=CodeLanguage.choices, blank=True)
     code = models.TextField(blank=True)
 
@@ -181,6 +215,7 @@ class OptionalCode(models.Model):
         abstract = True
 
     def clean(self) -> None:
+        """Require German code and a language as soon as code is used."""
         super().clean()
         if (self.language or self.code_en) and not self.code_de:
             raise field_error('code_de', 'required', 'Add the German code.')
@@ -189,6 +224,8 @@ class OptionalCode(models.Model):
 
 
 class ErrorMessage(OptionalCode):
+    """Common error message of a topic with cause and solution."""
+
     topic = models.ForeignKey(Topic, on_delete=models.PROTECT, related_name='+')
     slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
     message = models.CharField(max_length=300)
@@ -207,6 +244,8 @@ class ErrorMessage(OptionalCode):
 
 
 class ErrorStep(models.Model):
+    """Step towards solving an error message."""
+
     error = models.ForeignKey(ErrorMessage, on_delete=models.CASCADE, related_name='steps')
     text = models.TextField()
     position = models.IntegerField(default=0)
@@ -219,6 +258,8 @@ class ErrorStep(models.Model):
 
 
 class DebugGuide(models.Model):
+    """Guide for debugging, either general with a label or for one topic."""
+
     topic = models.ForeignKey(
         Topic, on_delete=models.PROTECT, null=True, blank=True, related_name='+'
     )
@@ -243,6 +284,7 @@ class DebugGuide(models.Model):
         return self.title
 
     def clean(self) -> None:
+        """Require a label for general guides and forbid it for topic guides."""
         super().clean()
         if self.topic_id is None and not self.label_de:
             raise field_error('label_de', 'required', 'General guides need a label.')
@@ -252,6 +294,8 @@ class DebugGuide(models.Model):
 
 
 class DebugGuideStep(OptionalCode):
+    """Step of a debug guide with optional code."""
+
     guide = models.ForeignKey(DebugGuide, on_delete=models.CASCADE, related_name='steps')
     title = models.CharField(max_length=120)
     text = models.TextField()
@@ -266,6 +310,7 @@ class DebugGuideStep(OptionalCode):
         return self.title
 
     def clean(self) -> None:
+        """Require the Windows code before the Unix code."""
         super().clean()
         if self.code_unix_de and not self.code_de:
             raise field_error('code_de', 'required', 'Add the Windows code first.')
@@ -273,11 +318,14 @@ class DebugGuideStep(OptionalCode):
 
     @property
     def os_code(self) -> str | dict[str, str]:
+        """Return the code, split by operating system if needed."""
         return split_os_code(self.code, self.code_unix)
 
 
 # Blueprints
 class Blueprint(models.Model):
+    """Step-by-step guide for a whole task, such as setting up a project."""
+
     topic = models.ForeignKey(Topic, on_delete=models.PROTECT, related_name='+')
     slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
     title = models.CharField(max_length=120)
@@ -295,6 +343,8 @@ class Blueprint(models.Model):
 
 
 class BlueprintStep(models.Model):
+    """Step of a blueprint that users can mark as done."""
+
     blueprint = models.ForeignKey(Blueprint, on_delete=models.CASCADE, related_name='steps')
     slug = models.SlugField(max_length=80, validators=[validate_clean_slug])
     title = models.CharField(max_length=120)
@@ -316,6 +366,8 @@ class BlueprintStep(models.Model):
 
 
 class BlueprintCode(models.Model):
+    """Code block of a blueprint step."""
+
     step = models.ForeignKey(BlueprintStep, on_delete=models.CASCADE, related_name='codes')
     language = models.CharField(max_length=20, choices=CodeLanguage.choices)
     code = models.TextField()
@@ -330,16 +382,20 @@ class BlueprintCode(models.Model):
         return self.get_language_display()
 
     def clean(self) -> None:
+        """Require the German Unix code before the English one."""
         super().clean()
         require_german(self, 'code_unix')
 
     @property
     def os_code(self) -> str | dict[str, str]:
+        """Return the code, split by operating system if needed."""
         return split_os_code(self.code, self.code_unix)
 
 
 # Glossary
 class GlossaryTerm(models.Model):
+    """Short definition of a term, optionally linked to a concept."""
+
     slug = models.SlugField(max_length=80, unique=True, validators=[validate_clean_slug])
     term = models.CharField(max_length=60)
     definition = models.TextField()
@@ -356,6 +412,8 @@ class GlossaryTerm(models.Model):
 
 
 class GlossaryAlias(models.Model):
+    """Other name of a glossary term in one language."""
+
     term = models.ForeignKey(GlossaryTerm, on_delete=models.CASCADE, related_name='aliases')
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='de')
     name = models.CharField(max_length=60)
@@ -379,6 +437,8 @@ class GlossaryAlias(models.Model):
 
 # News
 class NewsArea(models.TextChoices):
+    """Areas a news item can point to."""
+
     COMMANDS = 'befehle', 'Befehle'
     CONCEPTS = 'grundlagen', 'Grundlagen'
     BLUEPRINTS = 'anleitungen', 'Anleitungen'
@@ -389,6 +449,8 @@ AREAS_WITH_SUBTOPICS = (NewsArea.COMMANDS, NewsArea.CONCEPTS)
 
 
 class News(models.Model):
+    """News item about new content on the start page."""
+
     date = models.DateField()
     title = models.CharField(max_length=120)
     area = models.CharField(max_length=20, choices=NewsArea.choices)
@@ -410,6 +472,7 @@ class News(models.Model):
         return self.title
 
     def clean(self) -> None:
+        """Allow a subtopic only for commands and concepts of the same topic."""
         super().clean()
         if self.subtopic and self.area not in AREAS_WITH_SUBTOPICS:
             raise field_error('subtopic', 'invalid', 'Only commands and concepts have subtopics.')
@@ -418,5 +481,6 @@ class News(models.Model):
 
     @property
     def link(self) -> list[str]:
+        """Return the URL parts of the area, topic and subtopic."""
         parts = [f'/{self.area}', self.topic.slug]
         return [*parts, self.subtopic.slug] if self.subtopic else parts

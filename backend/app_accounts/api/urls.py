@@ -1,3 +1,5 @@
+"""URLs for login, account, favorites, progress and settings."""
+
 from django.urls import URLPattern, path
 
 from .views import (

@@ -1,3 +1,5 @@
+"""URLs for sending requests and listing your own."""
+
 from django.urls import URLPattern, path
 
 from .views import MyRequestListView, RequestCreateView
