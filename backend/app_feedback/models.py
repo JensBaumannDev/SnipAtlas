@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.conf import settings
 from django.core.validators import MaxLengthValidator, MinLengthValidator, URLValidator
@@ -9,6 +9,7 @@ from django.utils import timezone
 from app_content.models import Topic
 
 SUBJECT_LENGTH = 60
+GUEST_TICKET_DAYS = 183
 
 LIMITS = {
     'title': 120,
@@ -147,6 +148,13 @@ class Suggestion(models.Model):
             self.status = Status.DONE
             self.answered_at = timezone.now()
         super().save(*args, **kwargs)
+
+    @classmethod
+    def delete_old_guest_tickets(cls) -> int:
+        cutoff = timezone.now() - timedelta(days=GUEST_TICKET_DAYS)
+        old = cls.objects.filter(user__isnull=True, status=Status.DONE, created_at__lt=cutoff)
+        count, _ = old.delete()
+        return count
 
     @property
     def subject(self) -> str:
