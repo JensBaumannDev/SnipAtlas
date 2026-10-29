@@ -1,7 +1,13 @@
 from django.contrib.auth import authenticate, password_validation
 from rest_framework import serializers
 
-from app_accounts.models import Favorite, User, UserManager
+from app_accounts.models import (
+    PROJECT_VALUE_FIELDS,
+    PROJECT_VALUE_MAX_LENGTH,
+    Favorite,
+    User,
+    UserManager,
+)
 
 from .exceptions import InvalidCredentials
 
@@ -61,3 +67,25 @@ class FavoriteSerializer(serializers.ModelSerializer):
         model = Favorite
         fields = ('topic', 'subtopic', 'slug', 'title')
         read_only_fields = fields
+
+
+# Settings
+class SettingsSerializer(serializers.ModelSerializer):
+    project_values = serializers.DictField(
+        child=serializers.CharField(max_length=PROJECT_VALUE_MAX_LENGTH, allow_blank=True)
+    )
+
+    class Meta:
+        model = User
+        fields = ('os', 'theme', 'language', 'project_values')
+
+    def validate_project_values(self, values: dict[str, str]) -> dict[str, str]:
+        unknown = [key for key in values if key not in PROJECT_VALUE_FIELDS]
+        if unknown:
+            error = serializers.ErrorDetail('Unknown key.', code='unknown_key')
+            raise serializers.ValidationError({key: [error] for key in unknown})
+        return values
+
+    def update(self, user: User, validated_data: dict) -> User:
+        user.set_project_values(validated_data.pop('project_values', {}))
+        return super().update(user, validated_data)

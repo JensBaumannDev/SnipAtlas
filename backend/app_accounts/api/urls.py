@@ -11,6 +11,7 @@ from .views import (
     ProgressListView,
     ProgressStepView,
     RegisterView,
+    SettingsView,
 )
 
 urlpatterns: list[URLPattern] = [
@@ -32,4 +33,5 @@ urlpatterns: list[URLPattern] = [
         ProgressStepView.as_view(),
         name='progress-step',
     ),
+    path('me/settings/', SettingsView.as_view(), name='settings'),
 ]
