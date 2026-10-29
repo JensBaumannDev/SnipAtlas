@@ -13,7 +13,13 @@ from app_content.models import Blueprint, BlueprintStep, Entry
 from config.permissions import CsrfProtected
 from config.throttling import AuthRateThrottle
 
-from .serializers import FavoriteSerializer, LoginSerializer, RegisterSerializer, UserSerializer
+from .serializers import (
+    FavoriteSerializer,
+    LoginSerializer,
+    RegisterSerializer,
+    SettingsSerializer,
+    UserSerializer,
+)
 
 AUTH_THROTTLES = (AnonRateThrottle, UserRateThrottle, AuthRateThrottle)
 
@@ -109,3 +115,12 @@ class ProgressStepView(generics.GenericAPIView):
     def delete(self, request: Request, blueprint: str, step: str) -> Response:
         request.user.completed_steps.filter(step=self.get_step()).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Settings
+class SettingsView(generics.RetrieveUpdateAPIView):
+    serializer_class = SettingsSerializer
+    http_method_names = ('get', 'patch', 'head', 'options')
+
+    def get_object(self) -> User:
+        return self.request.user

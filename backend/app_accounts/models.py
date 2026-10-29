@@ -73,6 +73,15 @@ SETTING_CHOICES = {
 
 PROJECT_VALUE_MAX_LENGTH = 100
 
+PROJECT_VALUE_FIELDS = {
+    'project': 'project_name',
+    'github_user': 'project_github_user',
+    'repo': 'project_repo',
+    'domain': 'project_domain',
+    'server_user': 'project_server_user',
+    'server_ip': 'project_server_ip',
+}
+
 
 def choice_constraint(field: str, choices: type[models.TextChoices]) -> models.CheckConstraint:
     return models.CheckConstraint(
@@ -118,6 +127,14 @@ class User(AbstractUser):
     @property
     def since(self) -> date:
         return timezone.localdate(self.date_joined)
+
+    @property
+    def project_values(self) -> dict[str, str]:
+        return {key: getattr(self, field) for key, field in PROJECT_VALUE_FIELDS.items()}
+
+    def set_project_values(self, values: dict[str, str]) -> None:
+        for key, value in values.items():
+            setattr(self, PROJECT_VALUE_FIELDS[key], value)
 
     def progress(self) -> dict[str, list[str]]:
         steps = self.completed_steps.values_list('step__blueprint__slug', 'step__slug')

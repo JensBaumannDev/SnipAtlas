@@ -426,3 +426,28 @@ def test_deleting_user_deletes_only_own_progress(
     user.delete()
     assert list(CompletedStep.objects.all()) == [kept]
     assert BlueprintStep.objects.filter(pk=venv_step.pk).exists()
+
+
+# Project values
+def test_project_values_start_empty(user: User) -> None:
+    assert user.project_values == {
+        'project': '',
+        'github_user': '',
+        'repo': '',
+        'domain': '',
+        'server_user': '',
+        'server_ip': '',
+    }
+
+
+def test_project_values_read_project_fields(user: User) -> None:
+    user.project_name = 'snipatlas'
+    user.project_server_ip = '203.0.113.7'
+    assert user.project_values['project'] == 'snipatlas'
+    assert user.project_values['server_ip'] == '203.0.113.7'
+
+
+def test_set_project_values_changes_only_given_keys(user: User) -> None:
+    user.project_repo = 'old'
+    user.set_project_values({'github_user': 'ada', 'domain': ''})
+    assert (user.project_github_user, user.project_domain, user.project_repo) == ('ada', '', 'old')
