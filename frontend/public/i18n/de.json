@@ -126,7 +126,12 @@
       "passwordLength": "Das Passwort braucht mindestens {{min}} Zeichen.",
       "passwordMismatch": "Die Passwörter stimmen nicht überein."
     },
-    "forgotSent": "Falls es ein Konto mit dieser Adresse gibt, ist ein Link unterwegs. Er gilt eine Stunde."
+    "forgotSent": "Falls es ein Konto mit dieser Adresse gibt, ist ein Link unterwegs. Er gilt eine Stunde.",
+    "claim": "Vom ersten Befehl bis zum fertigen Projekt online.",
+    "benefits": {
+      "favorites": "Favoriten auf jedem Gerät",
+      "personalize": "SnipAtlas nach deinem Geschmack personalisieren"
+    }
   },
   "resetPassword": {
     "title": "Neues Passwort festlegen",

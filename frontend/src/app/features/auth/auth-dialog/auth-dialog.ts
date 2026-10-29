@@ -3,12 +3,14 @@ import { Component, ElementRef, Injector, afterNextRender, inject, signal } from
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { xIcon } from '../../../core/icons';
+import { checkIcon, xIcon } from '../../../core/icons';
 import { ForgotPassword } from '../forgot-password/forgot-password';
 import { Login } from '../login/login';
 import { Register } from '../register/register';
 
 export type AuthView = 'login' | 'register' | 'forgot';
+
+const BENEFITS = ['auth.benefits.favorites', 'auth.benefits.personalize'];
 
 @Component({
   imports: [ForgotPassword, Login, Register, TranslatePipe, LucideDynamicIcon],
@@ -25,6 +27,8 @@ export class AuthDialog {
   private readonly injector = inject(Injector);
 
   protected readonly xIcon = xIcon;
+  protected readonly checkIcon = checkIcon;
+  protected readonly benefits = BENEFITS;
   protected readonly view = signal<AuthView>('login');
   protected readonly closing = signal(false);
 

@@ -2,11 +2,11 @@
 
 :host {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  width: rem(400);
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  width: rem(800);
   max-width: calc(100vw - 2 * $space-md);
-  padding: $space-lg;
+  overflow: clip;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: $radius-xl;
@@ -17,7 +17,70 @@
   animation: auth-dialog-out var(--duration-fast) ease-in forwards;
 }
 
-// Close
+// Aside
+.auth-dialog__aside {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  padding: $space-xl $space-lg;
+  background:
+    radial-gradient(ellipse 120% 70% at 50% 0, var(--glow), transparent) no-repeat,
+    var(--bg);
+  border-right: 1px solid var(--line);
+}
+
+.auth-dialog__brand {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: center;
+  padding-block: $space-md;
+  font-size: $font-size-brand;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-none;
+  letter-spacing: $letter-spacing-tight;
+}
+
+.auth-dialog__logo {
+  width: $font-size-brand;
+  height: $font-size-brand;
+}
+
+.auth-dialog__accent {
+  color: var(--accent);
+}
+
+.auth-dialog__claim {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  text-align: center;
+}
+
+.auth-dialog__benefits {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  align-self: center;
+}
+
+.auth-dialog__benefit {
+  display: flex;
+  gap: $space-sm;
+  align-items: flex-start;
+}
+
+.auth-dialog__check {
+  flex: none;
+  margin-top: rem(1);
+  color: var(--accent);
+}
+
+// Main
+.auth-dialog__main {
+  position: relative;
+  padding: $space-lg;
+}
+
 .auth-dialog__close {
   position: absolute;
   top: $space-sm;
@@ -39,28 +102,6 @@
   }
 }
 
-// Brand
-.auth-dialog__brand {
-  display: flex;
-  gap: $space-sm;
-  align-items: center;
-  margin-bottom: $space-md;
-  font-size: $font-size-xl;
-  font-weight: $font-weight-bold;
-  line-height: $line-height-none;
-  letter-spacing: $letter-spacing-tight;
-}
-
-.auth-dialog__logo {
-  width: $font-size-xl;
-  height: $font-size-xl;
-  color: var(--ink);
-}
-
-.auth-dialog__accent {
-  color: var(--accent);
-}
-
 // Animation
 @keyframes auth-dialog-in {
   from {
@@ -79,13 +120,41 @@
 /* #region RESPONSIVE */
 @include mobile {
   :host {
+    display: flex;
+    flex-direction: column;
     width: 100vw;
     max-width: none;
     height: 100dvh;
-    padding: $space-lg $space-md;
     overflow-y: auto;
     border: 0;
     border-radius: 0;
+  }
+
+  .auth-dialog__aside {
+    padding: $space-lg $space-md 0;
+    background: none;
+    border-right: 0;
+  }
+
+  .auth-dialog__brand {
+    justify-content: flex-start;
+    padding-block: 0;
+    font-size: $font-size-xl;
+  }
+
+  .auth-dialog__logo {
+    width: $font-size-xl;
+    height: $font-size-xl;
+  }
+
+  .auth-dialog__claim,
+  .auth-dialog__benefits {
+    display: none;
+  }
+
+  .auth-dialog__main {
+    position: static;
+    padding: $space-md;
   }
 }
 
