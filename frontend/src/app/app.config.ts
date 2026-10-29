@@ -20,6 +20,7 @@ import { languageInterceptor } from './core/language-interceptor';
 import { PageTitle } from './core/page-title';
 import { Preferences } from './core/preferences';
 import { Session } from './core/session';
+import { SettingsSync } from './core/settings-sync';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -42,6 +43,9 @@ export const appConfig: ApplicationConfig = {
       }),
     }),
     provideAppInitializer(() => inject(TranslateService).use(inject(Preferences).language())),
+    provideAppInitializer(() => {
+      inject(SettingsSync);
+    }),
     provideAppInitializer(() => inject(Session).restore()),
     { provide: TitleStrategy, useExisting: PageTitle },
   ],
