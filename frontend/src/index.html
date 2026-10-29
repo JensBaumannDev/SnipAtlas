@@ -10,6 +10,14 @@
       content="Vom ersten Befehl bis zum fertigen Projekt online: Befehle, Grundlagen, Anleitungen und Fehlermeldungen für Einsteiger in die Webentwicklung."
     />
     <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <script>
+      try {
+        const theme = localStorage.getItem('snipatlas-theme');
+        if (theme === 'light' || theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch {}
+    </script>
   </head>
   <body>
     <app-root></app-root>

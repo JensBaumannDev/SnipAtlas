@@ -1,4 +1,4 @@
-import { DOCUMENT, Service, computed, effect, inject } from '@angular/core';
+import { DOCUMENT, REQUEST, Service, computed, effect, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { storedOption } from '../browser/browser-storage';
 import { Session } from '../auth/session';
@@ -19,6 +19,7 @@ const LANGUAGE_KEY = 'snipatlas-language';
 export class Preferences {
   private readonly document = inject(DOCUMENT);
   private readonly window = this.document.defaultView;
+  private readonly request = inject(REQUEST, { optional: true });
   private readonly translate = inject(TranslateService);
   private readonly session = inject(Session);
 
@@ -77,7 +78,11 @@ export class Preferences {
   }
 
   private browserLanguage(): Language {
-    const language = this.window?.navigator.language.toLowerCase() ?? '';
+    const language = (
+      this.request?.headers.get('accept-language') ??
+      this.window?.navigator.language ??
+      ''
+    ).toLowerCase();
     return language.startsWith('de') ? 'de' : 'en';
   }
 }
