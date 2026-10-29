@@ -73,6 +73,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/legal/privacy/privacy').then((m) => m.Privacy),
   },
   {
+    path: 'passwort-zuruecksetzen',
+    title: 'pages.resetPassword',
+    loadComponent: () =>
+      import('./features/auth/reset-password/reset-password').then((m) => m.ResetPassword),
+  },
+  {
     path: '**',
     title: 'pages.notFound',
     loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
