@@ -36,7 +36,15 @@
     </app-password-field>
   </div>
 
-  <button class="btn btn--primary auth-form__submit" type="submit" [disabled]="!filled()">
+  @if (errorText(); as message) {
+    <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
+  }
+
+  <button
+    class="btn btn--primary auth-form__submit"
+    type="submit"
+    [disabled]="!filled() || pending()"
+  >
     {{ 'auth.login' | translate }}
   </button>
 </form>

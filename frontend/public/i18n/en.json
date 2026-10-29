@@ -126,6 +126,36 @@
       "passwordMismatch": "The passwords do not match."
     }
   },
+  "apiErrors": {
+    "unreachableLabel": "Server unreachable",
+    "network_error": "Content and account are unavailable right now. Please try again in a moment.",
+    "server_error": "Something went wrong. Please try again in a moment.",
+    "validation_error": "Please check the marked fields.",
+    "invalid_credentials": "Email or password is incorrect.",
+    "wrong_password": "The password is incorrect.",
+    "invalid_link": "The link has expired or is invalid. Request a new one.",
+    "not_authenticated": "You are no longer signed in. Please sign in again.",
+    "csrf_failed": "Your session has expired. Please reload the page.",
+    "not_found": "This does not exist (anymore).",
+    "method_not_allowed": "Something went wrong. Please try again in a moment.",
+    "throttled": "Too many attempts. Please try again in {{seconds}} seconds.",
+    "fields": {
+      "required": "Please fill in this field.",
+      "blank": "Please fill in this field.",
+      "null": "Please fill in this field.",
+      "invalid": "The format is not correct.",
+      "max_length": "The text is too long.",
+      "min_length": "The text is too short.",
+      "invalid_choice": "This value is not allowed.",
+      "unique": "An account with this email address already exists.",
+      "password_too_short": "The password is too short.",
+      "password_too_common": "This password is too common.",
+      "password_entirely_numeric": "The password cannot consist of digits only.",
+      "password_too_similar": "The password is too similar to your email address.",
+      "unknown_key": "This value does not exist.",
+      "does_not_exist": "This entry does not exist."
+    }
+  },
   "settings": {
     "title": "Settings",
     "theme": "Appearance",

@@ -2,9 +2,11 @@ import { Component, computed, inject, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { finalize } from 'rxjs';
+import { formErrorText, toApiError } from '../../../core/api-error';
 import { Session } from '../../../core/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
-import { hasVisibleError, injectFocusInvalid } from '../auth-form';
+import { hasVisibleError, injectApiError, injectFocusInvalid } from '../auth-form';
 
 @Component({
   imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
@@ -27,6 +29,10 @@ export class Login {
     password: ['', Validators.required],
   });
 
+  protected readonly pending = signal(false);
+  protected readonly error = injectApiError(this.form);
+  protected readonly errorText = computed(() => formErrorText(this.error()));
+
   private readonly values = toSignal(this.form.valueChanges, {
     initialValue: this.form.getRawValue(),
   });
@@ -46,7 +52,18 @@ export class Login {
       this.focusInvalid();
       return;
     }
-    this.session.login(this.form.controls.email.value);
-    this.done.emit();
+    this.send();
+  }
+
+  private send(): void {
+    const { email, password } = this.form.getRawValue();
+    this.pending.set(true);
+    this.session
+      .login({ email: email.trim(), password })
+      .pipe(finalize(() => this.pending.set(false)))
+      .subscribe({
+        next: () => this.done.emit(),
+        error: (error: unknown) => this.error.set(toApiError(error)),
+      });
   }
 }

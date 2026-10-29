@@ -126,6 +126,36 @@
       "passwordMismatch": "Die Passwörter stimmen nicht überein."
     }
   },
+  "apiErrors": {
+    "unreachableLabel": "Server nicht erreichbar",
+    "network_error": "Inhalte und Konto sind gerade nicht verfügbar. Bitte versuche es gleich noch einmal.",
+    "server_error": "Etwas ist schiefgelaufen. Bitte versuche es gleich noch einmal.",
+    "validation_error": "Bitte prüfe die markierten Felder.",
+    "invalid_credentials": "E-Mail oder Passwort ist falsch.",
+    "wrong_password": "Das Passwort ist falsch.",
+    "invalid_link": "Der Link ist abgelaufen oder ungültig. Fordere einen neuen an.",
+    "not_authenticated": "Du bist nicht mehr angemeldet. Bitte melde dich erneut an.",
+    "csrf_failed": "Die Sitzung ist abgelaufen. Bitte lade die Seite neu.",
+    "not_found": "Das gibt es nicht (mehr).",
+    "method_not_allowed": "Etwas ist schiefgelaufen. Bitte versuche es gleich noch einmal.",
+    "throttled": "Zu viele Versuche. Bitte versuche es in {{seconds}} Sekunden erneut.",
+    "fields": {
+      "required": "Bitte fülle dieses Feld aus.",
+      "blank": "Bitte fülle dieses Feld aus.",
+      "null": "Bitte fülle dieses Feld aus.",
+      "invalid": "Das Format stimmt nicht.",
+      "max_length": "Der Text ist zu lang.",
+      "min_length": "Der Text ist zu kurz.",
+      "invalid_choice": "Dieser Wert ist nicht erlaubt.",
+      "unique": "Zu dieser E-Mail-Adresse gibt es schon ein Konto.",
+      "password_too_short": "Das Passwort ist zu kurz.",
+      "password_too_common": "Dieses Passwort ist zu verbreitet.",
+      "password_entirely_numeric": "Das Passwort darf nicht nur aus Ziffern bestehen.",
+      "password_too_similar": "Das Passwort ähnelt deiner E-Mail-Adresse zu sehr.",
+      "unknown_key": "Diesen Wert gibt es nicht.",
+      "does_not_exist": "Diesen Eintrag gibt es nicht."
+    }
+  },
   "settings": {
     "title": "Einstellungen",
     "theme": "Darstellung",
