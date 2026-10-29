@@ -1,12 +1,17 @@
-import { Service } from '@angular/core';
-import { Observable, delay, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ContactRequest } from './contact-request';
 
-const SIMULATED_DELAY = 600;
+export interface SentRequest {
+  id: number | null;
+}
 
 @Service()
 export class RequestApi {
-  send(request: ContactRequest): Observable<ContactRequest> {
-    return of(request).pipe(delay(SIMULATED_DELAY));
+  private readonly http = inject(HttpClient);
+
+  send(request: ContactRequest, website: string): Observable<SentRequest> {
+    return this.http.post<SentRequest>('/api/requests/', { ...request, website });
   }
 }

@@ -79,6 +79,7 @@ export function createRequestForm(fb: NonNullableFormBuilder) {
     bug: createBugGroup(fb),
     email: ['', [required, Validators.email]],
     privacy: [false, Validators.requiredTrue],
+    website: [''],
   });
 }
 

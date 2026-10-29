@@ -573,6 +573,7 @@
     "emailLabel": "Email for the reply",
     "emailPlaceholder": "name@example.com",
     "emailHint": "Only for the reply, no advertising.",
+    "websiteLabel": "Website",
     "privacyBefore": "I have read the",
     "privacyLink": "privacy policy",
     "privacyAfter": "and agree that my details are used to handle this request.",
@@ -593,6 +594,7 @@
     "done": {
       "title": "Thanks for your request!",
       "text": "It has arrived. You will get a reply at your email address.",
+      "textAccount": "It has arrived. You will find the reply in your profile under “Requests”.",
       "again": "Write another request"
     },
     "info": {
