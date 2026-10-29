@@ -4,7 +4,7 @@ import {
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
 import {
   TitleStrategy,
   provideRouter,
@@ -15,6 +15,7 @@ import {
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
+import { languageInterceptor } from './core/language-interceptor';
 import { PageTitle } from './core/page-title';
 import { Preferences } from './core/preferences';
 
@@ -27,7 +28,10 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
     ),
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors([languageInterceptor]),
+      withXsrfConfiguration({ cookieName: 'csrftoken', headerName: 'X-CSRFToken' }),
+    ),
     provideTranslateService({
       fallbackLang: 'de',
       loader: provideTranslateHttpLoader({
