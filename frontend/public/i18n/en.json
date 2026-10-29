@@ -126,7 +126,12 @@
       "passwordLength": "The password needs at least {{min}} characters.",
       "passwordMismatch": "The passwords do not match."
     },
-    "forgotSent": "If there is an account with this address, a link is on its way. It is valid for one hour."
+    "forgotSent": "If there is an account with this address, a link is on its way. It is valid for one hour.",
+    "claim": "From your first command to your finished project online.",
+    "benefits": {
+      "favorites": "Favorites on every device",
+      "personalize": "Personalize SnipAtlas to your taste"
+    }
   },
   "resetPassword": {
     "title": "Set a new password",

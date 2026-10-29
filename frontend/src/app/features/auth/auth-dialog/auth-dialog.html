@@ -1,25 +1,38 @@
-<button
-  class="auth-dialog__close"
-  type="button"
-  [attr.aria-label]="'auth.close' | translate"
-  (click)="close()"
->
-  <svg [lucideIcon]="xIcon" class="icon"></svg>
-</button>
+<aside class="auth-dialog__aside">
+  <p class="auth-dialog__brand">
+    <span class="logo auth-dialog__logo" aria-hidden="true"></span>
+    <span>Snip<span class="auth-dialog__accent">Atlas</span></span>
+  </p>
+  <p class="auth-dialog__claim">{{ 'auth.claim' | translate }}</p>
+  <ul class="auth-dialog__benefits" role="list">
+    @for (benefit of benefits; track benefit) {
+      <li class="auth-dialog__benefit">
+        <svg [lucideIcon]="checkIcon" class="icon auth-dialog__check"></svg>
+        {{ benefit | translate }}
+      </li>
+    }
+  </ul>
+</aside>
 
-<p class="auth-dialog__brand">
-  <span class="logo auth-dialog__logo" aria-hidden="true"></span>
-  <span>Snip<span class="auth-dialog__accent">Atlas</span></span>
-</p>
+<div class="auth-dialog__main">
+  <button
+    class="auth-dialog__close"
+    type="button"
+    [attr.aria-label]="'auth.close' | translate"
+    (click)="close()"
+  >
+    <svg [lucideIcon]="xIcon" class="icon"></svg>
+  </button>
 
-@switch (view()) {
-  @case ('login') {
-    <app-login (done)="close()" (forgot)="show('forgot')" (register)="show('register')" />
+  @switch (view()) {
+    @case ('login') {
+      <app-login (done)="close()" (forgot)="show('forgot')" (register)="show('register')" />
+    }
+    @case ('register') {
+      <app-register (done)="close()" (login)="show('login')" />
+    }
+    @case ('forgot') {
+      <app-forgot-password (login)="show('login')" />
+    }
   }
-  @case ('register') {
-    <app-register (done)="close()" (login)="show('login')" />
-  }
-  @case ('forgot') {
-    <app-forgot-password (login)="show('login')" />
-  }
-}
+</div>
