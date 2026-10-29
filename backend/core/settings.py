@@ -109,6 +109,7 @@ REST_FRAMEWORK = {
         'password_reset': '3/hour',
         'requests': '5/hour',
     },
+    'NUM_PROXIES': env.int('NUM_PROXIES', default=0),
 }
 
 # Sessions and CSRF
