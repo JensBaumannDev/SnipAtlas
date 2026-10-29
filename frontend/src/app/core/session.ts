@@ -15,6 +15,8 @@ export interface Credentials {
   password: string;
 }
 
+export type AccountSettings = Partial<Pick<SessionUser, 'notifyByMail' | 'accent'>>;
+
 export type AuthEvent = 'restore' | 'login' | 'logout';
 
 const URL = '/api/auth/';
@@ -66,6 +68,15 @@ export class Session {
 
   update(changes: Partial<SessionUser>): void {
     this.user.update((user) => (user ? { ...user, ...changes } : user));
+  }
+
+  saveSettings(changes: AccountSettings): void {
+    const previous = this.user();
+    this.update(changes);
+    this.http.patch<SessionUser>(`${URL}me/`, changes).subscribe({
+      next: (user) => this.user.set(user),
+      error: () => this.user.set(previous),
+    });
   }
 
   private signIn(user: SessionUser, event: AuthEvent): void {

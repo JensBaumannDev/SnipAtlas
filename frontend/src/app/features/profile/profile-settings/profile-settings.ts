@@ -14,7 +14,7 @@ export class ProfileSettings {
 
   protected setNotify(event: Event): void {
     if (event.target instanceof HTMLInputElement) {
-      this.session.update({ notifyByMail: event.target.checked });
+      this.session.saveSettings({ notifyByMail: event.target.checked });
     }
   }
 }

@@ -42,7 +42,7 @@ export class Preferences {
   }
 
   setAccent(accent: AccentTheme): void {
-    this.session.update({ accent });
+    this.session.saveSettings({ accent });
   }
 
   setOs(os: OperatingSystem): void {
