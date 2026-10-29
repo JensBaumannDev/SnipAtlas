@@ -1,24 +1,13 @@
 import { Component, computed, inject, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 import { fieldErrorKey, formErrorText, toApiError } from '../../../core/api-error';
 import { PASSWORD_MIN_LENGTH } from '../../../core/password-rules';
 import { Session } from '../../../core/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
-import { hasVisibleError, injectApiError, injectFocusInvalid } from '../auth-form';
-
-function passwordsMatch(group: AbstractControl): ValidationErrors | null {
-  const { password, repeat } = group.getRawValue() as { password: string; repeat: string };
-  return password === repeat ? null : { mismatch: true };
-}
+import { hasVisibleError, injectApiError, injectFocusInvalid, passwordsMatch } from '../auth-form';
 
 @Component({
   imports: [PasswordField, ReactiveFormsModule, TranslatePipe],

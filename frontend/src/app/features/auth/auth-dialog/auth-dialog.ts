@@ -39,7 +39,7 @@ export class AuthDialog {
 
   protected show(view: AuthView): void {
     this.view.set(view);
-    afterNextRender(() => this.host.querySelector<HTMLElement>('input')?.focus(), {
+    afterNextRender(() => this.host.querySelector<HTMLElement>('#auth-title')?.focus(), {
       injector: this.injector,
     });
   }

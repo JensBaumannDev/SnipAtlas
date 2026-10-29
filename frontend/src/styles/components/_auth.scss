@@ -12,6 +12,10 @@
   padding-right: $control-height;
   font-size: $font-size-xxl;
   font-weight: $font-weight-medium;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .auth-form__lead {

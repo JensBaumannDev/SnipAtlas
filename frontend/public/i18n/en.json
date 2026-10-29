@@ -27,7 +27,8 @@
     "settings": "Settings",
     "profile": "Profile",
     "notFound": "Page not found",
-    "news": "New on SnipAtlas"
+    "news": "New on SnipAtlas",
+    "resetPassword": "Reset password"
   },
   "sidebar": {
     "label": "Topics",
@@ -111,7 +112,6 @@
     "email": "Email",
     "password": "Password",
     "close": "Close",
-    "notYet": "This will work once the backend is ready.",
     "registerLead": "Free, just email and password.",
     "registerSubmit": "Create account",
     "hasAccount": "Already have an account?",
@@ -125,7 +125,17 @@
       "emailFormat": "This email address does not look right.",
       "passwordLength": "The password needs at least {{min}} characters.",
       "passwordMismatch": "The passwords do not match."
-    }
+    },
+    "forgotSent": "If there is an account with this address, a link is on its way. It is valid for one hour."
+  },
+  "resetPassword": {
+    "title": "Set a new password",
+    "lead": "Choose a new password for your account. You will then be signed out on all devices.",
+    "submit": "Save password",
+    "done": "Your password has been changed. Sign in with your new password now.",
+    "login": "Sign in now",
+    "invalid": "The link has expired or is invalid. It is valid for one hour and only once. Request a new one under “Forgot password?”.",
+    "newLink": "Request a new link"
   },
   "apiErrors": {
     "unreachableLabel": "Server unreachable",

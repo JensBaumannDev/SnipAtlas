@@ -27,7 +27,8 @@
     "settings": "Einstellungen",
     "profile": "Profil",
     "notFound": "Seite nicht gefunden",
-    "news": "Neu auf SnipAtlas"
+    "news": "Neu auf SnipAtlas",
+    "resetPassword": "Passwort zurücksetzen"
   },
   "sidebar": {
     "label": "Themen",
@@ -111,7 +112,6 @@
     "email": "E-Mail",
     "password": "Passwort",
     "close": "Schließen",
-    "notYet": "Das funktioniert, sobald das Backend steht.",
     "registerLead": "Kostenlos, nur mit E-Mail und Passwort.",
     "registerSubmit": "Konto anlegen",
     "hasAccount": "Schon ein Konto?",
@@ -125,7 +125,17 @@
       "emailFormat": "Diese E-Mail-Adresse sieht nicht richtig aus.",
       "passwordLength": "Das Passwort braucht mindestens {{min}} Zeichen.",
       "passwordMismatch": "Die Passwörter stimmen nicht überein."
-    }
+    },
+    "forgotSent": "Falls es ein Konto mit dieser Adresse gibt, ist ein Link unterwegs. Er gilt eine Stunde."
+  },
+  "resetPassword": {
+    "title": "Neues Passwort festlegen",
+    "lead": "Wähle ein neues Passwort für dein Konto. Danach bist du auf allen Geräten abgemeldet.",
+    "submit": "Passwort speichern",
+    "done": "Dein Passwort ist geändert. Melde dich jetzt mit dem neuen Passwort an.",
+    "login": "Jetzt anmelden",
+    "invalid": "Der Link ist abgelaufen oder ungültig. Er gilt eine Stunde und nur einmal. Fordere unter „Passwort vergessen?“ einen neuen an.",
+    "newLink": "Neuen Link anfordern"
   },
   "apiErrors": {
     "unreachableLabel": "Server nicht erreichbar",
