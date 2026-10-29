@@ -1,0 +1,323 @@
+/* Font */
+@font-face {
+  font-family: "IBM Plex Sans Variable";
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: swap;
+  src: url("fonts/ibm-plex-sans-latin-wght-normal.woff2") format("woff2-variations");
+}
+
+/* Colors */
+:root {
+  --sa-bg: #f5f7fb;
+  --sa-surface: #fff;
+  --sa-ink: #16191d;
+  --sa-muted: #5e6772;
+  --sa-line: #e3e6ea;
+  --sa-border: #858d97;
+  --sa-accent: #2457ff;
+  --sa-accent-hover: color-mix(in srgb, var(--sa-accent) 82%, #000);
+  --sa-on-accent: #fff;
+  --sa-accent-soft: color-mix(in srgb, var(--sa-accent) 10%, var(--sa-surface));
+  --sa-accent-pair: #7c3aed;
+  --sa-hover: rgb(22 25 29 / 4.5%);
+  --sa-card-from: #f7f8fa;
+  --sa-card-to: #eef0f3;
+  --sa-card-edge: rgb(255 255 255 / 90%);
+  --sa-card-shadow: 0 24px 48px -12px rgb(22 25 29 / 22%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sa-bg: #08090a;
+    --sa-surface: #17191c;
+    --sa-ink: #e8eaed;
+    --sa-muted: #959da6;
+    --sa-line: #25282d;
+    --sa-border: #6b727b;
+    --sa-accent: #669eff;
+    --sa-accent-hover: color-mix(in srgb, var(--sa-accent) 80%, #fff);
+    --sa-on-accent: #08090a;
+    --sa-accent-soft: color-mix(in srgb, var(--sa-accent) 16%, var(--sa-surface));
+    --sa-accent-pair: #a78bfa;
+    --sa-hover: rgb(255 255 255 / 4.5%);
+    --sa-card-from: #1c1f23;
+    --sa-card-to: #141619;
+    --sa-card-edge: rgb(255 255 255 / 8%);
+    --sa-card-shadow: 0 24px 48px -12px rgb(0 0 0 / 60%);
+  }
+}
+
+html[data-theme="dark"] {
+  --sa-bg: #08090a;
+  --sa-surface: #17191c;
+  --sa-ink: #e8eaed;
+  --sa-muted: #959da6;
+  --sa-line: #25282d;
+  --sa-border: #6b727b;
+  --sa-accent: #669eff;
+  --sa-accent-hover: color-mix(in srgb, var(--sa-accent) 80%, #fff);
+  --sa-on-accent: #08090a;
+  --sa-accent-soft: color-mix(in srgb, var(--sa-accent) 16%, var(--sa-surface));
+  --sa-accent-pair: #a78bfa;
+  --sa-hover: rgb(255 255 255 / 4.5%);
+  --sa-card-from: #1c1f23;
+  --sa-card-to: #141619;
+  --sa-card-edge: rgb(255 255 255 / 8%);
+  --sa-card-shadow: 0 24px 48px -12px rgb(0 0 0 / 60%);
+}
+
+/* Django variables */
+:root,
+html[data-theme] {
+  --primary: var(--sa-accent-soft);
+  --secondary: var(--sa-accent-soft);
+  --accent: var(--sa-accent);
+  --primary-fg: var(--sa-ink);
+
+  --body-fg: var(--sa-ink);
+  --body-bg: var(--sa-bg);
+  --body-quiet-color: var(--sa-muted);
+  --body-medium-color: var(--sa-ink);
+  --body-loud-color: var(--sa-ink);
+
+  --header-color: var(--sa-muted);
+  --header-branding-color: var(--sa-ink);
+  --header-bg: var(--sa-surface);
+  --header-link-color: var(--sa-ink);
+
+  --breadcrumbs-fg: var(--sa-muted);
+  --breadcrumbs-link-fg: var(--sa-accent);
+  --breadcrumbs-bg: var(--sa-surface);
+
+  --link-fg: var(--sa-accent);
+  --link-hover-color: var(--sa-accent-hover);
+  --link-selected-fg: var(--sa-accent);
+
+  --hairline-color: var(--sa-line);
+  --border-color: var(--sa-border);
+
+  --darkened-bg: var(--sa-surface);
+  --selected-bg: var(--sa-line);
+  --selected-row: var(--sa-accent-soft);
+
+  --button-fg: var(--sa-on-accent);
+  --button-bg: var(--sa-accent);
+  --button-hover-bg: var(--sa-accent-hover);
+  --default-button-bg: var(--sa-accent);
+  --default-button-hover-bg: var(--sa-accent-hover);
+
+  --object-tools-fg: var(--sa-on-accent);
+  --object-tools-bg: var(--sa-accent);
+  --object-tools-hover-bg: var(--sa-accent-hover);
+
+  --font-family-primary: "IBM Plex Sans Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Size */
+html {
+  font-size: calc(100% / 0.875);
+}
+
+/* Dashboard */
+.dashboard #content {
+  width: auto;
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+/* Header */
+#header,
+div.breadcrumbs {
+  border-bottom: 1px solid var(--sa-line);
+}
+
+#site-name {
+  font-weight: 600;
+}
+
+#site-name a:link,
+#site-name a:visited {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--header-branding-color);
+}
+
+.snipatlas-logo {
+  width: 1.75rem;
+  height: 1.75rem;
+  background-color: currentColor;
+  mask: url("logo.svg") center / contain no-repeat;
+}
+
+/* Cards */
+.dashboard .module {
+  padding: 1.25rem 1.5rem 1.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(145deg, var(--sa-card-from), var(--sa-card-to));
+  border: 2px solid var(--sa-card-edge);
+  border-radius: 1.75rem;
+  box-shadow: var(--sa-card-shadow);
+}
+
+.dashboard .module::after {
+  display: block;
+  height: 2px;
+  margin-top: 1rem;
+  content: "";
+  background: linear-gradient(90deg, var(--sa-accent), var(--sa-accent-pair));
+  border-radius: 1px;
+}
+
+.dashboard .module caption,
+.dashboard .module h2 {
+  padding: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: none;
+}
+
+.dashboard .module caption a.section:link,
+.dashboard .module caption a.section:visited {
+  color: var(--sa-ink);
+}
+
+.dashboard .module h3 {
+  color: var(--sa-muted);
+}
+
+.dashboard #content-related {
+  background: none;
+}
+
+/* Sidebar */
+#nav-sidebar {
+  padding: 1rem 0.75rem 2rem;
+  background-color: var(--sa-surface);
+  border-right-color: var(--sa-line);
+}
+
+#nav-sidebar .module {
+  margin-bottom: 1.5rem;
+  background: none;
+}
+
+#nav-sidebar .module caption {
+  padding: 0.25rem 0.5rem 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+  background: none;
+}
+
+#nav-sidebar .module caption a.section:link,
+#nav-sidebar .module caption a.section:visited {
+  font-weight: 700;
+  color: var(--sa-ink);
+}
+
+#nav-sidebar .module th,
+#nav-sidebar .module td {
+  padding: 0.5rem;
+  border-bottom: none;
+}
+
+#nav-sidebar .module th:first-child {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+#nav-sidebar .module td:last-child {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+#nav-sidebar .module th a:link,
+#nav-sidebar .module th a:visited {
+  color: var(--sa-muted);
+}
+
+#nav-sidebar .module tr:hover th,
+#nav-sidebar .module tr:hover td {
+  background: var(--sa-hover);
+}
+
+#nav-sidebar .module tr:hover th a:link,
+#nav-sidebar .module tr:hover th a:visited {
+  color: var(--sa-ink);
+}
+
+#nav-sidebar .current-model {
+  background: none;
+}
+
+#nav-sidebar .module .current-model th,
+#nav-sidebar .module .current-model td {
+  background: var(--sa-accent-soft);
+}
+
+#nav-sidebar .current-model th a:link,
+#nav-sidebar .current-model th a:visited {
+  font-weight: 600;
+  color: var(--sa-ink);
+}
+
+#nav-filter {
+  padding: 0.5rem 0.75rem;
+  margin: 0 0 1.25rem;
+  background-color: var(--sa-bg);
+  border-radius: 0.5rem;
+}
+
+.toggle-nav-sidebar {
+  color: var(--sa-muted);
+  background-color: var(--sa-surface);
+  border-right-color: var(--sa-line);
+}
+
+.toggle-nav-sidebar:hover,
+.toggle-nav-sidebar:focus {
+  color: var(--sa-ink);
+  background-color: var(--sa-hover);
+}
+
+/* Lists */
+tr:nth-child(odd),
+tr:nth-child(even) {
+  background: none;
+}
+
+.dashboard .module tr:last-child th,
+.dashboard .module tr:last-child td {
+  border-bottom: none;
+}
+
+/* Buttons and fields */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button,
+.submit-row a.deletelink,
+.submit-row a.closelink {
+  border-radius: 0.625rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="tel"],
+input[type="search"],
+textarea,
+select,
+.vTextField {
+  border-radius: 0.5rem;
+}
+
+.submit-row {
+  border-radius: 0.75rem;
+}
