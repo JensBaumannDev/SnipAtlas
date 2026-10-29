@@ -5,6 +5,7 @@ from datetime import date
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from app_content.models import BlueprintStep, Entry
 
@@ -51,33 +52,33 @@ class UserManager(BaseUserManager):
 class Accent(models.TextChoices):
     """Accent colors a user can choose."""
 
-    BLUE = 'blue'
-    TEAL = 'teal'
-    RASPBERRY = 'raspberry'
-    FUCHSIA = 'fuchsia'
+    BLUE = 'blue', _('Blue')
+    TEAL = 'teal', _('Teal')
+    RASPBERRY = 'raspberry', _('Raspberry')
+    FUCHSIA = 'fuchsia', _('Fuchsia')
 
 
 class OperatingSystem(models.TextChoices):
     """Operating systems for which code is shown."""
 
-    WIN = 'win'
-    UNIX = 'unix'
+    WIN = 'win', 'Windows'
+    UNIX = 'unix', 'macOS/Linux'
 
 
 class Theme(models.TextChoices):
     """Color themes a user can choose."""
 
-    LIGHT = 'light'
-    DARK = 'dark'
-    SYSTEM = 'system'
+    LIGHT = 'light', _('Light')
+    DARK = 'dark', _('Dark')
+    SYSTEM = 'system', _('System')
 
 
 class Language(models.TextChoices):
     """Interface languages a user can choose."""
 
-    AUTO = 'auto'
-    DE = 'de'
-    EN = 'en'
+    AUTO = 'auto', _('Automatic')
+    DE = 'de', 'Deutsch'
+    EN = 'en', 'English'
 
 
 SETTING_CHOICES = {
@@ -107,9 +108,9 @@ def choice_constraint(field: str, choices: type[models.TextChoices]) -> models.C
     )
 
 
-def project_value_field() -> models.CharField:
+def project_value_field(verbose_name: str) -> models.CharField:
     """Return an optional text field for a project value."""
-    return models.CharField(max_length=PROJECT_VALUE_MAX_LENGTH, blank=True)
+    return models.CharField(verbose_name, max_length=PROJECT_VALUE_MAX_LENGTH, blank=True)
 
 
 class User(AbstractUser):
@@ -118,18 +119,29 @@ class User(AbstractUser):
     username = None
     first_name = None
     last_name = None
-    email = models.EmailField(unique=True)
-    notify_by_mail = models.BooleanField(default=True)
-    accent = models.CharField(max_length=20, choices=Accent, default=Accent.BLUE)
-    os = models.CharField(max_length=10, choices=OperatingSystem, default=OperatingSystem.WIN)
-    theme = models.CharField(max_length=10, choices=Theme, default=Theme.SYSTEM)
-    language = models.CharField(max_length=10, choices=Language, default=Language.AUTO)
-    project_name = project_value_field()
-    project_github_user = project_value_field()
-    project_repo = project_value_field()
-    project_domain = project_value_field()
-    project_server_user = project_value_field()
-    project_server_ip = project_value_field()
+    email = models.EmailField(unique=True, verbose_name=_('email address'))
+    notify_by_mail = models.BooleanField(default=True, verbose_name=_('notify by mail'))
+    accent = models.CharField(
+        max_length=20, choices=Accent, default=Accent.BLUE, verbose_name=_('accent color')
+    )
+    os = models.CharField(
+        max_length=10,
+        choices=OperatingSystem,
+        default=OperatingSystem.WIN,
+        verbose_name=_('operating system'),
+    )
+    theme = models.CharField(
+        max_length=10, choices=Theme, default=Theme.SYSTEM, verbose_name=_('theme')
+    )
+    language = models.CharField(
+        max_length=10, choices=Language, default=Language.AUTO, verbose_name=_('language')
+    )
+    project_name = project_value_field(_('project name'))
+    project_github_user = project_value_field(_('GitHub user'))
+    project_repo = project_value_field(_('repository'))
+    project_domain = project_value_field(_('domain'))
+    project_server_user = project_value_field(_('server user'))
+    project_server_ip = project_value_field(_('server IP'))
 
     objects = UserManager()
 
@@ -137,6 +149,8 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     class Meta(AbstractUser.Meta):
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
         constraints = [
             choice_constraint(field, choices) for field, choices in SETTING_CHOICES.items()
         ]
@@ -177,11 +191,17 @@ class User(AbstractUser):
 class Favorite(models.Model):
     """Command a user has marked as favorite."""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
-    entry = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name='+')
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='favorites', verbose_name=_('user')
+    )
+    entry = models.ForeignKey(
+        Entry, on_delete=models.CASCADE, related_name='+', verbose_name=_('command')
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
 
     class Meta:
+        verbose_name = _('favorite')
+        verbose_name_plural = _('favorites')
         ordering = ('created_at', 'pk')
         constraints = [
             models.UniqueConstraint(fields=('user', 'entry'), name='favorite_unique_per_user'),
@@ -194,11 +214,17 @@ class Favorite(models.Model):
 class CompletedStep(models.Model):
     """Blueprint step a user has marked as done."""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='completed_steps')
-    step = models.ForeignKey(BlueprintStep, on_delete=models.CASCADE, related_name='+')
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='completed_steps', verbose_name=_('user')
+    )
+    step = models.ForeignKey(
+        BlueprintStep, on_delete=models.CASCADE, related_name='+', verbose_name=_('guide step')
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
 
     class Meta:
+        verbose_name = _('completed step')
+        verbose_name_plural = _('completed steps')
         ordering = ('step__blueprint_id', 'step__position', 'step_id')
         constraints = [
             models.UniqueConstraint(fields=('user', 'step'), name='completedstep_unique_per_user'),

@@ -5,6 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django.db.models import QuerySet
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 
 from .models import CompletedStep, Favorite, User
 
@@ -85,9 +86,9 @@ class UserAdmin(BaseUserAdmin):
     inlines = (FavoriteInline, CompletedStepInline)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Einstellungen', {'fields': ('notify_by_mail', 'accent', 'os', 'theme', 'language')}),
+        (_('Settings'), {'fields': ('notify_by_mail', 'accent', 'os', 'theme', 'language')}),
         (
-            'Projektwerte',
+            _('Project values'),
             {
                 'fields': (
                     'project_name',
@@ -100,10 +101,10 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
         (
-            'Rechte',
+            _('Rights'),
             {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')},
         ),
-        ('Daten', {'fields': ('date_joined', 'last_login')}),
+        (_('Dates'), {'fields': ('date_joined', 'last_login')}),
     )
     add_fieldsets = (
         (

@@ -4,14 +4,15 @@ from django.contrib import admin
 from django.db.models import QuerySet
 from django.forms import ModelForm
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 
 from .emails import send_answer_mail
 from .models import Kind, Status, Suggestion
 
 KIND_FIELDSETS = {
-    Kind.ENTRY: ('Ergänzung', ('area', 'topic', 'title', 'reason', 'example', 'source')),
-    Kind.IMPROVEMENT: ('Verbesserung', ('area', 'idea', 'benefit')),
-    Kind.BUG: ('Fehler', ('bug_type', 'location', 'problem', 'correction', 'environment')),
+    Kind.ENTRY: (_('New entry'), ('area', 'topic', 'title', 'reason', 'example', 'source')),
+    Kind.IMPROVEMENT: (_('Improvement'), ('area', 'idea', 'benefit')),
+    Kind.BUG: (_('Bug'), ('bug_type', 'location', 'problem', 'correction', 'environment')),
 }
 
 SUBMITTED_FIELDS = (
@@ -62,8 +63,18 @@ class SuggestionAdmin(admin.ModelAdmin):
         if obj:
             name, fields = KIND_FIELDSETS[obj.kind]
             fieldsets.append((name, {'fields': fields}))
-        fieldsets.append(('Bearbeitung', {'fields': ('status', 'answer', 'answered_at')}))
+        fieldsets.append((_('Processing'), {'fields': ('status', 'answer', 'answered_at')}))
         return fieldsets
+
+    @admin.display(description=_('subject'))
+    def subject(self, obj: Suggestion) -> str:
+        """Return the subject of the request for the list."""
+        return obj.subject
+
+    @admin.display(description=_('contact email'))
+    def contact_email(self, obj: Suggestion) -> str:
+        """Return the contact email of the request."""
+        return obj.contact_email
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         """Forbid adding requests in the admin."""
@@ -78,7 +89,7 @@ class SuggestionAdmin(admin.ModelAdmin):
         if first_answer:
             send_answer_mail(obj)
 
-    @admin.action(description='Als erledigt markieren', permissions=('change',))
+    @admin.action(description=_('Mark as done'), permissions=('change',))
     def mark_done(self, request: HttpRequest, queryset: QuerySet[Suggestion]) -> None:
         """Mark the selected requests as done."""
         queryset.update(status=Status.DONE)

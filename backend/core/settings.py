@@ -17,7 +17,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 # Apps
 INSTALLED_APPS = [
     'modeltranslation',
-    'django.contrib.admin',
+    'core.apps.SnipAtlasAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -84,6 +84,7 @@ LANGUAGE_CODE = 'de'
 LANGUAGES = [('de', 'Deutsch'), ('en', 'English')]
 TIME_ZONE = 'Europe/Berlin'
 USE_I18N = True
+LOCALE_PATHS = [BASE_DIR / 'locale']
 USE_TZ = True
 
 # Content translation

@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import ForeignKey
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import (
     TabbedTranslationAdmin,
     TranslationStackedInline,
@@ -97,7 +98,7 @@ class ContentItemAdmin(SubtopicChoicesMixin, TabbedTranslationAdmin):
     list_select_related = ('subtopic__topic',)
     prepopulated_fields = {'slug': ('title',)}
 
-    @admin.display(description='topic', ordering='subtopic__topic__position')
+    @admin.display(description=_('topic'), ordering='subtopic__topic__position')
     def topic(self, obj: ContentItem) -> Topic:
         """Return the topic of the subtopic for the list."""
         return obj.subtopic.topic
@@ -220,7 +221,7 @@ class GlossaryAliasFormSet(BaseInlineFormSet):
             if form.cleaned_data and not form.cleaned_data.get('DELETE')
         ]
         if len(aliases) != len(set(aliases)):
-            raise ValidationError('Use each alias only once per language.', code='duplicate')
+            raise ValidationError(_('Use each alias only once per language.'), code='duplicate')
 
 
 class GlossaryAliasInline(admin.TabularInline):

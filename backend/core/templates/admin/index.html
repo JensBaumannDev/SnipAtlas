@@ -1,0 +1,27 @@
+{% extends "admin/index.html" %}
+{% load i18n static %}
+
+{% block extrahead %}{{ block.super }}<script src="{% static 'snipatlas/admin-sections.js' %}" defer></script>{% endblock %}
+
+{% block content %}
+<div id="content-main" class="app-list">
+  {% for app in app_list %}
+    <details class="snipatlas-section" data-section="{{ app.app_label }}">
+      <summary class="snipatlas-section__summary">
+        <span class="snipatlas-section__name" id="section-{{ app.app_label }}">{{ app.name }}</span>
+      </summary>
+      <table class="snipatlas-section__models" aria-labelledby="section-{{ app.app_label }}">
+        {% for model in app.models %}
+          <tr>
+            <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+            <td>{% if model.add_url %}<a href="{{ model.add_url }}" class="snipatlas-section__action snipatlas-section__action--primary">{% translate 'Add' %}</a>{% endif %}</td>
+            <td>{% if model.view_only %}<a href="{{ model.admin_url }}" class="snipatlas-section__action">{% translate 'View' %}</a>{% else %}<a href="{{ model.admin_url }}" class="snipatlas-section__action">{% translate 'Change' %}</a>{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </details>
+  {% empty %}
+    <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+  {% endfor %}
+</div>
+{% endblock %}

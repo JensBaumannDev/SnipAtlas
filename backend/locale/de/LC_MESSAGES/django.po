@@ -1,0 +1,438 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SnipAtlas\n"
+"Report-Msgid-Bugs-To: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Project values"
+msgstr "Projektwerte"
+
+msgid "Rights"
+msgstr "Rechte"
+
+msgid "Dates"
+msgstr "Daten"
+
+msgid "Accounts"
+msgstr "Konten"
+
+msgid "Blue"
+msgstr "Blau"
+
+msgid "Teal"
+msgstr "Petrol"
+
+msgid "Raspberry"
+msgstr "Himbeere"
+
+msgid "Fuchsia"
+msgstr "Fuchsia"
+
+msgid "Light"
+msgstr "Hell"
+
+msgid "Dark"
+msgstr "Dunkel"
+
+msgid "System"
+msgstr "System"
+
+msgid "Automatic"
+msgstr "Automatisch"
+
+msgid "email address"
+msgstr "E-Mail-Adresse"
+
+msgid "notify by mail"
+msgstr "Benachrichtigung per E-Mail"
+
+msgid "accent color"
+msgstr "Akzentfarbe"
+
+msgid "operating system"
+msgstr "Betriebssystem"
+
+msgid "theme"
+msgstr "Farbschema"
+
+msgid "language"
+msgstr "Sprache"
+
+msgid "project name"
+msgstr "Projektname"
+
+msgid "GitHub user"
+msgstr "GitHub-Nutzer"
+
+msgid "repository"
+msgstr "Repository"
+
+msgid "domain"
+msgstr "Domain"
+
+msgid "server user"
+msgstr "Server-Nutzer"
+
+msgid "server IP"
+msgstr "Server-IP"
+
+msgid "user"
+msgstr "Nutzer"
+
+msgid "users"
+msgstr "Nutzer"
+
+msgid "command"
+msgstr "Befehl"
+
+msgid "created at"
+msgstr "Erstellt am"
+
+msgid "favorite"
+msgstr "Favorit"
+
+msgid "favorites"
+msgstr "Favoriten"
+
+msgid "guide step"
+msgstr "Anleitungsschritt"
+
+msgid "completed step"
+msgstr "Erledigter Schritt"
+
+msgid "completed steps"
+msgstr "Erledigte Schritte"
+
+msgid "topic"
+msgstr "Thema"
+
+msgid "Use each alias only once per language."
+msgstr "Jeden anderen Namen nur einmal pro Sprache verwenden."
+
+msgid "Content"
+msgstr "Inhalte"
+
+msgid "This slug is reserved."
+msgstr "Dieser Slug ist reserviert."
+
+msgid "slug"
+msgstr "Slug"
+
+msgid "name"
+msgstr "Name"
+
+msgid "position"
+msgstr "Position"
+
+msgid "topic group"
+msgstr "Themengruppe"
+
+msgid "topic groups"
+msgstr "Themengruppen"
+
+msgid "color"
+msgstr "Farbe"
+
+msgid "topics"
+msgstr "Themen"
+
+msgid "subtopic"
+msgstr "Unterordner"
+
+msgid "subtopics"
+msgstr "Unterordner"
+
+msgid "Add the German text first."
+msgstr "Erst den deutschen Text eintragen."
+
+msgid "title"
+msgstr "Titel"
+
+msgid "code language"
+msgstr "Code-Sprache"
+
+msgid "code"
+msgstr "Code"
+
+msgid "description"
+msgstr "Beschreibung"
+
+msgid "code for macOS/Linux"
+msgstr "Code für macOS/Linux"
+
+msgid "commands"
+msgstr "Befehle"
+
+msgid "summary"
+msgstr "Zusammenfassung"
+
+msgid "explanation"
+msgstr "Erklärung"
+
+msgid "note"
+msgstr "Hinweis"
+
+msgid "concept"
+msgstr "Grundlage"
+
+msgid "concepts"
+msgstr "Grundlagen"
+
+msgid "Add the German code."
+msgstr "Bitte den deutschen Code eintragen."
+
+msgid "Choose the code language."
+msgstr "Bitte die Code-Sprache wählen."
+
+msgid "message"
+msgstr "Meldung"
+
+msgid "meaning"
+msgstr "Bedeutung"
+
+msgid "cause"
+msgstr "Ursache"
+
+msgid "error message"
+msgstr "Fehlermeldung"
+
+msgid "error messages"
+msgstr "Fehlermeldungen"
+
+msgid "text"
+msgstr "Text"
+
+msgid "solution step"
+msgstr "Lösungsschritt"
+
+msgid "solution steps"
+msgstr "Lösungsschritte"
+
+msgid "sidebar label"
+msgstr "Name in der Seitenleiste"
+
+msgid "debug guide"
+msgstr "Debug-Anleitung"
+
+msgid "debug guides"
+msgstr "Debug-Anleitungen"
+
+msgid "General guides need a label."
+msgstr "Allgemeine Anleitungen brauchen einen Namen für die Seitenleiste."
+
+msgid "Only general guides have a label."
+msgstr "Nur allgemeine Anleitungen haben einen Namen für die Seitenleiste."
+
+msgid "step"
+msgstr "Schritt"
+
+msgid "steps"
+msgstr "Schritte"
+
+msgid "Add the Windows code first."
+msgstr "Erst den Windows-Code eintragen."
+
+msgid "guide"
+msgstr "Anleitung"
+
+msgid "guides"
+msgstr "Anleitungen"
+
+msgid "why"
+msgstr "Warum"
+
+msgid "guide steps"
+msgstr "Anleitungsschritte"
+
+msgid "code block"
+msgstr "Code-Block"
+
+msgid "code blocks"
+msgstr "Code-Blöcke"
+
+msgid "term"
+msgstr "Begriff"
+
+msgid "definition"
+msgstr "Definition"
+
+msgid "terms"
+msgstr "Begriffe"
+
+msgid "other name"
+msgstr "Anderer Name"
+
+msgid "other names"
+msgstr "Andere Namen"
+
+msgid "Commands"
+msgstr "Befehle"
+
+msgid "Concepts"
+msgstr "Grundlagen"
+
+msgid "Guides"
+msgstr "Anleitungen"
+
+msgid "Errors"
+msgstr "Fehler"
+
+msgid "date"
+msgstr "Datum"
+
+msgid "area"
+msgstr "Bereich"
+
+msgid "news item"
+msgstr "Neuigkeit"
+
+msgid "news"
+msgstr "Neuigkeiten"
+
+msgid "Only commands and concepts have subtopics."
+msgstr "Nur Befehle und Grundlagen haben Unterordner."
+
+msgid "The subtopic belongs to another topic."
+msgstr "Der Unterordner gehört zu einem anderen Thema."
+
+msgid "New entry"
+msgstr "Ergänzung"
+
+msgid "Improvement"
+msgstr "Verbesserung"
+
+msgid "Bug"
+msgstr "Fehler"
+
+msgid "Processing"
+msgstr "Bearbeitung"
+
+msgid "subject"
+msgstr "Betreff"
+
+msgid "contact email"
+msgstr "Kontakt-E-Mail"
+
+msgid "Mark as done"
+msgstr "Als erledigt markieren"
+
+msgid "Requests"
+msgstr "Anfragen"
+
+msgid "Open"
+msgstr "Offen"
+
+msgid "Done"
+msgstr "Erledigt"
+
+msgid "Command"
+msgstr "Befehl"
+
+msgid "Concept"
+msgstr "Grundlage"
+
+msgid "Error message"
+msgstr "Fehlermeldung"
+
+msgid "Usability"
+msgstr "Bedienung"
+
+msgid "Design"
+msgstr "Design"
+
+msgid "Feature"
+msgstr "Funktion"
+
+msgid "Other"
+msgstr "Sonstiges"
+
+msgid "Wrong"
+msgstr "Falsch"
+
+msgid "Outdated"
+msgstr "Veraltet"
+
+msgid "Broken"
+msgstr "Funktioniert nicht"
+
+msgid "Typo"
+msgstr "Tippfehler"
+
+msgid "kind"
+msgstr "Art"
+
+msgid "email"
+msgstr "E-Mail"
+
+msgid "status"
+msgstr "Status"
+
+msgid "answer"
+msgstr "Antwort"
+
+msgid "received at"
+msgstr "Eingegangen am"
+
+msgid "answered at"
+msgstr "Beantwortet am"
+
+msgid "reason"
+msgstr "Begründung"
+
+msgid "example"
+msgstr "Beispiel"
+
+msgid "source"
+msgstr "Quelle"
+
+msgid "idea"
+msgstr "Idee"
+
+msgid "benefit"
+msgstr "Nutzen"
+
+msgid "bug type"
+msgstr "Fehlerart"
+
+msgid "location"
+msgstr "Fundstelle"
+
+msgid "problem"
+msgstr "Problem"
+
+msgid "correction"
+msgstr "Korrektur"
+
+msgid "environment"
+msgstr "Umgebung"
+
+msgid "request"
+msgstr "Anfrage"
+
+msgid "requests"
+msgstr "Anfragen"
+
+msgid "Site structure"
+msgstr "Aufbau der Seite"
+
+msgid "Commands & concepts"
+msgstr "Befehle & Grundlagen"
+
+msgid "Terms & news"
+msgstr "Begriffe & Neues"
+
+msgid "Users & requests"
+msgstr "Nutzer & Anfragen"
+
+msgid "More"
+msgstr "Weitere"
+
+msgid "Permission groups"
+msgstr "Berechtigungsgruppen"
