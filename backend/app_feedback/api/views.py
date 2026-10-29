@@ -5,7 +5,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
-from config.throttling import RequestRateThrottle
+from core.throttling import RequestRateThrottle
 
 from .serializers import KIND_SERIALIZERS, MyRequestSerializer, SuggestionSerializer
 

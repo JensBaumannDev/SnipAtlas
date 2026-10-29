@@ -40,7 +40,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -57,7 +57,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 DATABASES = {'default': env.db('DATABASE_URL')}
@@ -90,11 +90,11 @@ MODELTRANSLATION_FALLBACK_LANGUAGES = ('de',)
 
 # API
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['config.authentication.SessionAuthentication'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['core.authentication.SessionAuthentication'],
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
     'DEFAULT_RENDERER_CLASSES': ['djangorestframework_camel_case.render.CamelCaseJSONRenderer'],
     'DEFAULT_PARSER_CLASSES': ['djangorestframework_camel_case.parser.CamelCaseJSONParser'],
-    'EXCEPTION_HANDLER': 'config.exceptions.api_exception_handler',
+    'EXCEPTION_HANDLER': 'core.exceptions.api_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'non_field',
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',

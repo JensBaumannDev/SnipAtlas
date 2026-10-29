@@ -10,8 +10,8 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from app_accounts.models import User
 from app_content.models import Blueprint, BlueprintStep, Entry
-from config.permissions import CsrfProtected
-from config.throttling import AuthRateThrottle, PasswordResetRateThrottle
+from core.permissions import CsrfProtected
+from core.throttling import AuthRateThrottle, PasswordResetRateThrottle
 
 from .serializers import (
     CurrentPasswordSerializer,

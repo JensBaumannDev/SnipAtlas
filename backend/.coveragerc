@@ -6,8 +6,8 @@ omit =
     */tests/*
     conftest.py
     manage.py
-    config/asgi.py
-    config/wsgi.py
+    core/asgi.py
+    core/wsgi.py
 
 [report]
 show_missing = True

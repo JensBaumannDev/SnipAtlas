@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.test import APIRequestFactory
 
 from app_accounts.models import User
-from config.permissions import CsrfProtected
+from core.permissions import CsrfProtected
 
 pytestmark = pytest.mark.django_db
 
