@@ -11,7 +11,7 @@
     <ul class="faq__list" role="list">
       @for (question of group.questions; track question) {
         <li>
-          <details class="faq__card">
+          <details class="faq__card" name="faq">
             <summary class="faq__question">
               <span class="faq__question-text">
                 {{ 'faq.' + group.id + '.' + question + '.question' | translate }}
