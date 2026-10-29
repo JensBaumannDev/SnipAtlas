@@ -71,7 +71,7 @@ export function slugExists(find: FindBySlug<unknown>): CanActivateFn {
   };
 }
 
-export function itemTitle<T>(
+export function itemText<T>(
   find: FindBySlug<T>,
   title: (item: T) => string,
   fallback: string,

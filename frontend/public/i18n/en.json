@@ -30,6 +30,19 @@
     "news": "New on SnipAtlas",
     "resetPassword": "Reset password"
   },
+  "meta": {
+    "default": "From your first command to a finished project online: commands, basics, guides and error messages for beginners in web development.",
+    "commands": "Commands for the terminal, Git and frameworks: briefly explained and ready to copy, matching your operating system.",
+    "concepts": "Web development basics explained simply: the ideas behind the code, with short examples for beginners.",
+    "blueprints": "Step-by-step guides to a finished project, every step with its reason and code to copy.",
+    "debugging": "Understand and fix error messages: meaning, cause and solution of common errors, plus general ways to debug.",
+    "glossary": "Web development terms explained in short, with links to the detailed explanation in the basics.",
+    "news": "What is new on SnipAtlas: new commands, basics, guides and error messages.",
+    "request": "Missing a command, an explanation or an error message? Request new content for SnipAtlas here.",
+    "faq": "Answers to frequently asked questions about SnipAtlas: content, account, favourites and privacy.",
+    "imprint": "Legal notice of SnipAtlas.",
+    "privacy": "Privacy policy of SnipAtlas: which data is stored, what for and for how long."
+  },
   "sidebar": {
     "label": "Topics",
     "topics": "Topics",

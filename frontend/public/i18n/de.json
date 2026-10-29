@@ -30,6 +30,19 @@
     "news": "Neu auf SnipAtlas",
     "resetPassword": "Passwort zurücksetzen"
   },
+  "meta": {
+    "default": "Vom ersten Befehl bis zum fertigen Projekt online: Befehle, Grundlagen, Anleitungen und Fehlermeldungen für Einsteiger in die Webentwicklung.",
+    "commands": "Befehle für Terminal, Git und Frameworks: kurz erklärt und zum Kopieren, passend zu deinem Betriebssystem.",
+    "concepts": "Grundlagen der Webentwicklung einfach erklärt: die Ideen hinter dem Code, mit kurzen Beispielen für Einsteiger.",
+    "blueprints": "Anleitungen Schritt für Schritt bis zum fertigen Projekt, jeder Schritt mit Begründung und Code zum Kopieren.",
+    "debugging": "Fehlermeldungen verstehen und lösen: Bedeutung, Ursache und Lösung häufiger Fehler, dazu allgemeine Wege zum Debuggen.",
+    "glossary": "Begriffe aus der Webentwicklung kurz erklärt, mit Links zur ausführlichen Erklärung in den Grundlagen.",
+    "news": "Was neu auf SnipAtlas ist: neue Befehle, Grundlagen, Anleitungen und Fehlermeldungen.",
+    "request": "Fehlt ein Befehl, eine Erklärung oder eine Fehlermeldung? Hier kannst du dir neue Inhalte für SnipAtlas wünschen.",
+    "faq": "Antworten auf häufige Fragen zu SnipAtlas: Inhalte, Konto, Favoriten und Datenschutz.",
+    "imprint": "Impressum von SnipAtlas.",
+    "privacy": "Datenschutzerklärung von SnipAtlas: welche Daten gespeichert werden, wofür und wie lange."
+  },
   "sidebar": {
     "label": "Themen",
     "topics": "Themen",

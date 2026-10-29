@@ -19,7 +19,7 @@ import { routes } from './app.routes';
 import { apiErrorInterceptor } from './core/http/api-error-interceptor';
 import { forwardedForInterceptor } from './core/http/forwarded-for-interceptor';
 import { languageInterceptor } from './core/http/language-interceptor';
-import { PageTitle } from './core/ui/page-title';
+import { PageMeta } from './core/ui/page-meta';
 import { Preferences } from './core/user-data/preferences';
 import { Session } from './core/auth/session';
 import { SettingsSync } from './core/user-data/settings-sync';
@@ -50,6 +50,6 @@ export const appConfig: ApplicationConfig = {
       inject(SettingsSync);
     }),
     provideAppInitializer(() => inject(Session).restore()),
-    { provide: TitleStrategy, useExisting: PageTitle },
+    { provide: TitleStrategy, useExisting: PageMeta },
   ],
 };
