@@ -163,3 +163,9 @@ class Suggestion(models.Model):
     @property
     def contact_email(self) -> str:
         return self.user.email if self.user else self.email
+
+    @property
+    def notify_email(self) -> str:
+        if self.user and not self.user.notify_by_mail:
+            return ''
+        return self.contact_email

@@ -72,6 +72,19 @@ def test_user_contact_email_is_account_email(bug_suggestion: Suggestion) -> None
     assert bug_suggestion.contact_email == 'ada@example.com'
 
 
+def test_guest_is_always_notified(entry_suggestion: Suggestion) -> None:
+    assert entry_suggestion.notify_email == 'guest@example.com'
+
+
+def test_user_is_notified_at_account_email(bug_suggestion: Suggestion) -> None:
+    assert bug_suggestion.notify_email == 'ada@example.com'
+
+
+def test_user_without_notify_is_not_notified(bug_suggestion: Suggestion) -> None:
+    bug_suggestion.user.notify_by_mail = False
+    assert bug_suggestion.notify_email == ''
+
+
 # Answer
 def test_saving_answer_marks_suggestion_done(entry_suggestion: Suggestion) -> None:
     entry_suggestion.answer = 'Kommt nächste Woche.'

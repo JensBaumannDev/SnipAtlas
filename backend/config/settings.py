@@ -138,3 +138,4 @@ MAILERS = {
     },
 }
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='noreply@snipatlas.jensbaumann.com')
+REPLY_TO_EMAIL = env('REPLY_TO_EMAIL')
