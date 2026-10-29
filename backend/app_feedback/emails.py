@@ -11,6 +11,6 @@ def send_answer_mail(suggestion: Suggestion) -> None:
     recipient = suggestion.notify_email
     if not recipient:
         return
-    body = render_to_string('emails/suggestion_answer.txt', {'suggestion': suggestion})
+    body = render_to_string('app_feedback/emails/suggestion_answer.txt', {'suggestion': suggestion})
     message = EmailMessage(ANSWER_SUBJECT, body, to=[recipient], reply_to=[settings.REPLY_TO_EMAIL])
     message.send()
