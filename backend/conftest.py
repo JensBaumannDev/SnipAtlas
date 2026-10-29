@@ -20,6 +20,7 @@ from app_content.models import (
     Subtopic,
     Topic,
 )
+from app_feedback.models import Suggestion
 
 
 @pytest.fixture(autouse=True)
@@ -237,4 +238,28 @@ def news(subtopic: Subtopic) -> News:
         area='befehle',
         topic=subtopic.topic,
         subtopic=subtopic,
+    )
+
+
+# Feedback
+@pytest.fixture
+def entry_suggestion(topic: Topic) -> Suggestion:
+    return Suggestion.objects.create(
+        kind='entry',
+        email='guest@example.com',
+        area='command',
+        topic=topic,
+        title='git rebase -i erklären',
+        reason='Ich verstehe interaktives Rebasen nicht.',
+    )
+
+
+@pytest.fixture
+def bug_suggestion(user: User) -> Suggestion:
+    return Suggestion.objects.create(
+        kind='bug',
+        user=user,
+        bug_type='typo',
+        location='Virtuelle Umgebung anlegen',
+        problem='Im zweiten Schritt fehlt ein Buchstabe.',
     )
