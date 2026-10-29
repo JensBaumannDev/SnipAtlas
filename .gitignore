@@ -7,6 +7,12 @@
 .env
 .env.*
 !.env.example
+# Zertifikate und Schlüssel (HTTPS auf dem Server)
+*.pem
+*.key
+*.crt
+# Lokale Docker-Anpassungen
+docker-compose.override.yml
 
 # --- Python / Django (backend/) ---
 env/
@@ -29,6 +35,13 @@ node_modules/
 dist/
 .angular/
 npm-debug.log*
+
+# --- Datenbank-Sicherungen und Logs ---
+# Dumps enthalten Nutzerdaten (E-Mails, Passwort-Hashes).
+*.sql
+*.sql.gz
+*.dump
+*.log
 
 # --- Editor ---
 .vscode/*
