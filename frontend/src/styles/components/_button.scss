@@ -31,7 +31,9 @@
   background: var(--ink);
 
   &:hover:not(:disabled) {
-    opacity: 0.85;
+    color: var(--on-accent);
+    background: var(--accent);
+    border-color: var(--accent);
   }
 }
 
@@ -41,7 +43,9 @@
   border-color: var(--line);
 
   &:hover:not(:disabled) {
-    border-color: var(--muted);
+    color: var(--on-accent);
+    background: var(--accent);
+    border-color: var(--accent);
   }
 }
 
@@ -50,7 +54,9 @@
   border-color: var(--danger);
 
   &:hover:not(:disabled) {
-    background: var(--danger-soft);
+    color: var(--on-accent);
+    background: var(--accent);
+    border-color: var(--accent);
   }
 }
 
@@ -62,7 +68,9 @@
   border-color: var(--line);
 
   &:hover:not(:disabled) {
-    color: var(--ink);
+    color: var(--on-accent);
+    background: var(--accent);
+    border-color: var(--accent);
   }
 
   &[aria-current='page'] {
