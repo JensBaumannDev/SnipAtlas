@@ -104,14 +104,14 @@ def test_delete_account_keeps_content(
 def test_delete_account_logs_out_this_device(logged_in: APIClient) -> None:
     response = delete(logged_in)
     assert response.cookies['sessionid'].value == ''
-    assert logged_in.get(ME_URL).status_code == 401
+    assert logged_in.get(ME_URL).status_code == 204
 
 
 def test_delete_account_logs_out_other_devices(logged_in: APIClient, user: User) -> None:
     other_device = APIClient()
     other_device.force_login(user)
     delete(logged_in)
-    assert other_device.get(ME_URL).status_code == 401
+    assert other_device.get(ME_URL).status_code == 204
 
 
 def test_login_fails_after_delete(logged_in: APIClient) -> None:

@@ -68,7 +68,7 @@ def test_change_password_logs_out_other_devices(logged_in: APIClient, user: User
     other_device = APIClient()
     other_device.force_login(user)
     change(logged_in)
-    assert other_device.get(ME_URL).status_code == 401
+    assert other_device.get(ME_URL).status_code == 204
 
 
 def test_change_password_rotates_session_key(logged_in: APIClient) -> None:

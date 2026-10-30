@@ -41,8 +41,12 @@ export class Session {
       return Promise.resolve();
     }
     const restored = this.refreshCsrf().pipe(
-      switchMap(() => this.http.get<SessionUser>(`${URL}me/`)),
-      map((user) => this.signIn(user, 'restore')),
+      switchMap(() => this.http.get<SessionUser | null>(`${URL}me/`)),
+      map((user) => {
+        if (user) {
+          this.signIn(user, 'restore');
+        }
+      }),
       catchError(() => of(undefined)),
     );
     return firstValueFrom(restored);

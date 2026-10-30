@@ -697,33 +697,33 @@ def test_me_returns_only_own_user(api_client: APIClient, user: User, staff_user:
     assert api_client.get(reverse('auth-me')).json()['email'] == 'staff@example.com'
 
 
-def test_me_of_guest_is_rejected(api_client: APIClient) -> None:
+def test_me_of_guest_returns_no_content(api_client: APIClient) -> None:
     response = api_client.get(reverse('auth-me'))
-    assert response.status_code == 401
-    assert response.json() == {'code': 'not_authenticated'}
+    assert response.status_code == 204
+    assert not response.content
 
 
-def test_me_with_unknown_session_is_rejected(api_client: APIClient) -> None:
+def test_me_with_unknown_session_returns_no_content(api_client: APIClient) -> None:
     api_client.cookies['sessionid'] = 'invalid'
-    assert api_client.get(reverse('auth-me')).status_code == 401
+    assert api_client.get(reverse('auth-me')).status_code == 204
 
 
-def test_me_of_deactivated_user_is_rejected(api_client: APIClient, user: User) -> None:
+def test_me_of_deactivated_user_returns_no_content(api_client: APIClient, user: User) -> None:
     api_client.force_login(user)
     User.objects.filter(pk=user.pk).update(is_active=False)
-    assert api_client.get(reverse('auth-me')).status_code == 401
+    assert api_client.get(reverse('auth-me')).status_code == 204
 
 
-def test_me_of_deleted_user_is_rejected(api_client: APIClient, user: User) -> None:
+def test_me_of_deleted_user_returns_no_content(api_client: APIClient, user: User) -> None:
     api_client.force_login(user)
     user.delete()
-    assert api_client.get(reverse('auth-me')).status_code == 401
+    assert api_client.get(reverse('auth-me')).status_code == 204
 
 
-def test_me_after_logout_is_rejected(api_client: APIClient, user: User) -> None:
+def test_me_after_logout_returns_no_content(api_client: APIClient, user: User) -> None:
     api_client.force_login(user)
     api_client.post(reverse('auth-logout'))
-    assert api_client.get(reverse('auth-me')).status_code == 401
+    assert api_client.get(reverse('auth-me')).status_code == 204
 
 
 def test_me_after_login_returns_user(api_client: APIClient, user: User) -> None:
