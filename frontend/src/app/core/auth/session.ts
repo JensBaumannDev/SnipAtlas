@@ -3,6 +3,7 @@ import { PLATFORM_ID, Service, computed, inject, signal } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { Observable, catchError, firstValueFrom, map, of, switchMap } from 'rxjs';
 import type { AccentTheme } from '../user-data/preferences';
+import { Notifications } from '../ui/notifications';
 
 export interface SessionUser {
   email: string;
@@ -30,6 +31,7 @@ const URL = '/api/auth/';
 @Service()
 export class Session {
   private readonly http = inject(HttpClient);
+  private readonly notifications = inject(Notifications);
   private readonly isServer = isPlatformServer(inject(PLATFORM_ID));
 
   readonly user = signal<SessionUser | undefined>(undefined);
@@ -88,7 +90,10 @@ export class Session {
     const previous = this.user();
     this.update(changes);
     this.http.patch<SessionUser>(`${URL}me/`, changes).subscribe({
-      next: (user) => this.user.set(user),
+      next: (user) => {
+        this.user.set(user);
+        this.notifications.show('notifications.settingUpdated');
+      },
       error: () => this.user.set(previous),
     });
   }

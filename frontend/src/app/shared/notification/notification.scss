@@ -1,0 +1,48 @@
+@use 'abstracts' as *;
+
+:host {
+  position: fixed;
+  right: $space-lg;
+  bottom: calc($space-lg + env(safe-area-inset-bottom, 0px));
+  z-index: $z-dialog + 1;
+  width: min(rem(420), calc(100vw - 2 * $space-lg));
+  pointer-events: none;
+}
+
+.notification {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  padding: $space-md $space-lg;
+  color: var(--ink);
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-radius: $radius-lg;
+  box-shadow: var(--card-shadow);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY($space-xs) scale(0.98);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    visibility 180ms;
+}
+
+.notification--visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.notification__icon {
+  flex: none;
+  color: var(--accent);
+}
+
+@include mobile {
+  :host {
+    right: $space-md;
+    bottom: calc($space-md + var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+    width: calc(100vw - 2 * $space-md);
+  }
+}

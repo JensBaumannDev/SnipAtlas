@@ -67,6 +67,12 @@
       "debugging": "Errors"
     }
   },
+  "notifications": {
+    "signedIn": "You are signed in.",
+    "signedOut": "You are signed out.",
+    "downloaded": "The download has started.",
+    "settingUpdated": "Setting updated."
+  },
   "account": {
     "menu": "Account menu",
     "signedIn": "Signed in",

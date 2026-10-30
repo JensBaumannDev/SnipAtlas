@@ -1,0 +1,12 @@
+<div
+  class="notification"
+  [class.notification--visible]="!!notifications.message()"
+  [attr.aria-hidden]="!notifications.message()"
+  role="status"
+  aria-live="polite"
+>
+  <svg [lucideIcon]="circleCheckIcon" class="icon notification__icon" aria-hidden="true"></svg>
+  @if (notifications.message(); as message) {
+    <span>{{ message | translate }}</span>
+  }
+</div>

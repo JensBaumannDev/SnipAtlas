@@ -67,6 +67,12 @@
       "debugging": "Fehler"
     }
   },
+  "notifications": {
+    "signedIn": "Du bist angemeldet.",
+    "signedOut": "Du bist abgemeldet.",
+    "downloaded": "Der Download wurde gestartet.",
+    "settingUpdated": "Einstellung aktualisiert."
+  },
   "account": {
     "menu": "Konto-Menü",
     "signedIn": "Angemeldet",

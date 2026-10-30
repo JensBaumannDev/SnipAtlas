@@ -2,6 +2,7 @@ import { DOCUMENT, REQUEST, Service, computed, effect, inject } from '@angular/c
 import { TranslateService } from '@ngx-translate/core';
 import { storedOption } from '../browser/browser-storage';
 import { Session } from '../auth/session';
+import { Notifications } from '../ui/notifications';
 
 export type OperatingSystem = 'win' | 'unix';
 export type ThemeMode = 'light' | 'dark' | 'system';
@@ -22,6 +23,7 @@ export class Preferences {
   private readonly request = inject(REQUEST, { optional: true });
   private readonly translate = inject(TranslateService);
   private readonly session = inject(Session);
+  private readonly notifications = inject(Notifications);
 
   readonly os = storedOption<OperatingSystem>(OS_KEY, ['win', 'unix'], 'win');
   readonly theme = storedOption<ThemeMode>(THEME_KEY, ['light', 'dark', 'system'], 'system');
@@ -40,6 +42,7 @@ export class Preferences {
 
   setLanguage(mode: LanguageMode): void {
     this.languageMode.set(mode);
+    this.notifications.show('notifications.settingUpdated');
   }
 
   setAccent(accent: AccentTheme): void {
@@ -48,10 +51,12 @@ export class Preferences {
 
   setOs(os: OperatingSystem): void {
     this.os.set(os);
+    this.notifications.show('notifications.settingUpdated');
   }
 
   setTheme(theme: ThemeMode): void {
     this.theme.set(theme);
+    this.notifications.show('notifications.settingUpdated');
   }
 
   private applyTheme(theme: ThemeMode): void {
