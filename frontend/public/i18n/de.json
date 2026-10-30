@@ -53,16 +53,19 @@
     "collectionHint": "Melde dich an, um Befehle als Favoriten zu speichern und hier wiederzufinden."
   },
   "search": {
-    "label": "Befehle, Grundlagen, Anleitungen und Fehlermeldungen durchsuchen",
+    "label": "Befehle, Grundlagen, Begriffe, Anleitungen und Fehlermeldungen durchsuchen",
     "placeholder": "Suchen …",
     "ctrl": "Strg",
     "heroPlaceholder": "Suche, z. B. git stash",
     "resultsLabel": "Suchergebnisse",
+    "clear": "Suche leeren",
     "empty": "Keine Treffer. Versuch es mit einem anderen Begriff.",
     "count": "{{count}} Treffer",
+    "glossaryMatches": "{{count}} passende Begriffe im Glossar",
     "areas": {
       "commands": "Befehl",
       "concepts": "Grundlagen",
+      "glossary": "Begriff",
       "blueprints": "Anleitung",
       "debugging": "Fehler"
     }
@@ -444,6 +447,7 @@
     }
   },
   "glossary": {
+    "clearSearch": "Glossarsuche leeren",
     "summary": "{{count}} Begriffe von A bis Z",
     "searchLabel": "Begriffe durchsuchen",
     "searchPlaceholder": "Begriff suchen, z. B. CORS",

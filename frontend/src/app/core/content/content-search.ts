@@ -11,6 +11,8 @@ import { Entry, entryLink } from '../models/entry';
 import { EntryApi } from '../api/entry-api';
 import { ErrorApi } from '../api/error-api';
 import { ErrorMessage, errorLink } from '../models/error-message';
+import { GlossaryApi } from '../api/glossary-api';
+import { GlossaryTerm } from '../models/glossary-term';
 import { SearchResult } from '../models/search-result';
 
 const MAX_RESULTS = 8;
@@ -19,6 +21,8 @@ interface SearchItem {
   result: SearchResult;
   title: string;
   content: string;
+  aliases: string[];
+  description: string;
 }
 
 function normalize(text: string): string {
@@ -28,11 +32,15 @@ function normalize(text: string): string {
     .toLowerCase();
 }
 
-function toItem(result: SearchResult, ...extra: string[]): SearchItem {
+function toItem(result: SearchResult, options: { aliases?: string[]; extra?: string[] } = {}): SearchItem {
+  const aliases = (options.aliases ?? []).map(normalize);
+  const description = normalize(result.text);
   return {
     result,
     title: normalize(result.title),
-    content: normalize([result.title, result.text, ...extra].join(' ')),
+    aliases,
+    description,
+    content: normalize([result.title, result.text, ...aliases, ...(options.extra ?? [])].join(' ')),
   };
 }
 
@@ -48,7 +56,7 @@ function fromEntry(entry: Entry): SearchItem {
       text: entry.description,
       link: entryLink(entry),
     },
-    codeText(entry.code),
+    { extra: [codeText(entry.code)] },
   );
 }
 
@@ -86,12 +94,30 @@ function fromBlueprint(blueprint: Blueprint): SearchItem {
   });
 }
 
-function rank(item: SearchItem, terms: string[]): number {
-  return terms.reduce(
-    (score, term) =>
-      score + (item.title.startsWith(term) ? 3 : 0) + (item.title.includes(term) ? 2 : 0),
-    0,
+function fromGlossaryTerm(term: GlossaryTerm): SearchItem {
+  return toItem(
+    {
+      area: 'glossary',
+      title: term.term,
+      text: term.definition,
+      link: ['/begriffe'],
+      fragment: term.slug,
+    },
+    { aliases: term.aliases },
   );
+}
+
+function rank(item: SearchItem, terms: string[]): number {
+  return terms.reduce((score, term) => {
+    const titleScore = item.title === term ? 100 : item.title.startsWith(term) ? 70 : item.title.includes(term) ? 50 : 0;
+    const aliasScore = item.aliases.some((alias) => alias === term)
+      ? 65
+      : item.aliases.some((alias) => alias.startsWith(term))
+        ? 45
+        : 0;
+    const descriptionScore = item.description.includes(term) ? 10 : 0;
+    return score + Math.max(titleScore, aliasScore, descriptionScore);
+  }, 0);
 }
 
 @Service()
@@ -103,13 +129,15 @@ export class ContentSearch {
       inject(ErrorApi).getAll(),
       inject(DebugGuideApi).getAll(),
       inject(BlueprintApi).getAll(),
+      inject(GlossaryApi).getAll(),
     ]).pipe(
-      map(([entries, concepts, errors, guides, blueprints]) => [
+      map(([entries, concepts, errors, guides, blueprints, glossaryTerms]) => [
         ...entries.map(fromEntry),
         ...concepts.map(fromConcept),
         ...errors.map(fromError),
         ...guides.map(fromGuide),
         ...blueprints.map(fromBlueprint),
+        ...glossaryTerms.map(fromGlossaryTerm),
       ]),
     ),
     { initialValue: [] },
@@ -120,10 +148,22 @@ export class ContentSearch {
     if (!terms.length) {
       return [];
     }
-    return this.items()
-      .filter((item) => terms.every((term) => item.content.includes(term)))
+    const matches = this.items().filter((item) => terms.every((term) => item.content.includes(term)));
+    const glossaryMatches = matches.filter((item) => item.result.area === 'glossary');
+    const otherMatches = matches.filter((item) => item.result.area !== 'glossary');
+    const results = otherMatches
       .sort((a, b) => rank(b, terms) - rank(a, terms))
-      .slice(0, MAX_RESULTS)
       .map((item) => item.result);
+    if (glossaryMatches.length) {
+      results.unshift({
+        area: 'glossary',
+        title: query.trim(),
+        text: '',
+        link: ['/begriffe'],
+        query: query.trim(),
+        glossaryMatchCount: glossaryMatches.length,
+      });
+    }
+    return results.slice(0, MAX_RESULTS);
   }
 }

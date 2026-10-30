@@ -1,4 +1,9 @@
-<div class="search-box" role="search" [class.search-box--hero]="variant() === 'hero'">
+<div
+  class="search-box"
+  role="search"
+  [class.search-box--hero]="variant() === 'hero'"
+  [class.search-box--has-shortcut]="shortcut()"
+>
   <svg [lucideIcon]="searchIcon" class="icon search-box__icon"></svg>
   <label class="visually-hidden" [for]="inputId()">{{ 'search.label' | translate }}</label>
   <input
@@ -19,6 +24,16 @@
     (input)="onInput($event)"
     (keydown)="onKeydown($event)"
   />
+  @if (hasQuery()) {
+    <button
+      class="btn btn--icon search-box__clear"
+      type="button"
+      [attr.aria-label]="'search.clear' | translate"
+      (click)="clearSearch()"
+    >
+      <svg [lucideIcon]="clearIcon" class="icon"></svg>
+    </button>
+  }
   @if (shortcut()) {
     <kbd class="search-box__shortcut" aria-hidden="true"
       ><kbd class="search-box__key">{{ 'search.ctrl' | translate }}</kbd
@@ -42,9 +57,17 @@
         (mousedown)="$event.preventDefault()"
         (click)="go(result)"
       >
-        <span class="search-box__area">{{ 'search.areas.' + result.area | translate }}</span>
-        <span class="search-box__title">{{ result.title }}</span>
-        <span class="search-box__text">{{ result.text }}</span>
+        <span class="search-box__content">
+          <span class="search-box__title">{{ result.title }}</span>
+          <span class="search-box__text">
+            @if (result.glossaryMatchCount !== undefined) {
+              {{ 'search.glossaryMatches' | translate: { count: result.glossaryMatchCount } }}
+            } @else {
+              {{ result.text }}
+            }
+          </span>
+        </span>
+        <span class="btn btn--primary search-box__area">{{ 'search.areas.' + result.area | translate }}</span>
       </li>
     }
   </ul>

@@ -53,16 +53,19 @@
     "collectionHint": "Sign in to save commands as favourites and find them here again."
   },
   "search": {
-    "label": "Search commands, basics, guides and error messages",
+    "label": "Search commands, basics, terms, guides and error messages",
     "placeholder": "Search …",
     "ctrl": "Ctrl",
     "heroPlaceholder": "Search, e.g. git stash",
     "resultsLabel": "Search results",
+    "clear": "Clear search",
     "empty": "No results. Try a different term.",
     "count": "{{count}} results",
+    "glossaryMatches": "{{count}} matching terms in the glossary",
     "areas": {
       "commands": "Command",
       "concepts": "Basics",
+      "glossary": "Term",
       "blueprints": "Guide",
       "debugging": "Errors"
     }
@@ -444,6 +447,7 @@
     }
   },
   "glossary": {
+    "clearSearch": "Clear glossary search",
     "summary": "{{count}} terms from A to Z",
     "searchLabel": "Search terms",
     "searchPlaceholder": "Search a term, e.g. CORS",

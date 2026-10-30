@@ -34,7 +34,35 @@
 }
 
 .glossary__search-input {
+  padding-right: calc($control-padding-x + $control-height);
   padding-left: calc($control-padding-x * 2 + rem(20));
+
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+.glossary__clear {
+  position: absolute;
+  top: 50%;
+  right: $control-padding-x;
+  width: rem(24);
+  min-height: rem(24);
+  padding: 0;
+  color: var(--muted);
+  background: var(--bg);
+  border-color: transparent;
+  border-radius: 50%;
+  transform: translateY(-50%);
+
+  .icon {
+    width: rem(14);
+    height: rem(14);
+  }
+
+  &:hover {
+    color: var(--on-accent);
+  }
 }
 
 .glossary__count,

@@ -34,12 +34,44 @@
   padding-right: $search-shortcut-space;
   padding-left: $control-height;
 
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+
   .search-box--hero & {
     min-height: var(--search-height);
     padding-right: $space-lg;
     padding-left: rem(60);
     font-size: $font-size-lg;
     border-radius: $radius-xl;
+  }
+}
+
+.search-box__clear {
+  position: absolute;
+  top: calc(var(--search-height, #{$control-height}) / 2);
+  right: $space-sm;
+  z-index: 1;
+  width: rem(24);
+  min-height: rem(24);
+  padding: 0;
+  color: var(--muted);
+  background: var(--bg);
+  border-color: transparent;
+  border-radius: 50%;
+  transform: translateY(-50%);
+
+  .icon {
+    width: rem(14);
+    height: rem(14);
+  }
+
+  &:hover:not(:disabled) {
+    color: var(--on-accent);
+  }
+
+  .search-box--has-shortcut & {
+    right: calc($search-shortcut-space - rem(8));
   }
 }
 
@@ -98,7 +130,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0 $space-md;
-  padding: $space-sm $space-md;
+  padding: $space-xs $space-md;
   cursor: pointer;
   border-radius: $radius-md;
 
@@ -112,22 +144,27 @@
   }
 }
 
+.search-box__content {
+  display: grid;
+  gap: 0;
+  grid-row: 1;
+  grid-column: 1;
+  min-width: 0;
+}
+
 .search-box__area {
+  justify-self: end;
+  align-self: center;
   grid-row: 1;
   grid-column: 2;
-  color: var(--accent);
-  white-space: nowrap;
 }
 
 .search-box__title {
-  grid-row: 1;
-  grid-column: 1;
   font-weight: $font-weight-semibold;
   overflow-wrap: anywhere;
 }
 
 .search-box__text {
-  grid-column: 1 / -1;
   overflow: clip;
   text-overflow: ellipsis;
   color: var(--muted);
@@ -144,11 +181,15 @@
 /* #region RESPONSIVE */
 @include mobile {
   .search-box__input {
-    padding-right: $control-padding-x;
+    padding-right: rem(48);
   }
 
   .search-box__shortcut {
     display: none;
+  }
+
+  .search-box__clear {
+    right: $space-sm;
   }
 }
 
@@ -167,11 +208,14 @@
   }
 
   .search-box__area {
+    justify-self: start;
+    grid-row: 1;
     grid-column: 1;
   }
 
-  .search-box__title {
+  .search-box__content {
     grid-row: 2;
+    grid-column: 1;
   }
 }
 
