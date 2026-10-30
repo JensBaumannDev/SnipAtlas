@@ -2,6 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { LucideDynamicIcon } from '@lucide/angular';
+import { userIcon } from '../../core/ui/icons';
 import { Preferences } from '../../core/user-data/preferences';
 import { Session } from '../../core/auth/session';
 
@@ -18,7 +20,7 @@ const TABS: ProfileTab[] = [
 ];
 
 @Component({
-  imports: [DatePipe, RouterLink, RouterLinkActive, RouterOutlet, TranslatePipe],
+  imports: [DatePipe, RouterLink, RouterLinkActive, RouterOutlet, TranslatePipe, LucideDynamicIcon],
   selector: 'app-profile',
   styleUrl: './profile.scss',
   templateUrl: './profile.html',
@@ -27,6 +29,7 @@ export class Profile {
   protected readonly session = inject(Session);
   protected readonly language = inject(Preferences).language;
   protected readonly tabs = TABS;
+  protected readonly userIcon = userIcon;
 
   constructor() {
     const router = inject(Router);

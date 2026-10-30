@@ -27,6 +27,11 @@
   border-radius: 50%;
 }
 
+.profile__avatar-icon {
+  width: rem(28);
+  height: rem(28);
+}
+
 .profile__heading {
   display: flex;
   flex-direction: column;

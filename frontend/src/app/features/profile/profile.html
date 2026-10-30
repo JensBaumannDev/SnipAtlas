@@ -1,6 +1,8 @@
 @if (session.user(); as user) {
   <header class="profile__header">
-    <span class="profile__avatar" aria-hidden="true">{{ session.initial() }}</span>
+    <span class="profile__avatar" aria-hidden="true">
+      <svg [lucideIcon]="userIcon" class="icon profile__avatar-icon"></svg>
+    </span>
     <div class="profile__heading">
       <h1>{{ 'pages.profile' | translate }}</h1>
       <p class="profile__meta">

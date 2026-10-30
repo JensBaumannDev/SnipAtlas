@@ -23,8 +23,17 @@
 
   &:hover,
   &[aria-expanded='true'] {
-    background: var(--hover);
+    background: var(--accent);
+
+    .user-menu__avatar-icon {
+      color: var(--on-accent);
+    }
   }
+}
+
+.user-menu__avatar-icon {
+  width: rem(20);
+  height: rem(20);
 }
 
 // Panel

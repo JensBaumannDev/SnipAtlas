@@ -7,7 +7,7 @@
   [attr.aria-label]="'account.menu' | translate"
   (click)="toggle()"
 >
-  <span aria-hidden="true">{{ session.initial() }}</span>
+  <svg [lucideIcon]="userIcon" class="icon user-menu__avatar-icon" aria-hidden="true"></svg>
 </button>
 
 <div class="user-menu__panel" id="user-menu" [hidden]="!open()">
