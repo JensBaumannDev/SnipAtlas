@@ -67,6 +67,13 @@ export const routes: Routes = [
     loadComponent: () => import('./features/faq/faq').then((m) => m.Faq),
   },
   {
+    path: 'vscode-theme',
+    title: 'pages.vscodeTheme',
+    data: { description: 'meta.vscodeTheme' },
+    loadComponent: () =>
+      import('./features/vscode-theme/vscode-theme').then((m) => m.VscodeTheme),
+  },
+  {
     path: 'impressum',
     title: 'pages.imprint',
     data: { description: 'meta.imprint' },

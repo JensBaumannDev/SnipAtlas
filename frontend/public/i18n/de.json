@@ -28,7 +28,8 @@
     "profile": "Profil",
     "notFound": "Seite nicht gefunden",
     "news": "Neu auf SnipAtlas",
-    "resetPassword": "Passwort zurücksetzen"
+    "resetPassword": "Passwort zurücksetzen",
+    "vscodeTheme": "SnipAtlas Theme für VS Code"
   },
   "meta": {
     "default": "Vom ersten Befehl bis zum fertigen Projekt online: Befehle, Grundlagen, Anleitungen und Fehlermeldungen für Einsteiger in die Webentwicklung.",
@@ -41,7 +42,8 @@
     "request": "Fehlt ein Befehl, eine Erklärung oder eine Fehlermeldung? Hier kannst du dir neue Inhalte für SnipAtlas wünschen.",
     "faq": "Antworten auf häufige Fragen zu SnipAtlas: Inhalte, Konto, Favoriten und Datenschutz.",
     "imprint": "Impressum von SnipAtlas.",
-    "privacy": "Datenschutzerklärung von SnipAtlas: welche Daten gespeichert werden, wofür und wie lange."
+    "privacy": "Datenschutzerklärung von SnipAtlas: welche Daten gespeichert werden, wofür und wie lange.",
+    "vscodeTheme": "Lade das SnipAtlas-Farbthema für Visual Studio Code herunter. Mit dunkler und heller Variante."
   },
   "sidebar": {
     "label": "Themen",
@@ -388,7 +390,21 @@
     }
   },
   "footer": {
-    "label": "Rechtliches und Kontakt"
+    "label": "Links und Kontakt",
+    "vscodeTheme": "VS-Code-Theme herunterladen"
+  },
+  "vscodeTheme": {
+    "lead": "Die Farben von SnipAtlas direkt in Visual Studio Code – mit dunklem und hellem Theme.",
+    "download": "Theme herunterladen",
+    "details": "Für Editor, Terminal und Arbeitsbereiche. Version 0.1.0 · MIT-Lizenz.",
+    "installTitle": "So installierst du das Theme",
+    "stepLabel": "Schritt {{number}}",
+    "step1Title": "Theme-Datei herunterladen",
+    "step1": "Lade das SnipAtlas-Theme-Paket (.vsix) über den Button oben herunter.",
+    "step2Title": "In VS Code installieren",
+    "step2": "Klicke links auf das Puzzleteil-Symbol für Erweiterungen. Klicke oben im Erweiterungsbereich auf die drei Punkte und wähle „Aus VSIX installieren …“. Öffne im Dateifenster den Ordner „Downloads“ und wähle „snipatlas-theme-0.1.0.vsix“ aus.",
+    "step3Title": "Theme aktivieren",
+    "step3": "Drücke nacheinander Strg+K und Strg+T. Wähle dann SnipAtlas Dark oder SnipAtlas Light."
   },
   "project": {
     "title": "Dein Projekt",

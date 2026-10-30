@@ -28,7 +28,8 @@
     "profile": "Profile",
     "notFound": "Page not found",
     "news": "New on SnipAtlas",
-    "resetPassword": "Reset password"
+    "resetPassword": "Reset password",
+    "vscodeTheme": "SnipAtlas theme for VS Code"
   },
   "meta": {
     "default": "From your first command to a finished project online: commands, basics, guides and error messages for beginners in web development.",
@@ -41,7 +42,8 @@
     "request": "Missing a command, an explanation or an error message? Request new content for SnipAtlas here.",
     "faq": "Answers to frequently asked questions about SnipAtlas: content, account, favourites and privacy.",
     "imprint": "Legal notice of SnipAtlas.",
-    "privacy": "Privacy policy of SnipAtlas: which data is stored, what for and for how long."
+    "privacy": "Privacy policy of SnipAtlas: which data is stored, what for and for how long.",
+    "vscodeTheme": "Download the SnipAtlas color theme for Visual Studio Code, available in dark and light variants."
   },
   "sidebar": {
     "label": "Topics",
@@ -388,7 +390,21 @@
     }
   },
   "footer": {
-    "label": "Legal and contact"
+    "label": "Links and contact",
+    "vscodeTheme": "Download VS Code theme"
+  },
+  "vscodeTheme": {
+    "lead": "Bring SnipAtlas colors to Visual Studio Code, with dark and light themes.",
+    "download": "Download the theme",
+    "details": "For the editor, terminal and workbench. Version 0.1.0 · MIT License.",
+    "installTitle": "Install the theme",
+    "stepLabel": "Step {{number}}",
+    "step1Title": "Download the theme file",
+    "step1": "Download the SnipAtlas theme package (.vsix) using the button above.",
+    "step2Title": "Install in VS Code",
+    "step2": "Click the puzzle-piece Extensions icon on the left. Click the three dots at the top of the Extensions view and choose “Install from VSIX…”. In the file picker, open Downloads and select “snipatlas-theme-0.1.0.vsix”.",
+    "step3Title": "Choose your theme",
+    "step3": "Press Ctrl+K, then Ctrl+T. Choose SnipAtlas Dark or SnipAtlas Light."
   },
   "project": {
     "title": "Your project",
