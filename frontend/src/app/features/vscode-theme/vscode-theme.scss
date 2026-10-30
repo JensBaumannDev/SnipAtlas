@@ -1,0 +1,110 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  width: 100%;
+  max-width: rem(800);
+  margin-inline: auto;
+}
+
+.vscode-theme__intro {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.vscode-theme__lead {
+  max-width: rem(720);
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
+
+.vscode-theme__download {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-lg;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-lg;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-xl;
+}
+
+.vscode-theme__heading {
+  font-size: $font-size-lg;
+  color: var(--accent);
+}
+
+.vscode-theme__details {
+  margin-top: $space-xs;
+  color: var(--muted);
+}
+
+.vscode-theme__download-link {
+  text-decoration: none;
+}
+
+.vscode-theme__install {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+.vscode-theme__install-head {
+  display: block;
+}
+
+.vscode-theme__steps {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.vscode-theme__step {
+  display: grid;
+  grid-template-columns: rem(104) minmax(0, 1fr);
+  gap: $space-sm;
+  padding: $space-lg $space-xs;
+  border-bottom: 1px solid var(--line);
+}
+
+.vscode-theme__step-number {
+  font-family: $font-mono;
+  font-size: rem(14);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.vscode-theme__step-body {
+  grid-column: 2;
+}
+
+.vscode-theme__step-title {
+  margin-bottom: $space-xs;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight;
+}
+
+.vscode-theme__step-text {
+  max-width: 70ch;
+  line-height: $line-height-base;
+  color: var(--muted);
+}
+
+/* #region RESPONSIVE */
+@include small {
+  .vscode-theme__download {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: $space-md;
+  }
+
+}
+
+/* #endregion */

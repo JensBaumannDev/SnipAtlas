@@ -69,14 +69,14 @@ def test_confirm_keeps_spaces(api_client: APIClient, user: User) -> None:
 
 def test_confirm_does_not_log_in(api_client: APIClient, user: User) -> None:
     confirm(api_client, user)
-    assert api_client.get(ME_URL).status_code == 401
+    assert api_client.get(ME_URL).status_code == 204
 
 
 def test_confirm_logs_out_all_devices(api_client: APIClient, user: User) -> None:
     device = APIClient()
     device.force_login(user)
     confirm(api_client, user)
-    assert device.get(ME_URL).status_code == 401
+    assert device.get(ME_URL).status_code == 204
 
 
 def test_login_works_only_with_new_password(api_client: APIClient, user: User) -> None:
@@ -275,7 +275,7 @@ def test_confirm_with_csrf_token_is_allowed(csrf_client: APIClient, user: User) 
 def test_confirm_of_logged_in_user_logs_out(api_client: APIClient, user: User) -> None:
     api_client.force_login(user)
     assert confirm(api_client, user).status_code == 204
-    assert api_client.get(ME_URL).status_code == 401
+    assert api_client.get(ME_URL).status_code == 204
 
 
 def test_confirm_is_throttled_after_five_attempts(api_client: APIClient, user: User) -> None:

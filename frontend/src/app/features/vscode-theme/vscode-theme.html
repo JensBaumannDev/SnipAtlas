@@ -1,0 +1,57 @@
+<header class="vscode-theme__intro">
+  <h1>{{ 'pages.vscodeTheme' | translate }}</h1>
+  <p class="vscode-theme__lead">{{ 'vscodeTheme.lead' | translate }}</p>
+</header>
+
+<section class="vscode-theme__download" aria-labelledby="vscode-theme-download">
+  <div>
+    <h2 class="vscode-theme__heading" id="vscode-theme-download">
+      {{ 'vscodeTheme.download' | translate }}
+    </h2>
+    <p class="vscode-theme__details">{{ 'vscodeTheme.details' | translate }}</p>
+  </div>
+  <a
+    class="btn btn--primary vscode-theme__download-link"
+    href="/downloads/snipatlas-theme-0.1.0.vsix"
+    download
+  >
+    {{ 'vscodeTheme.download' | translate }}
+  </a>
+</section>
+
+<section class="vscode-theme__install" aria-labelledby="vscode-theme-install">
+  <header class="vscode-theme__install-head">
+    <h2 class="vscode-theme__heading" id="vscode-theme-install">
+      {{ 'vscodeTheme.installTitle' | translate }}
+    </h2>
+  </header>
+  <ol class="vscode-theme__steps">
+    <li class="vscode-theme__step">
+      <span class="vscode-theme__step-number">
+        {{ 'vscodeTheme.stepLabel' | translate: { number: 1 } }}
+      </span>
+      <article class="vscode-theme__step-body">
+        <h3 class="vscode-theme__step-title">{{ 'vscodeTheme.step1Title' | translate }}</h3>
+        <p class="vscode-theme__step-text">{{ 'vscodeTheme.step1' | translate }}</p>
+      </article>
+    </li>
+    <li class="vscode-theme__step">
+      <span class="vscode-theme__step-number">
+        {{ 'vscodeTheme.stepLabel' | translate: { number: 2 } }}
+      </span>
+      <article class="vscode-theme__step-body">
+        <h3 class="vscode-theme__step-title">{{ 'vscodeTheme.step2Title' | translate }}</h3>
+        <p class="vscode-theme__step-text">{{ 'vscodeTheme.step2' | translate }}</p>
+      </article>
+    </li>
+    <li class="vscode-theme__step">
+      <span class="vscode-theme__step-number">
+        {{ 'vscodeTheme.stepLabel' | translate: { number: 3 } }}
+      </span>
+      <article class="vscode-theme__step-body">
+        <h3 class="vscode-theme__step-title">{{ 'vscodeTheme.step3Title' | translate }}</h3>
+        <p class="vscode-theme__step-text">{{ 'vscodeTheme.step3' | translate }}</p>
+      </article>
+    </li>
+  </ol>
+</section>

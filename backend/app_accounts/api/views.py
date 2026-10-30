@@ -1,11 +1,13 @@
 """Views for login, account, favorites, progress and settings."""
 
+from typing import Any
+
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.db.models import QuerySet
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, BasePermission
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -85,6 +87,18 @@ class MeView(generics.RetrieveUpdateAPIView):
 
     serializer_class = UserSerializer
     http_method_names = ('get', 'patch', 'head', 'options')
+
+    def get_permissions(self) -> list[BasePermission]:
+        """Allow the session check to report an anonymous state without an error."""
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return super().get_permissions()
+
+    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        """Return no content when there is no signed-in user."""
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return super().retrieve(request, *args, **kwargs)
 
     def get_object(self) -> User:
         """Return the logged-in user."""

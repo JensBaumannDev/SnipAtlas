@@ -99,7 +99,7 @@ def test_reset_keeps_password(api_client: APIClient, user: User) -> None:
 
 def test_reset_does_not_log_in(api_client: APIClient, user: User) -> None:
     request_reset(api_client)
-    assert api_client.get(reverse('auth-me')).status_code == 401
+    assert api_client.get(reverse('auth-me')).status_code == 204
 
 
 def test_reset_of_logged_in_user_is_allowed(api_client: APIClient, user: User) -> None:
