@@ -6,6 +6,7 @@ import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
 import { Favorites } from '../../../core/user-data/favorites';
 import { downloadJson } from '../../../core/browser/file-download';
 import { Session } from '../../../core/auth/session';
+import { Notifications } from '../../../core/ui/notifications';
 import { UserRequestApi } from '../../../core/api/user-request-api';
 import { AccountDelete } from './account-delete/account-delete';
 import { AccountEmail } from './account-email/account-email';
@@ -23,6 +24,7 @@ export class ProfileAccount {
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
   private readonly session = inject(Session);
+  private readonly notifications = inject(Notifications);
   private readonly progress = inject(BlueprintProgress);
   private readonly favorites = inject(Favorites);
   private readonly requests = toSignal(inject(UserRequestApi).getMine(), { initialValue: [] });
@@ -34,6 +36,7 @@ export class ProfileAccount {
       progress: this.progress.done(),
       requests: this.requests(),
     });
+    this.notifications.show('notifications.downloaded');
   }
 
   protected logout(): void {
