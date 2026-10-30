@@ -1,12 +1,12 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { GlossaryApi } from '../../core/api/glossary-api';
 import { GlossaryTerm } from '../../core/models/glossary-term';
-import { bookAIcon, searchIcon } from '../../core/ui/icons';
+import { bookAIcon, searchIcon, xIcon } from '../../core/ui/icons';
 import { syncOutline } from '../../core/ui/page-outline';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { ReportLink } from '../../shared/report-link/report-link';
@@ -30,14 +30,22 @@ interface LetterGroup {
   templateUrl: './glossary.html',
 })
 export class Glossary {
+  private readonly route = inject(ActivatedRoute);
+  private readonly routeQuery = toSignal(this.route.queryParamMap, {
+    initialValue: this.route.snapshot.queryParamMap,
+  });
   private readonly terms = toSignal(inject(GlossaryApi).getAll(), { initialValue: [] });
 
   protected readonly searchIcon = searchIcon;
+  protected readonly xIcon = xIcon;
   protected readonly icon = bookAIcon;
   protected readonly total = computed(() => this.terms().length);
 
-  protected readonly query = new FormControl('', { nonNullable: true });
-  private readonly queryValue = toSignal(this.query.valueChanges, { initialValue: '' });
+  protected readonly query = new FormControl(this.route.snapshot.queryParamMap.get('q') ?? '', {
+    nonNullable: true,
+  });
+  private readonly queryValue = toSignal(this.query.valueChanges, { initialValue: this.query.value });
+  protected readonly hasQuery = computed(() => this.queryValue().length > 0);
 
   protected readonly filtered = computed(() => {
     const words = this.queryValue().trim().toLowerCase().split(/\s+/).filter(Boolean);
@@ -68,6 +76,12 @@ export class Glossary {
   });
 
   constructor() {
+    effect(() => {
+      const value = this.routeQuery().get('q') ?? '';
+      if (this.query.value !== value) {
+        this.query.setValue(value);
+      }
+    });
     syncOutline(() =>
       this.groups().map((group) => ({ id: this.letterId(group.letter), label: group.letter })),
     );
@@ -75,5 +89,9 @@ export class Glossary {
 
   protected letterId(letter: string): string {
     return `letter-${letter.toLowerCase()}`;
+  }
+
+  protected clearSearch(): void {
+    this.query.setValue('');
   }
 }

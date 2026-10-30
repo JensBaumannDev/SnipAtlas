@@ -18,6 +18,16 @@
         [placeholder]="'glossary.searchPlaceholder' | translate"
         [formControl]="query"
       />
+      @if (hasQuery()) {
+        <button
+          class="btn btn--icon glossary__clear"
+          type="button"
+          [attr.aria-label]="'glossary.clearSearch' | translate"
+          (click)="clearSearch()"
+        >
+          <svg [lucideIcon]="xIcon" class="icon"></svg>
+        </button>
+      }
     </div>
     <p class="glossary__count" role="status">
       @let count = filtered().length;

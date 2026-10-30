@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import type { ContentSearch } from '../../core/content/content-search';
-import { searchIcon } from '../../core/ui/icons';
+import { searchIcon, xIcon } from '../../core/ui/icons';
 import { SearchResult } from '../../core/models/search-result';
 
 @Component({
@@ -36,6 +36,7 @@ export class SearchBox {
   readonly shortcut = input(false);
 
   protected readonly searchIcon = searchIcon;
+  protected readonly clearIcon = xIcon;
   protected readonly query = signal('');
   protected readonly open = signal(false);
   protected readonly active = signal(-1);
@@ -66,6 +67,12 @@ export class SearchBox {
 
   search(text: string): void {
     this.query.set(text);
+    this.active.set(-1);
+    this.focus();
+  }
+
+  protected clearSearch(): void {
+    this.query.set('');
     this.active.set(-1);
     this.focus();
   }
@@ -105,7 +112,10 @@ export class SearchBox {
   }
 
   protected go(result: SearchResult): void {
-    this.router.navigate(result.link, { fragment: result.fragment });
+    this.router.navigate(result.link, {
+      fragment: result.fragment,
+      queryParams: result.query ? { q: result.query } : undefined,
+    });
     this.query.set('');
     this.close();
     this.input().nativeElement.blur();
