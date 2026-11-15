@@ -19,6 +19,10 @@ CSRF_TOKEN = 'a' * 32
 URL = reverse('auth-email-confirm')
 
 
+def tamper(token: str) -> str:
+    return ('1' if token[0] == '0' else '0') + token[1:]
+
+
 @pytest.fixture
 def pending(user: User) -> User:
     user.pending_email = 'ada.neu@example.com'
@@ -142,7 +146,7 @@ def test_expired_link_is_rejected(
         lambda user: make_link_token(user, ACTIVATION),
         default_token_generator.make_token,
         lambda user: 'broken',
-        lambda user: f'0{make_link_token(user, EMAIL_CHANGE)[1:]}',
+        lambda user: tamper(make_link_token(user, EMAIL_CHANGE)),
     ],
 )
 def test_wrong_token_is_rejected(api_client: APIClient, pending: User, make_token: object) -> None:
