@@ -578,6 +578,49 @@ def test_login_of_inactive_user_is_rejected(api_client: APIClient, user: User) -
     assert login(api_client).json() == {'code': 'invalid_credentials'}
 
 
+def test_login_of_unconfirmed_user_is_rejected_as_not_activated(
+    api_client: APIClient, user: User
+) -> None:
+    User.objects.filter(pk=user.pk).update(email_confirmed=False)
+    response = login(api_client, email=' ADA@example.com ')
+    assert response.status_code == 400
+    assert response.json() == {'code': 'not_activated'}
+    assert logged_in_user_id(api_client) is None
+    assert 'sessionid' not in response.cookies
+    user.refresh_from_db()
+    assert user.last_login is None
+
+
+def test_login_of_unconfirmed_user_with_wrong_password_reveals_nothing(
+    api_client: APIClient, user: User
+) -> None:
+    User.objects.filter(pk=user.pk).update(email_confirmed=False)
+    assert login(api_client, password='wrong').json() == {'code': 'invalid_credentials'}
+
+
+def test_login_of_unconfirmed_deactivated_user_reveals_nothing(
+    api_client: APIClient, user: User
+) -> None:
+    User.objects.filter(pk=user.pk).update(email_confirmed=False, is_active=False)
+    assert login(api_client).json() == {'code': 'invalid_credentials'}
+
+
+def test_failed_unconfirmed_login_keeps_current_user_logged_in(
+    api_client: APIClient, user: User, staff_user: User
+) -> None:
+    User.objects.filter(pk=user.pk).update(email_confirmed=False)
+    api_client.force_login(staff_user)
+    login(api_client)
+    assert logged_in_user_id(api_client) == str(staff_user.pk)
+
+
+def test_login_works_after_registering_and_activating(api_client: APIClient) -> None:
+    register(api_client)
+    assert login(api_client, email='grace@example.com').json() == {'code': 'not_activated'}
+    User.objects.filter(email='grace@example.com').update(email_confirmed=True)
+    assert login(api_client, email='grace@example.com').status_code == 200
+
+
 def test_login_of_user_without_password_is_rejected(api_client: APIClient) -> None:
     User.objects.create_user('grace@example.com')
     response = login(api_client, email='grace@example.com', password='!')

@@ -22,7 +22,7 @@ from app_accounts.models import (
 )
 from app_accounts.tokens import ACTIVATION, check_link_token
 
-from .exceptions import InvalidCredentials, InvalidLink, WrongPassword
+from .exceptions import InvalidCredentials, InvalidLink, NotActivated, WrongPassword
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -123,6 +123,8 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(request, email=attrs['email'], password=attrs['password'])
         if user is None:
             raise InvalidCredentials
+        if not user.email_confirmed:
+            raise NotActivated
         return {'user': user}
 
 

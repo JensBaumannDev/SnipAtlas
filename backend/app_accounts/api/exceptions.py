@@ -19,6 +19,14 @@ class InvalidLink(APIException):
     default_code = 'invalid_link'
 
 
+class NotActivated(APIException):
+    """Error for a correct login of an account whose email is not confirmed yet."""
+
+    status_code = 400
+    default_detail = 'The email address is not confirmed yet.'
+    default_code = 'not_activated'
+
+
 class WrongPassword(APIException):
     """Error for a wrong current password."""
 
