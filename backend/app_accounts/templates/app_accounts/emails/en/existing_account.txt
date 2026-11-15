@@ -1,0 +1,14 @@
+{% autoescape off %}Hello,
+
+someone just tried to sign up for SnipAtlas with this email address, but you already have an account.
+
+You can log in here:
+{{ link }}
+
+If you forgot your password, choose "Forgot password" when logging in.
+
+If this was not you, just ignore this mail. Nothing changes in your account.
+
+Best regards
+SnipAtlas
+{% endautoescape %}

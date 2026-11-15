@@ -10,7 +10,14 @@ from modeltranslation.fields import TranslationField
 
 from app_accounts.models import Accent, Language, OperatingSystem
 from app_content.models import Entry, News, NewsArea, Topic, validate_topic_slug
-from app_feedback.models import BugType, EntryArea, ImprovementArea, Kind, Status
+from app_feedback.models import (
+    BugType,
+    EntryArea,
+    ImprovementArea,
+    Kind,
+    RequestLanguage,
+    Status,
+)
 
 CATALOG = Path(settings.LOCALE_PATHS[0]) / 'de' / 'LC_MESSAGES' / 'django.po'
 OWN_APPS = ('app_accounts', 'app_content', 'app_feedback')
@@ -137,6 +144,7 @@ FIELD_NAMES = [
     ('app_feedback.suggestion', 'email', 'E-Mail', 'email'),
     ('app_feedback.suggestion', 'status', 'Status', 'status'),
     ('app_feedback.suggestion', 'answer', 'Antwort', 'answer'),
+    ('app_feedback.suggestion', 'language', 'Sprache', 'language'),
     ('app_feedback.suggestion', 'created_at', 'Eingegangen am', 'received at'),
     ('app_feedback.suggestion', 'answered_at', 'Beantwortet am', 'answered at'),
     ('app_feedback.suggestion', 'area', 'Bereich', 'area'),
@@ -164,6 +172,8 @@ CHOICE_LABELS = [
     (Language.AUTO, 'Automatisch', 'Automatic'),
     (Language.DE, 'Deutsch', 'Deutsch'),
     (Language.EN, 'English', 'English'),
+    (RequestLanguage.DE, 'Deutsch', 'Deutsch'),
+    (RequestLanguage.EN, 'English', 'English'),
     (NewsArea.COMMANDS, 'Befehle', 'Commands'),
     (NewsArea.CONCEPTS, 'Grundlagen', 'Concepts'),
     (NewsArea.BLUEPRINTS, 'Anleitungen', 'Guides'),
@@ -254,7 +264,7 @@ def test_choice_label_is_german_and_english(
 
 def test_every_own_choice_has_a_label() -> None:
     enums = (Accent, OperatingSystem, Language, NewsArea, Kind, Status)
-    enums += (EntryArea, ImprovementArea, BugType)
+    enums += (EntryArea, ImprovementArea, BugType, RequestLanguage)
     assert {choice for enum in enums for choice in enum} == own_choices()
 
 

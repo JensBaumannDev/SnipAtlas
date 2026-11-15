@@ -1,19 +1,38 @@
+import re
+from smtplib import SMTPException
+from urllib.parse import parse_qs, urlsplit
+
 import pytest
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sessions.models import Session
+from django.core import mail
+from django.core.mail import EmailMessage
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
+from django.test import override_settings
 from django.urls import reverse
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from pytest_django import DjangoAssertNumQueries
 from rest_framework.test import APIClient
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from app_accounts.models import User
+from app_accounts.tokens import ACTIVATION, check_link_token
 
 pytestmark = pytest.mark.django_db
 
 PASSWORD = 'Kaffee-Tasse-2026!'
 CSRF_TOKEN = 'a' * 32
 OTHER_METHODS = ['get', 'put', 'patch', 'delete']
+ACTIVATION_LINK = re.compile(r'http://localhost:4200/konto-aktivieren\?\S+')
+
+
+def activation_link(body: str) -> tuple[str, str]:
+    match = ACTIVATION_LINK.search(body)
+    assert match
+    query = parse_qs(urlsplit(match[0]).query)
+    return query['uid'][0], query['token'][0]
 
 
 def register(api_client: APIClient, **changes: object) -> HttpResponse:
@@ -37,16 +56,17 @@ def logged_in_user_id(api_client: APIClient) -> str | None:
 
 
 # Register
-def test_register_creates_user_and_returns_it(api_client: APIClient) -> None:
+def test_register_answers_without_content(api_client: APIClient) -> None:
     response = register(api_client)
+    assert response.status_code == 204
+    assert response.content == b''
+
+
+def test_register_creates_unconfirmed_user(api_client: APIClient) -> None:
+    register(api_client)
     user = User.objects.get(email='grace@example.com')
-    assert response.status_code == 201
-    assert response.json() == {
-        'email': 'grace@example.com',
-        'since': user.since.isoformat(),
-        'notifyByMail': True,
-        'accent': 'blue',
-    }
+    assert not user.email_confirmed
+    assert user.is_active
 
 
 def test_register_stores_hashed_password(api_client: APIClient) -> None:
@@ -62,18 +82,19 @@ def test_register_keeps_spaces_in_password(api_client: APIClient) -> None:
 
 
 def test_register_lowercases_and_trims_email(api_client: APIClient) -> None:
-    response = register(api_client, email='  Grace@Example.COM ')
-    assert response.json()['email'] == 'grace@example.com'
+    register(api_client, email='  Grace@Example.COM ')
     assert User.objects.filter(email='grace@example.com').exists()
+    assert mail.outbox[0].to == ['grace@example.com']
 
 
 def test_register_ignores_other_fields(api_client: APIClient) -> None:
     extra = {'isStaff': True, 'isSuperuser': True, 'accent': 'teal', 'notifyByMail': False}
-    register(api_client, **extra, isActive=False, since='2000-01-01')
+    register(api_client, **extra, isActive=False, since='2000-01-01', emailConfirmed=True)
     user = User.objects.get(email='grace@example.com')
     assert (user.is_staff, user.is_superuser, user.is_active) == (False, False, True)
     assert (user.accent, user.notify_by_mail) == ('blue', True)
     assert user.date_joined.year != 2000
+    assert not user.email_confirmed
 
 
 def test_register_creates_user_without_groups_or_rights(api_client: APIClient) -> None:
@@ -83,35 +104,138 @@ def test_register_creates_user_without_groups_or_rights(api_client: APIClient) -
     assert not user.user_permissions.exists()
 
 
-def test_register_logs_in_new_user(api_client: APIClient) -> None:
+def test_register_does_not_log_in(api_client: APIClient) -> None:
+    response = register(api_client)
+    assert logged_in_user_id(api_client) is None
+    assert 'sessionid' not in response.cookies
+
+
+def test_register_while_logged_in_keeps_current_user(api_client: APIClient, user: User) -> None:
+    api_client.force_login(user)
     register(api_client)
-    user = User.objects.get(email='grace@example.com')
     assert logged_in_user_id(api_client) == str(user.pk)
 
 
-def test_register_sets_http_only_session_cookie(api_client: APIClient) -> None:
-    cookie = register(api_client).cookies['sessionid']
-    assert cookie['httponly']
-    assert cookie['samesite'] == 'Lax'
-
-
-def test_register_sets_new_readable_csrf_cookie(api_client: APIClient) -> None:
-    api_client.cookies['csrftoken'] = CSRF_TOKEN
-    cookie = register(api_client).cookies['csrftoken']
-    assert cookie.value != CSRF_TOKEN
-    assert not cookie['httponly']
-
-
-def test_register_while_logged_in_switches_to_new_user(api_client: APIClient, user: User) -> None:
-    api_client.force_login(user)
+# Register: mails
+def test_register_sends_activation_mail(api_client: APIClient) -> None:
     register(api_client)
-    assert logged_in_user_id(api_client) != str(user.pk)
-    assert User.objects.get(pk=logged_in_user_id(api_client)).email == 'grace@example.com'
+    assert len(mail.outbox) == 1
+    message = mail.outbox[0]
+    assert message.to == ['grace@example.com']
+    assert message.from_email == 'noreply@snipatlas.jensbaumann.com'
+    assert message.subject == 'Bestätige dein Konto bei SnipAtlas'
+    assert message.content_subtype == 'plain'
 
 
-def test_failed_register_does_not_log_in(api_client: APIClient) -> None:
+def test_activation_mail_contains_valid_link(api_client: APIClient) -> None:
+    register(api_client)
+    user = User.objects.get(email='grace@example.com')
+    uid, token = activation_link(mail.outbox[0].body)
+    assert force_str(urlsafe_base64_decode(uid)) == str(user.pk)
+    assert check_link_token(user, token, ACTIVATION)
+
+
+@override_settings(FRONTEND_URL='https://snipatlas.jensbaumann.com')
+def test_activation_link_uses_frontend_url(api_client: APIClient) -> None:
+    register(api_client)
+    assert 'https://snipatlas.jensbaumann.com/konto-aktivieren?uid=' in mail.outbox[0].body
+
+
+def test_activation_token_is_not_a_password_reset_token(api_client: APIClient) -> None:
+    register(api_client)
+    user = User.objects.get(email='grace@example.com')
+    _, token = activation_link(mail.outbox[0].body)
+    assert not default_token_generator.check_token(user, token)
+    assert not check_link_token(user, token, 'email-change')
+
+
+def test_activation_mail_is_plain_text_without_html(api_client: APIClient) -> None:
+    register(api_client)
+    assert '<' not in mail.outbox[0].body
+    assert '&amp;' not in mail.outbox[0].body
+
+
+# Register: existing account
+@pytest.mark.parametrize('email', ['ada@example.com', 'ADA@Example.com', ' ada@example.com'])
+def test_register_with_confirmed_email_sends_existing_account_mail(
+    api_client: APIClient, user: User, email: str
+) -> None:
+    response = register(api_client, email=email)
+    assert response.status_code == 204
+    assert [message.to for message in mail.outbox] == [['ada@example.com']]
+    assert mail.outbox[0].subject == 'Dein Konto bei SnipAtlas'
+    assert 'http://localhost:4200' in mail.outbox[0].body
+    assert 'konto-aktivieren' not in mail.outbox[0].body
+
+
+def test_register_with_confirmed_email_changes_nothing(api_client: APIClient, user: User) -> None:
+    before = model_to_dict(user)
+    register(api_client, email='ada@example.com', password='Andere-Tasse-2026!')
+    user.refresh_from_db()
+    assert model_to_dict(user) == before
+    assert User.objects.count() == 1
+
+
+def test_register_with_deactivated_email_changes_nothing(api_client: APIClient, user: User) -> None:
+    User.objects.filter(pk=user.pk).update(is_active=False)
+    register(api_client, email='ada@example.com', password='Andere-Tasse-2026!')
+    user.refresh_from_db()
+    assert not user.is_active
+    assert user.check_password(PASSWORD)
+    assert mail.outbox[0].subject == 'Dein Konto bei SnipAtlas'
+
+
+# Register: unconfirmed account
+def test_register_again_overwrites_password_of_unconfirmed_user(api_client: APIClient) -> None:
+    register(api_client)
+    register(api_client, email='GRACE@example.com', password='Andere-Tasse-2026!')
+    user = User.objects.get(email='grace@example.com')
+    assert user.check_password('Andere-Tasse-2026!')
+    assert not user.email_confirmed
+    assert User.objects.count() == 1
+
+
+def test_register_again_sends_new_link_and_voids_old_one(api_client: APIClient) -> None:
+    register(api_client)
+    register(api_client, password='Andere-Tasse-2026!')
+    user = User.objects.get(email='grace@example.com')
+    (_, old), (_, new) = (activation_link(message.body) for message in mail.outbox)
+    assert [message.subject for message in mail.outbox] == [
+        'Bestätige dein Konto bei SnipAtlas'
+    ] * 2
+    assert not check_link_token(user, old, ACTIVATION)
+    assert check_link_token(user, new, ACTIVATION)
+
+
+# Register: same answer
+def test_register_answers_the_same_for_new_and_known_emails(
+    api_client: APIClient, user: User
+) -> None:
+    new = register(api_client)
+    known = register(api_client, email='ada@example.com')
+    again = register(api_client)
+    answers = {
+        (item.status_code, item.content, tuple(item.cookies)) for item in (new, known, again)
+    }
+    assert len(answers) == 1
+
+
+def test_register_with_failing_mail_answers_the_same(
+    api_client: APIClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def fail(self: EmailMessage, fail_silently: bool = False) -> int:
+        raise SMTPException
+
+    monkeypatch.setattr(EmailMessage, 'send', fail)
+    response = register(api_client)
+    assert (response.status_code, response.content) == (204, b'')
+    assert User.objects.filter(email='grace@example.com').exists()
+
+
+def test_failed_register_sends_no_mail(api_client: APIClient) -> None:
     register(api_client, email='no-mail')
     assert logged_in_user_id(api_client) is None
+    assert mail.outbox == []
 
 
 @pytest.mark.parametrize('field', ['email', 'password'])
@@ -148,12 +272,17 @@ def test_register_with_too_long_email_is_rejected(api_client: APIClient) -> None
     assert 'max_length' in field_codes(response, 'email')
 
 
-@pytest.mark.parametrize('email', ['ada@example.com', 'ADA@Example.com', ' ada@example.com'])
-def test_register_with_taken_email_is_rejected(
-    api_client: APIClient, user: User, email: str
+def test_register_with_null_character_in_email_is_rejected(api_client: APIClient) -> None:
+    response = register(api_client, email='grace@example.com\x00')
+    assert 'null_characters_not_allowed' in field_codes(response, 'email')
+
+
+def test_register_with_weak_password_for_known_email_is_rejected(
+    api_client: APIClient, user: User
 ) -> None:
-    assert field_codes(register(api_client, email=email), 'email') == ['unique']
-    assert User.objects.count() == 1
+    response = register(api_client, email='ada@example.com', password='Kaffee1')
+    assert field_codes(response, 'password') == ['password_too_short']
+    assert mail.outbox == []
 
 
 @pytest.mark.parametrize(
@@ -222,7 +351,7 @@ def test_register_throttles_per_ip(api_client: APIClient) -> None:
     data = {'email': 'grace@example.com', 'password': PASSWORD}
     url = reverse('auth-register')
     response = api_client.post(url, data, format='json', REMOTE_ADDR='10.0.0.2')
-    assert response.status_code == 201
+    assert response.status_code == 204
 
 
 def test_register_throttles_per_ip_even_when_logged_in(api_client: APIClient, user: User) -> None:
@@ -245,7 +374,7 @@ def test_register_with_csrf_token_is_allowed(csrf_client: APIClient) -> None:
     data = {'email': 'grace@example.com', 'password': PASSWORD}
     url = reverse('auth-register')
     response = csrf_client.post(url, data, format='json', HTTP_X_CSRFTOKEN=CSRF_TOKEN)
-    assert response.status_code == 201
+    assert response.status_code == 204
 
 
 @pytest.mark.parametrize('method', OTHER_METHODS)
@@ -290,7 +419,7 @@ def test_csrf_token_allows_register(csrf_client: APIClient) -> None:
     data = {'email': 'grace@example.com', 'password': PASSWORD}
     url = reverse('auth-register')
     response = csrf_client.post(url, data, format='json', HTTP_X_CSRFTOKEN=token)
-    assert response.status_code == 201
+    assert response.status_code == 204
 
 
 def test_csrf_does_not_start_session(api_client: APIClient) -> None:

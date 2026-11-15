@@ -18,6 +18,7 @@ KIND_FIELDSETS = {
 SUBMITTED_FIELDS = (
     'kind',
     'contact_email',
+    'language',
     'created_at',
     'answered_at',
     'area',
@@ -42,7 +43,7 @@ class SuggestionAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'kind', 'subject', 'contact_email', 'status', 'created_at')
     list_display_links = ('id', 'subject')
-    list_filter = ('status', 'kind')
+    list_filter = ('status', 'kind', 'language')
     list_select_related = ('user',)
     search_fields = (
         'title',
@@ -59,7 +60,7 @@ class SuggestionAdmin(admin.ModelAdmin):
 
     def get_fieldsets(self, request: HttpRequest, obj: Suggestion | None = None) -> list:
         """Return the fieldsets for the kind of request."""
-        fieldsets = [(None, {'fields': ('kind', 'contact_email', 'created_at')})]
+        fieldsets = [(None, {'fields': ('kind', 'contact_email', 'language', 'created_at')})]
         if obj:
             name, fields = KIND_FIELDSETS[obj.kind]
             fieldsets.append((name, {'fields': fields}))

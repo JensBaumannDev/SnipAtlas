@@ -1,0 +1,14 @@
+{% autoescape off %}Hallo,
+
+schön, dass du dich bei SnipAtlas registriert hast.
+
+Bitte bestätige noch deine E-Mail-Adresse, damit dein Konto aktiv wird:
+{{ link }}
+
+Der Link gilt 24 Stunden und nur einmal.
+
+Wenn du dich nicht bei SnipAtlas registriert hast, ignoriere diese Mail einfach. Das Konto wird dann nach 7 Tagen gelöscht.
+
+Viele Grüße
+SnipAtlas
+{% endautoescape %}

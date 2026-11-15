@@ -1,0 +1,16 @@
+{% autoescape off %}Hello,
+
+thanks for your request on SnipAtlas. I had a look at it and wrote you a reply.
+
+Your request: {{ suggestion.subject }}
+
+My reply:
+{{ suggestion.answer }}
+{% if suggestion.user %}
+You can also find the reply in your profile under "Requests".
+{% endif %}
+If you have any more questions, just reply to this mail.
+
+Best regards
+Jens from SnipAtlas
+{% endautoescape %}

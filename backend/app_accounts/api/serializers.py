@@ -8,7 +8,11 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 from rest_framework.fields import get_error_detail
 
-from app_accounts.emails import send_reset_mail
+from app_accounts.emails import (
+    send_activation_mail,
+    send_existing_account_mail,
+    send_reset_mail,
+)
 from app_accounts.models import (
     PROJECT_VALUE_FIELDS,
     PROJECT_VALUE_MAX_LENGTH,
@@ -16,6 +20,7 @@ from app_accounts.models import (
     User,
     UserManager,
 )
+from app_accounts.tokens import ACTIVATION, check_link_token
 
 from .exceptions import InvalidCredentials, InvalidLink, WrongPassword
 
@@ -44,27 +49,52 @@ def unique_email(value: str, user: User | None = None) -> str:
 
 # Register
 class RegisterSerializer(serializers.Serializer):
-    """Registration with email and password."""
+    """Registration with email and password that never reveals existing accounts."""
 
     email = serializers.EmailField(max_length=254)
     password = serializers.CharField(write_only=True, trim_whitespace=False)
 
     def validate_email(self, value: str) -> str:
-        """Check that the email address is still free."""
-        return unique_email(value)
+        """Return the normalized email address."""
+        return UserManager.normalize_email(value)
 
     def validate_password(self, value: str) -> str:
         """Check the password against the password rules."""
         password_validation.validate_password(value, User(email=self.initial_data.get('email')))
         return value
 
-    def create(self, validated_data: dict) -> User:
-        """Create the new user."""
-        return User.objects.create_user(validated_data['email'], validated_data['password'])
+    def save(self) -> None:
+        """Send an activation link, or a hint if the address already has an account."""
+        user, _ = User.objects.get_or_create(
+            email=self.validated_data['email'], defaults={'email_confirmed': False}
+        )
+        if user.email_confirmed:
+            send_existing_account_mail(user)
+            return
+        user.set_password(self.validated_data['password'])
+        user.save(update_fields=['password'])
+        send_activation_mail(user)
 
-    def to_representation(self, user: User) -> dict:
-        """Return the new user like the user endpoint."""
-        return UserSerializer(user).data
+
+class ActivationSerializer(serializers.Serializer):
+    """Confirmation of a new account with the link from the activation mail."""
+
+    uid = serializers.CharField(write_only=True)
+    token = serializers.CharField(write_only=True)
+
+    def validate(self, attrs: dict) -> dict:
+        """Check the link and return its user."""
+        user = user_from_uid(attrs['uid'])
+        if user.email_confirmed or not check_link_token(user, attrs['token'], ACTIVATION):
+            raise InvalidLink
+        return {'user': user}
+
+    def save(self) -> User:
+        """Mark the email address as confirmed and return the user."""
+        user = self.validated_data['user']
+        user.email_confirmed = True
+        user.save(update_fields=['email_confirmed'])
+        return user
 
 
 # Login
@@ -160,13 +190,18 @@ class PasswordResetSerializer(serializers.Serializer):
             send_reset_mail(user)
 
 
-def user_from_link(uid: str, token: str) -> User:
-    """Return the user of a reset link or raise InvalidLink."""
+def user_from_uid(uid: str) -> User:
+    """Return the active user of the encoded id in a link or raise InvalidLink."""
     try:
         pk = force_str(urlsafe_base64_decode(uid))
-        user = User.objects.get(pk=pk, is_active=True)
+        return User.objects.get(pk=pk, is_active=True)
     except ValueError, User.DoesNotExist:
         raise InvalidLink from None
+
+
+def user_from_link(uid: str, token: str) -> User:
+    """Return the user of a reset link or raise InvalidLink."""
+    user = user_from_uid(uid)
     if not default_token_generator.check_token(user, token):
         raise InvalidLink
     return user

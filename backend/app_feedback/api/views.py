@@ -7,6 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
+from core.mail import mail_language
 from core.throttling import RequestRateThrottle
 
 from .serializers import KIND_SERIALIZERS, MyRequestSerializer, SuggestionSerializer
@@ -42,9 +43,9 @@ class RequestCreateView(generics.CreateAPIView):
         return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer: SuggestionSerializer) -> None:
-        """Save the request with the user if logged in."""
+        """Save the request with the user if logged in and the request language."""
         user = self.request.user
-        serializer.save(user=user if user.is_authenticated else None)
+        serializer.save(user=user if user.is_authenticated else None, language=mail_language())
 
 
 class MyRequestListView(generics.ListAPIView):

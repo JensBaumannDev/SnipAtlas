@@ -122,7 +122,8 @@ def test_login_fails_after_delete(logged_in: APIClient) -> None:
 def test_email_can_register_again_after_delete(logged_in: APIClient) -> None:
     delete(logged_in)
     data = {'email': 'ada@example.com', 'password': PASSWORD}
-    assert logged_in.post(reverse('auth-register'), data, format='json').status_code == 201
+    assert logged_in.post(reverse('auth-register'), data, format='json').status_code == 204
+    assert not User.objects.get(email='ada@example.com').email_confirmed
 
 
 def test_delete_account_ignores_other_fields(logged_in: APIClient, user: User, other: User) -> None:

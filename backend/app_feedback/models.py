@@ -67,6 +67,13 @@ class BugType(models.TextChoices):
     TYPO = 'typo', _('Typo')
 
 
+class RequestLanguage(models.TextChoices):
+    """Language the request was sent in, used for the answer mail."""
+
+    DE = 'de', 'Deutsch'
+    EN = 'en', 'English'
+
+
 # Fields
 def text_field(verbose_name: str, max_length: int, *, min_length: int = 0) -> models.TextField:
     """Return an optional text field with length limits."""
@@ -127,6 +134,12 @@ class Suggestion(models.Model):
         max_length=10, choices=Status, default=Status.OPEN, verbose_name=_('status')
     )
     answer = models.TextField(blank=True, verbose_name=_('answer'))
+    language = models.CharField(
+        max_length=2,
+        choices=RequestLanguage,
+        default=RequestLanguage.DE,
+        verbose_name=_('language'),
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('received at'))
     answered_at = models.DateTimeField(null=True, blank=True, verbose_name=_('answered at'))
     area = models.CharField(
@@ -170,6 +183,9 @@ class Suggestion(models.Model):
             kind_constraint(),
             models.CheckConstraint(
                 condition=Q(status__in=Status.values), name='suggestion_status_valid'
+            ),
+            models.CheckConstraint(
+                condition=Q(language__in=RequestLanguage.values), name='suggestion_language_valid'
             ),
             models.CheckConstraint(
                 condition=Q(user__isnull=False) | ~Q(email=''), name='suggestion_has_contact'
