@@ -522,7 +522,7 @@
       "title": "Costs",
       "free": {
         "question": "Does SnipAtlas cost anything?",
-        "answer": "No. SnipAtlas is free, without ads and without tracking."
+        "answer": "No. SnipAtlas is free and without ads. For visitor numbers I use Umami, without cookies and without user profiles."
       }
     },
     "requests": {
@@ -579,7 +579,11 @@
       },
       "logsText": "I need this data to keep the site running, find errors and fend off attacks. I do not combine it with other data and do not use it for statistics. The log files are deleted automatically after 14 days. The legal basis is Art. 6 (1) (f) GDPR.",
       "resources": "Fonts and icons",
-      "resourcesText": "The Geist font, the icons and the topic logos are stored on my own server and loaded from there. There is no connection to Google Fonts, content delivery networks or any other third-party servers. Your IP address is therefore not sent to anyone except my server.",
+      "resourcesText": "The Urbanist and IBM Plex Mono fonts, the icons and the topic logos are stored on my own server and loaded from there. There is no connection to Google Fonts or content delivery networks. The only exception is the visitor statistics with Umami (see the next section).",
+      "analytics": "Web analytics with Umami",
+      "analyticsText": "SnipAtlas uses the web analytics service Umami Cloud, provided by Umami Software, Inc. (USA). The collected data is stored on servers in the European Union. Umami collects anonymised usage data such as pages visited, time spent on the site, referring website, approximate country of origin, device type, browser and operating system. This helps me understand how SnipAtlas is used and improve it.",
+      "analyticsPrivacy": "Umami does not set cookies, does not store any information on your device and does not create cross-device profiles. Your IP address is not stored; it is only used briefly to generate an anonymous, regularly rotating check value. I am not able to identify individual visitors.",
+      "analyticsBasis": "The legal basis is Art. 6 (1) (f) GDPR; I have a legitimate interest in the anonymised analysis of user behaviour in order to improve SnipAtlas. The data is stored in the EU; however, as the provider is based in the USA, access from the USA cannot be completely ruled out. You can object to the collection by enabling the \"Do Not Track\" setting in your browser or by using a script blocker.",
       "cookies": "Cookies",
       "cookiesText": "SnipAtlas sets no cookies for advertising, analytics or tracking. When you sign in, SnipAtlas stores a cookie with a sign-in token in your browser. It keeps you signed in so you do not have to sign in again on every visit. The cookie is deleted when you sign out, at the latest after 14 days. Without signing in, SnipAtlas sets no cookies.",
       "cookiesBasis": "This cookie is strictly necessary for signing in (§ 25 (2) no. 2 TDDDG), so no consent is required. The legal basis for processing is Art. 6 (1) (b) GDPR.",
