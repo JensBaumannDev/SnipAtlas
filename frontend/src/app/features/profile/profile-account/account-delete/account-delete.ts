@@ -37,6 +37,7 @@ export class AccountDelete {
       return;
     }
     this.pending.set(true);
+    this.error.set(undefined);
     this.session
       .deleteAccount(this.form.controls.password.value)
       .pipe(finalize(() => this.pending.set(false)))

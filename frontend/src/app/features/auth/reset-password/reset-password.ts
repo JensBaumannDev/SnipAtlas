@@ -92,6 +92,7 @@ export class ResetPassword {
 
   private send(link: ResetLink): void {
     this.pending.set(true);
+    this.error.set(undefined);
     this.passwordReset
       .confirm({ ...link, password: this.form.controls.password.value })
       .pipe(finalize(() => this.pending.set(false)))

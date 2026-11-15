@@ -55,6 +55,7 @@ export class AccountPassword {
 
   private send(): void {
     this.pending.set(true);
+    this.error.set(undefined);
     this.saved.set(false);
     this.session
       .changePassword(this.form.getRawValue())

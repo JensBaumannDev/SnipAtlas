@@ -54,6 +54,7 @@ export class AccountEmail {
   private send(): void {
     const { email, password } = this.form.getRawValue();
     this.pending.set(true);
+    this.error.set(undefined);
     this.saved.set(false);
     this.session
       .changeEmail({ email: email.trim(), password })
