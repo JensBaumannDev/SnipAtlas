@@ -25,7 +25,8 @@ from app_feedback.models import Suggestion
 
 
 @pytest.fixture(autouse=True)
-def clear_cache() -> None:
+def memory_cache(settings: Settings) -> None:
+    settings.CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}
     cache.clear()
 
 

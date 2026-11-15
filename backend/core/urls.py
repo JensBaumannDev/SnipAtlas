@@ -1,12 +1,13 @@
 """Root URL configuration that mounts the admin and the API of each app."""
 
+from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
 
 from .views import ApiNotFoundView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(settings.ADMIN_PATH, admin.site.urls),
     path('api/', include('app_accounts.api.urls')),
     path('api/', include('app_content.api.urls')),
     path('api/', include('app_feedback.api.urls')),
