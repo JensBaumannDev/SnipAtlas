@@ -58,6 +58,7 @@ export class Login {
   private send(): void {
     const { email, password } = this.form.getRawValue();
     this.pending.set(true);
+    this.error.set(undefined);
     this.session
       .login({ email: email.trim(), password })
       .pipe(finalize(() => this.pending.set(false)))

@@ -55,6 +55,7 @@ export class ForgotPassword {
 
   private send(): void {
     this.pending.set(true);
+    this.error.set(undefined);
     this.sent.set(false);
     this.passwordReset
       .request(this.form.controls.email.value.trim())

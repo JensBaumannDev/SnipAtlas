@@ -4,6 +4,8 @@ from pathlib import Path
 
 import environ
 
+from core.mail import mailer_config
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
@@ -132,18 +134,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'core' / 'static']
 
 # Email
-MAILERS = {
-    'default': {
-        'BACKEND': env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend'),
-        'OPTIONS': {
-            'host': env('EMAIL_HOST', default='localhost'),
-            'port': env.int('EMAIL_PORT', default=587),
-            'username': env('EMAIL_HOST_USER', default=''),
-            'password': env('EMAIL_HOST_PASSWORD', default=''),
-            'use_tls': env.bool('EMAIL_USE_TLS', default=True),
-        },
-    },
-}
+MAILERS = {'default': mailer_config(env)}
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='noreply@snipatlas.jensbaumann.com')
 REPLY_TO_EMAIL = env('REPLY_TO_EMAIL')
 

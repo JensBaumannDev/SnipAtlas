@@ -76,6 +76,7 @@ export class Register {
   private send(): void {
     const { email, password } = this.form.getRawValue();
     this.pending.set(true);
+    this.error.set(undefined);
     this.session
       .register({ email: email.trim(), password })
       .pipe(finalize(() => this.pending.set(false)))
