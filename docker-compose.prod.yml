@@ -1,0 +1,76 @@
+name: snipatlas
+
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    env_file: backend/.env
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file: backend/.env
+    command: >-
+      sh -c 'python manage.py migrate --noinput
+      && python manage.py createcachetable
+      && python manage.py collectstatic --noinput
+      && exec gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 3'
+    volumes:
+      - static:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      API_URL: http://backend:8000
+      SITE_URL: https://snipatlas.jensbaumann.com
+      NG_ALLOWED_HOSTS: snipatlas.jensbaumann.com
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:1.29-alpine
+    restart: unless-stopped
+    command: >-
+      sh -c 'while :; do sleep 6h; nginx -s reload; done
+      & exec /docker-entrypoint.sh nginx -g "daemon off;"'
+    environment:
+      ADMIN_PATH: ${ADMIN_PATH:?ADMIN_PATH is missing, start with --env-file backend/.env}
+    volumes:
+      - ./nginx/server/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./nginx/server/security-headers.conf:/etc/nginx/snippets/security-headers.conf:ro
+      - ./nginx/server/proxy.conf:/etc/nginx/snippets/proxy.conf:ro
+      - static:/app/staticfiles:ro
+      - acme:/var/www/certbot:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - backend
+      - frontend
+
+  certbot:
+    image: certbot/certbot:v4.0.0
+    restart: unless-stopped
+    entrypoint: >-
+      sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet;
+      sleep 12h & wait $${!}; done'
+    volumes:
+      - acme:/var/www/certbot
+      - /etc/letsencrypt:/etc/letsencrypt
+
+volumes:
+  pgdata:
+  static:
+  acme:

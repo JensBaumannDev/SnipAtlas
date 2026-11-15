@@ -1,0 +1,7 @@
+# Install on the server with: crontab deploy/crontab (PROJECT = repository on the server)
+PROJECT=/opt/snipatlas
+COMPOSE="docker compose -f docker-compose.prod.yml --env-file backend/.env"
+
+0 3 * * * cd $PROJECT && $COMPOSE exec -T backend python manage.py clearsessions
+10 3 * * * cd $PROJECT && $COMPOSE exec -T backend python manage.py delete_old_suggestions
+20 3 * * * cd $PROJECT && $COMPOSE exec -T backend python manage.py delete_unconfirmed_accounts
