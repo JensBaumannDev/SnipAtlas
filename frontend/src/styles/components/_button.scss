@@ -71,8 +71,6 @@
   }
 
   &[aria-current='page'] {
-    color: var(--ink);
-    background: var(--hover);
-    border-color: var(--muted);
+    color: var(--accent);
   }
 }

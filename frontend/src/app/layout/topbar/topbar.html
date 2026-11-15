@@ -17,7 +17,17 @@
 
     <div class="topbar__tools">
       <a
-        class="btn btn--icon topbar__settings"
+        class="btn btn--icon topbar__tool"
+        routerLink="/anfrage"
+        routerLinkActive
+        ariaCurrentWhenActive="page"
+        [attr.aria-label]="'nav.request' | translate"
+      >
+        <svg [lucideIcon]="requestIcon" class="icon topbar__icon"></svg>
+      </a>
+
+      <a
+        class="btn btn--icon topbar__tool"
         routerLink="/einstellungen"
         routerLinkActive
         ariaCurrentWhenActive="page"
