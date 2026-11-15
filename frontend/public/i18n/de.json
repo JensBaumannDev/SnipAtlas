@@ -325,8 +325,7 @@
     "cause": "Warum passiert das?",
     "fix": "So behebst du es",
     "nav": {
-      "debug": "Debuggen",
-      "errors": "Häufige Fehler"
+      "debug": "Debuggen"
     },
     "info": {
       "message": {

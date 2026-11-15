@@ -25,6 +25,10 @@
   grid-template-columns: repeat(auto-fill, minmax(rem(200), 1fr));
   gap: $space-xl;
   align-items: start;
+
+  &--narrow {
+    grid-template-columns: repeat(auto-fill, minmax(rem(160), 1fr));
+  }
 }
 
 .area-menu__heading {
@@ -165,7 +169,8 @@
     animation: none;
   }
 
-  .area-menu__columns {
+  .area-menu__columns,
+  .area-menu__columns--narrow {
     grid-template-columns: 1fr;
     gap: $space-md;
   }

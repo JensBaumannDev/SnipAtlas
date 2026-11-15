@@ -325,8 +325,7 @@
     "cause": "Why does this happen?",
     "fix": "How to fix it",
     "nav": {
-      "debug": "Debugging",
-      "errors": "Common errors"
+      "debug": "Debugging"
     },
     "info": {
       "message": {
