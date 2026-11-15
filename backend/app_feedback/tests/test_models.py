@@ -24,6 +24,30 @@ def error_codes(error: ValidationError, field: str) -> list[str]:
 
 
 # Defaults
+def test_suggestion_language_defaults_to_german(entry_suggestion: Suggestion) -> None:
+    assert entry_suggestion.language == 'de'
+
+
+def test_suggestion_saves_english_language(entry_suggestion: Suggestion) -> None:
+    entry_suggestion.language = 'en'
+    entry_suggestion.save()
+    entry_suggestion.refresh_from_db()
+    assert entry_suggestion.language == 'en'
+
+
+@pytest.mark.parametrize('value', ['fr', 'EN', '', 'auto'])
+def test_suggestion_language_outside_choices_is_rejected(value: str) -> None:
+    with pytest.raises(ValidationError) as error:
+        improvement(language=value).full_clean()
+    assert error_codes(error.value, 'language') in (['invalid_choice'], ['blank'])
+
+
+@pytest.mark.parametrize('value', ['fr', 'EN', ''])
+def test_database_rejects_unknown_language(entry_suggestion: Suggestion, value: str) -> None:
+    with pytest.raises(IntegrityError), transaction.atomic():
+        Suggestion.objects.filter(pk=entry_suggestion.pk).update(language=value)
+
+
 def test_suggestion_starts_open_without_answer(entry_suggestion: Suggestion) -> None:
     assert entry_suggestion.status == 'open'
     assert entry_suggestion.answer == ''

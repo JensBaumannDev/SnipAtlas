@@ -173,6 +173,33 @@ def test_change_page_only_edits_status_and_answer(
     assert set(form.fields) == {'status', 'answer'}
 
 
+def test_change_page_shows_request_language(
+    admin_client: Client, entry_suggestion: Suggestion
+) -> None:
+    Suggestion.objects.filter(pk=entry_suggestion.pk).update(language='en')
+    response = admin_client.get(change_url(entry_suggestion))
+    assert 'language' in response.context['adminform'].readonly_fields
+    assert 'English' in response.content.decode()
+
+
+def test_admin_cannot_change_request_language(
+    admin_client: Client, entry_suggestion: Suggestion
+) -> None:
+    data = {'status': 'open', 'answer': '', 'language': 'en'}
+    admin_client.post(change_url(entry_suggestion), data)
+    entry_suggestion.refresh_from_db()
+    assert entry_suggestion.language == 'de'
+
+
+def test_suggestion_list_filters_by_language(
+    admin_client: Client, entry_suggestion: Suggestion, bug_suggestion: Suggestion
+) -> None:
+    Suggestion.objects.filter(pk=bug_suggestion.pk).update(language='en')
+    url = reverse('admin:app_feedback_suggestion_changelist')
+    response = admin_client.get(url, {'language__exact': 'en'})
+    assert list(response.context['cl'].result_list) == [bug_suggestion]
+
+
 def test_change_page_shows_source_as_text(
     admin_client: Client, entry_suggestion: Suggestion
 ) -> None:

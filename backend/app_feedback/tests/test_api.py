@@ -93,6 +93,7 @@ def test_guest_sends_entry_request(api_client: APIClient, topic: Topic) -> None:
         'email': 'guest@example.com',
         'status': 'open',
         'answer': '',
+        'language': 'de',
         'answered_at': None,
         'area': 'command',
         'topic': topic.pk,
