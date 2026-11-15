@@ -1,91 +1,105 @@
-<h2 class="auth-form__title" id="auth-title" tabindex="-1">{{ 'auth.register' | translate }}</h2>
-<p class="auth-form__lead">{{ 'auth.registerLead' | translate }}</p>
+@if (sentTo(); as email) {
+  <h2 class="auth-form__title" id="auth-title" tabindex="-1">
+    {{ 'activation.sentTitle' | translate }}
+  </h2>
+  <p class="auth-form__lead">{{ 'activation.sentText' | translate: { email } }}</p>
+  <app-resend-activation class="auth-form__fields" [email]="email" />
 
-<form class="auth-form__fields" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-  <div class="field">
-    <label class="field__label" for="register-email">{{ 'auth.email' | translate }}</label>
-    <input
-      class="input"
-      id="register-email"
-      type="email"
-      autocomplete="email"
-      formControlName="email"
-      [attr.aria-invalid]="emailError() || !!emailServerError()"
-      [attr.aria-describedby]="emailError() || emailServerError() ? 'register-email-error' : null"
-    />
-    @if (emailError()) {
-      <p class="field__error" id="register-email-error">
-        {{ 'auth.errors.emailFormat' | translate }}
-      </p>
-    } @else if (emailServerError(); as key) {
-      <p class="field__error" id="register-email-error">{{ key | translate }}</p>
-    }
-  </div>
+  <p class="auth-form__footer">
+    <button class="auth-form__link" type="button" (click)="login.emit()">
+      {{ 'auth.backToLogin' | translate }}
+    </button>
+  </p>
+} @else {
+  <h2 class="auth-form__title" id="auth-title" tabindex="-1">{{ 'auth.register' | translate }}</h2>
+  <p class="auth-form__lead">{{ 'auth.registerLead' | translate }}</p>
 
-  <div class="field">
-    <label class="field__label" for="register-password">{{ 'auth.password' | translate }}</label>
-    <app-password-field>
+  <form class="auth-form__fields" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="field">
+      <label class="field__label" for="register-email">{{ 'auth.email' | translate }}</label>
       <input
-        class="input input--action"
-        id="register-password"
-        type="password"
-        autocomplete="new-password"
-        formControlName="password"
-        aria-describedby="register-password-message"
-        [attr.aria-invalid]="passwordError() || !!passwordServerError()"
+        class="input"
+        id="register-email"
+        type="email"
+        autocomplete="email"
+        formControlName="email"
+        [attr.aria-invalid]="emailError() || !!emailServerError()"
+        [attr.aria-describedby]="emailError() || emailServerError() ? 'register-email-error' : null"
       />
-    </app-password-field>
-    @if (passwordError()) {
-      <p class="field__error" id="register-password-message">
-        {{ 'auth.errors.passwordLength' | translate: { min: minLength } }}
-      </p>
-    } @else if (passwordServerError(); as key) {
-      <p class="field__error" id="register-password-message">{{ key | translate }}</p>
-    } @else {
-      <p class="field__hint" id="register-password-message">
-        {{ 'auth.passwordHint' | translate: { min: minLength } }}
-      </p>
+      @if (emailError()) {
+        <p class="field__error" id="register-email-error">
+          {{ 'auth.errors.emailFormat' | translate }}
+        </p>
+      } @else if (emailServerError(); as key) {
+        <p class="field__error" id="register-email-error">{{ key | translate }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="register-password">{{ 'auth.password' | translate }}</label>
+      <app-password-field>
+        <input
+          class="input input--action"
+          id="register-password"
+          type="password"
+          autocomplete="new-password"
+          formControlName="password"
+          aria-describedby="register-password-message"
+          [attr.aria-invalid]="passwordError() || !!passwordServerError()"
+        />
+      </app-password-field>
+      @if (passwordError()) {
+        <p class="field__error" id="register-password-message">
+          {{ 'auth.errors.passwordLength' | translate: { min: minLength } }}
+        </p>
+      } @else if (passwordServerError(); as key) {
+        <p class="field__error" id="register-password-message">{{ key | translate }}</p>
+      } @else {
+        <p class="field__hint" id="register-password-message">
+          {{ 'auth.passwordHint' | translate: { min: minLength } }}
+        </p>
+      }
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="register-repeat">{{
+        'auth.passwordRepeat' | translate
+      }}</label>
+      <app-password-field>
+        <input
+          class="input input--action"
+          id="register-repeat"
+          type="password"
+          autocomplete="new-password"
+          formControlName="repeat"
+          [attr.aria-invalid]="repeatError()"
+          [attr.aria-describedby]="repeatError() ? 'register-repeat-error' : null"
+        />
+      </app-password-field>
+      @if (repeatError()) {
+        <p class="field__error" id="register-repeat-error">
+          {{ 'auth.errors.passwordMismatch' | translate }}
+        </p>
+      }
+    </div>
+
+    @if (errorText(); as message) {
+      <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
     }
-  </div>
 
-  <div class="field">
-    <label class="field__label" for="register-repeat">{{
-      'auth.passwordRepeat' | translate
-    }}</label>
-    <app-password-field>
-      <input
-        class="input input--action"
-        id="register-repeat"
-        type="password"
-        autocomplete="new-password"
-        formControlName="repeat"
-        [attr.aria-invalid]="repeatError()"
-        [attr.aria-describedby]="repeatError() ? 'register-repeat-error' : null"
-      />
-    </app-password-field>
-    @if (repeatError()) {
-      <p class="field__error" id="register-repeat-error">
-        {{ 'auth.errors.passwordMismatch' | translate }}
-      </p>
-    }
-  </div>
+    <button
+      class="btn btn--primary auth-form__submit"
+      type="submit"
+      [disabled]="!filled() || pending()"
+    >
+      {{ 'auth.registerSubmit' | translate }}
+    </button>
+  </form>
 
-  @if (errorText(); as message) {
-    <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
-  }
-
-  <button
-    class="btn btn--primary auth-form__submit"
-    type="submit"
-    [disabled]="!filled() || pending()"
-  >
-    {{ 'auth.registerSubmit' | translate }}
-  </button>
-</form>
-
-<p class="auth-form__footer">
-  {{ 'auth.hasAccount' | translate }}
-  <button class="auth-form__link" type="button" (click)="login.emit()">
-    {{ 'auth.login' | translate }}
-  </button>
-</p>
+  <p class="auth-form__footer">
+    {{ 'auth.hasAccount' | translate }}
+    <button class="auth-form__link" type="button" (click)="login.emit()">
+      {{ 'auth.login' | translate }}
+    </button>
+  </p>
+}

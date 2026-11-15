@@ -36,7 +36,9 @@
     <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
   }
   @if (saved()) {
-    <p class="auth-form__note" role="status">{{ 'profile.account.emailSaved' | translate }}</p>
+    <p class="auth-form__note" role="status">
+      {{ 'profile.account.emailSaved' | translate: { email: sentTo() } }}
+    </p>
   }
   <button class="btn btn--ghost" type="submit" [disabled]="!filled() || pending()">
     {{ 'profile.account.emailSubmit' | translate }}

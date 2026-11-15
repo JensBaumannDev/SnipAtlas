@@ -39,6 +39,9 @@
   @if (errorText(); as message) {
     <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
   }
+  @if (notActivated()) {
+    <app-resend-activation [email]="form.controls.email.value.trim()" />
+  }
 
   <button
     class="btn btn--primary auth-form__submit"

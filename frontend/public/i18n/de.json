@@ -34,6 +34,8 @@
     "notFound": "Seite nicht gefunden",
     "news": "Neu auf SnipAtlas",
     "resetPassword": "Passwort zurücksetzen",
+    "activateAccount": "Konto aktivieren",
+    "confirmEmail": "E-Mail-Adresse bestätigen",
     "vscodeTheme": "SnipAtlas Theme für VS Code"
   },
   "meta": {
@@ -111,7 +113,7 @@
     "account": {
       "email": "E-Mail-Adresse",
       "emailSubmit": "E-Mail ändern",
-      "emailSaved": "Deine E-Mail-Adresse ist geändert.",
+      "emailSaved": "Fast geschafft: Wir haben dir einen Link an {{email}} geschickt. Erst wenn du ihn öffnest, gilt die neue Adresse. Der Link gilt 24 Stunden.",
       "password": "Passwort ändern",
       "currentPassword": "Aktuelles Passwort",
       "newPassword": "Neues Passwort",
@@ -159,6 +161,28 @@
       "personalize": "SnipAtlas nach deinem Geschmack personalisieren"
     }
   },
+  "activation": {
+    "sentTitle": "Bestätige deine E-Mail-Adresse",
+    "sentText": "Wir haben dir einen Link an {{email}} geschickt. Öffne ihn, um dein Konto zu aktivieren. Der Link gilt 24 Stunden.",
+    "resend": "Link erneut senden",
+    "resent": "Falls diese Adresse noch nicht bestätigt ist, ist ein neuer Link unterwegs."
+  },
+  "confirmLink": {
+    "pending": "Einen Moment, wir prüfen den Link …",
+    "login": "Jetzt anmelden",
+    "activation": {
+      "title": "Konto aktivieren",
+      "done": "Dein Konto ist aktiviert und du bist angemeldet.",
+      "invalid": "Der Link ist abgelaufen oder ungültig. Er gilt 24 Stunden und nur einmal. Melde dich an, dann kannst du einen neuen Link anfordern.",
+      "next": "Zur Startseite"
+    },
+    "email": {
+      "title": "E-Mail-Adresse bestätigen",
+      "done": "Deine neue E-Mail-Adresse ist übernommen.",
+      "invalid": "Der Link ist abgelaufen oder ungültig. Er gilt 24 Stunden und nur einmal. Ändere deine Adresse im Profil erneut, dann bekommst du einen neuen Link.",
+      "next": "Zum Profil"
+    }
+  },
   "resetPassword": {
     "title": "Neues Passwort festlegen",
     "lead": "Wähle ein neues Passwort für dein Konto. Danach bist du auf allen Geräten abgemeldet.",
@@ -176,6 +200,7 @@
     "invalid_credentials": "E-Mail oder Passwort ist falsch.",
     "wrong_password": "Das Passwort ist falsch.",
     "invalid_link": "Der Link ist abgelaufen oder ungültig. Fordere einen neuen an.",
+    "not_activated": "Dein Konto ist noch nicht aktiviert. Öffne den Link aus unserer E-Mail.",
     "not_authenticated": "Du bist nicht mehr angemeldet. Bitte melde dich erneut an.",
     "csrf_failed": "Die Sitzung ist abgelaufen. Bitte lade die Seite neu.",
     "not_found": "Das gibt es nicht (mehr).",

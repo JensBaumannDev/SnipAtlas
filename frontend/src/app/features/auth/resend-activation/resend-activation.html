@@ -1,0 +1,9 @@
+<button class="auth-form__link" type="button" [disabled]="pending()" (click)="send()">
+  {{ 'activation.resend' | translate }}
+</button>
+@if (sent()) {
+  <p class="auth-form__note" role="status">{{ 'activation.resent' | translate }}</p>
+}
+@if (errorText(); as message) {
+  <p class="field__error" role="alert">{{ message.key | translate: message.params }}</p>
+}

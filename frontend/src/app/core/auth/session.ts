@@ -3,6 +3,7 @@ import { PLATFORM_ID, Service, inject, signal } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { Observable, catchError, firstValueFrom, map, of, switchMap } from 'rxjs';
 import type { AccentTheme } from '../user-data/preferences';
+import type { MailLink } from './link';
 import { Notifications } from '../ui/notifications';
 
 export interface SessionUser {
@@ -64,9 +65,23 @@ export class Session {
   }
 
   register(credentials: Credentials): Observable<void> {
+    return this.http.post<void>(`${URL}register/`, credentials);
+  }
+
+  activate(link: MailLink): Observable<void> {
     return this.http
-      .post<SessionUser>(`${URL}register/`, credentials)
+      .post<SessionUser>(`${URL}activate/`, link)
       .pipe(map((user) => this.signIn(user, 'login')));
+  }
+
+  reload(): Observable<void> {
+    if (!this.user()) {
+      return of(undefined);
+    }
+    return this.http.get<SessionUser | null>(`${URL}me/`).pipe(
+      map((user) => this.user.set(user ?? undefined)),
+      catchError(() => of(undefined)),
+    );
   }
 
   logout(): void {

@@ -91,6 +91,20 @@ export const routes: Routes = [
       import('./features/auth/reset-password/reset-password').then((m) => m.ResetPassword),
   },
   {
+    path: 'konto-aktivieren',
+    title: 'pages.activateAccount',
+    data: { link: 'activation' },
+    loadComponent: () =>
+      import('./features/auth/confirm-link/confirm-link').then((m) => m.ConfirmLink),
+  },
+  {
+    path: 'email-bestaetigen',
+    title: 'pages.confirmEmail',
+    data: { link: 'email' },
+    loadComponent: () =>
+      import('./features/auth/confirm-link/confirm-link').then((m) => m.ConfirmLink),
+  },
+  {
     path: '**',
     title: 'pages.notFound',
     loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),

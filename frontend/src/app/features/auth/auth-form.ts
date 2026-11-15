@@ -32,6 +32,13 @@ export function injectFocusInvalid(): () => void {
     });
 }
 
+export function injectFocusTitle(): () => void {
+  const host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  const injector = inject(Injector);
+  return () =>
+    afterNextRender(() => host.querySelector<HTMLElement>('#auth-title')?.focus(), { injector });
+}
+
 export function injectApiError(form: AbstractControl): WritableSignal<ApiError | undefined> {
   const error = signal<ApiError | undefined>(undefined);
   form.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => error.set(undefined));

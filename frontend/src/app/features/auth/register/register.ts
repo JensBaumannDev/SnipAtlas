@@ -7,10 +7,17 @@ import { fieldErrorKey, formErrorText, toApiError } from '../../../core/http/api
 import { PASSWORD_MIN_LENGTH } from '../../../core/auth/password-rules';
 import { Session } from '../../../core/auth/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
-import { hasVisibleError, injectApiError, injectFocusInvalid, passwordsMatch } from '../auth-form';
+import {
+  hasVisibleError,
+  injectApiError,
+  injectFocusInvalid,
+  injectFocusTitle,
+  passwordsMatch,
+} from '../auth-form';
+import { ResendActivation } from '../resend-activation/resend-activation';
 
 @Component({
-  imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
+  imports: [PasswordField, ReactiveFormsModule, ResendActivation, TranslatePipe],
   selector: 'app-register',
   styleUrl: './register.scss',
   templateUrl: './register.html',
@@ -18,10 +25,12 @@ import { hasVisibleError, injectApiError, injectFocusInvalid, passwordsMatch } f
 })
 export class Register {
   private readonly focusInvalid = injectFocusInvalid();
+  private readonly focusTitle = injectFocusTitle();
   private readonly session = inject(Session);
 
-  readonly done = output<void>();
   readonly login = output<void>();
+
+  protected readonly sentTo = signal<string | undefined>(undefined);
 
   protected readonly minLength = PASSWORD_MIN_LENGTH;
   protected readonly attempted = signal(false);
@@ -74,18 +83,24 @@ export class Register {
   }
 
   private send(): void {
-    const { email, password } = this.form.getRawValue();
+    const { password } = this.form.getRawValue();
+    const email = this.form.controls.email.value.trim();
     this.pending.set(true);
     this.error.set(undefined);
     this.session
-      .register({ email: email.trim(), password })
+      .register({ email, password })
       .pipe(finalize(() => this.pending.set(false)))
       .subscribe({
-        next: () => this.done.emit(),
+        next: () => this.showSent(email),
         error: (error: unknown) => {
           this.error.set(toApiError(error));
           this.focusInvalid();
         },
       });
+  }
+
+  private showSent(email: string): void {
+    this.sentTo.set(email);
+    this.focusTitle();
   }
 }
