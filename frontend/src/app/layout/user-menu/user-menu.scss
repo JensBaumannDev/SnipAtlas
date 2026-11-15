@@ -12,21 +12,19 @@
   justify-content: center;
   width: $control-height;
   height: $control-height;
-  font-size: $font-size-base;
-  font-weight: $font-weight-semibold;
-  color: var(--ink);
+  color: var(--muted);
   cursor: pointer;
-  background: var(--surface);
-  border: 2px solid var(--accent);
-  border-radius: 50%;
+  background: transparent;
+  border: 0;
+  border-radius: $radius-lg;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
 
   &:hover,
   &[aria-expanded='true'] {
-    background: var(--accent);
-
-    .user-menu__avatar-icon {
-      color: var(--on-accent);
-    }
+    color: var(--ink);
+    background: var(--surface);
   }
 }
 

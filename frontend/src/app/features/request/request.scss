@@ -20,10 +20,7 @@
 
 // Layout
 .request__layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: $space-xxl;
-  align-items: start;
+  @include page-body($space-xxl);
 }
 
 .request__heading {
@@ -170,34 +167,40 @@
 .request__info {
   display: flex;
   flex-direction: column;
-  gap: $space-md;
-  padding-top: $space-lg;
+  gap: $space-xl;
+  align-items: center;
+  padding-top: $space-xxl;
+  text-align: center;
   border-top: 1px solid var(--line);
 }
 
 .request__steps {
-  display: flex;
-  flex-direction: column;
-  gap: $space-md;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(rem(200), 1fr));
+  gap: $space-xl $space-xxl;
+  width: 100%;
+  padding: 0;
+  margin: 0;
   counter-reset: step;
 }
 
 .request__step {
   display: flex;
-  gap: $space-sm;
-  color: var(--muted);
+  flex-direction: column;
+  gap: $space-md;
+  align-items: center;
+  color: var(--text);
   counter-increment: step;
 
   &::before {
     display: grid;
-    flex: none;
     place-items: center;
-    width: rem(28);
-    height: rem(28);
-    font-weight: $font-weight-semibold;
-    color: var(--ink);
+    width: rem(40);
+    height: rem(40);
+    font-weight: $font-weight-bold;
+    color: var(--bg);
     content: counter(step);
-    border: 1px solid var(--line);
+    background: var(--ink);
     border-radius: 50%;
   }
 }

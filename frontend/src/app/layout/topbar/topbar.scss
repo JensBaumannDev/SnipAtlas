@@ -81,6 +81,25 @@
   align-items: center;
 }
 
+.topbar__tool {
+  color: var(--muted);
+  background: transparent;
+  border-color: transparent;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+
+  &:hover:not(:disabled) {
+    color: var(--ink);
+    background: var(--surface);
+    border-color: transparent;
+  }
+
+  &[aria-current='page'] {
+    color: var(--accent);
+  }
+}
+
 .topbar__icon {
   width: rem(20);
   height: rem(20);
@@ -101,7 +120,7 @@
     order: 1;
   }
 
-  .topbar__settings {
+  .topbar__tool {
     display: none;
   }
 }
