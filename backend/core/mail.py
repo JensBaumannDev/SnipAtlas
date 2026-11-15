@@ -1,7 +1,9 @@
-"""Mail backend configuration read from environment variables."""
+"""Mail backend configuration and the language of mails."""
 
 import environ
+from django.utils import translation
 
+MAIL_LANGUAGES = ('de', 'en')
 CONSOLE_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SMTP_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
@@ -23,3 +25,11 @@ def _smtp_options(env: environ.Env) -> dict:
         'password': env('EMAIL_HOST_PASSWORD', default=''),
         'use_tls': env.bool('EMAIL_USE_TLS', default=True),
     }
+
+
+def mail_language(code: str | None = None) -> str:
+    """Return 'en' for an English language code, otherwise 'de'."""
+    if code is None:
+        code = translation.get_language() or ''
+    language = code.lower().split('-')[0]
+    return language if language in MAIL_LANGUAGES else MAIL_LANGUAGES[0]

@@ -2,8 +2,9 @@ import environ
 import pytest
 from django.core import mail
 from django.test import override_settings
+from django.utils import translation
 
-from core.mail import mailer_config
+from core.mail import mail_language, mailer_config
 
 SMTP = 'django.core.mail.backends.smtp.EmailBackend'
 CONSOLE = 'django.core.mail.backends.console.EmailBackend'
@@ -42,3 +43,25 @@ def test_smtp_backend_gets_options_from_env(
             'use_tls': True,
         },
     }
+
+
+@pytest.mark.parametrize(('active', 'expected'), [('de', 'de'), ('en', 'en'), ('en-us', 'en')])
+def test_mail_language_follows_active_language(active: str, expected: str) -> None:
+    with translation.override(active):
+        assert mail_language() == expected
+
+
+@pytest.mark.parametrize('code', ['en', 'EN', 'en-GB'])
+def test_mail_language_accepts_given_english_code(code: str) -> None:
+    assert mail_language(code) == 'en'
+
+
+@pytest.mark.parametrize('code', ['de', 'fr', 'auto', '', 'xx'])
+def test_mail_language_falls_back_to_german(code: str) -> None:
+    with translation.override('en'):
+        assert mail_language(code) == 'de'
+
+
+def test_mail_language_without_active_language_is_german() -> None:
+    with translation.override(None):
+        assert mail_language() == 'de'

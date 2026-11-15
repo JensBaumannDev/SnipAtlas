@@ -1,0 +1,14 @@
+{% autoescape off %}Hello,
+
+thanks for signing up for SnipAtlas.
+
+Please confirm your email address to activate your account:
+{{ link }}
+
+The link is valid for 24 hours and can only be used once.
+
+If you did not sign up for SnipAtlas, just ignore this mail. The account will be deleted after 7 days.
+
+Best regards
+SnipAtlas
+{% endautoescape %}
