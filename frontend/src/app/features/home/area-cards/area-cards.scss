@@ -1,0 +1,67 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Cards
+.area-cards__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-md;
+}
+
+.area-cards__card {
+  @include home-card;
+}
+
+.area-cards__title {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  margin-bottom: $space-sm;
+  font-size: $font-size-xxl;
+  line-height: $line-height-tight;
+}
+
+.area-cards__icon {
+  flex: none;
+  color: var(--accent);
+}
+
+.area-cards__text {
+  max-width: 46ch;
+}
+
+.area-cards__count {
+  margin-block: $space-sm $space-lg;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.area-cards__link {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* #region RESPONSIVE */
+@include wide {
+  .area-cards__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@include mobile {
+  .area-cards__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@include tiny {
+  .area-cards__link {
+    align-self: stretch;
+    white-space: normal;
+  }
+}
+
+/* #endregion */

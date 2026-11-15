@@ -11,6 +11,7 @@
 
 .notification {
   display: flex;
+  visibility: hidden;
   gap: $space-sm;
   align-items: center;
   padding: $space-md $space-lg;
@@ -18,8 +19,6 @@
   background: var(--raised);
   border: 1px solid var(--line);
   border-radius: $radius-lg;
-  box-shadow: var(--card-shadow);
-  visibility: hidden;
   opacity: 0;
   transform: translateY($space-xs) scale(0.98);
   transition:
@@ -42,7 +41,7 @@
 @include mobile {
   :host {
     right: $space-md;
-    bottom: calc($space-md + var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+    bottom: calc($space-md + env(safe-area-inset-bottom, 0px));
     width: calc(100vw - 2 * $space-md);
   }
 }

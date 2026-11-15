@@ -30,7 +30,7 @@ def add_user(admin_client: Client, **changes: str) -> HttpResponse:
 
 def change_user(admin_client: Client, user: User, **changes: str) -> HttpResponse:
     url = reverse('admin:app_accounts_user_change', args=[user.pk])
-    settings = {'accent': user.accent, 'os': user.os, 'theme': user.theme}
+    settings = {'accent': user.accent, 'os': user.os}
     data = {'email': user.email, 'is_active': 'on', 'language': user.language} | settings
     return admin_client.post(url, data | INLINE_FORMS | changes)
 
@@ -165,14 +165,18 @@ def test_user_change_rejects_unknown_accent(admin_client: Client, user: User) ->
     assert form_error_codes(response, 'accent') == ['invalid_choice']
 
 
-def test_user_change_saves_os_theme_and_language(admin_client: Client, user: User) -> None:
-    response = change_user(admin_client, user, os='unix', theme='dark', language='en')
+def test_user_change_saves_os_and_language(admin_client: Client, user: User) -> None:
+    response = change_user(admin_client, user, os='unix', language='en')
     user.refresh_from_db()
     assert response.status_code == 302
-    assert (user.os, user.theme, user.language) == ('unix', 'dark', 'en')
+    assert (user.os, user.language) == ('unix', 'en')
 
 
-@pytest.mark.parametrize(('field', 'value'), [('os', 'mac'), ('theme', 'blue'), ('language', '')])
+def test_user_change_page_has_no_theme_field(admin_client: Client, user: User) -> None:
+    assert 'name="theme"' not in change_page(admin_client, user).content.decode()
+
+
+@pytest.mark.parametrize(('field', 'value'), [('os', 'mac'), ('language', '')])
 def test_user_change_rejects_unknown_setting(
     admin_client: Client, user: User, field: str, value: str
 ) -> None:

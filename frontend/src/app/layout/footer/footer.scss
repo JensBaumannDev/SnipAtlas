@@ -2,8 +2,7 @@
 
 :host {
   display: block;
-  padding-right: calc($space-xl + var(--outline-space));
-  padding-left: calc(var(--nav-width) + $space-xl);
+  padding-inline: $space-xl;
 }
 
 .footer {

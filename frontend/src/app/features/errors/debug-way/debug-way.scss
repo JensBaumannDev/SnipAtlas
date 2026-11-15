@@ -5,10 +5,6 @@
 }
 
 // Header
-.debug-way__header {
-  @include page-header;
-}
-
 .debug-way__summary {
   color: var(--muted);
 }

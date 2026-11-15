@@ -7,10 +7,8 @@ html {
 }
 
 body {
-  color: var(--ink);
-  background:
-    radial-gradient(ellipse 60% $glow-height at 50% 0, var(--glow), transparent) no-repeat,
-    var(--bg);
+  color: var(--text);
+  background: var(--bg);
 }
 
 a {
@@ -32,12 +30,62 @@ a {
 :root {
   --duration-fast: 0.15s;
   --duration: 0.3s;
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease: cubic-bezier(0.22, 0.8, 0.2, 1);
 
   // Terminal
   --term-close: #ff5f57;
   --term-minimize: #febc2e;
   --term-zoom: #28c840;
+}
+
+// Page transitions
+::view-transition-old(root),
+::view-transition-new(root),
+::view-transition-group(*) {
+  animation: none;
+}
+
+::view-transition-old(subtopic-tabs) {
+  display: none;
+}
+
+::view-transition-old(stage-heading),
+::view-transition-new(stage-heading) {
+  width: 100%;
+  height: 100%;
+  object-fit: none;
+}
+
+::view-transition-old(stage-heading) {
+  animation: fade-out var(--duration-fast) var(--ease) both;
+}
+
+::view-transition-new(stage-heading) {
+  animation: fade-in var(--duration) var(--ease) var(--duration-fast) both;
+}
+
+::view-transition-old(stage-heading):only-child {
+  display: none;
+}
+
+::view-transition-new(stage-heading):only-child {
+  animation: none;
+}
+
+::view-transition-new(subtopic-tabs) {
+  animation: none;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

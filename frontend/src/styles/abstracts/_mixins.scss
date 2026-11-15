@@ -25,6 +25,18 @@
   }
 }
 
+@mixin nav-compact {
+  @media (max-width: $bp-nav) {
+    @content;
+  }
+}
+
+@mixin nav-full {
+  @media (min-width: $bp-nav + 1) {
+    @content;
+  }
+}
+
 @mixin wide {
   @media (min-width: $bp-wide) {
     @content;
@@ -45,73 +57,61 @@
 }
 
 // Cards
-@mixin card-surface($radius: $radius-card, $shadow: true) {
-  background: linear-gradient(145deg, var(--card-from), var(--card-to));
-  border: 2px solid var(--card-edge);
+@mixin card-surface($radius: $radius-card) {
+  background: var(--surface);
   border-radius: $radius;
-
-  @if $shadow {
-    box-shadow: var(--card-shadow);
-  }
 }
 
-@mixin card-title {
-  font-size: $font-size-lg;
-  text-transform: uppercase;
-  letter-spacing: $letter-spacing-caps;
-}
+@mixin home-card {
+  @include card-surface;
 
-@mixin card-line {
-  height: 2px;
-  content: '';
-  background: linear-gradient(90deg, var(--accent), var(--accent-pair));
-  border-radius: 1px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: $space-xl;
 }
 
 @mixin section-heading {
-  @include card-title;
+  font-size: rem(28);
+  line-height: $line-height-tight;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
 
-  padding: 0 $space-xs;
-  margin-bottom: $space-sm;
+// Topic sections
+@mixin topic-section {
+  display: grid;
+  grid-template-columns: $topic-label-width minmax(0, 1fr);
+  gap: $space-md $space-xl;
+  align-items: start;
+  width: 100%;
+  max-width: $topic-section-width;
+  padding-top: $space-xl;
+  margin: $space-xl auto 0;
+  scroll-margin-top: calc($topbar-height + $space-lg);
+  border-top: 1px solid var(--line);
 
-  &::after {
-    @include card-line;
-
-    display: block;
-    width: rem(48);
-    margin-top: $space-sm;
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@mixin accent-block {
-  padding: $space-xs $space-md;
-  overflow-wrap: anywhere;
-  border-left: 2px solid var(--accent);
+@mixin topic-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  width: 100%;
+  min-width: 0;
+  max-width: $topic-list-width;
 }
 
 // Pages
-@mixin page-header {
-  padding-bottom: $space-lg;
-  border-bottom: 1px solid var(--line);
-}
-
 @mixin page-body($gap: $space-md) {
   display: flex;
   flex-direction: column;
   gap: $gap;
+  width: 100%;
+  max-width: rem(960);
   padding-top: $space-lg;
-}
-
-// Backgrounds
-@mixin dot-grid($shape: ellipse 60% 70% at 50% 45%) {
-  position: absolute;
-  inset: 0;
-  z-index: $z-background;
-  content: '';
-  background-image: radial-gradient(
-    light-dark(color-mix(in srgb, var(--line), var(--ink) 9%), var(--line)) 1px,
-    transparent 1px
-  );
-  background-size: rem(16) rem(16);
-  mask-image: radial-gradient($shape, #000 30%, transparent 100%);
+  margin-inline: auto;
 }

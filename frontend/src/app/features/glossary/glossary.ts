@@ -7,13 +7,41 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { GlossaryApi } from '../../core/api/glossary-api';
 import { GlossaryTerm } from '../../core/models/glossary-term';
 import { bookAIcon, searchIcon, xIcon } from '../../core/ui/icons';
-import { syncOutline } from '../../core/ui/page-outline';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { ReportLink } from '../../shared/report-link/report-link';
 
 interface LetterGroup {
   letter: string;
   terms: GlossaryTerm[];
+}
+
+interface LetterLink {
+  letter: string;
+  active: boolean;
+}
+
+const ALPHABET = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+const OTHER = '#';
+
+function letterOf(term: string): string {
+  const first = term.normalize('NFD').match(/[a-z0-9]/i)?.[0] ?? OTHER;
+  const letter = first.toUpperCase();
+  return ALPHABET.includes(letter) ? letter : OTHER;
+}
+
+function letterRank(letter: string): number {
+  return letter === OTHER ? ALPHABET.length : ALPHABET.indexOf(letter);
+}
+
+function sortByLetter(terms: GlossaryTerm[]): GlossaryTerm[] {
+  return terms
+    .map((term) => ({ term, letter: letterOf(term.term) }))
+    .sort(
+      (a, b) =>
+        letterRank(a.letter) - letterRank(b.letter) ||
+        a.term.term.localeCompare(b.term.term, 'de', { sensitivity: 'base' }),
+    )
+    .map(({ term }) => term);
 }
 
 @Component({
@@ -44,7 +72,9 @@ export class Glossary {
   protected readonly query = new FormControl(this.route.snapshot.queryParamMap.get('q') ?? '', {
     nonNullable: true,
   });
-  private readonly queryValue = toSignal(this.query.valueChanges, { initialValue: this.query.value });
+  private readonly queryValue = toSignal(this.query.valueChanges, {
+    initialValue: this.query.value,
+  });
   protected readonly hasQuery = computed(() => this.queryValue().length > 0);
 
   protected readonly filtered = computed(() => {
@@ -59,12 +89,9 @@ export class Glossary {
   });
 
   protected readonly groups = computed<LetterGroup[]>(() => {
-    const sorted = [...this.filtered()].sort((a, b) =>
-      a.term.localeCompare(b.term, 'de', { sensitivity: 'base' }),
-    );
     const groups: LetterGroup[] = [];
-    for (const term of sorted) {
-      const letter = term.term.charAt(0).toUpperCase();
+    for (const term of sortByLetter(this.filtered())) {
+      const letter = letterOf(term.term);
       const group = groups.at(-1);
       if (group?.letter === letter) {
         group.terms.push(term);
@@ -75,6 +102,12 @@ export class Glossary {
     return groups;
   });
 
+  protected readonly letters = computed<LetterLink[]>(() => {
+    const present = new Set(this.groups().map((group) => group.letter));
+    const extra = [...present].filter((letter) => !ALPHABET.includes(letter));
+    return [...ALPHABET, ...extra].map((letter) => ({ letter, active: present.has(letter) }));
+  });
+
   constructor() {
     effect(() => {
       const value = this.routeQuery().get('q') ?? '';
@@ -82,13 +115,10 @@ export class Glossary {
         this.query.setValue(value);
       }
     });
-    syncOutline(() =>
-      this.groups().map((group) => ({ id: this.letterId(group.letter), label: group.letter })),
-    );
   }
 
   protected letterId(letter: string): string {
-    return `letter-${letter.toLowerCase()}`;
+    return letter === OTHER ? 'letter-other' : `letter-${letter.toLowerCase()}`;
   }
 
   protected clearSearch(): void {

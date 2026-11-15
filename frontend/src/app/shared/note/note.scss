@@ -6,12 +6,16 @@
 
 // Note
 .note {
-  @include accent-block;
-
-  max-width: 70ch;
+  padding: $space-md $space-lg;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: $radius-card;
 }
 
 .note__label {
   display: block;
-  font-weight: $font-weight-semibold;
+  margin-bottom: $space-xs;
+  font-weight: $font-weight-bold;
+  color: var(--ink);
 }

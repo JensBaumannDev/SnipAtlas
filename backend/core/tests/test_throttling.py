@@ -23,6 +23,14 @@ def get_groups(client: APIClient, forwarded_for: str | None = None) -> int:
     return client.get(reverse('group-list'), headers=headers).status_code
 
 
+def test_anon_rate_allows_normal_browsing() -> None:
+    assert settings.REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon'] == '2000/hour'
+
+
+def test_user_rate_is_not_below_anon_rate() -> None:
+    assert settings.REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['user'] == '3000/hour'
+
+
 def test_num_proxies_defaults_to_zero() -> None:
     assert settings.REST_FRAMEWORK['NUM_PROXIES'] == 0
 

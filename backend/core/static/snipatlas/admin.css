@@ -22,39 +22,8 @@
   --sa-hover: rgb(22 25 29 / 4.5%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --sa-bg: #08090a;
-    --sa-surface: #17191c;
-    --sa-ink: #e8eaed;
-    --sa-muted: #959da6;
-    --sa-line: #25282d;
-    --sa-border: #6b727b;
-    --sa-accent: #669eff;
-    --sa-accent-hover: color-mix(in srgb, var(--sa-accent) 80%, #fff);
-    --sa-on-accent: #08090a;
-    --sa-accent-soft: color-mix(in srgb, var(--sa-accent) 16%, var(--sa-surface));
-    --sa-hover: rgb(255 255 255 / 4.5%);
-  }
-}
-
-html[data-theme="dark"] {
-  --sa-bg: #08090a;
-  --sa-surface: #17191c;
-  --sa-ink: #e8eaed;
-  --sa-muted: #959da6;
-  --sa-line: #25282d;
-  --sa-border: #6b727b;
-  --sa-accent: #669eff;
-  --sa-accent-hover: color-mix(in srgb, var(--sa-accent) 80%, #fff);
-  --sa-on-accent: #08090a;
-  --sa-accent-soft: color-mix(in srgb, var(--sa-accent) 16%, var(--sa-surface));
-  --sa-hover: rgb(255 255 255 / 4.5%);
-}
-
 /* Django variables */
-:root,
-html[data-theme] {
+:root {
   --primary: var(--sa-accent-soft);
   --secondary: var(--sa-accent-soft);
   --accent: var(--sa-accent);

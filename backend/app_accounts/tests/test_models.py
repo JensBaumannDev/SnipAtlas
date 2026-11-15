@@ -103,19 +103,23 @@ def test_new_user_gets_mail_notification_and_blue_accent(user: User) -> None:
 
 
 def test_new_user_gets_default_settings(user: User) -> None:
-    assert (user.os, user.theme, user.language) == ('win', 'system', 'auto')
+    assert (user.os, user.language) == ('win', 'auto')
+
+
+def test_user_has_no_theme_setting() -> None:
+    assert 'theme' not in {field.name for field in User._meta.get_fields()}
 
 
 @pytest.mark.parametrize(
     ('field', 'value'),
-    [('accent', 'orange'), ('os', 'mac'), ('theme', 'blue'), ('language', 'fr')],
+    [('accent', 'orange'), ('os', 'mac'), ('language', 'fr')],
 )
 def test_setting_outside_choices_is_rejected(user: User, field: str, value: str) -> None:
     setattr(user, field, value)
     assert error_codes(user, field) == ['invalid_choice']
 
 
-@pytest.mark.parametrize('field', ['accent', 'os', 'theme', 'language'])
+@pytest.mark.parametrize('field', ['accent', 'os', 'language'])
 def test_empty_setting_is_rejected(user: User, field: str) -> None:
     setattr(user, field, '')
     assert error_codes(user, field) == ['blank']
@@ -123,7 +127,7 @@ def test_empty_setting_is_rejected(user: User, field: str) -> None:
 
 @pytest.mark.parametrize(
     ('field', 'value'),
-    [('accent', 'orange'), ('os', 'mac'), ('os', 'WIN'), ('theme', 'blue'), ('language', '')],
+    [('accent', 'orange'), ('os', 'mac'), ('os', 'WIN'), ('language', '')],
 )
 def test_database_rejects_setting_outside_choices(user: User, field: str, value: str) -> None:
     with pytest.raises(IntegrityError), transaction.atomic():
@@ -132,7 +136,7 @@ def test_database_rejects_setting_outside_choices(user: User, field: str, value:
 
 @pytest.mark.parametrize(
     ('field', 'value'),
-    [('os', 'unix'), ('theme', 'light'), ('theme', 'dark'), ('language', 'de'), ('language', 'en')],
+    [('os', 'unix'), ('language', 'de'), ('language', 'en')],
 )
 def test_setting_inside_choices_is_saved(user: User, field: str, value: str) -> None:
     setattr(user, field, value)

@@ -3,11 +3,15 @@
   class="favorite-star"
   type="button"
   [class.favorite-star--active]="favorite()"
+  [class.favorite-star--labeled]="labeled()"
   [attr.aria-pressed]="favorite()"
-  [attr.aria-label]="'favorites.toggle' | translate: { title: entry().title }"
+  [attr.aria-label]="labeled() ? null : ('favorites.toggle' | translate: { title: entry().title })"
   (click)="toggle()"
 >
   <svg [lucideIcon]="starIcon" class="icon favorite-star__icon"></svg>
+  @if (labeled()) {
+    {{ 'favorites.label' | translate }}
+  }
 </button>
 
 @if (loginHint()) {

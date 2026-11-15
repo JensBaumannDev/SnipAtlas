@@ -5,14 +5,19 @@
   },
   "nav": {
     "label": "Sections",
-    "home": "Home",
     "glossary": "Glossary",
     "commands": "Commands",
     "concepts": "Basics",
     "blueprints": "Guides",
     "debugging": "Errors",
     "request": "Request",
-    "settings": "Settings"
+    "settings": "Settings",
+    "menu": "Menu",
+    "overview": "Go to overview",
+    "subtopics": "Subfolders",
+    "allSubtopics": "All",
+    "empty": "There are no topics in this section yet.",
+    "showTopics": "Show topics in {{area}}"
   },
   "pages": {
     "commands": "Commands",
@@ -45,12 +50,9 @@
     "privacy": "Privacy policy of SnipAtlas: which data is stored, what for and for how long.",
     "vscodeTheme": "Download the SnipAtlas color theme for Visual Studio Code, available in dark and light variants."
   },
-  "sidebar": {
-    "label": "Topics",
-    "topics": "Topics",
-    "toggleSubtopics": "Expand or collapse subfolders of {{topic}}",
-    "collection": "My collection",
-    "collectionHint": "Sign in to save commands as favourites and find them here again."
+  "collection": {
+    "title": "My collection",
+    "hint": "Sign in to save commands as favourites and find them here again."
   },
   "search": {
     "label": "Search commands, basics, terms, guides and error messages",
@@ -198,10 +200,6 @@
   },
   "settings": {
     "title": "Settings",
-    "theme": "Appearance",
-    "themeLight": "Light",
-    "themeSystem": "System",
-    "themeDark": "Dark",
     "accent": "Color theme",
     "accentHint": "Accent color for links, icons and active areas. Saved in your account.",
     "accentBlue": "Blue",
@@ -269,9 +267,12 @@
     "progressComplete": "All {{total}} steps done",
     "progressLabel": "Progress",
     "progressOf": "Progress: {{title}}",
+    "done": "Done",
     "markDone": "Step {{number}} done: {{title}}",
     "reset": "Reset",
     "note": "Note",
+    "count": "{{count}} guides",
+    "countOne": "1 guide",
     "empty": "There are no guides for this topic yet.",
     "info": {
       "purpose": {
@@ -324,6 +325,7 @@
     "openPage": "Open as page"
   },
   "favorites": {
+    "label": "Save as favourite",
     "toggle": "Save as favourite: {{title}}",
     "loginHint": "Sign in to save commands as favourites.",
     "empty": "No favourites yet. Click the star on a command.",
@@ -357,45 +359,36 @@
       "debugging": "Understand and fix error messages"
     },
     "news": {
-      "title": "New on SnipAtlas",
-      "all": "All news"
+      "title": "New on SnipAtlas"
     },
-    "offer": {
-      "title": "What you will find here",
-      "tabs": "Areas",
+    "areasTitle": "From your first command to going live",
+    "intro": "SnipAtlas is a reference for everyday development work. Commands for the terminal, Git, npm and Docker come with a short explanation and separate versions for Windows and Linux/Mac. The concepts section explains individual functions and ideas such as signals, interceptors or serializers with a small example. Guides go step by step through setting up a project, and for common error messages you find the cause and the fix. Technical terms are explained right in the text.",
+    "cards": {
       "commands": {
-        "title": "Commands to copy",
-        "text": "Terminal, Git, npm and Docker. Every command with a short explanation of what it is for, and separate versions for Windows and Linux/Mac where needed.",
-        "count": "Commands: {{count}}",
-        "open": "Go to commands",
-        "comment": "# Put changes aside for a moment and bring them back"
+        "text": "Terminal, Git, npm and Docker to copy, with separate versions for Windows and Linux/Mac where needed.",
+        "count": "{{count}} commands",
+        "open": "Go to commands"
       },
       "concepts": {
-        "title": "Basics in plain words",
-        "text": "What is a signal, an interceptor, a serializer? Explained briefly, with a small code example that makes sense.",
-        "count": "Explanations: {{count}}",
-        "open": "Go to basics",
-        "comment": "// A signal holds a value and reports changes"
+        "text": "The ideas behind the code, explained briefly with a small example.",
+        "count": "{{count}} explanations",
+        "open": "Go to concepts"
       },
       "blueprints": {
-        "title": "Guides to tick off",
-        "text": "A whole project step by step, from an empty folder to the goal. Every step explains why it is needed, and your progress is saved.",
-        "count": "Guides: {{count}}",
-        "open": "Go to guides",
-        "step1": "Create the project folder",
-        "step2": "Set up a virtual environment",
-        "step3": "Install Django",
-        "step4": "Create the Django project",
-        "step5": "Add .gitignore and make the first commit",
-        "more": "# … and more steps"
+        "text": "Set up whole projects step by step, every step with its reason.",
+        "count": "{{count}} guides",
+        "open": "Go to guides"
       },
       "debugging": {
-        "title": "Understand and fix errors",
-        "text": "Common error messages with meaning, cause and solution, plus guides on how to find errors yourself.",
-        "count": "Error guides: {{count}}",
-        "open": "Go to error messages",
-        "comment": "# Port 8000 is already taken. Just use another one:"
+        "text": "Common error messages with cause and fix, plus ways to find errors yourself.",
+        "count": "{{count}} error guides",
+        "open": "Go to errors"
       }
+    },
+    "guide": {
+      "continue": "Continue: {{title}}",
+      "progress": "{{done}} of {{total}} steps",
+      "start": "New here? Start with: {{title}}"
     }
   },
   "footer": {
@@ -457,7 +450,8 @@
     "suggest": "Suggest a term",
     "lead": "Web development terms in plain words. They are marked in explanations, error messages and guides: one click shows the short definition.",
     "all": "All terms",
-    "aliases": "Also:"
+    "aliases": "Also:",
+    "letters": "Jump to letter"
   },
   "faq": {
     "lead": "Answers to general questions about SnipAtlas: what you'll find here, what you need an account for and how to contact me.",
@@ -563,7 +557,6 @@
       "storage": "Settings in your browser (local storage)",
       "storageIntro": "So that SnipAtlas remembers your settings, the site stores the following in your browser's local storage:",
       "storageItems": {
-        "theme": "appearance (light, dark or system)",
         "os": "commands for Windows or Linux/Mac",
         "language": "interface language"
       },
@@ -575,7 +568,7 @@
         "login": "email address, password hash, date of registration and of your last sign-in",
         "favorites": "your favourites",
         "progress": "your progress in the guides",
-        "settings": "your settings (commands for Windows or Linux/Mac, appearance, email when a request is answered)",
+        "settings": "your settings (commands for Windows or Linux/Mac, email when a request is answered)",
         "requests": "your requests with their status and my reply"
       },
       "accountBasis": "The legal basis is Art. 6 (1) (b) GDPR, because I cannot provide the features of your account without this data. Only you can see and change your data. In your account you can change your email address and password and download all your data.",

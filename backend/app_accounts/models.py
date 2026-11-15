@@ -65,14 +65,6 @@ class OperatingSystem(models.TextChoices):
     UNIX = 'unix', 'macOS/Linux'
 
 
-class Theme(models.TextChoices):
-    """Color themes a user can choose."""
-
-    LIGHT = 'light', _('Light')
-    DARK = 'dark', _('Dark')
-    SYSTEM = 'system', _('System')
-
-
 class Language(models.TextChoices):
     """Interface languages a user can choose."""
 
@@ -84,7 +76,6 @@ class Language(models.TextChoices):
 SETTING_CHOICES = {
     'accent': Accent,
     'os': OperatingSystem,
-    'theme': Theme,
     'language': Language,
 }
 
@@ -129,9 +120,6 @@ class User(AbstractUser):
         choices=OperatingSystem,
         default=OperatingSystem.WIN,
         verbose_name=_('operating system'),
-    )
-    theme = models.CharField(
-        max_length=10, choices=Theme, default=Theme.SYSTEM, verbose_name=_('theme')
     )
     language = models.CharField(
         max_length=10, choices=Language, default=Language.AUTO, verbose_name=_('language')

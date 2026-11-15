@@ -86,7 +86,7 @@ class UserAdmin(BaseUserAdmin):
     inlines = (FavoriteInline, CompletedStepInline)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Settings'), {'fields': ('notify_by_mail', 'accent', 'os', 'theme', 'language')}),
+        (_('Settings'), {'fields': ('notify_by_mail', 'accent', 'os', 'language')}),
         (
             _('Project values'),
             {

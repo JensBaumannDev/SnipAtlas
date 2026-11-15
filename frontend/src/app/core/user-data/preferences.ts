@@ -5,7 +5,6 @@ import { Session } from '../auth/session';
 import { Notifications } from '../ui/notifications';
 
 export type OperatingSystem = 'win' | 'unix';
-export type ThemeMode = 'light' | 'dark' | 'system';
 export type Language = 'de' | 'en';
 export type LanguageMode = Language | 'auto';
 export type AccentTheme = 'blue' | 'teal' | 'raspberry' | 'fuchsia';
@@ -13,7 +12,6 @@ export type AccentTheme = 'blue' | 'teal' | 'raspberry' | 'fuchsia';
 const DEFAULT_ACCENT: AccentTheme = 'blue';
 
 const OS_KEY = 'snipatlas-os';
-const THEME_KEY = 'snipatlas-theme';
 const LANGUAGE_KEY = 'snipatlas-language';
 
 @Service()
@@ -26,7 +24,6 @@ export class Preferences {
   private readonly notifications = inject(Notifications);
 
   readonly os = storedOption<OperatingSystem>(OS_KEY, ['win', 'unix'], 'win');
-  readonly theme = storedOption<ThemeMode>(THEME_KEY, ['light', 'dark', 'system'], 'system');
   readonly languageMode = storedOption<LanguageMode>(LANGUAGE_KEY, ['auto', 'de', 'en'], 'auto');
   readonly language = computed<Language>(() => {
     const mode = this.languageMode();
@@ -35,7 +32,6 @@ export class Preferences {
   readonly accent = computed<AccentTheme>(() => this.session.user()?.accent ?? DEFAULT_ACCENT);
 
   constructor() {
-    effect(() => this.applyTheme(this.theme()));
     effect(() => this.applyLanguage(this.language()));
     effect(() => this.applyAccent(this.accent()));
   }
@@ -52,20 +48,6 @@ export class Preferences {
   setOs(os: OperatingSystem): void {
     this.os.set(os);
     this.notifications.show('notifications.settingUpdated');
-  }
-
-  setTheme(theme: ThemeMode): void {
-    this.theme.set(theme);
-    this.notifications.show('notifications.settingUpdated');
-  }
-
-  private applyTheme(theme: ThemeMode): void {
-    const root = this.document.documentElement;
-    if (theme === 'system') {
-      root.removeAttribute('data-theme');
-    } else {
-      root.setAttribute('data-theme', theme);
-    }
   }
 
   private applyAccent(accent: AccentTheme): void {

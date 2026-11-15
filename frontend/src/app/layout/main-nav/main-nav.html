@@ -1,0 +1,84 @@
+<button
+  #toggle
+  class="btn btn--icon main-nav__toggle"
+  type="button"
+  aria-controls="main-nav"
+  [attr.aria-expanded]="menuOpen()"
+  [attr.aria-label]="'nav.menu' | translate"
+  (click)="toggleMenu()"
+>
+  <svg [lucideIcon]="menuOpen() ? xIcon : menuIcon" class="icon main-nav__toggle-icon"></svg>
+</button>
+
+<nav
+  class="main-nav"
+  id="main-nav"
+  [class.main-nav--open]="menuOpen()"
+  [attr.aria-label]="'nav.label' | translate"
+>
+  <ul class="main-nav__list" role="list">
+    <li class="main-nav__item">
+      <a
+        class="main-nav__link"
+        routerLink="/begriffe"
+        routerLinkActive="main-nav__link--active"
+        ariaCurrentWhenActive="page"
+      >
+        {{ 'nav.glossary' | translate }}
+      </a>
+    </li>
+    @for (link of links; track link.area) {
+      @let open = openArea() === link.area;
+      <li
+        #item
+        class="main-nav__item"
+        [class.main-nav__item--open]="open"
+        (pointerenter)="onPointerEnter(link.area, $event)"
+        (pointerleave)="onPointerLeave($event)"
+        (focusout)="onFocusOut($event, item)"
+      >
+        <a
+          class="main-nav__link"
+          [class.main-nav__link--active]="activeArea() === link.area"
+          [routerLink]="link.path"
+          [attr.aria-current]="activeArea() === link.area ? 'page' : null"
+        >
+          {{ link.label | translate }}
+        </a>
+        <button
+          class="main-nav__expand"
+          type="button"
+          [attr.aria-expanded]="open"
+          [attr.aria-controls]="'area-menu-' + link.area"
+          [attr.aria-label]="'nav.showTopics' | translate: { area: (link.label | translate) }"
+          (click)="toggleArea(link.area)"
+        >
+          <svg [lucideIcon]="chevronDownIcon" class="icon main-nav__chevron"></svg>
+        </button>
+        @if (open) {
+          <app-area-menu [id]="'area-menu-' + link.area" [link]="link" />
+        }
+      </li>
+    }
+    <li class="main-nav__item main-nav__item--extra">
+      <a
+        class="main-nav__link"
+        routerLink="/einstellungen"
+        routerLinkActive="main-nav__link--active"
+        ariaCurrentWhenActive="page"
+      >
+        {{ 'nav.settings' | translate }}
+      </a>
+    </li>
+    <li class="main-nav__item main-nav__item--extra">
+      <a
+        class="main-nav__link"
+        routerLink="/anfrage"
+        routerLinkActive="main-nav__link--active"
+        ariaCurrentWhenActive="page"
+      >
+        {{ 'nav.request' | translate }}
+      </a>
+    </li>
+  </ul>
+</nav>

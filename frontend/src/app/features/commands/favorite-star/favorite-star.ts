@@ -1,5 +1,6 @@
 import {
   Component,
+  booleanAttribute,
   ElementRef,
   Injector,
   afterNextRender,
@@ -32,6 +33,7 @@ export class FavoriteStar {
   private readonly star = viewChild.required<ElementRef<HTMLButtonElement>>('star');
 
   readonly entry = input.required<Entry>();
+  readonly labeled = input(false, { transform: booleanAttribute });
 
   protected readonly starIcon = starIcon;
   protected readonly favorite = computed(() => this.favorites.has(this.entry()));

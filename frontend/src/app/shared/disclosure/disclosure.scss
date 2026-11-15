@@ -6,18 +6,12 @@
 
 // Card
 .disclosure {
-  position: relative;
-  border-bottom: 1px solid var(--line);
+  --code-bg: var(--bg);
 
-  &--open::before {
-    position: absolute;
-    top: $space-md;
-    bottom: $space-lg;
-    left: -$space-sm;
-    width: 2px;
-    content: '';
-    background: var(--accent);
-  }
+  @include card-surface;
+
+  padding-inline: $space-lg;
+  scroll-margin-top: calc($topbar-height + $space-lg);
 }
 
 // Head
@@ -39,7 +33,7 @@
   align-items: center;
   width: 100%;
   min-height: $control-height;
-  padding: $space-md $space-xs;
+  padding-block: $space-md;
   color: inherit;
   text-align: left;
   cursor: pointer;
@@ -47,20 +41,16 @@
   border: 0;
   transition: color var(--duration-fast);
 
-  &:hover {
-    color: var(--accent);
+  &:hover .disclosure__chevron {
+    color: var(--ink);
   }
 
   &:focus-visible {
-    outline-offset: -2px;
-  }
-
-  &[aria-expanded='true'] {
-    color: var(--accent);
+    outline-offset: 2px;
   }
 
   &[aria-expanded='true'] .disclosure__chevron {
-    color: var(--accent);
+    color: var(--ink);
     transform: rotate(180deg);
   }
 }
@@ -74,7 +64,7 @@
 }
 
 .disclosure__title {
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-bold;
   line-height: $line-height-tight;
   overflow-wrap: anywhere;
 }
@@ -101,7 +91,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--disclosure-gap, #{$space-md});
-  padding: 0 $space-xs $space-lg;
+  padding-bottom: $space-lg;
 
   &[hidden] {
     display: none;

@@ -1,0 +1,27 @@
+<nav class="subtopic-tabs" [attr.aria-label]="'nav.subtopics' | translate">
+  <ul class="subtopic-tabs__list" role="list">
+    <li>
+      <a
+        class="subtopic-tabs__tab"
+        [routerLink]="path()"
+        routerLinkActive="subtopic-tabs__tab--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+      >
+        {{ 'nav.allSubtopics' | translate }}
+      </a>
+    </li>
+    @for (subtopic of subtopics(); track subtopic.slug) {
+      <li>
+        <a
+          class="subtopic-tabs__tab"
+          [routerLink]="[...path(), subtopic.slug]"
+          routerLinkActive="subtopic-tabs__tab--active"
+          ariaCurrentWhenActive="page"
+        >
+          {{ subtopic.name }}
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

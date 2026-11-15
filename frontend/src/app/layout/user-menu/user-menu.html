@@ -16,6 +16,13 @@
     <span class="user-menu__state">{{ 'account.signedIn' | translate }}</span>
   </p>
 
+  <section class="user-menu__collection" aria-labelledby="user-menu-collection">
+    <h2 class="user-menu__heading" id="user-menu-collection">
+      {{ 'collection.title' | translate }}
+    </h2>
+    <app-collection [limit]="5" (click)="close()" />
+  </section>
+
   <ul class="user-menu__list" role="list">
     <li>
       <a class="user-menu__item" routerLink="/profil" (click)="close()">

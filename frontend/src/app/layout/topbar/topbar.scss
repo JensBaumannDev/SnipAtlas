@@ -10,13 +10,13 @@
 .topbar {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(max-content, var(--nav-width)) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: $space-lg;
   align-items: center;
   min-height: calc($topbar-height + 1px);
-  padding-block: $space-sm;
+  padding: $space-sm $space-lg;
   background: var(--chrome);
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(12px);
 }
 
 // Brand
@@ -26,20 +26,18 @@
   align-items: center;
   justify-self: start;
   height: $control-height;
-  padding-left: $space-lg;
-  font-size: $font-size-brand;
+  font-size: $font-size-xxl;
   font-weight: $font-weight-bold;
   line-height: $line-height-none;
   color: var(--ink);
   letter-spacing: $letter-spacing-tight;
   white-space: nowrap;
   text-decoration: none;
-  transition: transform var(--duration) var(--ease);
 }
 
 .brand__logo {
-  width: $font-size-brand;
-  height: $font-size-brand;
+  width: $font-size-xxl;
+  height: $font-size-xxl;
   color: var(--ink);
 }
 
@@ -47,16 +45,24 @@
   color: var(--accent);
 }
 
+// Nav
+.topbar__nav {
+  justify-self: center;
+}
+
 // Main
 .topbar__main {
-  padding-right: max(calc($space-xl + var(--outline-space)), $topbar-tools-space);
-  padding-left: $space-xl;
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
 }
 
 // Search
 .topbar__search {
-  max-width: $search-max-width;
-  margin-inline: auto;
+  flex: 0 1 $topbar-search-width;
+  min-width: 0;
   transition:
     opacity var(--duration) var(--ease),
     visibility var(--duration);
@@ -69,17 +75,10 @@
 
 // Tools
 .topbar__tools {
-  position: absolute;
-  top: 50%;
-  right: $space-lg;
   display: flex;
+  flex: none;
   gap: $space-sm;
   align-items: center;
-  transform: translateY(-50%);
-}
-
-.topbar__settings {
-  display: none;
 }
 
 .topbar__icon {
@@ -88,46 +87,46 @@
 }
 
 /* #region RESPONSIVE */
-@include desktop {
-  .brand--centered {
-    transform: translateX(calc(50vw + (var(--nav-width) - var(--outline-space)) / 2 - 50% - #{$space-lg} / 2));
+@include nav-compact {
+  .topbar {
+    display: flex;
+    gap: $space-sm;
+  }
+
+  .topbar__main {
+    flex: 1;
+  }
+
+  .topbar__nav {
+    order: 1;
+  }
+
+  .topbar__settings {
+    display: none;
   }
 }
 
 @include mobile {
   .topbar {
-    display: flex;
     flex-wrap: wrap;
-    gap: $space-sm;
     padding-inline: $space-md;
-  }
-
-  .brand {
-    padding-left: 0;
   }
 
   .topbar__main {
     display: contents;
   }
 
-  .topbar__settings {
-    display: inline-flex;
+  .topbar__tools {
+    margin-left: auto;
   }
 
   .topbar__search {
     flex-basis: 100%;
-    order: 1;
-    max-width: none;
+    order: 2;
 
     &--hidden {
       display: none;
     }
-  }
-
-  .topbar__tools {
-    position: static;
-    margin-left: auto;
-    transform: none;
   }
 }
 

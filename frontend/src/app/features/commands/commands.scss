@@ -5,19 +5,31 @@
 }
 
 // Header
-.commands__header {
-  @include page-header;
-}
-
 .commands__meta {
   color: var(--muted);
 }
 
 // Sections
+.commands__section {
+  @include topic-section;
+
+  &--plain {
+    display: block;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
 .commands__section-title {
   @include section-heading;
+}
 
-  margin-top: $space-xxl;
+.commands__list {
+  @include topic-list;
+
+  .commands__section--plain & {
+    margin-inline: auto;
+  }
 }
 
 .commands__section-link {

@@ -27,7 +27,7 @@ export class Collection {
   private readonly injector = inject(Injector);
   private readonly list = viewChild<ElementRef<HTMLUListElement>>('list');
 
-  readonly hint = input('sidebar.collectionHint');
+  readonly hint = input('collection.hint');
   readonly limit = input<number>();
 
   protected readonly session = inject(Session);

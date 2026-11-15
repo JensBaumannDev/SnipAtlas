@@ -10,14 +10,11 @@
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
   white-space: nowrap;
+  text-decoration: none;
   background: none;
   border: 1px solid transparent;
   border-radius: $radius-lg;
-  transition:
-    background-color var(--duration-fast),
-    border-color var(--duration-fast),
-    color var(--duration-fast),
-    opacity var(--duration-fast);
+  transition: opacity var(--duration-fast);
 
   &:disabled {
     cursor: not-allowed;

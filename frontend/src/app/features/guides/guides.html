@@ -1,32 +1,41 @@
 @if (currentTopic(); as topic) {
+  @let count = topicBlueprints().length;
+
   <app-topic-header
     [topic]="topic"
     [heading]="topic.name"
     [parentLabel]="'pages.blueprints' | translate"
     parentLink="/anleitungen"
-  />
+  >
+    <p class="guides__meta">
+      {{ (count === 1 ? 'guides.countOne' : 'guides.count') | translate: { count: count } }}
+    </p>
+  </app-topic-header>
 
-  <ul class="guides__list" role="list">
-    @for (blueprint of topicBlueprints(); track blueprint.slug) {
-      <li class="guides__item" [id]="blueprint.slug">
-        <h2 class="guides__title">
-          <a
-            class="guides__link"
-            [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]"
-            >{{ blueprint.title }}</a
-          >
-        </h2>
-        <p class="guides__summary">{{ blueprint.summary }}</p>
-        <app-progress-bar
-          [done]="progress.doneCount(blueprint)"
-          [total]="blueprint.steps.length"
-          [label]="'guides.progressOf' | translate: { title: blueprint.title }"
-        />
-      </li>
-    } @empty {
-      <li class="guides__empty">{{ 'guides.empty' | translate }}</li>
-    }
-  </ul>
+  <section class="guides__section" aria-labelledby="guides-heading">
+    <h2 class="guides__heading" id="guides-heading">{{ 'pages.blueprints' | translate }}</h2>
+    <ul class="guides__list" role="list">
+      @for (blueprint of topicBlueprints(); track blueprint.slug) {
+        <li class="guides__item" [id]="blueprint.slug">
+          <h3 class="guides__title">
+            <a
+              class="guides__link"
+              [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]"
+              >{{ blueprint.title }}</a
+            >
+          </h3>
+          <p class="guides__summary">{{ blueprint.summary }}</p>
+          <app-progress-bar
+            [done]="progress.doneCount(blueprint)"
+            [total]="blueprint.steps.length"
+            [label]="'guides.progressOf' | translate: { title: blueprint.title }"
+          />
+        </li>
+      } @empty {
+        <li class="guides__empty">{{ 'guides.empty' | translate }}</li>
+      }
+    </ul>
+  </section>
 } @else {
   <app-area-intro
     title="pages.blueprints"

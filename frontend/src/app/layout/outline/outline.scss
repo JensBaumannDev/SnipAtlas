@@ -51,8 +51,8 @@
     position: sticky;
     top: calc($topbar-height + 1px);
     display: block;
-    flex: none;
-    width: $sidebar-width;
+    grid-column: 3;
+    width: $outline-width;
     max-height: calc(100dvh - $topbar-height - 1px);
     padding-block: $space-xl;
     overflow-y: auto;

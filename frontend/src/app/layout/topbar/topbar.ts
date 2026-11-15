@@ -17,12 +17,21 @@ import { settingsIcon } from '../../core/ui/icons';
 import { LoginDialog } from '../../core/auth/login-dialog';
 import { Session } from '../../core/auth/session';
 import { SearchBox } from '../../shared/search-box/search-box';
+import { MainNav } from '../main-nav/main-nav';
 import { UserMenu } from '../user-menu/user-menu';
 
 const SCROLL_GAP = 16;
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, SearchBox, TranslatePipe, UserMenu, LucideDynamicIcon],
+  imports: [
+    MainNav,
+    RouterLink,
+    RouterLinkActive,
+    SearchBox,
+    TranslatePipe,
+    UserMenu,
+    LucideDynamicIcon,
+  ],
   selector: 'app-topbar',
   styleUrl: './topbar.scss',
   templateUrl: './topbar.html',

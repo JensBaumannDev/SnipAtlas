@@ -10,11 +10,12 @@ import { Preferences } from '../../core/user-data/preferences';
 import { findSubtopic, groupBySubtopic, injectTopic } from '../../core/content/topic-resource';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
+import { SubtopicTabs } from '../../shared/subtopic-tabs/subtopic-tabs';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { EntryCard } from './entry-card/entry-card';
 
 @Component({
-  imports: [AreaInfo, AreaIntro, EntryCard, RouterLink, TopicHeader, TranslatePipe],
+  imports: [AreaInfo, AreaIntro, EntryCard, RouterLink, SubtopicTabs, TopicHeader, TranslatePipe],
   selector: 'app-commands',
   styleUrl: './commands.scss',
   templateUrl: './commands.html',
@@ -42,6 +43,12 @@ export class Commands {
   protected readonly currentTopic = injectTopic(this.topic);
   protected readonly currentSubtopic = computed(() =>
     findSubtopic(this.currentTopic(), this.subtopic()),
+  );
+
+  protected readonly tabs = computed(() =>
+    groupBySubtopic(this.currentTopic()?.subtopics ?? [], this.entries.value()).map(
+      (section) => section.subtopic,
+    ),
   );
 
   protected readonly sections = computed(() => {

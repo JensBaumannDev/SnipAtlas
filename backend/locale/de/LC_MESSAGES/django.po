@@ -35,15 +35,6 @@ msgstr "Himbeere"
 msgid "Fuchsia"
 msgstr "Fuchsia"
 
-msgid "Light"
-msgstr "Hell"
-
-msgid "Dark"
-msgstr "Dunkel"
-
-msgid "System"
-msgstr "System"
-
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -58,9 +49,6 @@ msgstr "Akzentfarbe"
 
 msgid "operating system"
 msgstr "Betriebssystem"
-
-msgid "theme"
-msgstr "Farbschema"
 
 msgid "language"
 msgstr "Sprache"

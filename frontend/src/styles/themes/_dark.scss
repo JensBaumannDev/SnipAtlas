@@ -1,35 +1,25 @@
 @mixin dark-tokens {
   // Surfaces and text
-  --bg: #08090a;
-  --chrome: rgb(8 9 10 / 92%);
-  --surface: #17191c;
-  --popover: rgb(23 25 28 / 75%);
-  --backdrop: rgb(0 0 0 / 45%);
-  --raised: #2a2e35;
-  --ink: #e8eaed;
-  --muted: #959da6;
-  --line: #25282d;
-  --hover: rgb(255 255 255 / 4.5%);
+  --bg: #000;
+  --chrome: #000;
+  --surface: #111;
+  --popover: rgb(17 17 17 / 75%);
+  --backdrop: rgb(0 0 0 / 55%);
+  --raised: #1c1c1e;
+  --ink: #f5f5f7;
+  --text: #f5f5f7;
+  --muted: #98989d;
+  --line: #2c2c2e;
+  --hover: rgb(255 255 255 / 5%);
   --scrollbar: rgb(255 255 255 / 20%);
 
   // Accent
-  --accent-blue: #669eff;
+  --accent-blue: #2997ff;
   --accent-teal: #2dd4c4;
   --accent-raspberry: #ff6b8f;
   --accent-fuchsia: #f472e6;
-  --accent-blue-pair: #a78bfa;
-  --accent-teal-pair: #38bdf8;
-  --accent-raspberry-pair: #fb923c;
-  --accent-fuchsia-pair: #a78bfa;
-  --accent-soft-share: 12%;
-  --glow-share: 8%;
-  --on-accent: #08090a;
-
-  // Cards
-  --card-from: #1c1f23;
-  --card-to: #141619;
-  --card-edge: rgb(255 255 255 / 8%);
-  --card-shadow: 0 24px 48px -12px rgb(0 0 0 / 60%);
+  --accent-soft-share: 14%;
+  --on-accent: #000;
 
   // Status
   --ok: #5ccb92;
@@ -38,9 +28,9 @@
   --danger-soft: rgb(240 122 110 / 10%);
 
   // Code blocks and syntax colors
-  --code-bg: #1a1d21;
-  --code-ink: #e3e7eb;
-  --code-dim: #7d8792;
+  --code-bg: #111;
+  --code-ink: #f5f5f7;
+  --code-dim: #98989d;
   --sx-cmd: #8fa3ff;
   --sx-kw: #c4b5fd;
   --sx-str: #6ee7b7;
@@ -48,17 +38,11 @@
   --sx-num: #fdba74;
 
   // Terminal
-  --term-bg: #15171c;
-  --term-bar: #23262d;
-  --term-edge: #2a2d35;
+  --term-bg: #111;
+  --term-bar: #1c1c1e;
+  --term-edge: #2c2c2e;
 
   color-scheme: dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    @include dark-tokens;
-  }
 }
 
 [data-theme='dark'] {

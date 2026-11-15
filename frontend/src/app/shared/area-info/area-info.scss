@@ -1,27 +1,31 @@
 @use 'abstracts' as *;
 
 :host {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(rem(260), 1fr));
   gap: $space-xl;
   width: 100%;
-  max-width: 70ch;
+  max-width: rem(1280);
   margin-inline: auto;
 }
 
 // Section
 .area-info__section {
-  @include accent-block;
-
   display: flex;
   flex-direction: column;
-  gap: $space-xs;
+  gap: $space-sm;
+  min-width: 0;
+  padding-top: $space-md;
+  overflow-wrap: anywhere;
+  border-top: 1px solid var(--line);
 }
 
 .area-info__title {
-  font-size: $font-size-lg;
+  font-size: $font-size-xl;
+  line-height: $line-height-tight;
+  letter-spacing: -0.02em;
 }
 
 .area-info__text {
-  color: var(--muted);
+  color: var(--text);
 }

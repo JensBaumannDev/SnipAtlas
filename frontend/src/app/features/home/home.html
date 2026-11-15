@@ -1,4 +1,4 @@
-<header class="home__hero">
+<header class="home__hero stage" data-theme="dark">
   <h1 class="home__title">{{ 'home.title' | translate }}</h1>
   <p class="home__lead">{{ 'home.lead' | translate }}</p>
   <app-search-box
@@ -10,13 +10,15 @@
   />
 </header>
 
-<section class="home__section" aria-labelledby="home-offer">
-  <h2 class="home__heading" id="home-offer">{{ 'home.offer.title' | translate }}</h2>
-  <app-offer />
-</section>
-
-<section class="home__section home__news" aria-labelledby="home-news">
-  <h2 class="home__heading" id="home-news">{{ 'home.news.title' | translate }}</h2>
-  <app-news-log class="home__log" [items]="news()" />
-  <a class="home__link" routerLink="/neu">{{ 'home.news.all' | translate }} →</a>
+<section class="home__section" aria-labelledby="home-areas">
+  <div class="home__intro">
+    <h2 class="home__heading" id="home-areas">{{ 'home.areasTitle' | translate }}</h2>
+    <p class="home__text">{{ 'home.intro' | translate }}</p>
+  </div>
+  <app-area-cards />
+  @if (news().length) {
+    <h3 class="visually-hidden">{{ 'home.news.title' | translate }}</h3>
+    <app-news-list class="home__news" [items]="news()" />
+  }
+  <app-guide-link class="home__guide" />
 </section>

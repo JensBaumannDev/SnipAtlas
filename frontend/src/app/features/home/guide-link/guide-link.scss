@@ -1,0 +1,24 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-md;
+  align-items: baseline;
+  justify-content: center;
+}
+
+// Link
+.guide-link__link {
+  font-weight: $font-weight-semibold;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.guide-link__progress {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}

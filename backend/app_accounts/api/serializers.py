@@ -226,7 +226,7 @@ class SettingsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('os', 'theme', 'language', 'project_values')
+        fields = ('os', 'language', 'project_values')
 
     def validate_project_values(self, values: dict[str, str]) -> dict[str, str]:
         """Reject unknown project value keys."""

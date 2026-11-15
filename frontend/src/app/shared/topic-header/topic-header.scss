@@ -6,10 +6,7 @@
 
 // Header
 .topic-header {
-  display: flex;
-  flex-wrap: wrap;
   gap: $space-md;
-  align-items: center;
 }
 
 .topic-header__logo {
@@ -21,14 +18,14 @@
 
 .topic-header__heading {
   display: flex;
-  flex: 1 1 rem(280);
   flex-direction: column;
-  gap: $space-xs;
+  gap: $space-sm;
+  align-items: center;
   min-width: 0;
+  view-transition-name: stage-heading;
 }
 
 .topic-header__parent {
-  align-self: flex-start;
   font-weight: $font-weight-medium;
   color: var(--muted);
   text-decoration: none;
