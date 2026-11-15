@@ -12,8 +12,10 @@
   display: flex;
   flex-direction: column;
   gap: $space-md;
-  align-items: flex-start;
+  align-items: center;
+  align-self: center;
   max-width: rem(720);
+  text-align: center;
 }
 
 /* #region RESPONSIVE */
