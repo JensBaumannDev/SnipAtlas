@@ -20,6 +20,7 @@ from app_accounts.models import (
     User,
     UserManager,
 )
+from app_accounts.tokens import ACTIVATION, check_link_token
 
 from .exceptions import InvalidCredentials, InvalidLink, WrongPassword
 
@@ -73,6 +74,27 @@ class RegisterSerializer(serializers.Serializer):
         user.set_password(self.validated_data['password'])
         user.save(update_fields=['password'])
         send_activation_mail(user)
+
+
+class ActivationSerializer(serializers.Serializer):
+    """Confirmation of a new account with the link from the activation mail."""
+
+    uid = serializers.CharField(write_only=True)
+    token = serializers.CharField(write_only=True)
+
+    def validate(self, attrs: dict) -> dict:
+        """Check the link and return its user."""
+        user = user_from_uid(attrs['uid'])
+        if user.email_confirmed or not check_link_token(user, attrs['token'], ACTIVATION):
+            raise InvalidLink
+        return {'user': user}
+
+    def save(self) -> User:
+        """Mark the email address as confirmed and return the user."""
+        user = self.validated_data['user']
+        user.email_confirmed = True
+        user.save(update_fields=['email_confirmed'])
+        return user
 
 
 # Login
@@ -168,13 +190,18 @@ class PasswordResetSerializer(serializers.Serializer):
             send_reset_mail(user)
 
 
-def user_from_link(uid: str, token: str) -> User:
-    """Return the user of a reset link or raise InvalidLink."""
+def user_from_uid(uid: str) -> User:
+    """Return the active user of the encoded id in a link or raise InvalidLink."""
     try:
         pk = force_str(urlsafe_base64_decode(uid))
-        user = User.objects.get(pk=pk, is_active=True)
+        return User.objects.get(pk=pk, is_active=True)
     except ValueError, User.DoesNotExist:
         raise InvalidLink from None
+
+
+def user_from_link(uid: str, token: str) -> User:
+    """Return the user of a reset link or raise InvalidLink."""
+    user = user_from_uid(uid)
     if not default_token_generator.check_token(user, token):
         raise InvalidLink
     return user

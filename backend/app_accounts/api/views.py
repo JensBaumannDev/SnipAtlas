@@ -18,6 +18,7 @@ from core.permissions import CsrfProtected
 from core.throttling import AuthRateThrottle, PasswordResetRateThrottle
 
 from .serializers import (
+    ActivationSerializer,
     CurrentPasswordSerializer,
     EmailChangeSerializer,
     FavoriteSerializer,
@@ -63,6 +64,22 @@ class RegisterView(SilentActionView):
 
     serializer_class = RegisterSerializer
     throttle_classes = AUTH_THROTTLES
+
+
+class ActivateView(generics.GenericAPIView):
+    """Confirm a new account with the activation link and log the user in."""
+
+    serializer_class = ActivationSerializer
+    permission_classes = (CsrfProtected,)
+    throttle_classes = AUTH_THROTTLES
+
+    def post(self, request: Request) -> Response:
+        """Confirm the email address, log the user in and return their data."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        login(request, user)
+        return Response(UserSerializer(user).data)
 
 
 class LoginView(generics.GenericAPIView):
