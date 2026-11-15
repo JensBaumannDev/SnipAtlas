@@ -7,9 +7,8 @@
   width: rem(800);
   max-width: calc(100vw - 2 * $space-md);
   overflow: clip;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: $radius-xl;
+  background: var(--bg);
+  border-radius: $radius-card;
   animation: auth-dialog-in var(--duration) var(--ease);
 }
 
@@ -19,46 +18,58 @@
 
 // Aside
 .auth-dialog__aside {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: $space-lg;
-  padding: $space-xl $space-lg;
-  background: var(--bg);
-  border-right: 1px solid var(--line);
+  gap: $space-xl;
+  justify-content: center;
+  padding: $space-xl;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 90% 45% at 50% 100%, var(--hero-glow), transparent 70%),
+    radial-gradient(ellipse 80% 30% at 50% 100%, rgb(255 255 255 / 6%), transparent 70%),
+    var(--bg);
 }
 
 .auth-dialog__brand {
   display: flex;
   gap: $space-sm;
   align-items: center;
-  justify-content: center;
-  padding-block: $space-md;
-  font-size: $font-size-brand;
+  font-size: $font-size-xl;
   font-weight: $font-weight-bold;
   line-height: $line-height-none;
+  color: var(--ink);
   letter-spacing: $letter-spacing-tight;
 }
 
 .auth-dialog__logo {
-  width: $font-size-brand;
-  height: $font-size-brand;
+  width: $font-size-xl;
+  height: $font-size-xl;
 }
 
 .auth-dialog__accent {
   color: var(--accent);
 }
 
+.auth-dialog__intro {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
 .auth-dialog__claim {
-  font-size: $font-size-lg;
-  font-weight: $font-weight-medium;
-  text-align: center;
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-heading;
+  color: var(--ink);
+  letter-spacing: $letter-spacing-heading;
+  text-wrap: balance;
 }
 
 .auth-dialog__benefits {
   display: flex;
   flex-direction: column;
   gap: $space-sm;
-  align-self: center;
 }
 
 .auth-dialog__benefit {
@@ -76,7 +87,7 @@
 // Main
 .auth-dialog__main {
   position: relative;
-  padding: $space-lg;
+  padding: $space-xl;
 }
 
 .auth-dialog__close {
@@ -124,35 +135,19 @@
     max-width: none;
     height: 100dvh;
     overflow-y: auto;
-    border: 0;
     border-radius: 0;
   }
 
   .auth-dialog__aside {
-    padding: $space-lg $space-md 0;
-    background: none;
-    border-right: 0;
+    padding: $space-md;
   }
 
-  .auth-dialog__brand {
-    justify-content: flex-start;
-    padding-block: 0;
-    font-size: $font-size-xl;
-  }
-
-  .auth-dialog__logo {
-    width: $font-size-xl;
-    height: $font-size-xl;
-  }
-
-  .auth-dialog__claim,
-  .auth-dialog__benefits {
+  .auth-dialog__intro {
     display: none;
   }
 
   .auth-dialog__main {
-    position: static;
-    padding: $space-md;
+    padding: $space-lg $space-md;
   }
 }
 
