@@ -5,6 +5,7 @@ map $request_method $admin_login_key {
 
 limit_req_zone $admin_login_key zone=admin_login:10m rate=5r/m;
 limit_req_status 429;
+access_log off;
 
 server {
     listen 80;

@@ -1,7 +1,14 @@
 name: snipatlas
 
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: '3'
+
 services:
   db:
+    logging: *logging
     image: postgres:18
     restart: unless-stopped
     env_file: backend/.env
@@ -14,6 +21,7 @@ services:
       retries: 10
 
   backend:
+    logging: *logging
     build: ./backend
     restart: unless-stopped
     env_file: backend/.env
@@ -29,6 +37,7 @@ services:
         condition: service_healthy
 
   frontend:
+    logging: *logging
     build: ./frontend
     restart: unless-stopped
     environment:
@@ -39,6 +48,7 @@ services:
       - backend
 
   nginx:
+    logging: *logging
     image: nginx:1.29-alpine
     restart: unless-stopped
     command: >-
@@ -61,6 +71,7 @@ services:
       - frontend
 
   certbot:
+    logging: *logging
     image: certbot/certbot:v4.0.0
     restart: unless-stopped
     entrypoint: >-
