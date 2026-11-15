@@ -70,6 +70,6 @@ export class Preferences {
       this.window?.navigator.language ??
       ''
     ).toLowerCase();
-    return language.startsWith('de') ? 'de' : 'en';
+    return !language || language.startsWith('de') ? 'de' : 'en';
   }
 }
