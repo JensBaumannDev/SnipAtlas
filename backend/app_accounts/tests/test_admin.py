@@ -83,7 +83,24 @@ def test_user_list_shows_newest_first(admin_client: Client, user: User) -> None:
     assert list(response.context['cl'].result_list)[:2] == [newer, user]
 
 
+def test_user_list_filters_by_email_confirmed(admin_client: Client, user: User) -> None:
+    open_user = User.objects.create_user('grace@example.com', PASSWORD, email_confirmed=False)
+    url = reverse('admin:app_accounts_user_changelist')
+    response = admin_client.get(url, {'email_confirmed__exact': '0'})
+    assert list(response.context['cl'].result_list) == [open_user]
+
+
+def test_user_list_shows_email_confirmed(admin_client: Client, user: User) -> None:
+    response = admin_client.get(reverse('admin:app_accounts_user_changelist'))
+    assert 'email_confirmed' in response.context['cl'].list_display
+
+
 # Add
+def test_admin_adds_confirmed_user(admin_client: Client) -> None:
+    add_user(admin_client)
+    assert User.objects.get(email='grace@example.com').email_confirmed
+
+
 def test_add_page_loads(admin_client: Client) -> None:
     response = admin_client.get(reverse('admin:app_accounts_user_add'))
     assert response.status_code == 200
@@ -145,6 +162,34 @@ def test_user_change_saves_settings(admin_client: Client, user: User) -> None:
     assert response.status_code == 302
     assert user.accent == 'teal'
     assert not user.notify_by_mail
+
+
+def test_admin_confirms_email(admin_client: Client) -> None:
+    open_user = User.objects.create_user('grace@example.com', PASSWORD, email_confirmed=False)
+    change_user(admin_client, open_user, email_confirmed='on')
+    open_user.refresh_from_db()
+    assert open_user.email_confirmed
+
+
+def test_user_change_without_checkbox_unconfirms_email(admin_client: Client, user: User) -> None:
+    change_user(admin_client, user)
+    user.refresh_from_db()
+    assert not user.email_confirmed
+
+
+def test_pending_email_is_read_only(admin_client: Client, user: User) -> None:
+    user.pending_email = 'new@example.com'
+    user.save()
+    change_user(admin_client, user, pending_email='evil@example.com', email_confirmed='on')
+    user.refresh_from_db()
+    assert user.pending_email == 'new@example.com'
+
+
+def test_user_change_page_shows_pending_email_escaped(admin_client: Client, user: User) -> None:
+    User.objects.filter(pk=user.pk).update(pending_email='"<script>"@example.com')
+    content = change_page(admin_client, user).content.decode()
+    assert '&quot;&lt;script&gt;&quot;@example.com' in content
+    assert '"<script>"@example.com' not in content
 
 
 def test_user_change_lowercases_email(admin_client: Client, user: User) -> None:

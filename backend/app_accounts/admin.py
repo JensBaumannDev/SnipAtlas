@@ -78,14 +78,21 @@ class UserAdmin(BaseUserAdmin):
 
     add_form = UserCreateForm
     form = UserEditForm
-    list_display = ('email', 'date_joined', 'last_login', 'is_active', 'is_staff')
-    list_filter = ('is_active', 'is_staff', 'is_superuser')
+    list_display = (
+        'email',
+        'date_joined',
+        'last_login',
+        'email_confirmed',
+        'is_active',
+        'is_staff',
+    )
+    list_filter = ('email_confirmed', 'is_active', 'is_staff', 'is_superuser')
     search_fields = ('email',)
     ordering = ('-date_joined',)
-    readonly_fields = ('last_login', 'date_joined')
+    readonly_fields = ('pending_email', 'last_login', 'date_joined')
     inlines = (FavoriteInline, CompletedStepInline)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'email_confirmed', 'pending_email', 'password')}),
         (_('Settings'), {'fields': ('notify_by_mail', 'accent', 'os', 'language')}),
         (
             _('Project values'),

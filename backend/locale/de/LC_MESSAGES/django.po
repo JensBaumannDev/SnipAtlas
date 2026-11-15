@@ -41,6 +41,12 @@ msgstr "Automatisch"
 msgid "email address"
 msgstr "E-Mail-Adresse"
 
+msgid "email confirmed"
+msgstr "E-Mail bestätigt"
+
+msgid "pending email address"
+msgstr "Neue E-Mail-Adresse (unbestätigt)"
+
 msgid "notify by mail"
 msgstr "Benachrichtigung per E-Mail"
 

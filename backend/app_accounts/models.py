@@ -111,6 +111,8 @@ class User(AbstractUser):
     first_name = None
     last_name = None
     email = models.EmailField(unique=True, verbose_name=_('email address'))
+    email_confirmed = models.BooleanField(default=True, verbose_name=_('email confirmed'))
+    pending_email = models.EmailField(blank=True, verbose_name=_('pending email address'))
     notify_by_mail = models.BooleanField(default=True, verbose_name=_('notify by mail'))
     accent = models.CharField(
         max_length=20, choices=Accent, default=Accent.BLUE, verbose_name=_('accent color')
@@ -170,8 +172,9 @@ class User(AbstractUser):
         return progress
 
     def save(self, *args: object, **kwargs: object) -> None:
-        """Normalize the email address and save the user."""
+        """Normalize the email addresses and save the user."""
         self.email = UserManager.normalize_email(self.email)
+        self.pending_email = UserManager.normalize_email(self.pending_email)
         super().save(*args, **kwargs)
 
 
