@@ -3,11 +3,9 @@ import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { EntryApi } from '../../core/api/entry-api';
-import { ExpandedSet } from '../../core/ui/expanded-set';
 import { terminalIcon } from '../../core/ui/icons';
-import { syncOutline } from '../../core/ui/page-outline';
 import { Preferences } from '../../core/user-data/preferences';
-import { findSubtopic, groupBySubtopic, injectTopic } from '../../core/content/topic-resource';
+import { TopicListing } from '../../core/content/topic-listing';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { SubtopicTabs } from '../../shared/subtopic-tabs/subtopic-tabs';
@@ -29,7 +27,6 @@ export class Commands {
   protected readonly os = inject(Preferences).os;
   protected readonly icon = terminalIcon;
   protected readonly infoSections = ['what', 'why', 'memorize'];
-  protected readonly expanded = new ExpandedSet();
   protected readonly summary = toSignal(this.entryApi.getSummary(), {
     initialValue: { entries: 0, topics: 0 },
   });
@@ -40,42 +37,9 @@ export class Commands {
     defaultValue: [],
   });
 
-  protected readonly currentTopic = injectTopic(this.topic);
-  protected readonly currentSubtopic = computed(() =>
-    findSubtopic(this.currentTopic(), this.subtopic()),
-  );
-
-  protected readonly tabs = computed(() =>
-    groupBySubtopic(this.currentTopic()?.subtopics ?? [], this.entries.value()).map(
-      (section) => section.subtopic,
-    ),
-  );
-
-  protected readonly sections = computed(() => {
-    const current = this.currentSubtopic();
-    const subtopics = current ? [current] : (this.currentTopic()?.subtopics ?? []);
-    return groupBySubtopic(subtopics, this.entries.value());
-  });
-
-  protected readonly visibleEntries = computed(() =>
-    this.sections().flatMap((section) => section.items),
-  );
-  private readonly visibleSlugs = computed(() => this.visibleEntries().map((entry) => entry.slug));
-  protected readonly allExpanded = computed(() => this.expanded.hasAll(this.visibleSlugs()));
+  protected readonly listing = new TopicListing(this.topic, this.subtopic, this.entries.value);
 
   protected readonly hasOsVariants = computed(() =>
-    this.visibleEntries().some((entry) => typeof entry.code !== 'string'),
+    this.listing.visible().some((entry) => typeof entry.code !== 'string'),
   );
-
-  constructor() {
-    syncOutline(() =>
-      this.currentSubtopic()
-        ? this.visibleEntries().map((entry) => ({ id: entry.slug, label: entry.title }))
-        : this.sections().map(({ subtopic }) => ({ id: subtopic.slug, label: subtopic.name })),
-    );
-  }
-
-  protected toggleAll(): void {
-    this.expanded.setAll(this.visibleSlugs(), !this.allExpanded());
-  }
 }

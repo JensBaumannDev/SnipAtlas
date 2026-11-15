@@ -3,7 +3,6 @@
     @let subtopic = currentSubtopic();
 
     <app-topic-header
-      class="entry-detail__header"
       [topic]="topic"
       [heading]="entry.title"
       [parentLabel]="subtopic ? topic.name + ' · ' + subtopic.name : topic.name"

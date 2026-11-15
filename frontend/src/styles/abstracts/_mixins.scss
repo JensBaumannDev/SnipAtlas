@@ -31,12 +31,6 @@
   }
 }
 
-@mixin nav-full {
-  @media (min-width: $bp-nav + 1) {
-    @content;
-  }
-}
-
 @mixin wide {
   @media (min-width: $bp-wide) {
     @content;

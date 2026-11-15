@@ -710,9 +710,5 @@
   "news": {
     "lead": "Alles, was zuletzt auf SnipAtlas dazugekommen ist, das Neueste zuerst.",
     "fresh": "neu"
-  },
-  "terminal": {
-    "done": "erledigt:",
-    "todo": "offen:"
   }
 }

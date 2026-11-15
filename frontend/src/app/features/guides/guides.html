@@ -7,14 +7,16 @@
     [parentLabel]="'pages.blueprints' | translate"
     parentLink="/anleitungen"
   >
-    <p class="guides__meta">
+    <p class="topic-page__meta">
       {{ (count === 1 ? 'guides.countOne' : 'guides.count') | translate: { count: count } }}
     </p>
   </app-topic-header>
 
-  <section class="guides__section" aria-labelledby="guides-heading">
-    <h2 class="guides__heading" id="guides-heading">{{ 'pages.blueprints' | translate }}</h2>
-    <ul class="guides__list" role="list">
+  <section class="topic-page__section" aria-labelledby="guides-heading">
+    <h2 class="topic-page__section-title" id="guides-heading">
+      {{ 'pages.blueprints' | translate }}
+    </h2>
+    <ul class="topic-page__list" role="list">
       @for (blueprint of topicBlueprints(); track blueprint.slug) {
         <li class="guides__item" [id]="blueprint.slug">
           <h3 class="guides__title">
@@ -32,7 +34,7 @@
           />
         </li>
       } @empty {
-        <li class="guides__empty">{{ 'guides.empty' | translate }}</li>
+        <li class="topic-page__empty">{{ 'guides.empty' | translate }}</li>
       }
     </ul>
   </section>

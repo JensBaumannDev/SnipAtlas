@@ -2,13 +2,12 @@
   @let count = errors.value().length;
 
   <app-topic-header
-    class="errors__header"
     [topic]="topic"
     [heading]="topic.name"
     [parentLabel]="'pages.debugging' | translate"
     parentLink="/fehler"
   >
-    <p class="errors__meta">
+    <p class="topic-page__meta">
       {{
         (count === 1 ? 'debugging.errorCountOne' : 'debugging.errorCount')
           | translate: { count: count }
@@ -17,11 +16,11 @@
   </app-topic-header>
 
   @if (topicGuides.value().length) {
-    <section class="errors__section" aria-labelledby="errors-guides">
-      <h2 class="errors__section-title" id="errors-guides">
+    <section class="topic-page__section" aria-labelledby="errors-guides">
+      <h2 class="topic-page__section-title" id="errors-guides">
         {{ 'debugging.topicGuides' | translate: { topic: topic.name } }}
       </h2>
-      <div class="errors__list">
+      <div class="topic-page__list">
         @for (guide of topicGuides.value(); track guide.slug) {
           <app-debug-guide-card [guide]="guide" />
         }
@@ -29,15 +28,15 @@
     </section>
   }
 
-  <section class="errors__section" aria-labelledby="errors-list">
-    <h2 class="errors__section-title" id="errors-list">
+  <section class="topic-page__section" aria-labelledby="errors-list">
+    <h2 class="topic-page__section-title" id="errors-list">
       {{ 'debugging.commonErrors' | translate }}
     </h2>
-    <div class="errors__list">
+    <div class="topic-page__list">
       @for (error of errors.value(); track error.slug) {
         <app-error-card [error]="error" />
       } @empty {
-        <p class="errors__empty">{{ 'debugging.empty' | translate }}</p>
+        <p class="topic-page__empty">{{ 'debugging.empty' | translate }}</p>
       }
     </div>
   </section>

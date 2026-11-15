@@ -1,0 +1,44 @@
+@use 'abstracts' as *;
+
+// Header
+.topic-page__meta {
+  color: var(--muted);
+}
+
+// Sections
+.topic-page__section {
+  @include topic-section;
+
+  &--plain {
+    display: block;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+.topic-page__section-title {
+  @include section-heading;
+}
+
+.topic-page__section-link {
+  color: var(--ink);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+}
+
+.topic-page__list {
+  @include topic-list;
+
+  .topic-page__section--plain & {
+    margin-inline: auto;
+  }
+}
+
+.topic-page__empty {
+  padding-block: $space-lg;
+  color: var(--muted);
+}

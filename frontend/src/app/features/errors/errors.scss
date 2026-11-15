@@ -3,26 +3,3 @@
 :host {
   display: block;
 }
-
-// Header
-.errors__meta {
-  color: var(--muted);
-}
-
-// Sections
-.errors__section {
-  @include topic-section;
-}
-
-.errors__section-title {
-  @include section-heading;
-}
-
-.errors__list {
-  @include topic-list;
-}
-
-.errors__empty {
-  padding-block: $space-lg;
-  color: var(--muted);
-}

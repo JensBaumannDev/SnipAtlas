@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { PLATFORM_ID, Service, computed, inject, signal } from '@angular/core';
+import { PLATFORM_ID, Service, inject, signal } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { Observable, catchError, firstValueFrom, map, of, switchMap } from 'rxjs';
 import type { AccentTheme } from '../user-data/preferences';
@@ -36,7 +36,6 @@ export class Session {
 
   readonly user = signal<SessionUser | undefined>(undefined);
   readonly authEvent = signal<AuthEvent | undefined>(undefined);
-  readonly initial = computed(() => this.user()?.email.charAt(0).toUpperCase() ?? '');
 
   restore(): Promise<void> {
     if (this.isServer) {

@@ -1,15 +1,14 @@
-@if (currentTopic(); as topic) {
-  @let subtopic = currentSubtopic();
-  @let count = visibleEntries().length;
+@if (listing.topic(); as topic) {
+  @let subtopic = listing.subtopic();
+  @let count = listing.visible().length;
 
   <app-topic-header
-    class="commands__header"
     [topic]="topic"
     [heading]="subtopic?.name ?? topic.name"
     [parentLabel]="subtopic ? topic.name : ('pages.commands' | translate)"
     [parentLink]="subtopic ? ['/befehle', topic.slug] : '/befehle'"
   >
-    <p class="commands__meta">
+    <p class="topic-page__meta">
       {{
         (count === 1 ? 'commands.entryCountOne' : 'commands.entryCount')
           | translate: { count: count }
@@ -21,41 +20,41 @@
       }
     </p>
     @if (count) {
-      <button class="btn btn--ghost" type="button" (click)="toggleAll()">
-        {{ (allExpanded() ? 'item.collapseAll' : 'item.expandAll') | translate }}
+      <button class="btn btn--ghost" type="button" (click)="listing.toggleAll()">
+        {{ (listing.allExpanded() ? 'item.collapseAll' : 'item.expandAll') | translate }}
       </button>
     }
   </app-topic-header>
 
-  @if (tabs().length > 1) {
-    <app-subtopic-tabs [path]="['/befehle', topic.slug]" [subtopics]="tabs()" />
+  @if (listing.tabs().length > 1) {
+    <app-subtopic-tabs [path]="['/befehle', topic.slug]" [subtopics]="listing.tabs()" />
   }
 
-  @for (section of sections(); track section.subtopic.slug) {
-    <section class="commands__section" [class.commands__section--plain]="subtopic">
+  @for (section of listing.sections(); track section.subtopic.slug) {
+    <section class="topic-page__section" [class.topic-page__section--plain]="subtopic">
       @if (!subtopic) {
-        <h2 class="commands__section-title" [id]="section.subtopic.slug">
+        <h2 class="topic-page__section-title" [id]="section.subtopic.slug">
           <a
-            class="commands__section-link"
+            class="topic-page__section-link"
             [routerLink]="['/befehle', topic.slug, section.subtopic.slug]"
           >
             {{ section.subtopic.name }}
           </a>
         </h2>
       }
-      <div class="commands__list">
+      <div class="topic-page__list">
         @for (entry of section.items; track entry.slug) {
           <app-entry-card
             [entry]="entry"
             [level]="subtopic ? 2 : 3"
-            [expanded]="expanded.has(entry.slug)"
-            (expandedChange)="expanded.set(entry.slug, $event)"
+            [expanded]="listing.expanded.has(entry.slug)"
+            (expandedChange)="listing.expanded.set(entry.slug, $event)"
           />
         }
       </div>
     </section>
   } @empty {
-    <p class="commands__empty">{{ 'commands.empty' | translate }}</p>
+    <p class="topic-page__empty">{{ 'commands.empty' | translate }}</p>
   }
 } @else {
   <app-area-intro
