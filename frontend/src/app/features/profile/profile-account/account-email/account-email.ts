@@ -19,6 +19,7 @@ export class AccountEmail {
   private readonly session = inject(Session);
 
   protected readonly saved = signal(false);
+  protected readonly sentTo = signal('');
   protected readonly pending = signal(false);
   protected readonly form = inject(FormBuilder).nonNullable.group({
     email: [this.session.user()?.email ?? '', [Validators.required, Validators.email]],
@@ -60,13 +61,14 @@ export class AccountEmail {
       .changeEmail({ email: email.trim(), password })
       .pipe(finalize(() => this.pending.set(false)))
       .subscribe({
-        next: () => this.done(),
+        next: () => this.done(email.trim()),
         error: (error: unknown) => this.error.set(toApiError(error)),
       });
   }
 
-  private done(): void {
+  private done(email: string): void {
     this.form.controls.password.reset();
+    this.sentTo.set(email);
     this.saved.set(true);
   }
 }

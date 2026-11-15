@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 import { ApiError, fieldErrorKey, formErrorText, toApiError } from '../../../core/http/api-error';
+import { MailLink, readMailLink } from '../../../core/auth/link';
 import { LoginDialog } from '../../../core/auth/login-dialog';
 import { PASSWORD_MIN_LENGTH } from '../../../core/auth/password-rules';
 import { PasswordReset } from '../../../core/auth/password-reset';
@@ -14,19 +15,6 @@ import { PasswordField } from '../../../shared/password-field/password-field';
 import { hasVisibleError, injectApiError, injectFocusInvalid, passwordsMatch } from '../auth-form';
 
 type ResetStatus = 'form' | 'done' | 'invalid';
-
-interface ResetLink {
-  uid: string;
-  token: string;
-}
-
-function readLink(route: ActivatedRoute, location: Location): ResetLink | undefined {
-  const params = route.snapshot.queryParamMap;
-  const uid = params.get('uid');
-  const token = params.get('token');
-  location.replaceState(location.path().split('?')[0]);
-  return uid && token ? { uid, token } : undefined;
-}
 
 @Component({
   imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
@@ -39,7 +27,7 @@ export class ResetPassword {
   private readonly loginDialog = inject(LoginDialog);
   private readonly passwordReset = inject(PasswordReset);
   private readonly session = inject(Session);
-  private readonly link = readLink(inject(ActivatedRoute), inject(Location));
+  private readonly link = readMailLink(inject(ActivatedRoute), inject(Location));
 
   protected readonly minLength = PASSWORD_MIN_LENGTH;
   protected readonly status = signal<ResetStatus>(this.link ? 'form' : 'invalid');
@@ -90,7 +78,7 @@ export class ResetPassword {
     this.loginDialog.open();
   }
 
-  private send(link: ResetLink): void {
+  private send(link: MailLink): void {
     this.pending.set(true);
     this.error.set(undefined);
     this.passwordReset

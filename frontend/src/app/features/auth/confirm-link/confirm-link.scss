@@ -1,0 +1,26 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  padding-block: $space-xxl;
+}
+
+// Result
+.confirm-link__result {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  align-items: flex-start;
+  max-width: rem(720);
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  :host {
+    padding-block: $space-md $space-xl;
+  }
+}
+
+/* #endregion */

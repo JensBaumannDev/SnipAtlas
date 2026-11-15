@@ -7,9 +7,10 @@ import { formErrorText, toApiError } from '../../../core/http/api-error';
 import { Session } from '../../../core/auth/session';
 import { PasswordField } from '../../../shared/password-field/password-field';
 import { hasVisibleError, injectApiError, injectFocusInvalid } from '../auth-form';
+import { ResendActivation } from '../resend-activation/resend-activation';
 
 @Component({
-  imports: [PasswordField, ReactiveFormsModule, TranslatePipe],
+  imports: [PasswordField, ReactiveFormsModule, ResendActivation, TranslatePipe],
   selector: 'app-login',
   styleUrl: './login.scss',
   templateUrl: './login.html',
@@ -32,6 +33,7 @@ export class Login {
   protected readonly pending = signal(false);
   protected readonly error = injectApiError(this.form);
   protected readonly errorText = computed(() => formErrorText(this.error()));
+  protected readonly notActivated = computed(() => this.error()?.code === 'not_activated');
 
   private readonly values = toSignal(this.form.valueChanges, {
     initialValue: this.form.getRawValue(),

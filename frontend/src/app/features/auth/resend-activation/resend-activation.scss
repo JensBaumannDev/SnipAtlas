@@ -1,0 +1,8 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  align-items: flex-start;
+}

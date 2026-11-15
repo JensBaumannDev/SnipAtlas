@@ -34,6 +34,8 @@
     "notFound": "Page not found",
     "news": "New on SnipAtlas",
     "resetPassword": "Reset password",
+    "activateAccount": "Activate account",
+    "confirmEmail": "Confirm email address",
     "vscodeTheme": "SnipAtlas theme for VS Code"
   },
   "meta": {
@@ -111,7 +113,7 @@
     "account": {
       "email": "Email address",
       "emailSubmit": "Change email",
-      "emailSaved": "Your email address has been changed.",
+      "emailSaved": "Almost done: we sent a link to {{email}}. The new address only applies once you open it. The link is valid for 24 hours.",
       "password": "Change password",
       "currentPassword": "Current password",
       "newPassword": "New password",
@@ -159,6 +161,28 @@
       "personalize": "Personalize SnipAtlas to your taste"
     }
   },
+  "activation": {
+    "sentTitle": "Confirm your email address",
+    "sentText": "We sent a link to {{email}}. Open it to activate your account. The link is valid for 24 hours.",
+    "resend": "Send link again",
+    "resent": "If this address is not confirmed yet, a new link is on its way."
+  },
+  "confirmLink": {
+    "pending": "One moment, checking the link …",
+    "login": "Log in now",
+    "activation": {
+      "title": "Activate account",
+      "done": "Your account is activated and you are logged in.",
+      "invalid": "The link has expired or is invalid. It is valid for 24 hours and only once. Log in to request a new link.",
+      "next": "Go to home page"
+    },
+    "email": {
+      "title": "Confirm email address",
+      "done": "Your new email address has been applied.",
+      "invalid": "The link has expired or is invalid. It is valid for 24 hours and only once. Change your address in your profile again to get a new link.",
+      "next": "Go to profile"
+    }
+  },
   "resetPassword": {
     "title": "Set a new password",
     "lead": "Choose a new password for your account. You will then be signed out on all devices.",
@@ -176,6 +200,7 @@
     "invalid_credentials": "Email or password is incorrect.",
     "wrong_password": "The password is incorrect.",
     "invalid_link": "The link has expired or is invalid. Request a new one.",
+    "not_activated": "Your account is not activated yet. Open the link from our email.",
     "not_authenticated": "You are no longer signed in. Please sign in again.",
     "csrf_failed": "Your session has expired. Please reload the page.",
     "not_found": "This does not exist (anymore).",

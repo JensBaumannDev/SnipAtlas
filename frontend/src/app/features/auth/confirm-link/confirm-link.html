@@ -1,0 +1,38 @@
+<header class="stage" data-theme="dark">
+  <h1>{{ texts + '.title' | translate }}</h1>
+</header>
+
+@switch (status()) {
+  @case ('pending') {
+    <p class="confirm-link__result" role="status">{{ 'confirmLink.pending' | translate }}</p>
+  }
+  @case ('done') {
+    <section class="confirm-link__result" role="status">
+      <p>{{ texts + '.done' | translate }}</p>
+      <ng-container [ngTemplateOutlet]="next" />
+    </section>
+  }
+  @case ('invalid') {
+    <section class="confirm-link__result" role="alert">
+      <p>{{ texts + '.invalid' | translate }}</p>
+      <ng-container [ngTemplateOutlet]="next" />
+    </section>
+  }
+  @case ('failed') {
+    @if (errorText(); as message) {
+      <p class="confirm-link__result field__error" role="alert">
+        {{ message.key | translate: message.params }}
+      </p>
+    }
+  }
+}
+
+<ng-template #next>
+  @if (signedIn()) {
+    <a class="btn btn--primary" [routerLink]="nextLink">{{ texts + '.next' | translate }}</a>
+  } @else {
+    <button class="btn btn--primary" type="button" (click)="login()">
+      {{ 'confirmLink.login' | translate }}
+    </button>
+  }
+</ng-template>
