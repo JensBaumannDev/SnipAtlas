@@ -97,6 +97,19 @@ class ActivationSerializer(serializers.Serializer):
         return user
 
 
+class ActivationResendSerializer(serializers.Serializer):
+    """Request of a new activation link."""
+
+    email = serializers.EmailField(max_length=254)
+
+    def save(self) -> None:
+        """Send a new link if an active, unconfirmed user has the address."""
+        email = UserManager.normalize_email(self.validated_data['email'])
+        user = User.objects.filter(email=email, is_active=True, email_confirmed=False).first()
+        if user:
+            send_activation_mail(user)
+
+
 # Login
 class LoginSerializer(serializers.Serializer):
     """Login with email and password."""

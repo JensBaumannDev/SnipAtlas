@@ -18,6 +18,7 @@ from core.permissions import CsrfProtected
 from core.throttling import AuthRateThrottle, PasswordResetRateThrottle
 
 from .serializers import (
+    ActivationResendSerializer,
     ActivationSerializer,
     CurrentPasswordSerializer,
     EmailChangeSerializer,
@@ -80,6 +81,13 @@ class ActivateView(generics.GenericAPIView):
         user = serializer.save()
         login(request, user)
         return Response(UserSerializer(user).data)
+
+
+class ActivationResendView(SilentActionView):
+    """Send a new activation link."""
+
+    serializer_class = ActivationResendSerializer
+    throttle_classes = RESET_THROTTLES
 
 
 class LoginView(generics.GenericAPIView):
