@@ -28,6 +28,13 @@ DJANGO_USER_FIELDS = {
 
 FIELD_NAMES = [
     ('app_accounts.user', 'email', 'E-Mail-Adresse', 'email address'),
+    ('app_accounts.user', 'email_confirmed', 'E-Mail bestätigt', 'email confirmed'),
+    (
+        'app_accounts.user',
+        'pending_email',
+        'Neue E-Mail-Adresse (unbestätigt)',
+        'pending email address',
+    ),
     ('app_accounts.user', 'notify_by_mail', 'Benachrichtigung per E-Mail', 'notify by mail'),
     ('app_accounts.user', 'accent', 'Akzentfarbe', 'accent color'),
     ('app_accounts.user', 'os', 'Betriebssystem', 'operating system'),

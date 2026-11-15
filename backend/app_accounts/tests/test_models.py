@@ -95,6 +95,62 @@ def test_save_with_taken_email_in_other_case_is_rejected(user: User) -> None:
         User.objects.create(email='ADA@example.com')
 
 
+# Email confirmation
+def test_new_user_is_confirmed_by_default(user: User) -> None:
+    assert user.email_confirmed
+
+
+def test_create_superuser_is_confirmed() -> None:
+    admin = User.objects.create_superuser('admin@example.com', PASSWORD)
+    assert admin.email_confirmed
+
+
+def test_create_user_can_start_unconfirmed() -> None:
+    user = User.objects.create_user('grace@example.com', PASSWORD, email_confirmed=False)
+    user.refresh_from_db()
+    assert not user.email_confirmed
+
+
+def test_new_user_has_no_pending_email(user: User) -> None:
+    assert user.pending_email == ''
+
+
+def test_save_lowercases_and_trims_pending_email(user: User) -> None:
+    user.pending_email = ' Ada.New@Example.COM '
+    user.save()
+    user.refresh_from_db()
+    assert user.pending_email == 'ada.new@example.com'
+
+
+def test_pending_email_may_match_other_users_pending_email(user: User) -> None:
+    other = User.objects.create_user('grace@example.com', PASSWORD)
+    for person in (user, other):
+        person.pending_email = 'new@example.com'
+        person.save()
+    assert User.objects.filter(pending_email='new@example.com').count() == 2
+
+
+def test_invalid_pending_email_is_rejected(user: User) -> None:
+    user.pending_email = 'no-mail'
+    assert error_codes(user, 'pending_email') == ['invalid']
+
+
+def test_too_long_pending_email_is_rejected(user: User) -> None:
+    user.pending_email = f'{"a" * 245}@example.com'
+    assert error_codes(user, 'pending_email') == ['max_length']
+
+
+def test_database_rejects_too_long_pending_email(user: User) -> None:
+    user.pending_email = f'{"a" * 245}@example.com'
+    with pytest.raises(DataError), transaction.atomic():
+        user.save()
+
+
+def test_database_rejects_missing_pending_email(user: User) -> None:
+    with pytest.raises(IntegrityError), transaction.atomic():
+        User.objects.filter(pk=user.pk).update(pending_email=None)
+
+
 # Settings
 def test_new_user_gets_mail_notification_and_blue_accent(user: User) -> None:
     assert user.notify_by_mail
