@@ -22,6 +22,7 @@ from .serializers import (
     ActivationSerializer,
     CurrentPasswordSerializer,
     EmailChangeSerializer,
+    EmailConfirmSerializer,
     FavoriteSerializer,
     LoginSerializer,
     PasswordChangeSerializer,
@@ -151,6 +152,13 @@ class EmailView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class EmailConfirmView(SilentActionView):
+    """Take over a pending email address with the link sent to it."""
+
+    serializer_class = EmailConfirmSerializer
+    throttle_classes = AUTH_THROTTLES
 
 
 class PasswordView(generics.GenericAPIView):

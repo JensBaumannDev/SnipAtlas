@@ -1,0 +1,14 @@
+{% autoescape off %}Hello,
+
+this email address is about to become the new address of a SnipAtlas account.
+
+Please confirm it with this link:
+{{ link }}
+
+The link is valid for 24 hours and can only be used once. Until then, the current address stays in use.
+
+If you did not ask for this, just ignore this mail. Nothing will change.
+
+Best regards
+SnipAtlas
+{% endautoescape %}

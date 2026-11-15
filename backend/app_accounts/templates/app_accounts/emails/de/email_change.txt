@@ -1,0 +1,14 @@
+{% autoescape off %}Hallo,
+
+für dein Konto bei SnipAtlas soll diese E-Mail-Adresse die neue Adresse werden.
+
+Bitte bestätige sie über diesen Link:
+{{ link }}
+
+Der Link gilt 24 Stunden und nur einmal. Bis dahin gilt deine bisherige Adresse weiter.
+
+Wenn du das nicht angefordert hast, ignoriere diese Mail einfach. Dann ändert sich nichts.
+
+Viele Grüße
+SnipAtlas
+{% endautoescape %}

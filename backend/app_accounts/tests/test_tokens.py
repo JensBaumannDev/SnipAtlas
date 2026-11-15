@@ -11,6 +11,10 @@ pytestmark = pytest.mark.django_db
 PASSWORD = 'Kaffee-Tasse-2026!'
 
 
+def tamper(token: str) -> str:
+    return ('1' if token[0] == '0' else '0') + token[1:]
+
+
 def token_at(user: User, purpose: str, monkeypatch: pytest.MonkeyPatch, hours: float) -> str:
     moment = timezone.now() - timedelta(hours=hours)
     monkeypatch.setattr('django.core.signing.time.time', moment.timestamp)
@@ -54,7 +58,7 @@ def test_broken_token_is_rejected(user: User, token: str) -> None:
 
 def test_tampered_token_is_rejected(user: User) -> None:
     token = make_link_token(user, ACTIVATION)
-    assert not check_link_token(user, f'0{token[1:]}', ACTIVATION)
+    assert not check_link_token(user, tamper(token), ACTIVATION)
 
 
 @pytest.mark.parametrize(

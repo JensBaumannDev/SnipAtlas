@@ -14,12 +14,13 @@ from django.utils.http import urlsafe_base64_encode
 from core.mail import mail_language
 
 from .models import User
-from .tokens import ACTIVATION, make_link_token
+from .tokens import ACTIVATION, EMAIL_CHANGE, make_link_token
 
 logger = logging.getLogger(__name__)
 
 RESET_PATH = '/passwort-zuruecksetzen'
 ACTIVATION_PATH = '/konto-aktivieren'
+EMAIL_CHANGE_PATH = '/email-bestaetigen'
 SUBJECTS = {
     'password_reset': {'de': 'Neues Passwort für SnipAtlas', 'en': 'New password for SnipAtlas'},
     'activation': {
@@ -27,6 +28,10 @@ SUBJECTS = {
         'en': 'Confirm your SnipAtlas account',
     },
     'existing_account': {'de': 'Dein Konto bei SnipAtlas', 'en': 'Your SnipAtlas account'},
+    'email_change': {
+        'de': 'Bestätige deine neue E-Mail-Adresse',
+        'en': 'Confirm your new email address',
+    },
 }
 
 
@@ -55,6 +60,12 @@ def send_activation_mail(user: User) -> None:
 def send_existing_account_mail(user: User) -> None:
     """Tell the owner of a confirmed address that they already have an account."""
     _send('existing_account', user.email, settings.FRONTEND_URL)
+
+
+def send_email_change_mail(user: User) -> None:
+    """Send the link that confirms the pending address to that address."""
+    link = frontend_link(EMAIL_CHANGE_PATH, user, make_link_token(user, EMAIL_CHANGE))
+    _send('email_change', user.pending_email, link)
 
 
 def _send(template: str, to: str, link: str) -> None:

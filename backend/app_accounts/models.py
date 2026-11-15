@@ -1,6 +1,6 @@
 """User model with settings, favorites and completed blueprint steps."""
 
-from datetime import date
+from datetime import date, timedelta
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
@@ -80,6 +80,7 @@ SETTING_CHOICES = {
 }
 
 PROJECT_VALUE_MAX_LENGTH = 100
+UNCONFIRMED_ACCOUNT_DAYS = 7
 
 PROJECT_VALUE_FIELDS = {
     'project': 'project_name',
@@ -147,6 +148,14 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return self.email
+
+    @classmethod
+    def delete_unconfirmed(cls) -> int:
+        """Delete accounts whose email was not confirmed in time and return the count."""
+        cutoff = timezone.now() - timedelta(days=UNCONFIRMED_ACCOUNT_DAYS)
+        old = cls.objects.filter(email_confirmed=False, is_staff=False, date_joined__lt=cutoff)
+        _, per_model = old.delete()
+        return per_model.get(cls._meta.label, 0)
 
     @property
     def since(self) -> date:

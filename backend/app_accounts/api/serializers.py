@@ -10,6 +10,7 @@ from rest_framework.fields import get_error_detail
 
 from app_accounts.emails import (
     send_activation_mail,
+    send_email_change_mail,
     send_existing_account_mail,
     send_reset_mail,
 )
@@ -20,7 +21,7 @@ from app_accounts.models import (
     User,
     UserManager,
 )
-from app_accounts.tokens import ACTIVATION, check_link_token
+from app_accounts.tokens import ACTIVATION, EMAIL_CHANGE, check_link_token
 
 from .exceptions import InvalidCredentials, InvalidLink, NotActivated, WrongPassword
 
@@ -156,14 +157,39 @@ class EmailChangeSerializer(CurrentPasswordSerializer):
         return unique_email(value, self.instance)
 
     def update(self, user: User, validated_data: dict) -> User:
-        """Save the new email address."""
-        user.email = validated_data['email']
-        user.save(update_fields=['email'])
+        """Keep the new address pending and send it a confirmation link."""
+        email = validated_data['email']
+        user.pending_email = '' if email == user.email else email
+        user.save(update_fields=['pending_email'])
+        if user.pending_email:
+            send_email_change_mail(user)
         return user
 
     def to_representation(self, user: User) -> dict:
         """Return the user like the user endpoint."""
         return UserSerializer(user).data
+
+
+class EmailConfirmSerializer(serializers.Serializer):
+    """Confirmation of a pending email address with the link sent to it."""
+
+    uid = serializers.CharField(write_only=True)
+    token = serializers.CharField(write_only=True)
+
+    def validate(self, attrs: dict) -> dict:
+        """Check the link and that the pending address is still free."""
+        user = user_from_uid(attrs['uid'])
+        if not user.pending_email or not check_link_token(user, attrs['token'], EMAIL_CHANGE):
+            raise InvalidLink
+        if User.objects.filter(email=user.pending_email).exists():
+            raise InvalidLink
+        return {'user': user}
+
+    def save(self) -> None:
+        """Replace the email address with the pending one."""
+        user = self.validated_data['user']
+        user.email, user.pending_email = user.pending_email, ''
+        user.save(update_fields=['email', 'pending_email'])
 
 
 class PasswordChangeSerializer(serializers.Serializer):
