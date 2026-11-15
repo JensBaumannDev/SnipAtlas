@@ -98,6 +98,39 @@ def test_answer_mail_subject_ignores_line_breaks_in_request(
     assert mail.outbox[0].bcc == []
 
 
+# Language
+def test_english_request_gets_english_answer_mail(
+    admin_client: Client, entry_suggestion: Suggestion
+) -> None:
+    Suggestion.objects.filter(pk=entry_suggestion.pk).update(language='en')
+    entry_suggestion.refresh_from_db()
+    answer(admin_client, entry_suggestion)
+    message = mail.outbox[0]
+    assert message.subject == 'Reply to your SnipAtlas request'
+    assert 'Your request: git rebase -i erklären' in message.body
+    assert ANSWER in message.body
+    assert 'Anfrage' not in message.body
+    assert 'profile' not in message.body
+
+
+def test_english_answer_mail_for_user_points_to_profile(
+    admin_client: Client, bug_suggestion: Suggestion
+) -> None:
+    Suggestion.objects.filter(pk=bug_suggestion.pk).update(language='en')
+    bug_suggestion.refresh_from_db()
+    answer(admin_client, bug_suggestion)
+    assert 'profile' in mail.outbox[0].body
+
+
+def test_answer_mail_language_ignores_admin_language(
+    admin_client: Client, entry_suggestion: Suggestion
+) -> None:
+    url = reverse('admin:app_feedback_suggestion_change', args=[entry_suggestion.pk])
+    data = {'status': entry_suggestion.status, 'answer': ANSWER}
+    admin_client.post(url, data, HTTP_ACCEPT_LANGUAGE='en')
+    assert mail.outbox[0].subject == 'Antwort auf deine Anfrage bei SnipAtlas'
+
+
 # Only the first answer
 def test_changing_answer_sends_no_second_mail(
     admin_client: Client, entry_suggestion: Suggestion

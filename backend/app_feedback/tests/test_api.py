@@ -192,6 +192,26 @@ def test_request_accepts_values_at_the_limit(api_client: APIClient, field: str, 
     assert send(api_client, entry_data(**{field: value})).status_code == 201
 
 
+@pytest.mark.parametrize(
+    ('header', 'language'),
+    [('en', 'en'), ('en-US,en;q=0.9', 'en'), ('de', 'de'), ('fr', 'de'), ('', 'de')],
+)
+def test_request_stores_request_language(api_client: APIClient, header: str, language: str) -> None:
+    send(api_client, entry_data(), HTTP_ACCEPT_LANGUAGE=header)
+    assert Suggestion.objects.get().language == language
+
+
+def test_user_request_stores_request_language(logged_in: APIClient) -> None:
+    data = {k: v for k, v in entry_data().items() if k != 'email'}
+    send(logged_in, data, HTTP_ACCEPT_LANGUAGE='en')
+    assert Suggestion.objects.get().language == 'en'
+
+
+def test_request_ignores_language_in_body(api_client: APIClient) -> None:
+    send(api_client, entry_data() | {'language': 'en'})
+    assert Suggestion.objects.get().language == 'de'
+
+
 def test_request_ignores_fields_of_other_kinds(api_client: APIClient) -> None:
     send(api_client, entry_data(idea=IDEA, type='typo', location='Seite', problem=PROBLEM))
     assert (stored()['idea'], stored()['bug_type'], stored()['location']) == ('', '', '')
