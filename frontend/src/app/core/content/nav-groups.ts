@@ -2,8 +2,6 @@ import { ContentArea } from './content-index';
 import { DEBUG_PATH } from '../models/debug-guide';
 import { Group, Topic } from '../models/topic';
 
-const ERRORS_GROUP = 'haeufige-fehler';
-
 export interface NavGroup {
   slug: string;
   name: string;
@@ -21,15 +19,18 @@ function translatedGroup(
   return { slug, name, translate: true, path, topics: [...topics] };
 }
 
+function topicGroups(path: string, groups: readonly Group[]): NavGroup[] {
+  return groups.map((group) => ({ ...group, translate: false, path }));
+}
+
 function debuggingGroups(
   path: string,
   groups: readonly Group[],
   ways: readonly Topic[],
 ): NavGroup[] {
-  const topics = groups.flatMap((group) => group.topics);
   return [
     translatedGroup(DEBUG_PATH, 'debugging.nav.debug', `${path}/${DEBUG_PATH}`, ways),
-    translatedGroup(ERRORS_GROUP, 'debugging.nav.errors', path, topics),
+    ...topicGroups(path, groups),
   ];
 }
 
@@ -39,7 +40,5 @@ export function navGroups(
   groups: readonly Group[],
   ways: readonly Topic[],
 ): NavGroup[] {
-  return area === 'debugging'
-    ? debuggingGroups(path, groups, ways)
-    : groups.map((group) => ({ ...group, translate: false, path }));
+  return area === 'debugging' ? debuggingGroups(path, groups, ways) : topicGroups(path, groups);
 }

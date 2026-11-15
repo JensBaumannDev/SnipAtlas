@@ -45,6 +45,8 @@ export class AreaMenu {
 
   protected readonly loaded = computed(() => this.index.hasValue());
 
+  protected readonly hasDebugColumn = computed(() => this.link().area === 'debugging');
+
   protected readonly columns = computed(() => {
     const index = this.index.value();
     if (!index) {
