@@ -1,7 +1,16 @@
 import { OperatingSystem } from '../user-data/preferences';
 
 export type CodeLanguage =
-  'terminal' | 'python' | 'javascript' | 'typescript' | 'html' | 'css' | 'gitignore' | 'env';
+  | 'terminal'
+  | 'python'
+  | 'javascript'
+  | 'typescript'
+  | 'html'
+  | 'css'
+  | 'gitignore'
+  | 'env'
+  | 'json'
+  | 'nginx';
 
 export type OsCode = Record<OperatingSystem, string>;
 
