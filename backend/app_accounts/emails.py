@@ -1,7 +1,5 @@
 """Mails sent to users of the accounts app."""
 
-import logging
-from smtplib import SMTPException
 from urllib.parse import urlencode
 
 from django.conf import settings
@@ -11,12 +9,10 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from core.mail import mail_language
+from core.mail import mail_language, send_in_background
 
 from .models import User
 from .tokens import ACTIVATION, EMAIL_CHANGE, make_link_token
-
-logger = logging.getLogger(__name__)
 
 RESET_PATH = '/passwort-zuruecksetzen'
 ACTIVATION_PATH = '/konto-aktivieren'
@@ -69,10 +65,7 @@ def send_email_change_mail(user: User) -> None:
 
 
 def _send(template: str, to: str, link: str) -> None:
-    """Send a plain text mail in the request language and log errors instead of raising."""
+    """Send a plain text mail in the request language in the background."""
     language = mail_language()
     body = render_to_string(f'app_accounts/emails/{language}/{template}.txt', {'link': link})
-    try:
-        EmailMessage(SUBJECTS[template][language], body, to=[to]).send()
-    except SMTPException, OSError:
-        logger.exception('Mail "%s" failed', template)
+    send_in_background(EmailMessage(SUBJECTS[template][language], body, to=[to]), template)

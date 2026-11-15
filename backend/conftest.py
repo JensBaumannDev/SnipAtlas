@@ -4,6 +4,7 @@ import pytest
 from django.contrib.auth.models import Permission
 from django.core.cache import cache
 from django.test import Client
+from pytest_django import Settings
 from rest_framework.test import APIClient
 
 from app_accounts.models import User
@@ -24,8 +25,14 @@ from app_feedback.models import Suggestion
 
 
 @pytest.fixture(autouse=True)
-def clear_cache() -> None:
+def memory_cache(settings: Settings) -> None:
+    settings.CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}
     cache.clear()
+
+
+@pytest.fixture(autouse=True)
+def mail_at_once(settings: Settings) -> None:
+    settings.MAIL_IN_BACKGROUND = False
 
 
 @pytest.fixture

@@ -5,6 +5,7 @@ from pathlib import Path
 import environ
 
 from core.mail import mailer_config
+from core.security import admin_path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -15,6 +16,14 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ADMIN_PATH = admin_path(env('ADMIN_PATH', default='admin/'))
+
+# HTTPS behind the proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_HSTS_SECONDS = env.int('SECURE_HSTS_SECONDS', default=0)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = False
+SILENCED_SYSTEM_CHECKS = ['security.W008', 'security.W021']
 
 # Apps
 INSTALLED_APPS = [
@@ -63,8 +72,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Database
+# Database and cache
 DATABASES = {'default': env.db('DATABASE_URL')}
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'django_cache',
+    }
+}
 
 # Users and passwords
 AUTH_USER_MODEL = 'app_accounts.User'
@@ -137,6 +152,7 @@ STATICFILES_DIRS = [BASE_DIR / 'core' / 'static']
 MAILERS = {'default': mailer_config(env)}
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='noreply@snipatlas.jensbaumann.com')
 REPLY_TO_EMAIL = env('REPLY_TO_EMAIL')
+MAIL_IN_BACKGROUND = True
 
 # Frontend
 FRONTEND_URL = env('FRONTEND_URL', default='http://localhost:4200')

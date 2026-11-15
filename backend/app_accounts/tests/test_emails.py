@@ -1,6 +1,9 @@
+import threading
+
 import pytest
 from django.core import mail
 from django.urls import reverse
+from pytest_django import Settings
 from rest_framework.test import APIClient
 
 from app_accounts.models import User
@@ -75,3 +78,29 @@ def test_mail_language_follows_request_not_saved_setting(api_client: APIClient, 
     User.objects.filter(pk=user.pk).update(language='de')
     trigger(api_client, 'reset', 'en')
     assert mail.outbox[0].subject == SUBJECTS['reset'][1]
+
+
+@pytest.mark.parametrize('kind', SUBJECTS)
+def test_response_does_not_wait_for_the_mail(
+    api_client: APIClient,
+    user: User,
+    settings: Settings,
+    monkeypatch: pytest.MonkeyPatch,
+    kind: str,
+) -> None:
+    settings.MAIL_IN_BACKGROUND = True
+    release = threading.Event()
+
+    def send(self: mail.EmailMessage, fail_silently: bool = False) -> int:
+        assert release.wait(5)
+        mail.outbox.append(self)
+        return 1
+
+    monkeypatch.setattr(mail.EmailMessage, 'send', send)
+    trigger(api_client, kind, 'de')
+    assert mail.outbox == []
+    release.set()
+    for thread in threading.enumerate():
+        if thread is not threading.main_thread():
+            thread.join(5)
+    assert mail.outbox[0].subject == SUBJECTS[kind][0]
