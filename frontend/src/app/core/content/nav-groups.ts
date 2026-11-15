@@ -43,18 +43,3 @@ export function navGroups(
     ? debuggingGroups(path, groups, ways)
     : groups.map((group) => ({ ...group, translate: false, path }));
 }
-
-export function activeNavGroup(
-  area: ContentArea | undefined,
-  slug: string | undefined,
-  groups: readonly Group[],
-): string | undefined {
-  if (area === 'debugging' && slug) {
-    return slug === DEBUG_PATH ? DEBUG_PATH : ERRORS_GROUP;
-  }
-  return groups.find((group) => group.topics.some((topic) => topic.slug === slug))?.slug;
-}
-
-export function navGroupSlugs(area: ContentArea | undefined, groups: readonly Group[]): string[] {
-  return area === 'debugging' ? [DEBUG_PATH, ERRORS_GROUP] : groups.map((group) => group.slug);
-}

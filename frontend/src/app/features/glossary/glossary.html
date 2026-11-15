@@ -37,7 +37,7 @@
     </p>
 
     @if (groups().length) {
-      <nav class="glossary__letters" [attr.aria-label]="'glossary.letters' | translate">
+      <nav [attr.aria-label]="'glossary.letters' | translate">
         <ul class="glossary__letter-list" role="list">
           @for (link of letters(); track link.letter) {
             <li>
@@ -77,7 +77,8 @@
               <p class="glossary__definition">{{ term.definition }}</p>
               <app-report-link
                 class="glossary__report"
-                [subject]="('report.term' | translate) + ': ' + term.term" />
+                [subject]="('report.term' | translate) + ': ' + term.term"
+              />
             </li>
           }
         </ul>

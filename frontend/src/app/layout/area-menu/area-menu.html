@@ -1,6 +1,6 @@
 <div class="area-menu__columns">
   @for (group of columns(); track group.slug) {
-    <section class="area-menu__group" [attr.aria-labelledby]="'area-menu-group-' + group.slug">
+    <section [attr.aria-labelledby]="'area-menu-group-' + group.slug">
       <h2 class="area-menu__heading" [id]="'area-menu-group-' + group.slug">
         {{ group.translate ? (group.name | translate) : group.name }}
       </h2>

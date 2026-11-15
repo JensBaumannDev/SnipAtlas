@@ -24,7 +24,10 @@
         [attr.aria-label]="'guides.markDone' | translate: { number: number(), title: step().title }"
         (click)="toggled.emit()"
       >
-        <svg [lucideIcon]="done() ? checkIcon : squareIcon" class="icon guide-step__done-icon"></svg>
+        <svg
+          [lucideIcon]="done() ? checkIcon : squareIcon"
+          class="icon guide-step__done-icon"
+        ></svg>
         {{ 'guides.done' | translate }}
       </button>
       <app-report-link [subject]="('report.step' | translate) + ': ' + step().title" />

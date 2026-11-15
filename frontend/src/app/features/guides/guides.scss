@@ -4,29 +4,7 @@
   display: block;
 }
 
-// Header
-.guides__meta {
-  color: var(--muted);
-}
-
-// Section
-.guides__section {
-  @include topic-section;
-}
-
-.guides__heading {
-  @include section-heading;
-}
-
-// List
-.guides__list {
-  @include topic-list;
-
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
+// Items
 .guides__item {
   @include card-surface;
 
@@ -58,9 +36,4 @@
   max-width: 70ch;
   color: var(--text);
   overflow-wrap: anywhere;
-}
-
-.guides__empty {
-  padding-block: $space-lg;
-  color: var(--muted);
 }

@@ -1,4 +1,4 @@
-<app-terminal-window title="snipatlas — zsh" [lines]="lines()">
+<app-terminal-window title="snipatlas — zsh" [command]="command()">
   <ul class="news-log__list" role="list">
     @for (item of rows(); track item.date + item.title) {
       <li class="news-log__item">
