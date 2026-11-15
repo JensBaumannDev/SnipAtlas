@@ -35,10 +35,21 @@
     color: var(--muted);
   }
 
+  &:autofill {
+    -webkit-text-fill-color: var(--ink);
+    box-shadow: inset 0 0 0 100px var(--surface);
+  }
+
   &:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  &:autofill:focus {
+    box-shadow:
+      inset 0 0 0 100px var(--surface),
+      0 0 0 3px var(--accent-soft);
   }
 
   &[aria-invalid='true'] {
