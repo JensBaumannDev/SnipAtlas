@@ -8,7 +8,11 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 from rest_framework.fields import get_error_detail
 
-from app_accounts.emails import send_reset_mail
+from app_accounts.emails import (
+    send_activation_mail,
+    send_existing_account_mail,
+    send_reset_mail,
+)
 from app_accounts.models import (
     PROJECT_VALUE_FIELDS,
     PROJECT_VALUE_MAX_LENGTH,
@@ -44,27 +48,31 @@ def unique_email(value: str, user: User | None = None) -> str:
 
 # Register
 class RegisterSerializer(serializers.Serializer):
-    """Registration with email and password."""
+    """Registration with email and password that never reveals existing accounts."""
 
     email = serializers.EmailField(max_length=254)
     password = serializers.CharField(write_only=True, trim_whitespace=False)
 
     def validate_email(self, value: str) -> str:
-        """Check that the email address is still free."""
-        return unique_email(value)
+        """Return the normalized email address."""
+        return UserManager.normalize_email(value)
 
     def validate_password(self, value: str) -> str:
         """Check the password against the password rules."""
         password_validation.validate_password(value, User(email=self.initial_data.get('email')))
         return value
 
-    def create(self, validated_data: dict) -> User:
-        """Create the new user."""
-        return User.objects.create_user(validated_data['email'], validated_data['password'])
-
-    def to_representation(self, user: User) -> dict:
-        """Return the new user like the user endpoint."""
-        return UserSerializer(user).data
+    def save(self) -> None:
+        """Send an activation link, or a hint if the address already has an account."""
+        user, _ = User.objects.get_or_create(
+            email=self.validated_data['email'], defaults={'email_confirmed': False}
+        )
+        if user.email_confirmed:
+            send_existing_account_mail(user)
+            return
+        user.set_password(self.validated_data['password'])
+        user.save(update_fields=['password'])
+        send_activation_mail(user)
 
 
 # Login

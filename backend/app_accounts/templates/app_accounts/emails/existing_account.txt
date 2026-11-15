@@ -1,0 +1,14 @@
+{% autoescape off %}Hallo,
+
+mit dieser E-Mail-Adresse wollte sich gerade jemand bei SnipAtlas registrieren. Du hast aber schon ein Konto.
+
+Hier kannst du dich anmelden:
+{{ link }}
+
+Falls du dein Passwort nicht mehr weißt, wähle beim Anmelden „Passwort vergessen“.
+
+Wenn du das nicht warst, ignoriere diese Mail einfach. An deinem Konto ändert sich nichts.
+
+Viele Grüße
+SnipAtlas
+{% endautoescape %}

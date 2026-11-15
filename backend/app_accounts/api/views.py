@@ -45,16 +45,24 @@ class CsrfView(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RegisterView(generics.CreateAPIView):
-    """Register a new user and log them in."""
+class SilentActionView(generics.GenericAPIView):
+    """Run an action for guests and always answer without content."""
+
+    permission_classes = (CsrfProtected,)
+
+    def post(self, request: Request) -> Response:
+        """Check the body, run the action and answer the same way every time."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class RegisterView(SilentActionView):
+    """Register a new user and send the activation link."""
 
     serializer_class = RegisterSerializer
-    permission_classes = (CsrfProtected,)
     throttle_classes = AUTH_THROTTLES
-
-    def perform_create(self, serializer: RegisterSerializer) -> None:
-        """Create the user and log them in."""
-        login(self.request, serializer.save())
 
 
 class LoginView(generics.GenericAPIView):
@@ -150,22 +158,14 @@ class DeleteAccountView(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class PasswordResetView(generics.GenericAPIView):
+class PasswordResetView(SilentActionView):
     """Send a password reset mail."""
 
     serializer_class = PasswordResetSerializer
-    permission_classes = (CsrfProtected,)
     throttle_classes = RESET_THROTTLES
 
-    def post(self, request: Request) -> Response:
-        """Send the mail and always answer the same way."""
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-class PasswordResetConfirmView(PasswordResetView):
+class PasswordResetConfirmView(SilentActionView):
     """Set a new password from a password reset link."""
 
     serializer_class = PasswordResetConfirmSerializer
