@@ -42,38 +42,61 @@
     >
   }
 
-  <ul
-    class="search-box__results"
-    role="listbox"
-    [id]="listId()"
-    [attr.aria-label]="'search.resultsLabel' | translate"
-    [hidden]="!expanded()"
-  >
-    @for (result of results(); track result.link.join('/') + result.fragment; let index = $index) {
-      <li
-        class="search-box__result"
-        role="option"
-        [id]="optionId(index)"
-        [attr.aria-selected]="index === active()"
-        (mousedown)="$event.preventDefault()"
-        (click)="go(result)"
-      >
-        <span class="search-box__content">
-          <span class="search-box__title">{{ result.title }}</span>
-          <span class="search-box__text">
-            @if (result.glossaryMatchCount !== undefined) {
-              {{ 'search.glossaryMatches' | translate: { count: result.glossaryMatchCount } }}
-            } @else {
-              {{ result.text }}
+  <div class="search-box__panel" [hidden]="!expanded()">
+    <ul
+      class="search-box__results"
+      role="listbox"
+      [id]="listId()"
+      [attr.aria-label]="'search.resultsLabel' | translate"
+    >
+      @for (group of groups(); track group.area) {
+        <li class="search-box__group" role="group" [attr.aria-labelledby]="groupId(group.area)">
+          <span class="search-box__group-title" [id]="groupId(group.area)">{{
+            'search.groups.' + group.area | translate
+          }}</span>
+          <ul class="search-box__options" role="none">
+            @for (item of group.items; track item.index) {
+              <li
+                class="search-box__result"
+                role="option"
+                [id]="optionId(item.index)"
+                [attr.aria-selected]="item.index === active()"
+                (mousedown)="$event.preventDefault()"
+                (click)="go(item.result)"
+              >
+                <svg
+                  [lucideIcon]="group.icon"
+                  class="icon search-box__type"
+                  aria-hidden="true"
+                ></svg>
+                <span class="search-box__content">
+                  <span class="search-box__title">{{ item.result.title }}</span>
+                  <span class="search-box__text">
+                    @if (item.result.glossaryMatchCount !== undefined) {
+                      {{
+                        'search.glossaryMatches'
+                          | translate: { count: item.result.glossaryMatchCount }
+                      }}
+                    } @else {
+                      {{ item.result.text }}
+                    }
+                  </span>
+                </span>
+              </li>
             }
-          </span>
-        </span>
-        <span class="btn btn--primary search-box__area">{{
-          'search.areas.' + result.area | translate
-        }}</span>
-      </li>
-    }
-  </ul>
+          </ul>
+        </li>
+      }
+    </ul>
+    <p class="search-box__keys" aria-hidden="true">
+      <span
+        ><kbd class="search-box__key">↑</kbd><kbd class="search-box__key">↓</kbd>
+        {{ 'search.keys.select' | translate }}</span
+      >
+      <span><kbd class="search-box__key">↵</kbd> {{ 'search.keys.open' | translate }}</span>
+      <span><kbd class="search-box__key">Esc</kbd> {{ 'search.keys.close' | translate }}</span>
+    </p>
+  </div>
 
   @if (open() && hasQuery() && !results().length) {
     <p class="search-box__empty">{{ 'search.empty' | translate }}</p>

@@ -66,12 +66,17 @@
     "empty": "Keine Treffer. Versuch es mit einem anderen Begriff.",
     "count": "{{count}} Treffer",
     "glossaryMatches": "{{count}} passende Begriffe im Glossar",
-    "areas": {
-      "commands": "Befehl",
+    "groups": {
+      "glossary": "Begriffe",
+      "commands": "Befehle",
       "concepts": "Grundlagen",
-      "glossary": "Begriff",
-      "blueprints": "Anleitung",
+      "blueprints": "Anleitungen",
       "debugging": "Fehler"
+    },
+    "keys": {
+      "select": "auswählen",
+      "open": "öffnen",
+      "close": "schließen"
     }
   },
   "notifications": {

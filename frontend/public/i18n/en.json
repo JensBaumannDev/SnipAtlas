@@ -66,12 +66,17 @@
     "empty": "No results. Try a different term.",
     "count": "{{count}} results",
     "glossaryMatches": "{{count}} matching terms in the glossary",
-    "areas": {
-      "commands": "Command",
+    "groups": {
+      "glossary": "Glossary",
+      "commands": "Commands",
       "concepts": "Basics",
-      "glossary": "Term",
-      "blueprints": "Guide",
+      "blueprints": "Guides",
       "debugging": "Errors"
+    },
+    "keys": {
+      "select": "select",
+      "open": "open",
+      "close": "close"
     }
   },
   "notifications": {

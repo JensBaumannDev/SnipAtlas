@@ -15,7 +15,7 @@ import { GlossaryApi } from '../api/glossary-api';
 import { GlossaryTerm } from '../models/glossary-term';
 import { SearchResult } from '../models/search-result';
 
-const MAX_RESULTS = 8;
+const MAX_PER_AREA = 3;
 
 interface SearchItem {
   result: SearchResult;
@@ -120,6 +120,15 @@ function rank(item: SearchItem, terms: string[]): number {
   }, 0);
 }
 
+function limitPerArea(results: readonly SearchResult[]): SearchResult[] {
+  const counts = new Map<SearchResult['area'], number>();
+  return results.filter((result) => {
+    const count = counts.get(result.area) ?? 0;
+    counts.set(result.area, count + 1);
+    return count < MAX_PER_AREA;
+  });
+}
+
 @Service()
 export class ContentSearch {
   private readonly items = toSignal(
@@ -164,6 +173,6 @@ export class ContentSearch {
         glossaryMatchCount: glossaryMatches.length,
       });
     }
-    return results.slice(0, MAX_RESULTS);
+    return limitPerArea(results);
   }
 }

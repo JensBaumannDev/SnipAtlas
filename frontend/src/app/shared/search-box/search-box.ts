@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import type { ContentSearch } from '../../core/content/content-search';
+import { groupByArea } from '../../core/content/search-groups';
 import { searchIcon, xIcon } from '../../core/ui/icons';
 import { SearchResult } from '../../core/models/search-result';
 
@@ -27,6 +29,7 @@ import { SearchResult } from '../../core/models/search-result';
 export class SearchBox {
   private readonly injector = inject(Injector);
   private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
   private readonly input = viewChild.required<ElementRef<HTMLInputElement>>('input');
   private readonly engine = signal<ContentSearch | undefined>(undefined);
 
@@ -42,7 +45,12 @@ export class SearchBox {
   protected readonly active = signal(-1);
 
   protected readonly hasQuery = computed(() => this.query().trim() !== '');
-  protected readonly results = computed(() => this.engine()?.search(this.query()) ?? []);
+  protected readonly groups = computed(() =>
+    groupByArea(this.engine()?.search(this.query()) ?? []),
+  );
+  protected readonly results = computed(() =>
+    this.groups().flatMap((group) => group.items.map((item) => item.result)),
+  );
   protected readonly expanded = computed(
     () => this.open() && this.hasQuery() && this.results().length > 0,
   );
@@ -79,6 +87,10 @@ export class SearchBox {
 
   protected optionId(index: number): string {
     return `${this.inputId()}-option-${index}`;
+  }
+
+  protected groupId(area: string): string {
+    return `${this.inputId()}-group-${area}`;
   }
 
   protected async onFocus(): Promise<void> {
@@ -129,6 +141,9 @@ export class SearchBox {
   private moveActive(step: 1 | -1): boolean {
     const count = this.results().length;
     this.active.update((index) => (count ? (index + step + count) % count : -1));
+    this.document
+      .getElementById(this.optionId(this.active()))
+      ?.scrollIntoView({ block: 'nearest' });
     return true;
   }
 
