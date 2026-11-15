@@ -1,9 +1,18 @@
+from smtplib import SMTPException
+from urllib.parse import parse_qs, urlsplit
+
 import pytest
+from django.core import mail
+from django.core.mail import EmailMessage
+from django.test import override_settings
 from django.urls import reverse
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from rest_framework.response import Response
 from rest_framework.test import APIClient
 
 from app_accounts.models import User
+from app_accounts.tokens import ACTIVATION, EMAIL_CHANGE, check_link_token
 
 pytestmark = pytest.mark.django_db
 
@@ -23,6 +32,12 @@ def field_errors(response: Response) -> dict:
     return response.json()['fields']
 
 
+def confirm_link(body: str) -> tuple[str, str]:
+    link = next(word for word in body.split() if '/email-bestaetigen?' in word)
+    query = parse_qs(urlsplit(link).query)
+    return query['uid'][0], query['token'][0]
+
+
 def stored_email(user: User) -> str:
     user.refresh_from_db()
     return user.email
@@ -40,56 +55,142 @@ def other_user(db: None) -> User:
 
 
 # Change
-def test_change_email_returns_user(logged_in: APIClient, user: User) -> None:
+def test_change_email_returns_user_with_current_address(logged_in: APIClient, user: User) -> None:
     response = change(logged_in)
     assert response.status_code == 200
     assert response.json() == {
-        'email': 'ada.neu@example.com',
+        'email': 'ada@example.com',
         'since': user.since.isoformat(),
         'notifyByMail': True,
         'accent': 'blue',
     }
-    assert stored_email(user) == 'ada.neu@example.com'
+
+
+def test_change_email_keeps_address_until_confirmed(logged_in: APIClient, user: User) -> None:
+    change(logged_in)
+    user.refresh_from_db()
+    assert user.email == 'ada@example.com'
+    assert user.pending_email == 'ada.neu@example.com'
 
 
 def test_change_email_lowercases_and_trims(logged_in: APIClient, user: User) -> None:
     change(logged_in, email='  Ada.Neu@Example.COM ')
-    assert stored_email(user) == 'ada.neu@example.com'
+    user.refresh_from_db()
+    assert user.pending_email == 'ada.neu@example.com'
+    assert mail.outbox[0].to == ['ada.neu@example.com']
 
 
-def test_change_email_to_own_email_is_allowed(logged_in: APIClient, user: User) -> None:
-    assert change(logged_in, email='ADA@example.com').status_code == 200
-    assert stored_email(user) == 'ada@example.com'
+def test_change_email_sends_link_to_new_address_only(logged_in: APIClient, user: User) -> None:
+    change(logged_in)
+    assert len(mail.outbox) == 1
+    message = mail.outbox[0]
+    assert message.to == ['ada.neu@example.com']
+    assert message.from_email == 'noreply@snipatlas.jensbaumann.com'
+    assert message.subject == 'Bestätige deine neue E-Mail-Adresse'
+    assert message.content_subtype == 'plain'
+    assert 'Der Link gilt 24 Stunden' in message.body
+
+
+def test_change_email_link_is_valid(logged_in: APIClient, user: User) -> None:
+    change(logged_in)
+    user.refresh_from_db()
+    uid, token = confirm_link(mail.outbox[0].body)
+    assert force_str(urlsafe_base64_decode(uid)) == str(user.pk)
+    assert check_link_token(user, token, EMAIL_CHANGE)
+    assert not check_link_token(user, token, ACTIVATION)
+
+
+@override_settings(FRONTEND_URL='https://snipatlas.jensbaumann.com')
+def test_change_email_link_uses_frontend_url(logged_in: APIClient) -> None:
+    change(logged_in)
+    assert 'https://snipatlas.jensbaumann.com/email-bestaetigen?uid=' in mail.outbox[0].body
+
+
+def test_change_email_mail_follows_request_language(logged_in: APIClient) -> None:
+    logged_in.post(
+        URL,
+        {'email': 'ada.neu@example.com', 'password': PASSWORD},
+        format='json',
+        HTTP_ACCEPT_LANGUAGE='en',
+    )
+    assert mail.outbox[0].subject == 'Confirm your new email address'
+    assert 'The link is valid for 24 hours' in mail.outbox[0].body
+
+
+def test_new_change_request_voids_old_link(logged_in: APIClient, user: User) -> None:
+    change(logged_in)
+    change(logged_in, email='ada.other@example.com')
+    user.refresh_from_db()
+    (_, old), (_, new) = (confirm_link(message.body) for message in mail.outbox)
+    assert user.pending_email == 'ada.other@example.com'
+    assert not check_link_token(user, old, EMAIL_CHANGE)
+    assert check_link_token(user, new, EMAIL_CHANGE)
+
+
+def test_change_email_to_own_email_clears_pending_without_mail(
+    logged_in: APIClient, user: User
+) -> None:
+    change(logged_in)
+    mail.outbox.clear()
+    response = change(logged_in, email='ADA@example.com')
+    user.refresh_from_db()
+    assert response.status_code == 200
+    assert (user.email, user.pending_email) == ('ada@example.com', '')
+    assert mail.outbox == []
 
 
 def test_change_email_keeps_user_logged_in(logged_in: APIClient, user: User) -> None:
     change(logged_in)
-    assert logged_in.get(reverse('auth-me')).status_code == 200
+    assert logged_in.get(reverse('auth-me')).json()['email'] == 'ada@example.com'
 
 
-def test_change_email_allows_login_with_new_email(api_client: APIClient, user: User) -> None:
+def test_login_with_pending_email_fails(api_client: APIClient, user: User) -> None:
     api_client.force_login(user)
     change(api_client)
     api_client.logout()
-    login = {'email': 'ada.neu@example.com', 'password': PASSWORD}
-    assert api_client.post(reverse('auth-login'), login, format='json').status_code == 200
+    new = {'email': 'ada.neu@example.com', 'password': PASSWORD}
+    old = {'email': 'ada@example.com', 'password': PASSWORD}
+    assert api_client.post(reverse('auth-login'), new, format='json').status_code == 400
+    assert api_client.post(reverse('auth-login'), old, format='json').status_code == 200
 
 
 def test_change_email_ignores_other_fields(logged_in: APIClient, user: User) -> None:
-    change(logged_in, isStaff=True, accent='teal', notifyByMail=False)
+    change(logged_in, isStaff=True, accent='teal', notifyByMail=False, pendingEmail='x@y.de')
     user.refresh_from_db()
     assert (user.is_staff, user.accent, user.notify_by_mail) == (False, 'blue', True)
+    assert user.pending_email == 'ada.neu@example.com'
 
 
 def test_change_email_keeps_other_user(logged_in: APIClient, user: User, other_user: User) -> None:
     change(logged_in)
-    assert stored_email(other_user) == 'grace@example.com'
+    other_user.refresh_from_db()
+    assert (other_user.email, other_user.pending_email) == ('grace@example.com', '')
 
 
 def test_change_email_keeps_password(logged_in: APIClient, user: User) -> None:
     change(logged_in)
     user.refresh_from_db()
     assert user.check_password(PASSWORD)
+
+
+def test_change_email_with_failing_mail_still_answers(
+    logged_in: APIClient, user: User, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def fail(self: EmailMessage, fail_silently: bool = False) -> int:
+        raise SMTPException
+
+    monkeypatch.setattr(EmailMessage, 'send', fail)
+    assert change(logged_in).status_code == 200
+
+
+def test_failed_change_sets_no_pending_email_and_sends_no_mail(
+    logged_in: APIClient, user: User
+) -> None:
+    change(logged_in, password='Falsches-Passwort-1')
+    change(logged_in, email='no-mail')
+    user.refresh_from_db()
+    assert user.pending_email == ''
+    assert mail.outbox == []
 
 
 # Wrong password

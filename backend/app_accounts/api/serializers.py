@@ -10,6 +10,7 @@ from rest_framework.fields import get_error_detail
 
 from app_accounts.emails import (
     send_activation_mail,
+    send_email_change_mail,
     send_existing_account_mail,
     send_reset_mail,
 )
@@ -156,9 +157,12 @@ class EmailChangeSerializer(CurrentPasswordSerializer):
         return unique_email(value, self.instance)
 
     def update(self, user: User, validated_data: dict) -> User:
-        """Save the new email address."""
-        user.email = validated_data['email']
-        user.save(update_fields=['email'])
+        """Keep the new address pending and send it a confirmation link."""
+        email = validated_data['email']
+        user.pending_email = '' if email == user.email else email
+        user.save(update_fields=['pending_email'])
+        if user.pending_email:
+            send_email_change_mail(user)
         return user
 
     def to_representation(self, user: User) -> dict:
