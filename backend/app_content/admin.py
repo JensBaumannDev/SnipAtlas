@@ -108,14 +108,10 @@ class ContentItemAdmin(SubtopicChoicesMixin, TabbedTranslationAdmin):
 class EntryAdmin(ContentItemAdmin):
     """Admin for commands."""
 
-    pass
-
 
 @admin.register(Concept)
 class ConceptAdmin(ContentItemAdmin):
     """Admin for concepts."""
-
-    pass
 
 
 # Errors

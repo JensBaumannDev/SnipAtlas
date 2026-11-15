@@ -120,6 +120,17 @@ function rank(item: SearchItem, terms: string[]): number {
   }, 0);
 }
 
+function glossarySummary(query: string, count: number): SearchResult {
+  return {
+    area: 'glossary',
+    title: query,
+    text: '',
+    link: ['/begriffe'],
+    query,
+    glossaryMatchCount: count,
+  };
+}
+
 function limitPerArea(results: readonly SearchResult[]): SearchResult[] {
   const counts = new Map<SearchResult['area'], number>();
   return results.filter((result) => {
@@ -158,21 +169,12 @@ export class ContentSearch {
       return [];
     }
     const matches = this.items().filter((item) => terms.every((term) => item.content.includes(term)));
-    const glossaryMatches = matches.filter((item) => item.result.area === 'glossary');
-    const otherMatches = matches.filter((item) => item.result.area !== 'glossary');
-    const results = otherMatches
+    const glossaryCount = matches.filter((item) => item.result.area === 'glossary').length;
+    const results = matches
+      .filter((item) => item.result.area !== 'glossary')
       .sort((a, b) => rank(b, terms) - rank(a, terms))
       .map((item) => item.result);
-    if (glossaryMatches.length) {
-      results.unshift({
-        area: 'glossary',
-        title: query.trim(),
-        text: '',
-        link: ['/begriffe'],
-        query: query.trim(),
-        glossaryMatchCount: glossaryMatches.length,
-      });
-    }
-    return limitPerArea(results);
+    const glossary = glossaryCount ? [glossarySummary(query.trim(), glossaryCount)] : [];
+    return limitPerArea([...glossary, ...results]);
   }
 }
