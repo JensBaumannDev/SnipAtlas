@@ -10,7 +10,8 @@ INDEX_URL = reverse('admin:index')
 LOGIN_URL = reverse('admin:login')
 STYLESHEET = 'snipatlas/admin.css'
 LOGO = 'snipatlas/logo.svg'
-FONT = 'snipatlas/fonts/ibm-plex-sans-latin-wght-normal.woff2'
+FONT = 'snipatlas/fonts/urbanist-latin-wght-normal.woff2'
+OLD_FONT = 'snipatlas/fonts/ibm-plex-sans-latin-wght-normal.woff2'
 FAVICON = 'snipatlas/favicon.svg'
 FAVICON_TAG = f'<link rel="icon" type="image/svg+xml" href="{static(FAVICON)}">'
 
@@ -68,3 +69,14 @@ def test_admin_login_loads_snipatlas_stylesheet(client: Client) -> None:
 @pytest.mark.parametrize('path', [STYLESHEET, LOGO, FONT, FAVICON])
 def test_snipatlas_static_file_is_found(path: str) -> None:
     assert finders.find(path) is not None
+
+
+def test_old_admin_font_is_removed() -> None:
+    assert finders.find(OLD_FONT) is None
+
+
+def test_admin_stylesheet_uses_urbanist() -> None:
+    with open(finders.find(STYLESHEET), encoding='utf-8') as stylesheet:
+        css = stylesheet.read()
+    assert '--font-family-primary: "Urbanist Variable"' in css
+    assert 'Plex' not in css
