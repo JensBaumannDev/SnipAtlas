@@ -10,7 +10,9 @@ export type CodeLanguage =
   | 'gitignore'
   | 'env'
   | 'json'
-  | 'nginx';
+  | 'nginx'
+  | 'yaml'
+  | 'dockerfile';
 
 export type OsCode = Record<OperatingSystem, string>;
 
