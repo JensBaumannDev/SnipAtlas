@@ -5,44 +5,31 @@
 }
 
 // Header
-.guide-detail__header {
-  display: flex;
-  flex-direction: column;
-  gap: $space-sm;
-}
-
-.guide-detail__parent {
-  align-self: flex-start;
-  font-weight: $font-weight-medium;
-  color: var(--muted);
-  text-decoration: none;
-
-  &:hover {
-    color: var(--accent);
-    text-decoration: underline;
-  }
-}
-
 .guide-detail__lead {
   max-width: rem(720);
   font-size: $font-size-lg;
   color: var(--muted);
 }
 
+// Body
+.guide-detail__body {
+  @include page-body(0);
+}
+
 // Project
 .guide-detail__project {
+  @include card-surface;
+
   display: flex;
   flex-direction: column;
   gap: $space-sm;
-  padding: $space-lg;
-  margin-top: $space-lg;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: $radius-xl;
+  padding: $space-xl;
 }
 
 .guide-detail__project-title {
-  font-size: $font-size-lg;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
 }
 
 .guide-detail__project-hint {

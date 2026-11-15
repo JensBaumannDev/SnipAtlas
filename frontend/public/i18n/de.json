@@ -5,14 +5,19 @@
   },
   "nav": {
     "label": "Bereiche",
-    "home": "Start",
     "glossary": "Begriffe",
     "commands": "Befehle",
     "concepts": "Grundlagen",
     "blueprints": "Anleitungen",
     "debugging": "Fehler",
     "request": "Anfrage",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "menu": "Menü",
+    "overview": "Zur Übersicht",
+    "subtopics": "Unterordner",
+    "allSubtopics": "Alle",
+    "empty": "In diesem Bereich gibt es noch keine Themen.",
+    "showTopics": "Themen in {{area}} anzeigen"
   },
   "pages": {
     "commands": "Befehle",
@@ -45,12 +50,9 @@
     "privacy": "Datenschutzerklärung von SnipAtlas: welche Daten gespeichert werden, wofür und wie lange.",
     "vscodeTheme": "Lade das SnipAtlas-Farbthema für Visual Studio Code herunter. Mit dunkler und heller Variante."
   },
-  "sidebar": {
-    "label": "Themen",
-    "topics": "Themen",
-    "toggleSubtopics": "Unterordner von {{topic}} ein- oder ausklappen",
-    "collection": "Meine Sammlung",
-    "collectionHint": "Melde dich an, um Befehle als Favoriten zu speichern und hier wiederzufinden."
+  "collection": {
+    "title": "Meine Sammlung",
+    "hint": "Melde dich an, um Befehle als Favoriten zu speichern und hier wiederzufinden."
   },
   "search": {
     "label": "Befehle, Grundlagen, Begriffe, Anleitungen und Fehlermeldungen durchsuchen",
@@ -198,10 +200,6 @@
   },
   "settings": {
     "title": "Einstellungen",
-    "theme": "Darstellung",
-    "themeLight": "Hell",
-    "themeSystem": "System",
-    "themeDark": "Dunkel",
     "accent": "Farbthema",
     "accentHint": "Akzentfarbe für Links, Symbole und aktive Bereiche. Wird in deinem Konto gespeichert.",
     "accentBlue": "Blau",
@@ -269,9 +267,12 @@
     "progressComplete": "Alle {{total}} Schritte erledigt",
     "progressLabel": "Fortschritt",
     "progressOf": "Fortschritt: {{title}}",
+    "done": "Erledigt",
     "markDone": "Schritt {{number}} erledigt: {{title}}",
     "reset": "Zurücksetzen",
     "note": "Hinweis",
+    "count": "{{count}} Anleitungen",
+    "countOne": "1 Anleitung",
     "empty": "Zu diesem Thema gibt es noch keine Anleitungen.",
     "info": {
       "purpose": {
@@ -324,6 +325,7 @@
     "openPage": "Als eigene Seite öffnen"
   },
   "favorites": {
+    "label": "Als Favorit merken",
     "toggle": "Als Favorit merken: {{title}}",
     "loginHint": "Melde dich an, um Befehle als Favoriten zu speichern.",
     "empty": "Noch keine Favoriten. Klick bei einem Befehl auf den Stern.",
@@ -357,45 +359,36 @@
       "debugging": "Fehlermeldungen verstehen und lösen"
     },
     "news": {
-      "title": "Neu auf SnipAtlas",
-      "all": "Alle Neuigkeiten"
+      "title": "Neu auf SnipAtlas"
     },
-    "offer": {
-      "title": "Das findest du hier",
-      "tabs": "Bereiche",
+    "areasTitle": "Vom ersten Befehl bis online",
+    "intro": "SnipAtlas ist ein Nachschlagewerk für den Entwickleralltag. Befehle für Terminal, Git, npm und Docker stehen mit kurzer Erklärung und getrennt für Windows und Linux/Mac. Die Grundlagen erklären einzelne Funktionen und Konzepte wie Signals, Interceptoren oder Serializer mit einem kleinen Beispiel. Anleitungen gehen Schritt für Schritt durch den Aufbau eines Projekts, und zu häufigen Fehlermeldungen findest du Ursache und Lösung. Fachbegriffe sind direkt im Text erklärt.",
+    "cards": {
       "commands": {
-        "title": "Befehle zum Kopieren",
-        "text": "Terminal, Git, npm und Docker. Jeder Befehl mit kurzer Erklärung, wofür er da ist, und getrennt für Windows und Linux/Mac, wo es nötig ist.",
-        "count": "Befehle: {{count}}",
-        "open": "Zu den Befehlen",
-        "comment": "# Änderungen kurz beiseitelegen und zurückholen"
+        "text": "Terminal, Git, npm und Docker zum Kopieren, getrennt für Windows und Linux/Mac, wo es nötig ist.",
+        "count": "{{count}} Befehle",
+        "open": "Zu den Befehlen"
       },
       "concepts": {
-        "title": "Grundlagen in einfachen Worten",
-        "text": "Was ist ein Signal, ein Interceptor, ein Serializer? Kurz erklärt, mit einem kleinen Codebeispiel, das man versteht.",
-        "count": "Erklärungen: {{count}}",
-        "open": "Zu den Grundlagen",
-        "comment": "// Ein Signal hält einen Wert und meldet Änderungen"
+        "text": "Die Ideen hinter dem Code, kurz erklärt und mit einem kleinen Beispiel.",
+        "count": "{{count}} Erklärungen",
+        "open": "Zu den Grundlagen"
       },
       "blueprints": {
-        "title": "Anleitungen zum Abhaken",
-        "text": "Ein ganzes Projekt Schritt für Schritt, vom leeren Ordner bis zum Ziel. Jeder Schritt erklärt, warum er nötig ist, und dein Fortschritt bleibt gespeichert.",
-        "count": "Anleitungen: {{count}}",
-        "open": "Zu den Anleitungen",
-        "step1": "Projektordner anlegen",
-        "step2": "Virtuelle Umgebung einrichten",
-        "step3": "Django installieren",
-        "step4": "Django-Projekt erstellen",
-        "step5": ".gitignore anlegen und erster Commit",
-        "more": "# … und weitere Schritte"
+        "text": "Ganze Projekte Schritt für Schritt aufsetzen, jeder Schritt mit Begründung.",
+        "count": "{{count}} Anleitungen",
+        "open": "Zu den Anleitungen"
       },
       "debugging": {
-        "title": "Fehler verstehen und lösen",
-        "text": "Häufige Fehlermeldungen mit Bedeutung, Ursache und Lösung, dazu Anleitungen, wie du Fehler selbst findest.",
-        "count": "Fehlerhilfen: {{count}}",
-        "open": "Zu den Fehlermeldungen",
-        "comment": "# Port 8000 ist schon belegt. Einfach einen anderen nehmen:"
+        "text": "Häufige Fehlermeldungen mit Ursache und Lösung, dazu Wege, Fehler selbst zu finden.",
+        "count": "{{count}} Fehlerhilfen",
+        "open": "Zu den Fehlern"
       }
+    },
+    "guide": {
+      "continue": "Weitermachen: {{title}}",
+      "progress": "{{done}} von {{total}} Schritten",
+      "start": "Neu hier? Starte mit: {{title}}"
     }
   },
   "footer": {
@@ -457,7 +450,8 @@
     "suggest": "Begriff vorschlagen",
     "lead": "Fachwörter aus der Webentwicklung in einfachen Worten. In Erklärungen, Fehlermeldungen und Anleitungen sind sie markiert: ein Klick zeigt die kurze Erklärung.",
     "all": "Alle Begriffe",
-    "aliases": "Auch:"
+    "aliases": "Auch:",
+    "letters": "Zum Buchstaben springen"
   },
   "faq": {
     "lead": "Antworten auf allgemeine Fragen zu SnipAtlas: was du hier findest, wofür du ein Konto brauchst und wie du mir schreibst.",
@@ -563,7 +557,6 @@
       "storage": "Einstellungen im Browser (Local Storage)",
       "storageIntro": "Damit SnipAtlas sich deine Einstellungen merkt, speichert die Seite diese Angaben im Local Storage deines Browsers:",
       "storageItems": {
-        "theme": "Darstellung (Hell, Dunkel oder System)",
         "os": "Befehle für Windows oder Linux/Mac",
         "language": "Sprache der Oberfläche"
       },
@@ -575,7 +568,7 @@
         "login": "E-Mail-Adresse, Passwort-Hash, Datum der Registrierung und der letzten Anmeldung",
         "favorites": "deine Favoriten",
         "progress": "deinen Fortschritt in den Anleitungen",
-        "settings": "deine Einstellungen (Befehle für Windows oder Linux/Mac, Darstellung, E-Mail bei Antwort auf eine Anfrage)",
+        "settings": "deine Einstellungen (Befehle für Windows oder Linux/Mac, E-Mail bei Antwort auf eine Anfrage)",
         "requests": "deine Anfragen mit Status und meiner Antwort"
       },
       "accountBasis": "Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, denn ohne diese Daten kann ich dir die Funktionen deines Kontos nicht bereitstellen. Nur du siehst und änderst deine Daten. In deinem Konto kannst du deine E-Mail-Adresse und dein Passwort ändern und alle deine Daten herunterladen.",

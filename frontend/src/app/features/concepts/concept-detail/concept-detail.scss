@@ -5,10 +5,6 @@
 }
 
 // Header
-.concept-detail__header {
-  @include page-header;
-}
-
 .concept-detail__summary {
   color: var(--muted);
 }

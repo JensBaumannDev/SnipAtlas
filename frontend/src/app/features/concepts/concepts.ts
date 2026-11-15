@@ -9,11 +9,12 @@ import { syncOutline } from '../../core/ui/page-outline';
 import { findSubtopic, groupBySubtopic, injectTopic } from '../../core/content/topic-resource';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
+import { SubtopicTabs } from '../../shared/subtopic-tabs/subtopic-tabs';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { ConceptCard } from './concept-card/concept-card';
 
 @Component({
-  imports: [AreaInfo, AreaIntro, ConceptCard, RouterLink, TopicHeader, TranslatePipe],
+  imports: [AreaInfo, AreaIntro, ConceptCard, RouterLink, SubtopicTabs, TopicHeader, TranslatePipe],
   selector: 'app-concepts',
   styleUrl: './concepts.scss',
   templateUrl: './concepts.html',
@@ -40,6 +41,12 @@ export class Concepts {
   protected readonly currentTopic = injectTopic(this.topic);
   protected readonly currentSubtopic = computed(() =>
     findSubtopic(this.currentTopic(), this.subtopic()),
+  );
+
+  protected readonly tabs = computed(() =>
+    groupBySubtopic(this.currentTopic()?.subtopics ?? [], this.concepts.value()).map(
+      (section) => section.subtopic,
+    ),
   );
 
   protected readonly sections = computed(() => {

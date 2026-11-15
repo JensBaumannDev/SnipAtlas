@@ -1,6 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/api/blueprint-api';
 import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
@@ -9,10 +8,11 @@ import { placeholderKeys } from '../../../core/user-data/project-values';
 import { injectTopic } from '../../../core/content/topic-resource';
 import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
 import { ProjectForm } from '../../../shared/project-form/project-form';
+import { TopicHeader } from '../../../shared/topic-header/topic-header';
 import { GuideStep } from '../guide-step/guide-step';
 
 @Component({
-  imports: [GuideStep, ProgressBar, ProjectForm, RouterLink, TranslatePipe],
+  imports: [GuideStep, ProgressBar, ProjectForm, TopicHeader, TranslatePipe],
   selector: 'app-guide-detail',
   styleUrl: './guide-detail.scss',
   templateUrl: './guide-detail.html',

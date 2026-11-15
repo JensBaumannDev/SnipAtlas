@@ -23,9 +23,7 @@
   flex-direction: column;
   gap: $space-lg;
   padding: $space-xl $space-lg;
-  background:
-    radial-gradient(ellipse 120% 70% at 50% 0, var(--glow), transparent) no-repeat,
-    var(--bg);
+  background: var(--bg);
   border-right: 1px solid var(--line);
 }
 

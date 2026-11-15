@@ -1,0 +1,58 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+  view-transition-name: subtopic-tabs;
+}
+
+// Tabs
+.subtopic-tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.subtopic-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: rem(40);
+  padding: 0 $space-md;
+  font-weight: $font-weight-semibold;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--surface);
+  border-radius: $radius-pill;
+
+  &:hover {
+    color: var(--on-accent);
+    background: var(--accent);
+  }
+
+  &--active,
+  &--active:hover {
+    color: var(--bg);
+    background: var(--ink);
+  }
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .subtopic-tabs__list {
+    flex-wrap: nowrap;
+    justify-content: safe center;
+    padding: $space-xs $space-md;
+    margin-inline: -$space-md;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .subtopic-tabs__tab {
+    white-space: nowrap;
+  }
+}
+
+/* #endregion */

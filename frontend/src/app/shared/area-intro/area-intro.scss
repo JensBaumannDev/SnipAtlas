@@ -10,32 +10,7 @@
 
 // Header
 .area-intro__header {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: $space-lg;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100dvh - $topbar-height - rem(200));
-  padding-block: $space-xxl;
-  text-align: center;
-  isolation: isolate;
-
-  &::before {
-    @include dot-grid;
-
-    inset: -$space-xl calc(50% - 50vw) 0;
-    mask-image:
-      linear-gradient(to bottom, #000 65%, transparent),
-      linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
-      radial-gradient(ellipse rem(560) rem(280) at 50% 50%, transparent 40%, #000 90%);
-    mask-composite: intersect;
-  }
-}
-
-:host:has(> :not(.area-intro__header)) .area-intro__header {
-  min-height: 0;
-  padding-block: rem(96) $space-xl;
+  margin-bottom: 0;
 }
 
 .area-intro__frame {
@@ -44,61 +19,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: rem(144);
-  height: rem(144);
-  margin-bottom: $space-md;
+  width: rem(88);
+  height: rem(88);
 }
 
 .area-intro__icon {
-  width: rem(64);
-  height: rem(64);
+  width: rem(40);
+  height: rem(40);
   color: var(--accent);
 }
 
-.area-intro__title {
-  font-size: rem(72);
-  line-height: $line-height-tight;
-}
-
 .area-intro__lead {
-  max-width: rem(600);
-  font-size: $font-size-xl;
+  max-width: rem(640);
+  font-size: $font-size-lg;
   color: var(--muted);
 }
 
 .area-intro__meta {
   color: var(--muted);
 }
-
-/* #region RESPONSIVE */
-@include mobile {
-  .area-intro__header {
-    gap: $space-md;
-    min-height: rem(420);
-    padding-block: $space-xl;
-  }
-
-  :host:has(> :not(.area-intro__header)) .area-intro__header {
-    padding-block: $space-xl;
-  }
-
-  .area-intro__frame {
-    width: rem(88);
-    height: rem(88);
-  }
-
-  .area-intro__icon {
-    width: rem(40);
-    height: rem(40);
-  }
-
-  .area-intro__title {
-    font-size: rem(40);
-  }
-
-  .area-intro__lead {
-    font-size: $font-size-lg;
-  }
-}
-
-/* #endregion */

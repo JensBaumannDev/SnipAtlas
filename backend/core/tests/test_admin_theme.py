@@ -38,17 +38,27 @@ def test_admin_login_has_snipatlas_favicon(client: Client) -> None:
     assert FAVICON_TAG in client.get(LOGIN_URL).content.decode()
 
 
-def test_admin_login_shows_snipatlas_and_theme_toggle(client: Client) -> None:
+def test_admin_login_shows_snipatlas_without_theme_toggle(client: Client) -> None:
     content = client.get(LOGIN_URL).content.decode()
     assert 'SnipAtlas Admin' in content
-    assert 'theme-toggle' in content
+    assert 'theme-toggle' not in content
+
+
+def test_admin_has_no_theme_toggle(staff_client: Client) -> None:
+    assert 'theme-toggle' not in staff_client.get(INDEX_URL).content.decode()
 
 
 # Stylesheet
 def test_admin_loads_snipatlas_stylesheet(staff_client: Client) -> None:
     content = staff_client.get(INDEX_URL).content.decode()
     assert f'<link rel="stylesheet" href="{static(STYLESHEET)}">' in content
-    assert content.index(static('admin/css/dark_mode.css')) < content.index(static(STYLESHEET))
+
+
+def test_admin_has_no_dark_mode(staff_client: Client, client: Client) -> None:
+    pages = [staff_client.get(INDEX_URL), client.get(LOGIN_URL)]
+    for content in (page.content.decode() for page in pages):
+        assert static('admin/css/dark_mode.css') not in content
+        assert static('admin/js/theme.js') not in content
 
 
 def test_admin_login_loads_snipatlas_stylesheet(client: Client) -> None:

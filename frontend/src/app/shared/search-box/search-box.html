@@ -1,6 +1,7 @@
 <div
   class="search-box"
   role="search"
+  [class.search-box--bar]="variant() === 'bar'"
   [class.search-box--hero]="variant() === 'hero'"
   [class.search-box--has-shortcut]="shortcut()"
 >

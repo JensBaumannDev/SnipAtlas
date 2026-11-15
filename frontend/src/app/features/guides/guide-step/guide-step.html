@@ -1,18 +1,14 @@
 <article class="guide-step" [class.guide-step--done]="done()" [id]="step().slug">
-  <input
-    class="guide-step__check"
-    type="checkbox"
-    [id]="checkId()"
-    [checked]="done()"
-    [attr.aria-label]="'guides.markDone' | translate: { number: number(), title: step().title }"
-    (change)="toggled.emit()"
-  />
+  <span class="guide-step__number" aria-hidden="true">
+    @if (done()) {
+      <svg [lucideIcon]="checkIcon" class="icon guide-step__number-icon"></svg>
+    } @else {
+      {{ number() }}
+    }
+  </span>
 
   <div class="guide-step__body">
-    <h2 class="guide-step__title">
-      <span class="guide-step__number">{{ label() }}</span>
-      {{ step().title }}
-    </h2>
+    <h2 class="guide-step__title">{{ step().title }}</h2>
     <app-term-text class="guide-step__why" [text]="step().why" />
     @for (block of blocks(); track $index) {
       <app-code-block [code]="block.code" [language]="block.language" [os]="block.os" />
@@ -20,6 +16,18 @@
     @if (step().note; as note) {
       <app-note [label]="'guides.note' | translate" [text]="note" />
     }
-    <app-report-link [subject]="('report.step' | translate) + ': ' + step().title" />
+    <div class="guide-step__actions">
+      <button
+        class="guide-step__done"
+        type="button"
+        [attr.aria-pressed]="done()"
+        [attr.aria-label]="'guides.markDone' | translate: { number: number(), title: step().title }"
+        (click)="toggled.emit()"
+      >
+        <svg [lucideIcon]="done() ? checkIcon : squareIcon" class="icon guide-step__done-icon"></svg>
+        {{ 'guides.done' | translate }}
+      </button>
+      <app-report-link [subject]="('report.step' | translate) + ': ' + step().title" />
+    </div>
   </div>
 </article>

@@ -5,19 +5,31 @@
 }
 
 // Header
-.concepts__header {
-  @include page-header;
-}
-
 .concepts__meta {
   color: var(--muted);
 }
 
 // Sections
+.concepts__section {
+  @include topic-section;
+
+  &--plain {
+    display: block;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
 .concepts__section-title {
   @include section-heading;
+}
 
-  margin-top: $space-xxl;
+.concepts__list {
+  @include topic-list;
+
+  .concepts__section--plain & {
+    margin-inline: auto;
+  }
 }
 
 .concepts__section-link {

@@ -1,11 +1,6 @@
 @use 'abstracts' as *;
 
 :host {
-  --nav-width: #{$rail-width};
-  --content-max: #{$layout-max-width - $rail-width};
-  --outline-space: 0px;
-  --bottom-nav-height: #{$bottom-nav-height};
-
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -31,33 +26,22 @@
 
 .shell {
   position: relative;
-  display: flex;
+  display: grid;
   flex: 1;
-  gap: $space-xxl;
-  align-items: flex-start;
-  padding-right: $space-xl;
-  padding-left: calc(var(--nav-width) + $space-xl);
+  grid-template-columns: minmax(0, 1fr) minmax(0, $content-max-width) minmax(0, 1fr);
+  column-gap: $space-xxl;
+  align-items: start;
+  padding-inline: $space-xl;
   overflow-x: clip;
   isolation: isolate;
-
-  &:not(:has(app-home, app-area-intro))::before {
-    @include dot-grid;
-
-    bottom: auto;
-    height: $glow-height;
-    mask-image:
-      linear-gradient(to bottom, #000 20%, transparent),
-      radial-gradient(ellipse 45% 70% at 50% 35%, transparent 55%, #000 100%);
-    mask-composite: intersect;
-  }
 }
 
 .shell__content {
-  flex: 1;
+  --stage-offset: #{$space-xl};
+
+  grid-column: 2;
   min-width: 0;
-  max-width: var(--content-max);
   padding-block: $space-xl;
-  margin-inline: auto;
 
   &:focus {
     outline: none;
@@ -69,40 +53,31 @@
 }
 
 /* #region RESPONSIVE */
-@include desktop {
-  :host {
-    --nav-width: #{$rail-width + $sidebar-width};
-    --content-max: #{$content-max-width};
-  }
-}
-
 @include wide {
-  :host {
-    --outline-space: #{$sidebar-width + $space-xxl};
+  .shell {
+    grid-template-columns:
+      minmax($outline-width, 1fr) minmax(0, $content-max-width)
+      minmax($outline-width, 1fr);
+
+    &:has(> app-outline:not(:empty)) {
+      grid-template-columns:
+        minmax($outline-width, 1fr) minmax(0, $topic-section-width)
+        minmax($outline-width, 1fr);
+    }
   }
 }
 
 @include mobile {
-  :host {
-    padding-bottom: var(--bottom-nav-height);
-  }
-
   .shell {
-    flex-direction: column;
-    gap: $space-md;
+    grid-template-columns: minmax(0, 1fr);
     padding: $space-md;
   }
 
   .shell__content {
-    width: 100%;
-    max-width: none;
-    padding-block: 0;
-  }
-}
+    --stage-offset: #{$space-md};
 
-@include tiny {
-  :host {
-    --bottom-nav-height: #{$bottom-nav-height-tiny};
+    grid-column: 1;
+    padding-block: 0;
   }
 }
 

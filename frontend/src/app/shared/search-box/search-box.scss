@@ -1,12 +1,25 @@
 @use 'abstracts' as *;
 
 :host {
+  position: relative;
   display: block;
+  min-height: $control-height;
 }
 
 // Field
 .search-box {
   position: relative;
+
+  &--bar:focus-within {
+    @include desktop {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: $z-menu;
+      width: min(#{$search-expanded-width}, calc(100vw - #{$space-xl}));
+      animation: search-box-grow var(--duration) var(--ease);
+    }
+  }
 
   &--hero {
     --search-height: #{rem(60)};
@@ -61,13 +74,13 @@
   border-radius: 50%;
   transform: translateY(-50%);
 
+  &:hover:not(:disabled) {
+    color: var(--on-accent);
+  }
+
   .icon {
     width: rem(14);
     height: rem(14);
-  }
-
-  &:hover:not(:disabled) {
-    color: var(--on-accent);
   }
 
   .search-box--has-shortcut & {
@@ -101,8 +114,8 @@
   position: absolute;
   top: calc(100% + #{$space-xs});
   right: 0;
-  left: 0;
   z-index: $z-menu;
+  width: max(100%, min(#{$search-results-width}, calc(100vw - #{$space-xl})));
   padding: $space-xs;
   margin: 0;
   list-style: none;
@@ -146,17 +159,16 @@
 
 .search-box__content {
   display: grid;
-  gap: 0;
   grid-row: 1;
   grid-column: 1;
+  gap: 0;
   min-width: 0;
 }
 
 .search-box__area {
-  justify-self: end;
-  align-self: center;
   grid-row: 1;
   grid-column: 2;
+  place-self: center end;
 }
 
 .search-box__title {
@@ -175,6 +187,12 @@
   from {
     opacity: 0;
     transform: translateY(-4px);
+  }
+}
+
+@keyframes search-box-grow {
+  from {
+    width: $topbar-search-width;
   }
 }
 
@@ -208,9 +226,9 @@
   }
 
   .search-box__area {
-    justify-self: start;
     grid-row: 1;
     grid-column: 1;
+    justify-self: start;
   }
 
   .search-box__content {

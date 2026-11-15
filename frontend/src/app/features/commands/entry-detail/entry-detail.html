@@ -9,7 +9,7 @@
       [parentLabel]="subtopic ? topic.name + ' · ' + subtopic.name : topic.name"
       [parentLink]="['/befehle', topic.slug, entry.subtopic]"
     >
-      <app-favorite-star [entry]="entry" />
+      <app-favorite-star [entry]="entry" labeled />
     </app-topic-header>
 
     @if (resolved(); as resolved) {

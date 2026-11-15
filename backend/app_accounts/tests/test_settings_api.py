@@ -20,7 +20,7 @@ EMPTY_PROJECT = {
     'serverUser': '',
     'serverIp': '',
 }
-DEFAULTS = {'os': 'win', 'theme': 'system', 'language': 'auto', 'projectValues': EMPTY_PROJECT}
+DEFAULTS = {'os': 'win', 'language': 'auto', 'projectValues': EMPTY_PROJECT}
 
 
 def update(client: APIClient, data: object) -> Response:
@@ -54,11 +54,10 @@ def test_settings_return_defaults(logged_in: APIClient) -> None:
 
 def test_settings_return_stored_values(logged_in: APIClient, user: User) -> None:
     User.objects.filter(pk=user.pk).update(
-        os='unix', theme='dark', language='en', project_github_user='ada', project_server_ip='::1'
+        os='unix', language='en', project_github_user='ada', project_server_ip='::1'
     )
     assert logged_in.get(URL).json() == {
         'os': 'unix',
-        'theme': 'dark',
         'language': 'en',
         'projectValues': EMPTY_PROJECT | {'githubUser': 'ada', 'serverIp': '::1'},
     }
@@ -88,22 +87,28 @@ def test_settings_load_in_two_queries(
 
 # Update
 def test_update_settings_changes_values(logged_in: APIClient, user: User) -> None:
-    data = {'os': 'unix', 'theme': 'dark', 'language': 'en'}
+    data = {'os': 'unix', 'language': 'en'}
     project = {'githubUser': 'ada', 'serverIp': '::1'}
     response = update(logged_in, data | {'projectValues': project})
     assert response.status_code == 200
     assert response.json() == data | {'projectValues': EMPTY_PROJECT | project}
     values = stored(user)
-    assert (values['os'], values['theme'], values['language']) == ('unix', 'dark', 'en')
+    assert (values['os'], values['language']) == ('unix', 'en')
     assert (values['project_github_user'], values['project_server_ip']) == ('ada', '::1')
 
 
 def test_update_settings_changes_only_given_fields(logged_in: APIClient, user: User) -> None:
-    User.objects.filter(pk=user.pk).update(theme='dark', project_repo='snipatlas')
+    User.objects.filter(pk=user.pk).update(language='en', project_repo='snipatlas')
     update(logged_in, {'os': 'unix', 'projectValues': {'domain': 'example.com'}})
     values = stored(user)
-    assert (values['os'], values['theme']) == ('unix', 'dark')
+    assert (values['os'], values['language']) == ('unix', 'en')
     assert (values['project_repo'], values['project_domain']) == ('snipatlas', 'example.com')
+
+
+def test_update_settings_ignores_removed_theme(logged_in: APIClient) -> None:
+    response = update(logged_in, {'theme': 'dark'})
+    assert response.status_code == 200
+    assert response.json() == DEFAULTS
 
 
 def test_update_settings_clears_project_value(logged_in: APIClient, user: User) -> None:
@@ -173,9 +178,9 @@ def test_update_settings_accepts_snake_case_key(logged_in: APIClient, user: User
 
 
 def test_update_settings_ignores_query_parameters(logged_in: APIClient, user: User) -> None:
-    response = logged_in.patch(f'{URL}?os=unix&theme=dark', {}, format='json')
+    response = logged_in.patch(f'{URL}?os=unix&language=en', {}, format='json')
     assert response.status_code == 200
-    assert (stored(user)['os'], stored(user)['theme']) == ('win', 'system')
+    assert (stored(user)['os'], stored(user)['language']) == ('win', 'auto')
 
 
 def test_update_settings_ignores_accept_language(logged_in: APIClient, user: User) -> None:
@@ -205,8 +210,7 @@ def test_update_settings_queries(
         ({'os': 'WIN'}, {'os': ['invalid_choice']}),
         ({'os': ''}, {'os': ['invalid_choice']}),
         ({'os': None}, {'os': ['null']}),
-        ({'theme': 'blue'}, {'theme': ['invalid_choice']}),
-        ({'theme': ['dark']}, {'theme': ['invalid_choice']}),
+        ({'language': ['de']}, {'language': ['invalid_choice']}),
         ({'language': 'fr'}, {'language': ['invalid_choice']}),
         ({'language': '<script>'}, {'language': ['invalid_choice']}),
         ({'projectValues': None}, {'projectValues': ['null']}),

@@ -5,7 +5,6 @@ import {
   LanguageMode,
   OperatingSystem,
   Preferences,
-  ThemeMode,
 } from '../../core/user-data/preferences';
 import { Session } from '../../core/auth/session';
 
@@ -25,12 +24,6 @@ export class Settings {
 
   protected readonly preferences = inject(Preferences);
   protected readonly session = inject(Session);
-
-  protected readonly themeOptions: Option<ThemeMode>[] = [
-    { value: 'light', label: 'settings.themeLight' },
-    { value: 'system', label: 'settings.themeSystem' },
-    { value: 'dark', label: 'settings.themeDark' },
-  ];
 
   protected readonly accentOptions: Option<AccentTheme>[] = [
     { value: 'blue', label: 'settings.accentBlue' },

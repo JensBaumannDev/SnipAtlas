@@ -19,7 +19,6 @@
   background: var(--surface);
   border: 2px solid var(--accent);
   border-radius: 50%;
-  transition: background var(--duration-fast);
 
   &:hover,
   &[aria-expanded='true'] {
@@ -42,7 +41,7 @@
   top: calc(100% + $space-sm);
   right: 0;
   z-index: $z-menu;
-  width: rem(260);
+  width: min(#{rem(300)}, calc(100vw - #{$space-xl}));
   padding: $space-xs;
   background: var(--raised);
   border: 1px solid var(--line);
@@ -68,6 +67,20 @@
 }
 
 .user-menu__state {
+  color: var(--muted);
+}
+
+// Collection
+.user-menu__collection {
+  padding: $space-xs $space-sm $space-md;
+  margin-bottom: $space-xs;
+  border-bottom: 1px solid var(--line);
+}
+
+.user-menu__heading {
+  margin-bottom: $space-xs;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
   color: var(--muted);
 }
 

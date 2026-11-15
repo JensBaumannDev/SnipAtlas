@@ -9,27 +9,27 @@ export const routes: Routes = [
   {
     path: 'befehle',
     title: 'pages.commands',
-    data: { sidebar: 'subtopics', area: 'commands', description: 'meta.commands' },
+    data: { area: 'commands', description: 'meta.commands' },
     loadChildren: () =>
       import('./features/commands/commands.routes').then((m) => m.COMMANDS_ROUTES),
   },
   {
     path: 'grundlagen',
     title: 'pages.concepts',
-    data: { sidebar: 'subtopics', area: 'concepts', description: 'meta.concepts' },
+    data: { area: 'concepts', description: 'meta.concepts' },
     loadChildren: () =>
       import('./features/concepts/concepts.routes').then((m) => m.CONCEPTS_ROUTES),
   },
   {
     path: 'anleitungen',
     title: 'pages.blueprints',
-    data: { sidebar: 'topics', area: 'blueprints', description: 'meta.blueprints' },
+    data: { area: 'blueprints', description: 'meta.blueprints' },
     loadChildren: () => import('./features/guides/guides.routes').then((m) => m.GUIDES_ROUTES),
   },
   {
     path: 'fehler',
     title: 'pages.debugging',
-    data: { sidebar: 'topics', area: 'debugging', description: 'meta.debugging' },
+    data: { area: 'debugging', description: 'meta.debugging' },
     loadChildren: () => import('./features/errors/errors.routes').then((m) => m.ERRORS_ROUTES),
   },
   {
@@ -70,8 +70,7 @@ export const routes: Routes = [
     path: 'vscode-theme',
     title: 'pages.vscodeTheme',
     data: { description: 'meta.vscodeTheme' },
-    loadComponent: () =>
-      import('./features/vscode-theme/vscode-theme').then((m) => m.VscodeTheme),
+    loadComponent: () => import('./features/vscode-theme/vscode-theme').then((m) => m.VscodeTheme),
   },
   {
     path: 'impressum',

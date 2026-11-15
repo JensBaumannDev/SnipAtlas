@@ -1,47 +1,36 @@
-:root,
-[data-theme='light'] {
+:root {
   // Surfaces and text
-  --bg: #f5f7fb;
+  --bg: #fff;
   --chrome: #fff;
-  --surface: #fff;
+  --surface: #f4f4f4;
   --popover: rgb(255 255 255 / 75%);
-  --backdrop: rgb(22 25 29 / 25%);
+  --backdrop: rgb(23 26 32 / 25%);
   --raised: #fff;
-  --ink: #16191d;
-  --muted: #5e6772;
-  --line: #e3e6ea;
-  --hover: rgb(22 25 29 / 4.5%);
-  --scrollbar: rgb(22 25 29 / 22%);
+  --ink: #171a20;
+  --text: #393c41;
+  --muted: #6e6e73;
+  --line: #e5e5e5;
+  --hover: rgb(23 26 32 / 4.5%);
+  --scrollbar: rgb(23 26 32 / 22%);
 
   // Accent
-  --accent-blue: #2457ff;
+  --accent-blue: #06c;
   --accent-teal: #007571;
   --accent-raspberry: #c8103f;
   --accent-fuchsia: #a8189f;
-  --accent-blue-pair: #7c3aed;
-  --accent-teal-pair: #0284c7;
-  --accent-raspberry-pair: #ea580c;
-  --accent-fuchsia-pair: #6d28d9;
   --accent-soft-share: 7%;
-  --glow-share: 6%;
   --on-accent: #fff;
 
-  // Cards
-  --card-from: #f7f8fa;
-  --card-to: #eef0f3;
-  --card-edge: rgb(255 255 255 / 90%);
-  --card-shadow: 0 24px 48px -12px rgb(22 25 29 / 22%);
-
   // Status
-  --ok: #0e8a55;
+  --ok: #0a7d4d;
   --star: #c98306;
   --danger: #c2352b;
   --danger-soft: rgb(194 53 43 / 8%);
 
   // Code blocks and syntax colors
-  --code-bg: rgb(22 25 29 / 4%);
-  --code-ink: #1f2933;
-  --code-dim: #66717c;
+  --code-bg: #f4f4f4;
+  --code-ink: #171a20;
+  --code-dim: #6e6e73;
   --sx-cmd: #2f5bea;
   --sx-kw: #7c3aed;
   --sx-str: #0e7a54;
@@ -50,8 +39,8 @@
 
   // Terminal
   --term-bg: #fff;
-  --term-bar: #eceef2;
-  --term-edge: #d9dde4;
+  --term-bar: #f4f4f4;
+  --term-edge: #e5e5e5;
 
   color-scheme: light;
 }

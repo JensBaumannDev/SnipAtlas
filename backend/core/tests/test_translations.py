@@ -8,7 +8,7 @@ from django.db import models
 from django.utils import translation
 from modeltranslation.fields import TranslationField
 
-from app_accounts.models import Accent, Language, OperatingSystem, Theme
+from app_accounts.models import Accent, Language, OperatingSystem
 from app_content.models import Entry, News, NewsArea, Topic, validate_topic_slug
 from app_feedback.models import BugType, EntryArea, ImprovementArea, Kind, Status
 
@@ -31,7 +31,6 @@ FIELD_NAMES = [
     ('app_accounts.user', 'notify_by_mail', 'Benachrichtigung per E-Mail', 'notify by mail'),
     ('app_accounts.user', 'accent', 'Akzentfarbe', 'accent color'),
     ('app_accounts.user', 'os', 'Betriebssystem', 'operating system'),
-    ('app_accounts.user', 'theme', 'Farbschema', 'theme'),
     ('app_accounts.user', 'language', 'Sprache', 'language'),
     ('app_accounts.user', 'project_name', 'Projektname', 'project name'),
     ('app_accounts.user', 'project_github_user', 'GitHub-Nutzer', 'GitHub user'),
@@ -155,9 +154,6 @@ CHOICE_LABELS = [
     (Accent.FUCHSIA, 'Fuchsia', 'Fuchsia'),
     (OperatingSystem.WIN, 'Windows', 'Windows'),
     (OperatingSystem.UNIX, 'macOS/Linux', 'macOS/Linux'),
-    (Theme.LIGHT, 'Hell', 'Light'),
-    (Theme.DARK, 'Dunkel', 'Dark'),
-    (Theme.SYSTEM, 'System', 'System'),
     (Language.AUTO, 'Automatisch', 'Automatic'),
     (Language.DE, 'Deutsch', 'Deutsch'),
     (Language.EN, 'English', 'English'),
@@ -250,7 +246,7 @@ def test_choice_label_is_german_and_english(
 
 
 def test_every_own_choice_has_a_label() -> None:
-    enums = (Accent, OperatingSystem, Theme, Language, NewsArea, Kind, Status)
+    enums = (Accent, OperatingSystem, Language, NewsArea, Kind, Status)
     enums += (EntryArea, ImprovementArea, BugType)
     assert {choice for enum in enums for choice in enum} == own_choices()
 

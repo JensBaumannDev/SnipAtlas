@@ -5,19 +5,21 @@
 }
 
 // Header
-.errors__header {
-  @include page-header;
-}
-
 .errors__meta {
   color: var(--muted);
 }
 
 // Sections
+.errors__section {
+  @include topic-section;
+}
+
 .errors__section-title {
   @include section-heading;
+}
 
-  margin-top: $space-xxl;
+.errors__list {
+  @include topic-list;
 }
 
 .errors__empty {

@@ -3,6 +3,7 @@
 body {
   font-family: $font-sans;
   font-size: $font-size-base;
+  font-weight: $font-weight-medium;
   line-height: $line-height-base;
   -webkit-font-smoothing: antialiased;
 }
@@ -19,12 +20,13 @@ h1,
 h2,
 h3,
 h4 {
-  font-weight: $font-weight-semibold;
-  line-height: $line-height-tight;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-heading;
+  color: var(--ink);
   text-wrap: balance;
 }
 
 h1 {
   font-size: $font-size-xxl;
-  letter-spacing: $letter-spacing-tight;
+  letter-spacing: $letter-spacing-heading;
 }

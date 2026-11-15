@@ -1,0 +1,13 @@
+<ul class="news-list__list" role="list">
+  @for (item of items(); track item.date + item.title) {
+    <li>
+      <a class="news-list__row" [routerLink]="item.link">
+        <span class="news-list__topic">{{ item.topic }}</span>
+        <span class="news-list__title">{{ item.title }}</span>
+        <time class="news-list__date" [attr.datetime]="item.date">
+          {{ item.date | date: 'dd.MM.yyyy' }}
+        </time>
+      </a>
+    </li>
+  }
+</ul>

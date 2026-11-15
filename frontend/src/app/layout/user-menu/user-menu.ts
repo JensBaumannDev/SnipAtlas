@@ -4,9 +4,10 @@ import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { logOutIcon, messageSquareIcon, settingsIcon, userIcon } from '../../core/ui/icons';
 import { Session } from '../../core/auth/session';
+import { Collection } from '../../shared/collection/collection';
 
 @Component({
-  imports: [RouterLink, TranslatePipe, LucideDynamicIcon],
+  imports: [Collection, RouterLink, TranslatePipe, LucideDynamicIcon],
   selector: 'app-user-menu',
   styleUrl: './user-menu.scss',
   templateUrl: './user-menu.html',

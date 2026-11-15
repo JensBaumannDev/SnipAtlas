@@ -6,8 +6,8 @@
     class="concepts__header"
     [topic]="topic"
     [heading]="subtopic?.name ?? topic.name"
-    [parentLabel]="subtopic ? topic.name : undefined"
-    [parentLink]="['/grundlagen', topic.slug]"
+    [parentLabel]="subtopic ? topic.name : ('pages.concepts' | translate)"
+    [parentLink]="subtopic ? ['/grundlagen', topic.slug] : '/grundlagen'"
   >
     <p class="concepts__meta">
       {{
@@ -22,8 +22,12 @@
     }
   </app-topic-header>
 
+  @if (tabs().length > 1) {
+    <app-subtopic-tabs [path]="['/grundlagen', topic.slug]" [subtopics]="tabs()" />
+  }
+
   @for (section of sections(); track section.subtopic.slug) {
-    <section class="concepts__section">
+    <section class="concepts__section" [class.concepts__section--plain]="subtopic">
       @if (!subtopic) {
         <h2 class="concepts__section-title" [id]="section.subtopic.slug">
           <a
@@ -34,14 +38,16 @@
           </a>
         </h2>
       }
-      @for (concept of section.items; track concept.slug) {
-        <app-concept-card
-          [concept]="concept"
-          [level]="subtopic ? 2 : 3"
-          [expanded]="expanded.has(concept.slug)"
-          (expandedChange)="expanded.set(concept.slug, $event)"
-        />
-      }
+      <div class="concepts__list">
+        @for (concept of section.items; track concept.slug) {
+          <app-concept-card
+            [concept]="concept"
+            [level]="subtopic ? 2 : 3"
+            [expanded]="expanded.has(concept.slug)"
+            (expandedChange)="expanded.set(concept.slug, $event)"
+          />
+        }
+      </div>
     </section>
   } @empty {
     <p class="concepts__empty">{{ 'concepts.empty' | translate }}</p>

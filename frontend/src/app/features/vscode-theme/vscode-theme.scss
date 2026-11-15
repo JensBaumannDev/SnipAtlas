@@ -9,12 +9,6 @@
   margin-inline: auto;
 }
 
-.vscode-theme__intro {
-  display: flex;
-  flex-direction: column;
-  gap: $space-sm;
-}
-
 .vscode-theme__lead {
   max-width: rem(720);
   font-size: $font-size-lg;
@@ -100,8 +94,8 @@
 /* #region RESPONSIVE */
 @include small {
   .vscode-theme__download {
-    align-items: flex-start;
     flex-direction: column;
+    align-items: flex-start;
     padding: $space-md;
   }
 

@@ -8,7 +8,7 @@
 .debug-guide-steps {
   display: flex;
   flex-direction: column;
-  gap: $space-lg;
+  gap: $space-xl;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -16,13 +16,20 @@
 
 .debug-guide-steps__step {
   display: grid;
-  grid-template-columns: rem(32) minmax(0, 1fr);
-  gap: $space-sm;
+  grid-template-columns: rem(40) minmax(0, 1fr);
+  gap: $space-md;
+  align-items: start;
 }
 
 .debug-guide-steps__number {
-  font-family: $font-mono;
-  color: var(--accent);
+  display: grid;
+  place-items: center;
+  width: rem(40);
+  height: rem(40);
+  font-weight: $font-weight-bold;
+  color: var(--bg);
+  background: var(--ink);
+  border-radius: 50%;
 }
 
 .debug-guide-steps__body {
@@ -30,14 +37,18 @@
   flex-direction: column;
   gap: $space-sm;
   min-width: 0;
+  padding-top: rem(6);
 }
 
 .debug-guide-steps__title {
-  font-size: $font-size-base;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: var(--ink);
 }
 
 .debug-guide-steps__text {
   max-width: 70ch;
-  color: var(--muted);
+  color: var(--text);
   overflow-wrap: anywhere;
 }

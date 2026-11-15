@@ -30,6 +30,31 @@
   &--active .favorite-star__icon {
     fill: currentcolor;
   }
+
+  &--labeled {
+    gap: $space-sm;
+    width: auto;
+    padding: 0 $space-lg;
+    font-family: inherit;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: var(--ink);
+    background: var(--surface);
+    border-radius: $radius-pill;
+
+    &:hover {
+      color: var(--on-accent);
+      background: var(--accent);
+    }
+  }
+
+  &--labeled.favorite-star--active .favorite-star__icon {
+    color: var(--accent);
+  }
+
+  &--labeled.favorite-star--active:hover .favorite-star__icon {
+    color: inherit;
+  }
 }
 
 .favorite-star__icon {

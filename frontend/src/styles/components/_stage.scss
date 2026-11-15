@@ -1,0 +1,59 @@
+@use 'abstracts' as *;
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  align-items: center;
+  justify-content: center;
+  min-height: $hero-min-height;
+  padding-block: $hero-padding-y;
+  margin-bottom: $space-xl;
+  color: var(--text);
+  text-align: center;
+  isolation: isolate;
+
+  &::before {
+    position: absolute;
+    inset: calc(-1 * var(--stage-offset, 0px)) calc(50% - 50vw) 0;
+    z-index: $z-background;
+    content: '';
+    background:
+      radial-gradient(ellipse 45% 60% at 50% 70%, var(--hero-glow), transparent 70%),
+      radial-gradient(ellipse 80% 40% at 50% 100%, rgb(255 255 255 / 6%), transparent 70%),
+      var(--bg);
+  }
+
+  h1 {
+    max-width: $hero-title-width;
+    font-size: $hero-title-size;
+    line-height: $line-height-tight;
+  }
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .stage {
+    min-height: $hero-min-height-mobile;
+    padding-block: $space-xl;
+
+    h1 {
+      font-size: rem(40);
+    }
+  }
+}
+
+@include small {
+  .stage h1 {
+    font-size: rem(32);
+  }
+}
+
+@include tiny {
+  .stage {
+    padding-block: $space-lg;
+  }
+}
+
+/* #endregion */

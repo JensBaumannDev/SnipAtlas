@@ -30,28 +30,54 @@
       }
     </div>
     <p class="glossary__count" role="status">
-      @let count = filtered().length;
-      {{ (count === 1 ? 'glossary.countOne' : 'glossary.count') | translate: { count: count } }}
+      @if (hasQuery()) {
+        @let count = filtered().length;
+        {{ (count === 1 ? 'glossary.countOne' : 'glossary.count') | translate: { count: count } }}
+      }
     </p>
 
+    @if (groups().length) {
+      <nav class="glossary__letters" [attr.aria-label]="'glossary.letters' | translate">
+        <ul class="glossary__letter-list" role="list">
+          @for (link of letters(); track link.letter) {
+            <li>
+              @if (link.active) {
+                <a class="glossary__jump" [routerLink]="[]" [fragment]="letterId(link.letter)">
+                  {{ link.letter }}
+                </a>
+              } @else {
+                <span class="glossary__jump glossary__jump--empty" aria-hidden="true">
+                  {{ link.letter }}
+                </span>
+              }
+            </li>
+          }
+        </ul>
+      </nav>
+    }
+
     @for (group of groups(); track group.letter) {
-      <section class="glossary__group" [attr.aria-labelledby]="letterId(group.letter)">
-        <h2 class="glossary__letter" [id]="letterId(group.letter)">{{ group.letter }}</h2>
+      <section
+        class="glossary__group"
+        [id]="letterId(group.letter)"
+        [attr.aria-labelledby]="letterId(group.letter) + '-heading'"
+      >
+        <h2 class="glossary__letter" [id]="letterId(group.letter) + '-heading'">
+          {{ group.letter }}
+        </h2>
         <ul class="glossary__list" role="list">
           @for (term of group.terms; track term.slug) {
             <li class="glossary__term" [id]="term.slug">
-              <div class="glossary__head">
-                <h3 class="glossary__name">{{ term.term }}</h3>
-                @if (term.aliases.length) {
-                  <p class="glossary__aliases">
-                    {{ 'glossary.aliases' | translate }} {{ term.aliases.join(', ') }}
-                  </p>
-                }
-              </div>
-              <div class="glossary__body">
-                <p class="glossary__definition">{{ term.definition }}</p>
-                <app-report-link [subject]="('report.term' | translate) + ': ' + term.term" />
-              </div>
+              <h3 class="glossary__name">{{ term.term }}</h3>
+              @if (term.aliases.length) {
+                <p class="glossary__aliases">
+                  {{ 'glossary.aliases' | translate }} {{ term.aliases.join(', ') }}
+                </p>
+              }
+              <p class="glossary__definition">{{ term.definition }}</p>
+              <app-report-link
+                class="glossary__report"
+                [subject]="('report.term' | translate) + ': ' + term.term" />
             </li>
           }
         </ul>

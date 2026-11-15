@@ -6,8 +6,8 @@
     class="commands__header"
     [topic]="topic"
     [heading]="subtopic?.name ?? topic.name"
-    [parentLabel]="subtopic ? topic.name : undefined"
-    [parentLink]="['/befehle', topic.slug]"
+    [parentLabel]="subtopic ? topic.name : ('pages.commands' | translate)"
+    [parentLink]="subtopic ? ['/befehle', topic.slug] : '/befehle'"
   >
     <p class="commands__meta">
       {{
@@ -27,8 +27,12 @@
     }
   </app-topic-header>
 
+  @if (tabs().length > 1) {
+    <app-subtopic-tabs [path]="['/befehle', topic.slug]" [subtopics]="tabs()" />
+  }
+
   @for (section of sections(); track section.subtopic.slug) {
-    <section class="commands__section">
+    <section class="commands__section" [class.commands__section--plain]="subtopic">
       @if (!subtopic) {
         <h2 class="commands__section-title" [id]="section.subtopic.slug">
           <a
@@ -39,14 +43,16 @@
           </a>
         </h2>
       }
-      @for (entry of section.items; track entry.slug) {
-        <app-entry-card
-          [entry]="entry"
-          [level]="subtopic ? 2 : 3"
-          [expanded]="expanded.has(entry.slug)"
-          (expandedChange)="expanded.set(entry.slug, $event)"
-        />
-      }
+      <div class="commands__list">
+        @for (entry of section.items; track entry.slug) {
+          <app-entry-card
+            [entry]="entry"
+            [level]="subtopic ? 2 : 3"
+            [expanded]="expanded.has(entry.slug)"
+            (expandedChange)="expanded.set(entry.slug, $event)"
+          />
+        }
+      </div>
     </section>
   } @empty {
     <p class="commands__empty">{{ 'commands.empty' | translate }}</p>

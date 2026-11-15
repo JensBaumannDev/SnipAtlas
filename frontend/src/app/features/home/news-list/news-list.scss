@@ -1,0 +1,59 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// List
+.news-list__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.news-list__row {
+  display: grid;
+  grid-template-columns: rem(160) minmax(0, 1fr) auto;
+  gap: $space-lg;
+  align-items: baseline;
+  padding-block: $space-md;
+  color: var(--ink);
+  text-decoration: none;
+  border-top: 1px solid var(--line);
+
+  &:hover .news-list__title {
+    color: var(--accent);
+  }
+}
+
+li:last-child .news-list__row {
+  border-bottom: 1px solid var(--line);
+}
+
+.news-list__topic {
+  color: var(--muted);
+}
+
+.news-list__title {
+  font-weight: $font-weight-semibold;
+  overflow-wrap: anywhere;
+  transition: color var(--duration-fast);
+}
+
+.news-list__date {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+/* #region RESPONSIVE */
+@include small {
+  .news-list__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: $space-xs $space-md;
+  }
+
+  .news-list__topic {
+    grid-column: 1 / -1;
+  }
+}
+
+/* #endregion */

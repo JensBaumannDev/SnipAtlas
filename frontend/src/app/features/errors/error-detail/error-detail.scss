@@ -5,10 +5,6 @@
 }
 
 // Header
-.error-detail__header {
-  @include page-header;
-}
-
 .error-detail__meaning {
   color: var(--muted);
 }

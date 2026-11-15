@@ -2,13 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Service, computed, effect, inject, signal, untracked } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, filter } from 'rxjs';
-import { LanguageMode, OperatingSystem, Preferences, ThemeMode } from './preferences';
+import { LanguageMode, OperatingSystem, Preferences } from './preferences';
 import { PROJECT_KEYS, ProjectValueMap, ProjectValues } from './project-values';
 import { AuthEvent, Session } from '../auth/session';
 
 interface UserSettings {
   os: OperatingSystem;
-  theme: ThemeMode;
   language: LanguageMode;
   projectValues: ProjectValueMap;
 }
@@ -28,7 +27,6 @@ export class SettingsSync {
   private readonly server = signal<UserSettings | undefined>(undefined);
   private readonly local = computed<UserSettings>(() => ({
     os: this.preferences.os(),
-    theme: this.preferences.theme(),
     language: this.preferences.languageMode(),
     projectValues: this.project.values(),
   }));
@@ -60,7 +58,6 @@ export class SettingsSync {
   private apply(settings: UserSettings, merge: boolean): void {
     const values = this.project.values();
     this.preferences.os.set(settings.os);
-    this.preferences.theme.set(settings.theme);
     this.preferences.languageMode.set(settings.language);
     this.project.values.set(
       merge ? fillEmpty(settings.projectValues, values) : settings.projectValues,
@@ -88,7 +85,6 @@ function changedSettings(server: UserSettings | undefined, local: UserSettings):
 function changedChoices(server: UserSettings, local: UserSettings): SettingsChanges {
   return {
     ...(local.os !== server.os ? { os: local.os } : {}),
-    ...(local.theme !== server.theme ? { theme: local.theme } : {}),
     ...(local.language !== server.language ? { language: local.language } : {}),
   };
 }

@@ -7,11 +7,6 @@
 }
 
 // Intro
-.settings__intro {
-  display: flex;
-  flex-direction: column;
-  gap: $space-sm;
-}
 
 .settings__lead {
   color: var(--muted);
@@ -77,18 +72,7 @@
   gap: $space-sm;
   padding: $space-md;
   background: var(--bg);
-
-  &:first-child {
-    border-radius: $radius-md 0 0 $radius-md;
-  }
-
-  &:last-child {
-    border-radius: 0 $radius-md $radius-md 0;
-  }
-
-  &:only-child {
-    border-radius: $radius-md;
-  }
+  border-radius: $radius-md;
 }
 
 .settings__preview-line {
