@@ -24,6 +24,8 @@ export interface CodeLine {
 
 const COMMAND = /^(git|pip|python3?|django-admin|ng|npm|npx|ssh|sudo|scp|docker|cd|source)\b/;
 
+const YAML_KEY = /^(\s*(?:-\s+)?)([\w.-]+)(:)(?=\s|$)/;
+
 const KEYWORDS = new Set([
   'from',
   'import',
@@ -91,8 +93,11 @@ function highlightLine(line: string, language: CodeLanguage): CodeLine {
 }
 
 function languageLine(line: string, trimmed: string, language: CodeLanguage): CodeLine {
-  if (language === 'nginx') {
+  if (language === 'nginx' || language === 'dockerfile') {
     return { prompt: false, tokens: terminalTokens(line, 'keyword') };
+  }
+  if (language === 'yaml') {
+    return { prompt: false, tokens: yamlTokens(line) };
   }
   if (language === 'terminal' || COMMAND.test(trimmed)) {
     return { prompt: true, tokens: terminalTokens(line, 'command') };
@@ -101,6 +106,18 @@ function languageLine(line: string, trimmed: string, language: CodeLanguage): Co
     return singleToken(line, 'plain');
   }
   return { prompt: false, tokens: lineTokens(line, language) };
+}
+
+function yamlTokens(line: string): CodeToken[] {
+  const key = YAML_KEY.exec(line);
+  if (!key) {
+    return terminalTokens(line, 'plain');
+  }
+  const [match, indent, name] = key;
+  const tokens: CodeToken[] = [];
+  pushPlain(tokens, indent);
+  tokens.push({ text: name, kind: 'property' });
+  return [...tokens, ...terminalTokens(line.slice(match.length - 1), 'plain')];
 }
 
 function singleToken(text: string, kind: TokenKind): CodeLine {

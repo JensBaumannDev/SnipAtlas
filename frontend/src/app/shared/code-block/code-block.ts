@@ -29,6 +29,8 @@ const LANGUAGE_LABELS: Record<CodeLanguage, string> = {
   env: '.env',
   json: 'JSON',
   nginx: 'nginx',
+  yaml: 'YAML',
+  dockerfile: 'Dockerfile',
 };
 
 interface ViewToken {

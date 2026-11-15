@@ -186,6 +186,8 @@ def test_code_languages_match_frontend() -> None:
         'env',
         'json',
         'nginx',
+        'yaml',
+        'dockerfile',
     ]
     assert CodeLanguage.values == expected
 
@@ -725,7 +727,7 @@ def test_blueprint_code_rejects_unknown_language(venv_code: BlueprintCode) -> No
     assert error_codes(venv_code, 'language') == ['invalid_choice']
 
 
-@pytest.mark.parametrize('language', ['json', 'nginx'])
+@pytest.mark.parametrize('language', ['json', 'nginx', 'yaml', 'dockerfile'])
 def test_blueprint_code_accepts_config_languages(venv_code: BlueprintCode, language: str) -> None:
     venv_code.language = language
     venv_code.full_clean()

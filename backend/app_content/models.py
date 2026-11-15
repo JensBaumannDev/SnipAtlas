@@ -101,6 +101,8 @@ class CodeLanguage(models.TextChoices):
     ENV = 'env', '.env'
     JSON = 'json', 'JSON'
     NGINX = 'nginx', 'nginx'
+    YAML = 'yaml', 'YAML'
+    DOCKERFILE = 'dockerfile', 'Dockerfile'
 
 
 def language_constraint(*, optional: bool = False) -> models.CheckConstraint:
