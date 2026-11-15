@@ -137,6 +137,7 @@ STATICFILES_DIRS = [BASE_DIR / 'core' / 'static']
 MAILERS = {'default': mailer_config(env)}
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='noreply@snipatlas.jensbaumann.com')
 REPLY_TO_EMAIL = env('REPLY_TO_EMAIL')
+MAIL_IN_BACKGROUND = True
 
 # Frontend
 FRONTEND_URL = env('FRONTEND_URL', default='http://localhost:4200')

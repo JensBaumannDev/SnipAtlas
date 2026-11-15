@@ -1,7 +1,15 @@
-"""Mail backend configuration and the language of mails."""
+"""Mail backend configuration, sending in the background and the language of mails."""
+
+import logging
+from smtplib import SMTPException
+from threading import Thread
 
 import environ
+from django.conf import settings
+from django.core.mail import EmailMessage
 from django.utils import translation
+
+logger = logging.getLogger(__name__)
 
 MAIL_LANGUAGES = ('de', 'en')
 CONSOLE_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -33,3 +41,21 @@ def mail_language(code: str | None = None) -> str:
         code = translation.get_language() or ''
     language = code.lower().split('-')[0]
     return language if language in MAIL_LANGUAGES else MAIL_LANGUAGES[0]
+
+
+def send_in_background(message: EmailMessage, name: str) -> Thread | None:
+    """Send the mail in its own thread so the response time reveals nothing."""
+    if not settings.MAIL_IN_BACKGROUND:
+        _deliver(message, name)
+        return None
+    thread = Thread(target=_deliver, args=(message, name), name=f'mail-{name}')
+    thread.start()
+    return thread
+
+
+def _deliver(message: EmailMessage, name: str) -> None:
+    """Send the mail and log errors instead of raising."""
+    try:
+        message.send()
+    except SMTPException, OSError:
+        logger.exception('Mail "%s" failed', name)
