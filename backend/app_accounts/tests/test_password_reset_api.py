@@ -122,6 +122,21 @@ def test_reset_for_deactivated_user_sends_no_mail(api_client: APIClient, user: U
     assert mail.outbox == []
 
 
+def test_reset_for_unconfirmed_user_sends_no_mail(api_client: APIClient, user: User) -> None:
+    User.objects.filter(pk=user.pk).update(email_confirmed=False)
+    response = request_reset(api_client)
+    assert (response.status_code, response.content) == (204, b'')
+    assert mail.outbox == []
+
+
+def test_reset_after_activation_sends_mail(api_client: APIClient, user: User) -> None:
+    User.objects.filter(pk=user.pk).update(email_confirmed=False)
+    request_reset(api_client)
+    User.objects.filter(pk=user.pk).update(email_confirmed=True)
+    request_reset(api_client)
+    assert len(mail.outbox) == 1
+
+
 def test_reset_for_user_without_password_sends_no_mail(api_client: APIClient, db: None) -> None:
     User.objects.create_user('nopass@example.com')
     assert request_reset(api_client, 'nopass@example.com').status_code == 204

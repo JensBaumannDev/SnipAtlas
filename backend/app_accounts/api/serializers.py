@@ -198,9 +198,9 @@ class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=254)
 
     def save(self) -> None:
-        """Send the mail if an active user with a password exists."""
+        """Send the mail if an active, confirmed user with a password exists."""
         email = UserManager.normalize_email(self.validated_data['email'])
-        user = User.objects.filter(email=email, is_active=True).first()
+        user = User.objects.filter(email=email, is_active=True, email_confirmed=True).first()
         if user and user.has_usable_password():
             send_reset_mail(user)
 
