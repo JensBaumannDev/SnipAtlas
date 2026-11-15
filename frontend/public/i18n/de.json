@@ -522,7 +522,7 @@
       "title": "Kosten",
       "free": {
         "question": "Kostet SnipAtlas etwas?",
-        "answer": "Nein. SnipAtlas ist kostenlos, ohne Werbung und ohne Tracking."
+        "answer": "Nein. SnipAtlas ist kostenlos und ohne Werbung. Für die Besucherzahlen nutze ich Umami, ohne Cookies und ohne Nutzerprofile."
       }
     },
     "requests": {
@@ -579,7 +579,11 @@
       },
       "logsText": "Diese Daten brauche ich, um den Betrieb sicherzustellen, Fehler zu finden und Angriffe abzuwehren. Ich führe sie nicht mit anderen Daten zusammen und werte sie nicht für Statistiken aus. Die Logdateien werden nach 14 Tagen automatisch gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.",
       "resources": "Schriften und Symbole",
-      "resourcesText": "Die Schrift Geist, die Symbole und die Logos der Themen liegen auf dem eigenen Server und werden von dort geladen. Es besteht keine Verbindung zu Google Fonts, Content-Delivery-Netzwerken oder anderen fremden Servern. Deine IP-Adresse geht also an niemanden außer an meinen Server.",
+      "resourcesText": "Die Schriften Urbanist und IBM Plex Mono, die Symbole und die Logos der Themen liegen auf dem eigenen Server und werden von dort geladen. Es besteht keine Verbindung zu Google Fonts oder Content-Delivery-Netzwerken. Einzige Ausnahme ist die Besucherstatistik mit Umami (siehe nächster Abschnitt).",
+      "analytics": "Webanalyse mit Umami",
+      "analyticsText": "SnipAtlas nutzt den Webanalysedienst Umami Cloud, angeboten von Umami Software, Inc. (USA). Die erfassten Daten werden auf Servern in der Europäischen Union gespeichert. Umami erfasst anonymisierte Nutzungsdaten wie aufgerufene Seiten, Verweildauer, verweisende Website (Referrer), ungefähres Herkunftsland, Gerätetyp, Browser und Betriebssystem. So kann ich nachvollziehen, wie SnipAtlas genutzt wird, und es verbessern.",
+      "analyticsPrivacy": "Umami setzt keine Cookies, speichert keine Informationen auf deinem Endgerät und erstellt keine geräteübergreifenden Profile. Deine IP-Adresse wird nicht gespeichert, sondern nur kurzzeitig zur Bildung eines anonymen, regelmäßig wechselnden Prüfwerts verwendet. Eine Identifizierung einzelner Besucher ist mir nicht möglich.",
+      "analyticsBasis": "Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; ich habe ein berechtigtes Interesse an der anonymisierten Analyse des Nutzerverhaltens, um SnipAtlas zu verbessern. Die Daten werden in der EU gespeichert; da der Anbieter seinen Sitz in den USA hat, lässt sich ein Zugriff aus den USA jedoch nicht vollständig ausschließen. Du kannst der Erfassung widersprechen, indem du in deinem Browser die Einstellung „Do Not Track“ aktivierst oder einen Skript-Blocker verwendest.",
       "cookies": "Cookies",
       "cookiesText": "SnipAtlas setzt keine Cookies für Werbung, Analyse oder Tracking. Wenn du dich anmeldest, speichert SnipAtlas ein Cookie mit einem Anmelde-Token in deinem Browser. Es sorgt dafür, dass du angemeldet bleibst und dich nicht bei jedem Besuch neu anmelden musst. Das Cookie wird gelöscht, wenn du dich abmeldest, spätestens aber nach 14 Tagen. Ohne Anmeldung setzt SnipAtlas keine Cookies.",
       "cookiesBasis": "Dieses Cookie ist für die Anmeldung unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG), eine Einwilligung ist dafür nicht nötig. Rechtsgrundlage für die Verarbeitung ist Art. 6 Abs. 1 lit. b DSGVO.",
