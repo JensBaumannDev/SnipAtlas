@@ -99,6 +99,8 @@ class CodeLanguage(models.TextChoices):
     CSS = 'css', 'CSS'
     GITIGNORE = 'gitignore', '.gitignore'
     ENV = 'env', '.env'
+    JSON = 'json', 'JSON'
+    NGINX = 'nginx', 'nginx'
 
 
 def language_constraint(*, optional: bool = False) -> models.CheckConstraint:

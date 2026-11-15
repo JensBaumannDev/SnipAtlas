@@ -87,8 +87,15 @@ function highlightLine(line: string, language: CodeLanguage): CodeLine {
   if (isComment(trimmed, language)) {
     return singleToken(line, 'comment');
   }
+  return languageLine(line, trimmed, language);
+}
+
+function languageLine(line: string, trimmed: string, language: CodeLanguage): CodeLine {
+  if (language === 'nginx') {
+    return { prompt: false, tokens: terminalTokens(line, 'keyword') };
+  }
   if (language === 'terminal' || COMMAND.test(trimmed)) {
-    return { prompt: true, tokens: terminalTokens(line) };
+    return { prompt: true, tokens: terminalTokens(line, 'command') };
   }
   if (language === 'gitignore' || language === 'env') {
     return singleToken(line, 'plain');
@@ -119,7 +126,7 @@ function isComment(trimmed: string, language: CodeLanguage): boolean {
   return trimmed.startsWith('//') || (trimmed.startsWith('#') && language !== 'css');
 }
 
-function terminalTokens(line: string): CodeToken[] {
+function terminalTokens(line: string, firstWordKind: TokenKind): CodeToken[] {
   let commandFound = false;
   return tokenize(line, TERMINAL_TOKENS, ([, string, flag, number, word]) => {
     const kind = firstGroup([
@@ -131,7 +138,7 @@ function terminalTokens(line: string): CodeToken[] {
       return kind ?? 'plain';
     }
     commandFound = true;
-    return 'command';
+    return firstWordKind;
   });
 }
 

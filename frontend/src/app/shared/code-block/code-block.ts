@@ -27,6 +27,8 @@ const LANGUAGE_LABELS: Record<CodeLanguage, string> = {
   css: 'CSS',
   gitignore: '.gitignore',
   env: '.env',
+  json: 'JSON',
+  nginx: 'nginx',
 };
 
 interface ViewToken {

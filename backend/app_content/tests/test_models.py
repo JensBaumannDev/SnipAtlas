@@ -175,7 +175,18 @@ def test_concept_texts_follow_active_language(concept: Concept) -> None:
 
 
 def test_code_languages_match_frontend() -> None:
-    expected = ['terminal', 'python', 'javascript', 'typescript', 'html', 'css', 'gitignore', 'env']
+    expected = [
+        'terminal',
+        'python',
+        'javascript',
+        'typescript',
+        'html',
+        'css',
+        'gitignore',
+        'env',
+        'json',
+        'nginx',
+    ]
     assert CodeLanguage.values == expected
 
 
@@ -712,6 +723,15 @@ def test_blueprint_and_step_reject_invalid_slug(
 def test_blueprint_code_rejects_unknown_language(venv_code: BlueprintCode) -> None:
     venv_code.language = 'cobol'
     assert error_codes(venv_code, 'language') == ['invalid_choice']
+
+
+@pytest.mark.parametrize('language', ['json', 'nginx'])
+def test_blueprint_code_accepts_config_languages(venv_code: BlueprintCode, language: str) -> None:
+    venv_code.language = language
+    venv_code.full_clean()
+    venv_code.save()
+    venv_code.refresh_from_db()
+    assert venv_code.language == language
 
 
 def test_blueprint_slug_is_unique(blueprint: Blueprint) -> None:
