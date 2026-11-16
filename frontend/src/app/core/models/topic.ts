@@ -10,8 +10,11 @@ export interface Topic {
   subtopics: Subtopic[];
 }
 
+export type GroupArea = 'general' | 'ai';
+
 export interface Group {
   slug: string;
   name: string;
+  area: GroupArea;
   topics: Topic[];
 }

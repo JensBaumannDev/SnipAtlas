@@ -10,6 +10,7 @@
     "concepts": "Basics",
     "blueprints": "Guides",
     "debugging": "Errors",
+    "ai": "AI coding",
     "request": "Request",
     "settings": "Settings",
     "menu": "Menu",
@@ -24,6 +25,7 @@
     "concepts": "Basics",
     "blueprints": "Guides",
     "debugging": "Errors",
+    "ai": "AI coding",
     "request": "Request",
     "imprint": "Legal notice",
     "privacy": "Privacy policy",
@@ -44,6 +46,7 @@
     "concepts": "Web development basics explained simply: the ideas behind the code, with short examples for beginners.",
     "blueprints": "Step-by-step guides to a finished project, every step with its reason and code to copy.",
     "debugging": "Understand and fix error messages: meaning, cause and solution of common errors, plus general ways to debug.",
+    "ai": "Coding with AI agents like Claude Code, Codex and Antigravity CLI: setup, commands, basics and common errors for beginners.",
     "glossary": "Web development terms explained in short, with links to the detailed explanation in the basics.",
     "news": "What is new on SnipAtlas: new commands, basics, guides and error messages.",
     "request": "Missing a command, an explanation or an error message? Request new content for SnipAtlas here.",
@@ -345,6 +348,29 @@
         "title": "What if I get stuck?",
         "text": "Look up the message under your topic in the common errors. If that does not help, narrow the error down with one of the ways under Debugging."
       }
+    }
+  },
+  "ai": {
+    "lead": "Set up Claude Code, Codex and Antigravity CLI in the terminal and use them in a way that keeps you understanding the code.",
+    "kinds": "Content for this tool",
+    "info": {
+      "what": {
+        "title": "What is AI coding?",
+        "text": "An AI agent works right inside your project. It reads files, suggests changes, runs commands and checks the result. You describe the task, the agent works through it step by step and asks before it does anything important."
+      },
+      "why": {
+        "title": "Why is it worth it?",
+        "text": "Agents take routine work off your hands, such as writing tests, narrowing down bugs or restructuring code. That only works well if you know how to describe tasks, which permissions to give the agent and how to check its result."
+      },
+      "start": {
+        "title": "Where do I start?",
+        "text": "Pick a tool and set it up. Then create a project file that holds your rules. And never keep code you cannot explain."
+      }
+    },
+    "notice": {
+      "title": "Coding with AI still means understanding the code.",
+      "text": "An agent writes fast. Whether the code is right is up to you. Read every change and only keep what you can explain.",
+      "confirm": "Got it, continue"
     }
   },
   "item": {

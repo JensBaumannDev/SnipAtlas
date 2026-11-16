@@ -6,19 +6,22 @@ import { ErrorApi } from '../../core/api/error-api';
 import { triangleAlertIcon } from '../../core/ui/icons';
 import { syncOutline } from '../../core/ui/page-outline';
 import { injectTopic } from '../../core/content/topic-resource';
+import { ContentPaths } from '../../core/content/content-paths';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
+import { KindTabs } from '../../shared/kind-tabs/kind-tabs';
 import { DebugGuideCard } from './debug-guide-card/debug-guide-card';
 import { ErrorCard } from './error-card/error-card';
 
 @Component({
-  imports: [AreaInfo, AreaIntro, DebugGuideCard, ErrorCard, TopicHeader, TranslatePipe],
+  imports: [AreaInfo, AreaIntro, DebugGuideCard, ErrorCard, KindTabs, TopicHeader, TranslatePipe],
   selector: 'app-errors',
   styleUrl: './errors.scss',
   templateUrl: './errors.html',
 })
 export class Errors {
+  protected readonly paths = inject(ContentPaths);
   private readonly errorApi = inject(ErrorApi);
   private readonly debugGuideApi = inject(DebugGuideApi);
 

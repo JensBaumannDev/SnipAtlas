@@ -1,4 +1,12 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -7,7 +15,9 @@ import { AreaLink } from '../../core/content/area-links';
 import { filterGroups } from '../../core/content/content-index';
 import { NavGroup, navGroups } from '../../core/content/nav-groups';
 import { TopicApi } from '../../core/api/topic-api';
+import { AiCodingNotice } from '../../core/user-data/ai-notice';
 import { TopicLogo } from '../../shared/topic-logo/topic-logo';
+import { AiNotice } from '../ai-notice/ai-notice';
 
 interface MenuColumn extends NavGroup {
   summaries: string[];
@@ -21,13 +31,16 @@ function toColumn(group: NavGroup): MenuColumn {
 }
 
 @Component({
-  imports: [RouterLink, TopicLogo, TranslatePipe],
+  imports: [AiNotice, RouterLink, TopicLogo, TranslatePipe],
   selector: 'app-area-menu',
   styleUrl: './area-menu.scss',
   templateUrl: './area-menu.html',
 })
 export class AreaMenu {
   private readonly areaContent = inject(AreaContent);
+  private readonly notice = inject(AiCodingNotice);
+  private readonly injector = inject(Injector);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
 
   readonly link = input.required<AreaLink>();
@@ -45,6 +58,10 @@ export class AreaMenu {
 
   protected readonly loaded = computed(() => this.index.hasValue());
 
+  protected readonly noticeOpen = computed(
+    () => this.link().area === 'ai' && !this.notice.confirmed(),
+  );
+
   protected readonly hasDebugColumn = computed(() => this.link().area === 'debugging');
 
   protected readonly columns = computed(() => {
@@ -56,4 +73,11 @@ export class AreaMenu {
     const groups = filterGroups(this.groups(), index);
     return navGroups(area, path, groups, this.debugWays.value()).map(toColumn);
   });
+
+  protected confirmNotice(): void {
+    this.notice.confirm();
+    afterNextRender(() => this.host.querySelector<HTMLElement>('.area-menu__topic')?.focus(), {
+      injector: this.injector,
+    });
+  }
 }

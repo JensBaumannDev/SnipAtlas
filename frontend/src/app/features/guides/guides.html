@@ -4,13 +4,17 @@
   <app-topic-header
     [topic]="topic"
     [heading]="topic.name"
-    [parentLabel]="'pages.blueprints' | translate"
-    parentLink="/anleitungen"
+    [parentLabel]="paths.rootLabel('blueprints', topic.slug) | translate"
+    [parentLink]="paths.rootPath('blueprints', topic.slug)"
   >
     <p class="topic-page__meta">
       {{ (count === 1 ? 'guides.countOne' : 'guides.count') | translate: { count: count } }}
     </p>
   </app-topic-header>
+
+  @if (paths.isAi(topic.slug)) {
+    <app-kind-tabs [topic]="topic.slug" />
+  }
 
   <section class="topic-page__section" aria-labelledby="guides-heading">
     <h2 class="topic-page__section-title" id="guides-heading">
@@ -22,7 +26,7 @@
           <h3 class="guides__title">
             <a
               class="guides__link"
-              [routerLink]="['/anleitungen', blueprint.topic, blueprint.slug]"
+              [routerLink]="[paths.path('blueprints', topic.slug), blueprint.topic, blueprint.slug]"
               >{{ blueprint.title }}</a
             >
           </h3>

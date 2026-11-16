@@ -6,19 +6,31 @@ import { EntryApi } from '../../core/api/entry-api';
 import { terminalIcon } from '../../core/ui/icons';
 import { Preferences } from '../../core/user-data/preferences';
 import { TopicListing } from '../../core/content/topic-listing';
+import { ContentPaths } from '../../core/content/content-paths';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { SubtopicTabs } from '../../shared/subtopic-tabs/subtopic-tabs';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
+import { KindTabs } from '../../shared/kind-tabs/kind-tabs';
 import { EntryCard } from './entry-card/entry-card';
 
 @Component({
-  imports: [AreaInfo, AreaIntro, EntryCard, RouterLink, SubtopicTabs, TopicHeader, TranslatePipe],
+  imports: [
+    AreaInfo,
+    AreaIntro,
+    EntryCard,
+    KindTabs,
+    RouterLink,
+    SubtopicTabs,
+    TopicHeader,
+    TranslatePipe,
+  ],
   selector: 'app-commands',
   styleUrl: './commands.scss',
   templateUrl: './commands.html',
 })
 export class Commands {
+  protected readonly paths = inject(ContentPaths);
   private readonly entryApi = inject(EntryApi);
 
   readonly topic = input<string>();

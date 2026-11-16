@@ -4,8 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
-import { AREA_LINKS, areaForUrl } from '../../core/content/area-links';
-import { ContentArea } from '../../core/content/content-index';
+import { AREA_LINKS, NavArea, areaForUrl } from '../../core/content/area-links';
 import { chevronDownIcon, menuIcon, xIcon } from '../../core/ui/icons';
 import { AreaMenu } from '../area-menu/area-menu';
 
@@ -33,9 +32,9 @@ export class MainNav {
   protected readonly chevronDownIcon = chevronDownIcon;
   protected readonly menuIcon = menuIcon;
   protected readonly xIcon = xIcon;
-  protected readonly openArea = signal<ContentArea | undefined>(undefined);
+  protected readonly openArea = signal<NavArea | undefined>(undefined);
   protected readonly menuOpen = signal(false);
-  protected readonly activeArea = signal<ContentArea | undefined>(undefined);
+  protected readonly activeArea = signal<NavArea | undefined>(undefined);
 
   constructor() {
     this.router.events
@@ -46,7 +45,7 @@ export class MainNav {
       .subscribe(() => this.onNavigation());
   }
 
-  protected toggleArea(area: ContentArea): void {
+  protected toggleArea(area: NavArea): void {
     this.clearHoverTimer();
     this.openArea.update((open) => (open === area ? undefined : area));
   }
@@ -55,7 +54,7 @@ export class MainNav {
     this.menuOpen.update((open) => !open);
   }
 
-  protected onPointerEnter(area: ContentArea, event: PointerEvent): void {
+  protected onPointerEnter(area: NavArea, event: PointerEvent): void {
     if (this.usesHover(event)) {
       this.schedule(() => this.openArea.set(area), this.openArea() ? 0 : OPEN_DELAY);
     }
@@ -68,7 +67,7 @@ export class MainNav {
   }
 
   protected onFocusOut(event: FocusEvent, item: HTMLElement): void {
-    if (!(event.relatedTarget instanceof Node) || !item.contains(event.relatedTarget)) {
+    if (event.relatedTarget instanceof Node && !item.contains(event.relatedTarget)) {
       this.openArea.set(undefined);
     }
   }
@@ -85,7 +84,7 @@ export class MainNav {
   }
 
   protected onDocumentClick(event: MouseEvent): void {
-    if (event.target instanceof Node && !this.host.contains(event.target)) {
+    if (!event.composedPath().includes(this.host)) {
       this.openArea.set(undefined);
       this.menuOpen.set(false);
     }

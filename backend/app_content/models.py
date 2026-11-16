@@ -19,17 +19,35 @@ def validate_topic_slug(value: str) -> None:
         raise ValidationError(_('This slug is reserved.'), code='reserved')
 
 
+class GroupArea(models.TextChoices):
+    """Navigation area a topic group belongs to."""
+
+    GENERAL = 'general', _('General areas')
+    AI = 'ai', _('AI coding')
+
+
 class Group(models.Model):
     """Group of topics in the sidebar, such as frontend or backend."""
 
     slug = models.SlugField(unique=True, validators=[validate_clean_slug], verbose_name=_('slug'))
     name = models.CharField(max_length=60, verbose_name=_('name'))
+    area = models.CharField(
+        max_length=20,
+        choices=GroupArea.choices,
+        default=GroupArea.GENERAL,
+        verbose_name=_('area'),
+    )
     position = models.IntegerField(default=0, verbose_name=_('position'))
 
     class Meta:
         verbose_name = _('topic group')
         verbose_name_plural = _('topic groups')
         ordering = ('position', 'pk')
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(area__in=GroupArea.values), name='group_area_valid'
+            ),
+        ]
 
     def __str__(self) -> str:
         return self.name

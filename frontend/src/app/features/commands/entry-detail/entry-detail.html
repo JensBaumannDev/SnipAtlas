@@ -6,7 +6,7 @@
       [topic]="topic"
       [heading]="entry.title"
       [parentLabel]="subtopic ? topic.name + ' · ' + subtopic.name : topic.name"
-      [parentLink]="['/befehle', topic.slug, entry.subtopic]"
+      [parentLink]="[paths.path('commands', topic.slug), topic.slug, entry.subtopic]"
     >
       <app-favorite-star [entry]="entry" labeled />
     </app-topic-header>

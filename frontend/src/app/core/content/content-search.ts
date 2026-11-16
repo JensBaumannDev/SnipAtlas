@@ -1,6 +1,7 @@
 import { Service, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { combineLatest, map } from 'rxjs';
+import { ContentPaths } from './content-paths';
 import { Blueprint } from '../models/blueprint';
 import { BlueprintApi } from '../api/blueprint-api';
 import { Concept, conceptLink } from '../models/concept';
@@ -142,6 +143,8 @@ function limitPerArea(results: readonly SearchResult[]): SearchResult[] {
 
 @Service()
 export class ContentSearch {
+  private readonly paths = inject(ContentPaths);
+
   private readonly items = toSignal(
     combineLatest([
       inject(EntryApi).getAll(),
@@ -175,6 +178,10 @@ export class ContentSearch {
       .sort((a, b) => rank(b, terms) - rank(a, terms))
       .map((item) => item.result);
     const glossary = glossaryCount ? [glossarySummary(query.trim(), glossaryCount)] : [];
-    return limitPerArea([...glossary, ...results]);
+    return this.placed(limitPerArea([...glossary, ...results]));
+  }
+
+  private placed(results: readonly SearchResult[]): SearchResult[] {
+    return results.map((result) => ({ ...result, link: this.paths.areaLink(result.link) }));
   }
 }

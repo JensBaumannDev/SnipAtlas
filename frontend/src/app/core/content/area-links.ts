@@ -1,7 +1,11 @@
 import { ContentArea } from './content-index';
 
+export type NavArea = ContentArea | 'ai';
+
+export const AI_PATH = '/ki-coding';
+
 export interface AreaLink {
-  area: ContentArea;
+  area: NavArea;
   path: string;
   label: string;
   lead: string;
@@ -37,9 +41,27 @@ export const AREA_LINKS: readonly AreaLink[] = [
     lead: 'debugging.lead',
     preview: 'TypeError: Cannot read\nproperties of undefined',
   },
+  {
+    area: 'ai',
+    path: AI_PATH,
+    label: 'nav.ai',
+    lead: 'ai.lead',
+    preview: '$ claude\n> /init\n✓ CLAUDE.md',
+  },
 ];
 
-export function areaForUrl(url: string): ContentArea | undefined {
+export const AREA_PATHS: Readonly<Record<ContentArea, string>> = {
+  commands: '/befehle',
+  concepts: '/grundlagen',
+  blueprints: '/anleitungen',
+  debugging: '/fehler',
+};
+
+export function aiAreaPath(area: ContentArea): string {
+  return `${AI_PATH}${AREA_PATHS[area]}`;
+}
+
+export function areaForUrl(url: string): NavArea | undefined {
   const path = `/${url.split(/[/?#]/)[1] ?? ''}`;
   return AREA_LINKS.find((link) => link.path === path)?.area;
 }

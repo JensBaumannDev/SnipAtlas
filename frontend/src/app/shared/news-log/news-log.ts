@@ -1,7 +1,8 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NewsItem } from '../../core/models/news';
+import { ContentPaths } from '../../core/content/content-paths';
 import { TerminalWindow } from '../terminal-window/terminal-window';
 
 const FRESH_DAYS = 14;
@@ -14,6 +15,8 @@ const DAY = 24 * 60 * 60 * 1000;
   templateUrl: './news-log.html',
 })
 export class NewsLog {
+  private readonly paths = inject(ContentPaths);
+
   readonly items = input.required<NewsItem[]>();
   readonly command = input('snipatlas log');
 
@@ -21,6 +24,7 @@ export class NewsLog {
     const freshSince = Date.now() - FRESH_DAYS * DAY;
     return this.items().map((item) => ({
       ...item,
+      link: this.paths.areaLink(item.link),
       fresh: new Date(item.date).getTime() >= freshSince,
     }));
   });

@@ -1,9 +1,9 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { conceptLink } from '../../../core/models/concept';
 import { ConceptApi } from '../../../core/api/concept-api';
 import { findSubtopic, injectTopic } from '../../../core/content/topic-resource';
+import { ContentPaths } from '../../../core/content/content-paths';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { Note } from '../../../shared/note/note';
 import { RelatedList } from '../../../shared/related-list/related-list';
@@ -18,6 +18,7 @@ import { TopicHeader } from '../../../shared/topic-header/topic-header';
   templateUrl: './concept-detail.html',
 })
 export class ConceptDetail {
+  protected readonly paths = inject(ContentPaths);
   private readonly conceptApi = inject(ConceptApi);
 
   readonly topic = input.required<string>();
@@ -45,6 +46,10 @@ export class ConceptDetail {
     this.topicConcepts
       .value()
       .filter((concept) => concept.subtopic === this.subtopic() && concept.slug !== this.slug())
-      .map((concept) => ({ slug: concept.slug, title: concept.title, link: conceptLink(concept) })),
+      .map((concept) => ({
+        slug: concept.slug,
+        title: concept.title,
+        link: this.paths.link('concepts', concept.topic, concept.subtopic, concept.slug),
+      })),
   );
 }

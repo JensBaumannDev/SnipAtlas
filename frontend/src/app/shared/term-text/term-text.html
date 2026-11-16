@@ -1,22 +1,26 @@
 @let current = open();
-<p>
-  @for (part of parts(); track $index) {
-    @if (part.term; as term) {
-      <button
-        class="term-text__term"
-        type="button"
-        [class.term-text__term--open]="current?.slug === term.slug"
-        [attr.aria-expanded]="current?.slug === term.slug"
-        [attr.aria-controls]="definitionId"
-        (click)="toggle(term)"
-      >
-        {{ part.text }}
-      </button>
-    } @else {
-      {{ part.text }}
-    }
+<div class="term-text__body">
+  @for (paragraph of paragraphs(); track $index) {
+    <p>
+      @for (part of paragraph; track $index) {
+        @if (part.term; as term) {
+          <button
+            class="term-text__term"
+            type="button"
+            [class.term-text__term--open]="current?.slug === term.slug"
+            [attr.aria-expanded]="current?.slug === term.slug"
+            [attr.aria-controls]="definitionId"
+            (click)="toggle(term)"
+          >
+            {{ part.text }}
+          </button>
+        } @else {
+          {{ part.text }}
+        }
+      }
+    </p>
   }
-</p>
+</div>
 
 @if (current) {
   <div class="term-text__definition" [id]="definitionId">

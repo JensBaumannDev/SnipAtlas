@@ -4,8 +4,8 @@
   <app-topic-header
     [topic]="topic"
     [heading]="topic.name"
-    [parentLabel]="'pages.debugging' | translate"
-    parentLink="/fehler"
+    [parentLabel]="paths.rootLabel('debugging', topic.slug) | translate"
+    [parentLink]="paths.rootPath('debugging', topic.slug)"
   >
     <p class="topic-page__meta">
       {{
@@ -14,6 +14,10 @@
       }}
     </p>
   </app-topic-header>
+
+  @if (paths.isAi(topic.slug)) {
+    <app-kind-tabs [topic]="topic.slug" />
+  }
 
   @if (topicGuides.value().length) {
     <section class="topic-page__section" aria-labelledby="errors-guides">

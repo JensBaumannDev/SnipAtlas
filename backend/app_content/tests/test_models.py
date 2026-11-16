@@ -20,6 +20,7 @@ from app_content.models import (
     GlossaryAlias,
     GlossaryTerm,
     Group,
+    GroupArea,
     News,
     NewsArea,
     Subtopic,
@@ -69,6 +70,34 @@ def test_topics_are_ordered_by_position(group: Group, topic: Topic) -> None:
 def test_subtopics_are_ordered_by_position(topic: Topic, subtopic: Subtopic) -> None:
     first = Subtopic.objects.create(topic=topic, slug='umgebung', name_de='Umgebung', position=-1)
     assert list(topic.subtopics.all()) == [first, subtopic]
+
+
+# Group areas
+def test_group_area_defaults_to_general(group: Group) -> None:
+    assert group.area == GroupArea.GENERAL == 'general'
+
+
+def test_group_area_accepts_ai(db: None) -> None:
+    group = Group(slug='ki', name_de='KI', area=GroupArea.AI)
+    group.full_clean()
+    group.save()
+    assert Group.objects.get(slug='ki').area == 'ai'
+
+
+@pytest.mark.parametrize('area', ['', 'KI', 'AI', 'befehle'])
+def test_group_area_rejects_unknown_value(db: None, area: str) -> None:
+    group = Group(slug='ki', name_de='KI', area=area)
+    assert error_codes(group, 'area') == ['blank' if not area else 'invalid_choice']
+
+
+@pytest.mark.parametrize('area', ['', 'KI', 'AI', 'befehle'])
+def test_group_area_is_blocked_in_database(db: None, area: str) -> None:
+    with pytest.raises(IntegrityError):
+        Group.objects.create(slug='ki', name_de='KI', area=area)
+
+
+def test_group_area_is_not_translated(group: Group) -> None:
+    assert not hasattr(group, 'area_en')
 
 
 # Slugs

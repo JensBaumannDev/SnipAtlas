@@ -6,9 +6,10 @@ import {
   ResolveFn,
   Router,
 } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, combineLatest, map } from 'rxjs';
 import { AreaContent } from './area-content';
 import { ContentIndex, isContentArea } from './content-index';
+import { ContentPaths } from './content-paths';
 
 interface PlacedItem {
   topic: string;
@@ -28,6 +29,10 @@ function inIndex(index: ContentIndex, topic: string, subtopic: string | null): b
   return !subtopic || index[topic].includes(subtopic);
 }
 
+function inRouteArea(route: ActivatedRouteSnapshot, topic: string): Observable<boolean> {
+  return inject(ContentPaths).belongsTo(topic, route.data['ai'] === true);
+}
+
 export const contentExists: CanActivateFn = (route) => {
   const area: unknown = route.data['area'];
   const missing = notFound();
@@ -36,9 +41,10 @@ export const contentExists: CanActivateFn = (route) => {
   }
   const topic = route.paramMap.get('topic') ?? '';
   const subtopic = route.paramMap.get('subtopic');
-  return inject(AreaContent)
-    .getIndex(area)
-    .pipe(map((index) => (inIndex(index, topic, subtopic) ? true : missing)));
+  const index = inject(AreaContent).getIndex(area);
+  return combineLatest([index, inRouteArea(route, topic)]).pipe(
+    map(([found, inArea]) => (inArea && inIndex(found, topic, subtopic) ? true : missing)),
+  );
 };
 
 function belongsToRoute(item: PlacedItem | undefined, route: ActivatedRouteSnapshot): boolean {
@@ -58,8 +64,9 @@ function findInRoute<T>(
 export function itemExists(find: FindBySlug<PlacedItem>): CanActivateFn {
   return (route) => {
     const missing = notFound();
-    return findInRoute(find, route).pipe(
-      map((item) => (belongsToRoute(item, route) ? true : missing)),
+    const inArea = inRouteArea(route, route.paramMap.get('topic') ?? '');
+    return combineLatest([findInRoute(find, route), inArea]).pipe(
+      map(([item, own]) => (own && belongsToRoute(item, route) ? true : missing)),
     );
   };
 }

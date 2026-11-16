@@ -47,6 +47,7 @@ def test_groups_list_is_public(api_client: APIClient, subtopic: Subtopic) -> Non
         {
             'slug': 'backend',
             'name': 'Backend',
+            'area': 'general',
             'topics': [
                 {
                     'slug': 'python',
@@ -57,6 +58,18 @@ def test_groups_list_is_public(api_client: APIClient, subtopic: Subtopic) -> Non
             ],
         }
     ]
+
+
+def test_groups_list_returns_ai_area(api_client: APIClient, group: Group) -> None:
+    Group.objects.create(slug='ki', name_de='KI-Coding', area='ai', position=1)
+    data = api_client.get(reverse('group-list'), HTTP_ACCEPT_LANGUAGE='en').json()
+    assert [(item['slug'], item['area']) for item in data] == [('backend', 'general'), ('ki', 'ai')]
+
+
+def test_groups_list_ignores_area_parameter(api_client: APIClient, group: Group) -> None:
+    Group.objects.create(slug='ki', name_de='KI-Coding', area='ai', position=1)
+    data = api_client.get(reverse('group-list'), {'area': 'ai'}).json()
+    assert [item['slug'] for item in data] == ['backend', 'ki']
 
 
 def test_groups_list_keeps_order(api_client: APIClient, group: Group, topic: Topic) -> None:

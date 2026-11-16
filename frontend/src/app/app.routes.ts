@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { aiRoutes, aiTopicStart } from './core/content/ai-routes';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,42 @@ export const routes: Routes = [
     title: 'pages.debugging',
     data: { area: 'debugging', description: 'meta.debugging' },
     loadChildren: () => import('./features/errors/errors.routes').then((m) => m.ERRORS_ROUTES),
+  },
+  {
+    path: 'ki-coding',
+    title: 'pages.ai',
+    data: { ai: true, description: 'meta.ai' },
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/ai-coding/ai-coding').then((m) => m.AiCoding),
+      },
+      {
+        path: 'befehle',
+        data: { area: 'commands' },
+        loadChildren: () =>
+          import('./features/commands/commands.routes').then((m) => aiRoutes(m.COMMANDS_ROUTES)),
+      },
+      {
+        path: 'grundlagen',
+        data: { area: 'concepts' },
+        loadChildren: () =>
+          import('./features/concepts/concepts.routes').then((m) => aiRoutes(m.CONCEPTS_ROUTES)),
+      },
+      {
+        path: 'anleitungen',
+        data: { area: 'blueprints' },
+        loadChildren: () =>
+          import('./features/guides/guides.routes').then((m) => aiRoutes(m.GUIDES_ROUTES)),
+      },
+      {
+        path: 'fehler',
+        data: { area: 'debugging' },
+        loadChildren: () =>
+          import('./features/errors/errors.routes').then((m) => aiRoutes(m.ERRORS_ROUTES)),
+      },
+      { path: ':topic', canActivate: [aiTopicStart], children: [] },
+    ],
   },
   {
     path: 'begriffe',

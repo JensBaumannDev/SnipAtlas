@@ -2,8 +2,8 @@ import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ErrorApi } from '../../../core/api/error-api';
-import { errorLink } from '../../../core/models/error-message';
 import { injectTopic } from '../../../core/content/topic-resource';
+import { ContentPaths } from '../../../core/content/content-paths';
 import { RelatedList } from '../../../shared/related-list/related-list';
 import { ReportLink } from '../../../shared/report-link/report-link';
 import { TopicHeader } from '../../../shared/topic-header/topic-header';
@@ -16,6 +16,7 @@ import { ErrorBody } from '../error-body/error-body';
   templateUrl: './error-detail.html',
 })
 export class ErrorDetail {
+  protected readonly paths = inject(ContentPaths);
   private readonly errorApi = inject(ErrorApi);
 
   readonly topic = input.required<string>();
@@ -38,6 +39,10 @@ export class ErrorDetail {
     this.topicErrors
       .value()
       .filter((error) => error.slug !== this.slug())
-      .map((error) => ({ slug: error.slug, title: error.message, link: errorLink(error) })),
+      .map((error) => ({
+        slug: error.slug,
+        title: error.message,
+        link: this.paths.link('debugging', error.topic, error.slug),
+      })),
   );
 }

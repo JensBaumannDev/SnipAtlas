@@ -4,6 +4,13 @@
   display: block;
 }
 
+// Paragraphs
+.term-text__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
 // Term
 .term-text__term {
   padding: 0;

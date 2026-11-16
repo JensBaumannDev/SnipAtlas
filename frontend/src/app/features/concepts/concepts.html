@@ -5,8 +5,12 @@
   <app-topic-header
     [topic]="topic"
     [heading]="subtopic?.name ?? topic.name"
-    [parentLabel]="subtopic ? topic.name : ('pages.concepts' | translate)"
-    [parentLink]="subtopic ? ['/grundlagen', topic.slug] : '/grundlagen'"
+    [parentLabel]="subtopic ? topic.name : (paths.rootLabel('concepts', topic.slug) | translate)"
+    [parentLink]="
+      subtopic
+        ? [paths.path('concepts', topic.slug), topic.slug]
+        : paths.rootPath('concepts', topic.slug)
+    "
   >
     <p class="topic-page__meta">
       {{
@@ -21,8 +25,15 @@
     }
   </app-topic-header>
 
+  @if (paths.isAi(topic.slug)) {
+    <app-kind-tabs [topic]="topic.slug" />
+  }
+
   @if (listing.tabs().length > 1) {
-    <app-subtopic-tabs [path]="['/grundlagen', topic.slug]" [subtopics]="listing.tabs()" />
+    <app-subtopic-tabs
+      [path]="[paths.path('concepts', topic.slug), topic.slug]"
+      [subtopics]="listing.tabs()"
+    />
   }
 
   @for (section of listing.sections(); track section.subtopic.slug) {
@@ -31,7 +42,7 @@
         <h2 class="topic-page__section-title" [id]="section.subtopic.slug">
           <a
             class="topic-page__section-link"
-            [routerLink]="['/grundlagen', topic.slug, section.subtopic.slug]"
+            [routerLink]="[paths.path('concepts', topic.slug), topic.slug, section.subtopic.slug]"
           >
             {{ section.subtopic.name }}
           </a>

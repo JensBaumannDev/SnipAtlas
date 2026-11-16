@@ -5,6 +5,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/api/blueprint-api';
 import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
 import { UserRequestApi } from '../../../core/api/user-request-api';
+import { ContentPaths } from '../../../core/content/content-paths';
 import { Collection } from '../../../shared/collection/collection';
 import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
 
@@ -17,6 +18,7 @@ const LATEST_REQUESTS = 2;
   templateUrl: './profile-overview.html',
 })
 export class ProfileOverview {
+  protected readonly paths = inject(ContentPaths);
   private readonly progress = inject(BlueprintProgress);
   private readonly blueprints = toSignal(inject(BlueprintApi).getAll(), { initialValue: [] });
   private readonly requests = toSignal(inject(UserRequestApi).getMine(), { initialValue: [] });
