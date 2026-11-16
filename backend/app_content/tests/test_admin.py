@@ -102,15 +102,62 @@ def test_group_add_page_has_language_tabs(admin_client: Client) -> None:
     assert {'name_de', 'name_en'} <= set(fields)
 
 
+def group_data(**changes: str) -> dict:
+    data = {
+        'slug': 'tools',
+        'name_de': 'Werkzeuge',
+        'name_en': 'Tools',
+        'area': 'general',
+        'position': 2,
+    }
+    return {**data, **changes}
+
+
 def test_admin_adds_group(admin_client: Client) -> None:
-    data = {'slug': 'tools', 'name_de': 'Werkzeuge', 'name_en': 'Tools', 'position': 2}
+    response = admin_client.post(reverse('admin:app_content_group_add'), group_data())
+    assert response.status_code == 302
+    group = Group.objects.get(slug='tools')
+    assert (group.name_en, group.area) == ('Tools', 'general')
+
+
+def test_admin_adds_ai_group(admin_client: Client) -> None:
+    data = group_data(slug='ki', name_de='KI-Coding', name_en='AI coding', area='ai')
     response = admin_client.post(reverse('admin:app_content_group_add'), data)
     assert response.status_code == 302
-    assert Group.objects.get(slug='tools').name_en == 'Tools'
+    assert Group.objects.get(slug='ki').area == 'ai'
+
+
+@pytest.mark.parametrize('area', ['', 'KI', 'befehle'])
+def test_admin_rejects_unknown_group_area(admin_client: Client, area: str) -> None:
+    response = admin_client.post(reverse('admin:app_content_group_add'), group_data(area=area))
+    expected = ['required'] if not area else ['invalid_choice']
+    assert form_error_codes(response, 'area') == expected
+    assert not Group.objects.exists()
+
+
+def test_admin_changes_group_area(admin_client: Client, group: Group) -> None:
+    url = reverse('admin:app_content_group_change', args=[group.pk])
+    data = group_data(slug='backend', name_de='Backend', name_en='Backend', area='ai')
+    response = admin_client.post(url, data)
+    assert response.status_code == 302
+    group.refresh_from_db()
+    assert group.area == 'ai'
+
+
+def test_group_list_shows_area(admin_client: Client, group: Group) -> None:
+    response = admin_client.get(reverse('admin:app_content_group_changelist'))
+    assert 'area' in response.context['cl'].list_display
+
+
+def test_group_list_filters_by_area(admin_client: Client, group: Group) -> None:
+    ai = Group.objects.create(slug='ki', name_de='KI', area='ai')
+    url = reverse('admin:app_content_group_changelist')
+    response = admin_client.get(url, {'area__exact': 'ai'})
+    assert list(response.context['cl'].result_list) == [ai]
 
 
 def test_admin_requires_german_name(admin_client: Client) -> None:
-    data = {'slug': 'tools', 'name_de': '', 'name_en': 'Tools', 'position': 2}
+    data = {'slug': 'tools', 'name_de': '', 'name_en': 'Tools', 'area': 'general', 'position': 2}
     response = admin_client.post(reverse('admin:app_content_group_add'), data)
     assert form_error_codes(response, 'name_de') == ['required']
 

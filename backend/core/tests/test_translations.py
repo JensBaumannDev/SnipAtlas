@@ -9,7 +9,7 @@ from django.utils import translation
 from modeltranslation.fields import TranslationField
 
 from app_accounts.models import Accent, Language, OperatingSystem
-from app_content.models import Entry, News, NewsArea, Topic, validate_topic_slug
+from app_content.models import Entry, GroupArea, News, NewsArea, Topic, validate_topic_slug
 from app_feedback.models import (
     BugType,
     EntryArea,
@@ -60,6 +60,7 @@ FIELD_NAMES = [
     ('app_accounts.completedstep', 'created_at', 'Erstellt am', 'created at'),
     ('app_content.group', 'slug', 'Slug', 'slug'),
     ('app_content.group', 'name', 'Name', 'name'),
+    ('app_content.group', 'area', 'Bereich', 'area'),
     ('app_content.group', 'position', 'Position', 'position'),
     ('app_content.topic', 'group', 'Themengruppe', 'topic group'),
     ('app_content.topic', 'slug', 'Slug', 'slug'),
@@ -163,6 +164,8 @@ FIELD_NAMES = [
 ]
 
 CHOICE_LABELS = [
+    (GroupArea.GENERAL, 'Allgemeine Bereiche', 'General areas'),
+    (GroupArea.AI, 'KI-Coding', 'AI coding'),
     (Accent.BLUE, 'Blau', 'Blue'),
     (Accent.TEAL, 'Petrol', 'Teal'),
     (Accent.RASPBERRY, 'Himbeere', 'Raspberry'),
@@ -263,7 +266,7 @@ def test_choice_label_is_german_and_english(
 
 
 def test_every_own_choice_has_a_label() -> None:
-    enums = (Accent, OperatingSystem, Language, NewsArea, Kind, Status)
+    enums = (Accent, OperatingSystem, Language, GroupArea, NewsArea, Kind, Status)
     enums += (EntryArea, ImprovementArea, BugType, RequestLanguage)
     assert {choice for enum in enums for choice in enum} == own_choices()
 

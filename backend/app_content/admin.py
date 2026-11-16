@@ -37,8 +37,9 @@ from .models import (
 class GroupAdmin(TabbedTranslationAdmin):
     """Admin for groups."""
 
-    list_display = ('name', 'slug', 'position')
+    list_display = ('name', 'slug', 'area', 'position')
     list_editable = ('position',)
+    list_filter = ('area',)
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
 

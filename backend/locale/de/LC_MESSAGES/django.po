@@ -2,6 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SnipAtlas\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-16 21:23+0100\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -116,11 +117,20 @@ msgstr "Inhalte"
 msgid "This slug is reserved."
 msgstr "Dieser Slug ist reserviert."
 
+msgid "General areas"
+msgstr "Allgemeine Bereiche"
+
+msgid "AI coding"
+msgstr "KI-Coding"
+
 msgid "slug"
 msgstr "Slug"
 
 msgid "name"
 msgstr "Name"
+
+msgid "area"
+msgstr "Bereich"
 
 msgid "position"
 msgstr "Position"
@@ -280,9 +290,6 @@ msgstr "Fehler"
 
 msgid "date"
 msgstr "Datum"
-
-msgid "area"
-msgstr "Bereich"
 
 msgid "news item"
 msgstr "Neuigkeit"
