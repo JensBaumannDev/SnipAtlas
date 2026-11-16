@@ -1,4 +1,5 @@
-import { Injector, Service, Type, inject } from '@angular/core';
+import { Injector, Service, Signal, Type, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable, combineLatest, from, map, switchMap } from 'rxjs';
 import { NavArea } from './area-links';
 import { CONTENT_AREAS, ContentIndex, mergeIndex } from './content-index';
@@ -10,6 +11,17 @@ const loadDebugGuideApi = () => import('../api/debug-guide-api').then((m) => m.D
 interface IndexSource {
   getIndex(): Observable<ContentIndex>;
 }
+
+interface TopicSource {
+  getByTopic(topic: string): Observable<unknown>;
+}
+
+const TOPIC_SOURCES: readonly (() => Promise<Type<TopicSource>>)[] = [
+  () => import('../api/entry-api').then((m) => m.EntryApi),
+  () => import('../api/concept-api').then((m) => m.ConceptApi),
+  () => import('../api/error-api').then((m) => m.ErrorApi),
+  loadDebugGuideApi,
+];
 
 function toWayTopic(guide: DebugGuide): Topic {
   return {
@@ -23,6 +35,7 @@ function toWayTopic(guide: DebugGuide): Topic {
 @Service()
 export class AreaContent {
   private readonly injector = inject(Injector);
+  private kindIndexes?: Signal<ContentIndex[]>;
 
   getIndex(area: NavArea): Observable<ContentIndex> {
     switch (area) {
@@ -44,6 +57,22 @@ export class AreaContent {
 
   getKindIndexes(): Observable<ContentIndex[]> {
     return combineLatest(CONTENT_AREAS.map((kind) => this.getIndex(kind)));
+  }
+
+  kindIndexesSignal(): Signal<ContentIndex[]> {
+    this.kindIndexes ??= toSignal(this.getKindIndexes(), {
+      initialValue: [],
+      injector: this.injector,
+    });
+    return this.kindIndexes;
+  }
+
+  prefetchTopic(topic: string): void {
+    for (const source of TOPIC_SOURCES) {
+      from(source())
+        .pipe(switchMap((type) => this.injector.get(type).getByTopic(topic)))
+        .subscribe();
+    }
   }
 
   getDebugWays(): Observable<Topic[]> {

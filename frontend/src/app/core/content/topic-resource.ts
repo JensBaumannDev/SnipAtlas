@@ -1,6 +1,6 @@
-import { Signal, inject } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
-import { Subtopic, Topic } from '../models/topic';
+import { Signal, computed, inject } from '@angular/core';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { Group, Subtopic, Topic } from '../models/topic';
 import { TopicApi } from '../api/topic-api';
 
 export interface SubtopicSection<T> {
@@ -8,12 +8,18 @@ export interface SubtopicSection<T> {
   items: T[];
 }
 
+function findTopic(groups: readonly Group[], slug: string | undefined): Topic | undefined {
+  return groups.flatMap((group) => group.topics).find((topic) => topic.slug === slug);
+}
+
 export function injectTopic(slug: () => string | undefined): Signal<Topic | undefined> {
   const topicApi = inject(TopicApi);
-  return rxResource({
+  const groups = toSignal(topicApi.getGroups(), { initialValue: [] });
+  const loaded = rxResource({
     params: slug,
     stream: ({ params }) => topicApi.getBySlug(params),
   }).value;
+  return computed(() => findTopic(groups(), slug()) ?? loaded());
 }
 
 export function findSubtopic(

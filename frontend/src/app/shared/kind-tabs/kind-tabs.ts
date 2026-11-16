@@ -1,10 +1,9 @@
-import { Component, computed, inject, input } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, afterRenderEffect, computed, inject, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AreaContent } from '../../core/content/area-content';
 import { aiAreaPath } from '../../core/content/area-links';
-import { CONTENT_AREAS, ContentArea, ContentIndex } from '../../core/content/content-index';
+import { CONTENT_AREAS, ContentArea } from '../../core/content/content-index';
 
 const KIND_LABELS: Readonly<Record<ContentArea, string>> = {
   commands: 'nav.commands',
@@ -22,9 +21,8 @@ const KIND_LABELS: Readonly<Record<ContentArea, string>> = {
 export class KindTabs {
   readonly topic = input.required<string>();
 
-  private readonly indexes = toSignal(inject(AreaContent).getKindIndexes(), {
-    initialValue: [] as ContentIndex[],
-  });
+  private readonly areaContent = inject(AreaContent);
+  private readonly indexes = this.areaContent.kindIndexesSignal();
 
   protected readonly tabs = computed(() => {
     const topic = this.topic();
@@ -36,4 +34,8 @@ export class KindTabs {
       }),
     );
   });
+
+  constructor() {
+    afterRenderEffect(() => this.areaContent.prefetchTopic(this.topic()));
+  }
 }
