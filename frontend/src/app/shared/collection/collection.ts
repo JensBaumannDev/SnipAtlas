@@ -15,6 +15,7 @@ import { Favorites } from '../../core/user-data/favorites';
 import { starIcon } from '../../core/ui/icons';
 import { LoginDialog } from '../../core/auth/login-dialog';
 import { Session } from '../../core/auth/session';
+import { ContentPaths } from '../../core/content/content-paths';
 
 @Component({
   imports: [RouterLink, TranslatePipe, LucideDynamicIcon],
@@ -23,6 +24,7 @@ import { Session } from '../../core/auth/session';
   templateUrl: './collection.html',
 })
 export class Collection {
+  protected readonly paths = inject(ContentPaths);
   private readonly loginDialog = inject(LoginDialog);
   private readonly injector = inject(Injector);
   private readonly list = viewChild<ElementRef<HTMLUListElement>>('list');

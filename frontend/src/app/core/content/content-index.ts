@@ -4,10 +4,15 @@ export type ContentArea = 'commands' | 'concepts' | 'blueprints' | 'debugging';
 
 export type ContentIndex = Readonly<Record<string, readonly string[]>>;
 
-const AREAS: readonly ContentArea[] = ['commands', 'concepts', 'blueprints', 'debugging'];
+export const CONTENT_AREAS: readonly ContentArea[] = [
+  'commands',
+  'concepts',
+  'blueprints',
+  'debugging',
+];
 
 export function isContentArea(value: unknown): value is ContentArea {
-  return AREAS.some((area) => area === value);
+  return CONTENT_AREAS.some((area) => area === value);
 }
 
 export function buildIndex(items: readonly { topic: string; subtopic?: string }[]): ContentIndex {

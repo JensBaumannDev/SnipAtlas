@@ -7,18 +7,21 @@ import { BlueprintProgress } from '../../core/user-data/blueprint-progress';
 import { routeIcon } from '../../core/ui/icons';
 import { syncOutline } from '../../core/ui/page-outline';
 import { injectTopic } from '../../core/content/topic-resource';
+import { ContentPaths } from '../../core/content/content-paths';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { ProgressBar } from '../../shared/progress-bar/progress-bar';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
+import { KindTabs } from '../../shared/kind-tabs/kind-tabs';
 
 @Component({
-  imports: [AreaInfo, AreaIntro, ProgressBar, RouterLink, TopicHeader, TranslatePipe],
+  imports: [AreaInfo, AreaIntro, KindTabs, ProgressBar, RouterLink, TopicHeader, TranslatePipe],
   selector: 'app-guides',
   styleUrl: './guides.scss',
   templateUrl: './guides.html',
 })
 export class Guides {
+  protected readonly paths = inject(ContentPaths);
   private readonly blueprintApi = inject(BlueprintApi);
   protected readonly progress = inject(BlueprintProgress);
 

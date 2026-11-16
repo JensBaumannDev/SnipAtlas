@@ -1,0 +1,57 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+  margin-bottom: $space-lg;
+}
+
+// Tabs
+.kind-tabs__list {
+  display: flex;
+  gap: $space-xs;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.kind-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: $control-height;
+  padding: 0 $space-md;
+  margin-bottom: -1px;
+  font-weight: $font-weight-medium;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    color: var(--accent);
+  }
+
+  &--active,
+  &--active:hover {
+    font-weight: $font-weight-semibold;
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .kind-tabs__list {
+    justify-content: safe center;
+    padding-inline: $space-md;
+    margin-inline: -$space-md;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .kind-tabs__tab {
+    white-space: nowrap;
+  }
+}
+
+/* #endregion */

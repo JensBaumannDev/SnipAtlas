@@ -1,4 +1,4 @@
-import { ContentArea } from './content-index';
+import { NavArea } from './area-links';
 import { DEBUG_PATH } from '../models/debug-guide';
 import { Group, Topic } from '../models/topic';
 
@@ -34,11 +34,17 @@ function debuggingGroups(
   ];
 }
 
+function groupsOfArea(area: NavArea | undefined, groups: readonly Group[]): Group[] {
+  const groupArea = area === 'ai' ? 'ai' : 'general';
+  return groups.filter((group) => group.area === groupArea);
+}
+
 export function navGroups(
-  area: ContentArea | undefined,
+  area: NavArea | undefined,
   path: string,
   groups: readonly Group[],
   ways: readonly Topic[],
 ): NavGroup[] {
-  return area === 'debugging' ? debuggingGroups(path, groups, ways) : topicGroups(path, groups);
+  const own = groupsOfArea(area, groups);
+  return area === 'debugging' ? debuggingGroups(path, own, ways) : topicGroups(path, own);
 }

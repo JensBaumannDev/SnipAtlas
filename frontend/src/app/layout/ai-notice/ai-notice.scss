@@ -1,0 +1,72 @@
+@use 'abstracts' as *;
+
+:host {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-md;
+}
+
+// Card
+.ai-notice {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  align-items: center;
+  max-width: rem(440);
+  padding: $space-xl;
+  text-align: center;
+  background: var(--raised);
+  border-radius: $radius-card;
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--ink) 12%, transparent);
+  animation: ai-notice-in var(--duration) var(--ease);
+}
+
+.ai-notice__title {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: var(--ink);
+  letter-spacing: $letter-spacing-tight;
+  text-wrap: balance;
+}
+
+.ai-notice__text {
+  color: var(--text);
+}
+
+.ai-notice__confirm {
+  font-weight: $font-weight-semibold;
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+
+  &:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+}
+
+// Animation
+@keyframes ai-notice-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* #region RESPONSIVE */
+@include nav-compact {
+  :host {
+    align-items: flex-start;
+    padding: $space-sm 0;
+  }
+
+  .ai-notice {
+    padding: $space-lg;
+  }
+}
+
+/* #endregion */

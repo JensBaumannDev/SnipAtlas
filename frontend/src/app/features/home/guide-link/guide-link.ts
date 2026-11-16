@@ -5,6 +5,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/api/blueprint-api';
 import { Blueprint } from '../../../core/models/blueprint';
 import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
+import { ContentPaths } from '../../../core/content/content-paths';
 
 interface GuideState {
   blueprint: Blueprint;
@@ -19,6 +20,7 @@ interface GuideState {
   templateUrl: './guide-link.html',
 })
 export class GuideLink {
+  protected readonly paths = inject(ContentPaths);
   private readonly progress = inject(BlueprintProgress);
   private readonly blueprints = toSignal(inject(BlueprintApi).getAll(), { initialValue: [] });
 

@@ -6,6 +6,7 @@ import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
 import { syncOutline } from '../../../core/ui/page-outline';
 import { placeholderKeys } from '../../../core/user-data/project-values';
 import { injectTopic } from '../../../core/content/topic-resource';
+import { ContentPaths } from '../../../core/content/content-paths';
 import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
 import { ProjectForm } from '../../../shared/project-form/project-form';
 import { TopicHeader } from '../../../shared/topic-header/topic-header';
@@ -18,6 +19,7 @@ import { GuideStep } from '../guide-step/guide-step';
   templateUrl: './guide-detail.html',
 })
 export class GuideDetail {
+  protected readonly paths = inject(ContentPaths);
   private readonly blueprintApi = inject(BlueprintApi);
   private readonly progress = inject(BlueprintProgress);
 

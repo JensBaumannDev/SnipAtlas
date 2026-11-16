@@ -3,7 +3,7 @@
     [topic]="currentTopic()"
     [heading]="blueprint.title"
     [parentLabel]="currentTopic()?.name ?? ('pages.blueprints' | translate)"
-    [parentLink]="['/anleitungen', blueprint.topic]"
+    [parentLink]="[paths.path('blueprints', blueprint.topic), blueprint.topic]"
   >
     <p class="guide-detail__lead">{{ blueprint.summary }}</p>
   </app-topic-header>

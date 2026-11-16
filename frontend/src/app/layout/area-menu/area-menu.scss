@@ -20,6 +20,11 @@
 }
 
 // Columns
+.area-menu__main {
+  position: relative;
+  min-width: 0;
+}
+
 .area-menu__columns {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(rem(200), 1fr));
@@ -28,6 +33,13 @@
 
   &--narrow {
     grid-template-columns: repeat(auto-fill, minmax(rem(160), 1fr));
+  }
+
+  &--locked {
+    pointer-events: none;
+    user-select: none;
+    opacity: $opacity-disabled;
+    filter: blur(6px);
   }
 }
 

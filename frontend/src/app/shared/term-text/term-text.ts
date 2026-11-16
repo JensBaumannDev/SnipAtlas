@@ -2,9 +2,21 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { GlossaryTerm } from '../../core/models/glossary-term';
-import { TermLinker } from '../../core/content/term-linker';
+import { TermLinker, TextPart } from '../../core/content/term-linker';
+
+const PARAGRAPH_BREAK = /\n\s*\n/;
 
 let nextId = 0;
+
+function toParagraphs(parts: readonly TextPart[]): TextPart[][] {
+  const paragraphs: TextPart[][] = [[]];
+  for (const part of parts) {
+    const [first = '', ...rest] = part.term ? [part.text] : part.text.split(PARAGRAPH_BREAK);
+    paragraphs[paragraphs.length - 1].push({ ...part, text: first });
+    paragraphs.push(...rest.map((text) => [{ text }]));
+  }
+  return paragraphs;
+}
 
 @Component({
   imports: [RouterLink, TranslatePipe],
@@ -21,7 +33,7 @@ export class TermText {
   readonly text = input.required<string>();
 
   protected readonly definitionId = `term-text-${nextId++}`;
-  protected readonly parts = computed(() => this.linker.split(this.text()));
+  protected readonly paragraphs = computed(() => toParagraphs(this.linker.split(this.text())));
   protected readonly open = signal<GlossaryTerm | undefined>(undefined);
 
   protected toggle(term: GlossaryTerm): void {

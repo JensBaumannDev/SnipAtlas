@@ -5,6 +5,7 @@ import {
   ArrowRightLeft,
   BookA,
   BookText,
+  Bot,
   Bug,
   Check,
   ChevronDown,
@@ -41,6 +42,7 @@ export const arrowRightLeftIcon: LucideIconData = {
 };
 export const bookAIcon: LucideIconData = { name: 'book-a', node: BookA };
 export const bookTextIcon: LucideIconData = { name: 'book-text', node: BookText };
+export const botIcon: LucideIconData = { name: 'bot', node: Bot };
 export const bugIcon: LucideIconData = { name: 'bug', node: Bug };
 export const checkIcon: LucideIconData = { name: 'check', node: Check };
 export const chevronDownIcon: LucideIconData = { name: 'chevron-down', node: ChevronDown };

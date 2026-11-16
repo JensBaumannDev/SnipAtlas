@@ -9,7 +9,7 @@
       <li>
         <a
           class="collection__link"
-          [routerLink]="['/befehle', favorite.topic, favorite.subtopic, favorite.slug]"
+          [routerLink]="paths.link('commands', favorite.topic, favorite.subtopic, favorite.slug)"
         >
           <svg [lucideIcon]="starIcon" class="icon collection__icon"></svg>
           <span class="collection__title">{{ favorite.title }}</span>

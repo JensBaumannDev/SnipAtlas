@@ -1,7 +1,7 @@
 @if (state(); as state) {
   <a
     class="guide-link__link"
-    [routerLink]="['/anleitungen', state.blueprint.topic, state.blueprint.slug]"
+    [routerLink]="paths.link('blueprints', state.blueprint.topic, state.blueprint.slug)"
   >
     {{
       (state.started ? 'home.guide.continue' : 'home.guide.start')

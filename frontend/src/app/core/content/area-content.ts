@@ -1,6 +1,7 @@
 import { Injector, Service, Type, inject } from '@angular/core';
 import { Observable, combineLatest, from, map, switchMap } from 'rxjs';
-import { ContentArea, ContentIndex, mergeIndex } from './content-index';
+import { NavArea } from './area-links';
+import { CONTENT_AREAS, ContentIndex, mergeIndex } from './content-index';
 import { DebugGuide } from '../models/debug-guide';
 import { Topic } from '../models/topic';
 
@@ -23,7 +24,7 @@ function toWayTopic(guide: DebugGuide): Topic {
 export class AreaContent {
   private readonly injector = inject(Injector);
 
-  getIndex(area: ContentArea): Observable<ContentIndex> {
+  getIndex(area: NavArea): Observable<ContentIndex> {
     switch (area) {
       case 'commands':
         return this.load(() => import('../api/entry-api').then((m) => m.EntryApi));
@@ -36,7 +37,13 @@ export class AreaContent {
           this.load(() => import('../api/error-api').then((m) => m.ErrorApi)),
           this.load(loadDebugGuideApi),
         ]).pipe(map((indexes) => mergeIndex(...indexes)));
+      case 'ai':
+        return this.getAiIndex();
     }
+  }
+
+  getKindIndexes(): Observable<ContentIndex[]> {
+    return combineLatest(CONTENT_AREAS.map((kind) => this.getIndex(kind)));
   }
 
   getDebugWays(): Observable<Topic[]> {
@@ -44,6 +51,10 @@ export class AreaContent {
       switchMap((type) => this.injector.get(type).getGeneral()),
       map((guides) => guides.map(toWayTopic)),
     );
+  }
+
+  private getAiIndex(): Observable<ContentIndex> {
+    return this.getKindIndexes().pipe(map((indexes) => mergeIndex(...indexes)));
   }
 
   private load(source: () => Promise<Type<IndexSource>>): Observable<ContentIndex> {

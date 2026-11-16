@@ -10,6 +10,7 @@
     "concepts": "Grundlagen",
     "blueprints": "Anleitungen",
     "debugging": "Fehler",
+    "ai": "KI-Coding",
     "request": "Anfrage",
     "settings": "Einstellungen",
     "menu": "Menü",
@@ -24,6 +25,7 @@
     "concepts": "Grundlagen",
     "blueprints": "Anleitungen",
     "debugging": "Fehler",
+    "ai": "KI-Coding",
     "request": "Anfrage",
     "imprint": "Impressum",
     "privacy": "Datenschutz",
@@ -44,6 +46,7 @@
     "concepts": "Grundlagen der Webentwicklung einfach erklärt: die Ideen hinter dem Code, mit kurzen Beispielen für Einsteiger.",
     "blueprints": "Anleitungen Schritt für Schritt bis zum fertigen Projekt, jeder Schritt mit Begründung und Code zum Kopieren.",
     "debugging": "Fehlermeldungen verstehen und lösen: Bedeutung, Ursache und Lösung häufiger Fehler, dazu allgemeine Wege zum Debuggen.",
+    "ai": "Coden mit KI-Agenten wie Claude Code, Codex und Antigravity CLI: einrichten, Befehle, Grundlagen und häufige Fehler für Einsteiger.",
     "glossary": "Begriffe aus der Webentwicklung kurz erklärt, mit Links zur ausführlichen Erklärung in den Grundlagen.",
     "news": "Was neu auf SnipAtlas ist: neue Befehle, Grundlagen, Anleitungen und Fehlermeldungen.",
     "request": "Fehlt ein Befehl, eine Erklärung oder eine Fehlermeldung? Hier kannst du dir neue Inhalte für SnipAtlas wünschen.",
@@ -345,6 +348,29 @@
         "title": "Was, wenn ich nicht weiterkomme?",
         "text": "Such die Meldung unter deinem Thema bei den häufigen Fehlern. Hilft das nicht, grenz den Fehler mit einem der Wege unter Debuggen ein."
       }
+    }
+  },
+  "ai": {
+    "lead": "Claude Code, Codex und Antigravity CLI im Terminal einrichten und so nutzen, dass du den Code noch verstehst.",
+    "kinds": "Inhalte zu diesem Werkzeug",
+    "info": {
+      "what": {
+        "title": "Was ist KI-Coding?",
+        "text": "Ein KI-Agent arbeitet direkt in deinem Projekt. Er liest Dateien, schlägt Änderungen vor, führt Befehle aus und prüft das Ergebnis. Du beschreibst die Aufgabe, der Agent erledigt sie Schritt für Schritt und fragt nach, bevor er etwas Wichtiges tut."
+      },
+      "why": {
+        "title": "Warum lohnt es sich?",
+        "text": "Agenten nehmen dir Routine ab, etwa Tests schreiben, Fehler eingrenzen oder Code umstellen. Das klappt aber nur gut, wenn du weißt, wie du Aufgaben stellst, welche Rechte du dem Agenten gibst und wie du sein Ergebnis prüfst."
+      },
+      "start": {
+        "title": "Womit fange ich an?",
+        "text": "Such dir ein Werkzeug aus und richte es ein. Lege dann eine Projektdatei an, in der deine Regeln stehen. Und übernimm keinen Code, den du nicht erklären kannst."
+      }
+    },
+    "notice": {
+      "title": "Coden mit KI heißt, den Code trotzdem zu verstehen.",
+      "text": "Ein Agent schreibt schnell. Ob der Code stimmt, entscheidest du. Lies jede Änderung und übernimm nur, was du erklären kannst.",
+      "confirm": "Verstanden, weiter"
     }
   },
   "item": {

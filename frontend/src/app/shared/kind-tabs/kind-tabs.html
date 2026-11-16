@@ -1,0 +1,18 @@
+@if (tabs().length > 1) {
+  <nav [attr.aria-label]="'ai.kinds' | translate">
+    <ul class="kind-tabs__list" role="list">
+      @for (tab of tabs(); track tab.kind) {
+        <li>
+          <a
+            class="kind-tabs__tab"
+            [routerLink]="tab.link"
+            routerLinkActive="kind-tabs__tab--active"
+            ariaCurrentWhenActive="page"
+          >
+            {{ tab.label | translate }}
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+}

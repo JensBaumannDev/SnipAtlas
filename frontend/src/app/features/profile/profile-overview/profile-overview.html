@@ -11,7 +11,7 @@
     <div class="profile-row">
       <a
         class="profile-row__title profile-overview__link"
-        [routerLink]="['/anleitungen', item.blueprint.topic, item.blueprint.slug]"
+        [routerLink]="paths.link('blueprints', item.blueprint.topic, item.blueprint.slug)"
       >
         {{ item.blueprint.title }}
       </a>

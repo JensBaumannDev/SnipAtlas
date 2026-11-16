@@ -5,19 +5,31 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ConceptApi } from '../../core/api/concept-api';
 import { bookTextIcon } from '../../core/ui/icons';
 import { TopicListing } from '../../core/content/topic-listing';
+import { ContentPaths } from '../../core/content/content-paths';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
 import { SubtopicTabs } from '../../shared/subtopic-tabs/subtopic-tabs';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
+import { KindTabs } from '../../shared/kind-tabs/kind-tabs';
 import { ConceptCard } from './concept-card/concept-card';
 
 @Component({
-  imports: [AreaInfo, AreaIntro, ConceptCard, RouterLink, SubtopicTabs, TopicHeader, TranslatePipe],
+  imports: [
+    AreaInfo,
+    AreaIntro,
+    ConceptCard,
+    KindTabs,
+    RouterLink,
+    SubtopicTabs,
+    TopicHeader,
+    TranslatePipe,
+  ],
   selector: 'app-concepts',
   styleUrl: './concepts.scss',
   templateUrl: './concepts.html',
 })
 export class Concepts {
+  protected readonly paths = inject(ContentPaths);
   private readonly conceptApi = inject(ConceptApi);
 
   readonly topic = input<string>();

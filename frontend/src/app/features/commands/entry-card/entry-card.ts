@@ -5,6 +5,7 @@ import { Entry } from '../../../core/models/entry';
 import { resolveOsCode } from '../../../core/content/os-code';
 import { Preferences } from '../../../core/user-data/preferences';
 import { ProjectValues, fillPlaceholders } from '../../../core/user-data/project-values';
+import { ContentPaths } from '../../../core/content/content-paths';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { Disclosure } from '../../../shared/disclosure/disclosure';
 import { ItemLinks } from '../../../shared/item-links/item-links';
@@ -18,6 +19,7 @@ import { FavoriteStar } from '../favorite-star/favorite-star';
   templateUrl: './entry-card.html',
 })
 export class EntryCard {
+  private readonly paths = inject(ContentPaths);
   private readonly os = inject(Preferences).os;
   private readonly project = inject(ProjectValues);
 
@@ -33,6 +35,6 @@ export class EntryCard {
   );
   protected readonly link = computed(() => {
     const { topic, subtopic, slug } = this.entry();
-    return ['/befehle', topic, subtopic, slug];
+    return this.paths.link('commands', topic, subtopic, slug);
   });
 }

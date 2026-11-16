@@ -6,7 +6,7 @@
       [topic]="topic"
       [heading]="concept.title"
       [parentLabel]="subtopic ? topic.name + ' · ' + subtopic.name : topic.name"
-      [parentLink]="['/grundlagen', topic.slug, concept.subtopic]"
+      [parentLink]="[paths.path('concepts', topic.slug), topic.slug, concept.subtopic]"
     >
       <p class="concept-detail__summary">{{ concept.summary }}</p>
     </app-topic-header>
