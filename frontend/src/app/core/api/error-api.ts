@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { cachedPerLanguage, notFoundAsUndefined } from './api-request';
+import { cachedPerLanguage, cachedPerLanguageAndKey, notFoundAsUndefined } from './api-request';
 import { ContentIndex, buildIndex } from '../content/content-index';
 import { ErrorMessage } from '../models/error-message';
 
@@ -13,9 +13,9 @@ export class ErrorApi {
 
   readonly getAll = cachedPerLanguage(() => this.http.get<ErrorMessage[]>(URL));
 
-  getByTopic(topic: string): Observable<ErrorMessage[]> {
-    return this.http.get<ErrorMessage[]>(URL, { params: { topic } });
-  }
+  readonly getByTopic = cachedPerLanguageAndKey((topic) =>
+    this.http.get<ErrorMessage[]>(URL, { params: { topic } }),
+  );
 
   getBySlug(slug: string): Observable<ErrorMessage | undefined> {
     return this.http.get<ErrorMessage>(`${URL}${slug}/`).pipe(notFoundAsUndefined());

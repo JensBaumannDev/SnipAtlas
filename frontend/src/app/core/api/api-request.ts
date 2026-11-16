@@ -14,6 +14,19 @@ export function cachedPerLanguage<T>(load: () => Observable<T>): () => Observabl
   };
 }
 
+export function cachedPerLanguageAndKey<T>(
+  load: (key: string) => Observable<T>,
+): (key: string) => Observable<T> {
+  const translate = inject(TranslateService);
+  const cache = new Map<string, Observable<T>>();
+  return (key) => {
+    const id = `${translate.getCurrentLang() ?? 'de'}:${key}`;
+    const cached = cache.get(id) ?? load(key).pipe(shareReplay(1));
+    cache.set(id, cached);
+    return cached;
+  };
+}
+
 export function notFoundAsUndefined<T>(): OperatorFunction<T, T | undefined> {
   return catchError((error: unknown) =>
     error instanceof HttpErrorResponse && error.status === 404

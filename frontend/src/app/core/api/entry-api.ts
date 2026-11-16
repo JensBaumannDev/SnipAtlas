@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { cachedPerLanguage, notFoundAsUndefined } from './api-request';
+import { cachedPerLanguage, cachedPerLanguageAndKey, notFoundAsUndefined } from './api-request';
 import { ContentIndex, buildIndex } from '../content/content-index';
 import { Entry } from '../models/entry';
 
@@ -13,9 +13,9 @@ export class EntryApi {
 
   readonly getAll = cachedPerLanguage(() => this.http.get<Entry[]>(URL));
 
-  getByTopic(topic: string): Observable<Entry[]> {
-    return this.http.get<Entry[]>(URL, { params: { topic } });
-  }
+  readonly getByTopic = cachedPerLanguageAndKey((topic) =>
+    this.http.get<Entry[]>(URL, { params: { topic } }),
+  );
 
   getBySlug(slug: string): Observable<Entry | undefined> {
     return this.http.get<Entry>(`${URL}${slug}/`).pipe(notFoundAsUndefined());

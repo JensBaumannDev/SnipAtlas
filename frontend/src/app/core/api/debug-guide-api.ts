@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { cachedPerLanguage, notFoundAsUndefined } from './api-request';
+import { cachedPerLanguage, cachedPerLanguageAndKey, notFoundAsUndefined } from './api-request';
 import { ContentIndex, buildIndex } from '../content/content-index';
 import { DebugGuide } from '../models/debug-guide';
 
@@ -24,9 +24,9 @@ export class DebugGuideApi {
     );
   }
 
-  getByTopic(topic: string): Observable<DebugGuide[]> {
-    return this.http.get<DebugGuide[]>(URL, { params: { topic } });
-  }
+  readonly getByTopic = cachedPerLanguageAndKey((topic) =>
+    this.http.get<DebugGuide[]>(URL, { params: { topic } }),
+  );
 
   getIndex(): Observable<ContentIndex> {
     return this.getAll().pipe(
