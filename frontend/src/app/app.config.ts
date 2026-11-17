@@ -23,6 +23,7 @@ import { forwardedForInterceptor } from './core/http/forwarded-for-interceptor';
 import { languageInterceptor } from './core/http/language-interceptor';
 import { ComponentReuseStrategy } from './core/ui/component-reuse-strategy';
 import { PageMeta } from './core/ui/page-meta';
+import { ScrollRestoration } from './core/ui/scroll-restoration';
 import { Preferences } from './core/user-data/preferences';
 import { Session } from './core/auth/session';
 import { SettingsSync } from './core/user-data/settings-sync';
@@ -34,7 +35,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withComponentInputBinding(),
-      withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
+      withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'disabled' }),
       withRouterConfig({ onSameUrlNavigation: 'reload' }),
       withViewTransitions({ skipInitialTransition: true }),
     ),
@@ -54,6 +55,9 @@ export const appConfig: ApplicationConfig = {
       inject(SettingsSync);
     }),
     provideAppInitializer(() => inject(Session).restore()),
+    provideAppInitializer(() => {
+      inject(ScrollRestoration);
+    }),
     { provide: TitleStrategy, useExisting: PageMeta },
     { provide: RouteReuseStrategy, useExisting: ComponentReuseStrategy },
   ],

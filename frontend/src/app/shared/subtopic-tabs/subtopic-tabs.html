@@ -4,6 +4,7 @@
       <a
         class="subtopic-tabs__tab"
         [routerLink]="path()"
+        [info]="keepScroll"
         routerLinkActive="subtopic-tabs__tab--active"
         [routerLinkActiveOptions]="{ exact: true }"
         ariaCurrentWhenActive="page"
@@ -16,6 +17,7 @@
         <a
           class="subtopic-tabs__tab"
           [routerLink]="[...path(), subtopic.slug]"
+          [info]="keepScroll"
           routerLinkActive="subtopic-tabs__tab--active"
           ariaCurrentWhenActive="page"
         >
