@@ -1057,3 +1057,61 @@ def test_news_keeps_topic_and_subtopic(news: News) -> None:
         news.subtopic.delete()
     with pytest.raises(ProtectedError):
         news.topic.delete()
+
+
+# Frontend URLs
+def test_topic_url_points_to_the_area(topic: Topic) -> None:
+    assert topic.area_url('befehle') == '/befehle/python'
+    assert topic.area_url('fehler') == '/fehler/python'
+
+
+def test_subtopic_url_adds_its_slug(subtopic: Subtopic) -> None:
+    assert subtopic.area_url('grundlagen') == '/grundlagen/python/schleifen'
+
+
+def test_ai_topic_url_lies_under_ai_coding(ai_subtopic: Subtopic) -> None:
+    assert ai_subtopic.topic.area_url('befehle') == '/ki-coding/befehle/claude-code'
+    assert ai_subtopic.area_url('befehle') == '/ki-coding/befehle/claude-code/start'
+
+
+def test_entry_url(entry: Entry) -> None:
+    assert entry.get_absolute_url() == '/befehle/python/schleifen/for-schleife'
+
+
+def test_concept_url(concept: Concept) -> None:
+    assert concept.get_absolute_url() == '/grundlagen/python/schleifen/for-schleife'
+
+
+def test_blueprint_url(blueprint: Blueprint) -> None:
+    assert blueprint.get_absolute_url() == '/anleitungen/python/django-projekt-anlegen'
+
+
+def test_error_url(error_message: ErrorMessage) -> None:
+    assert error_message.get_absolute_url() == '/fehler/python/module-not-found'
+
+
+def test_general_debug_guide_url(debug_guide: DebugGuide) -> None:
+    assert debug_guide.get_absolute_url() == '/fehler/debuggen/vorgehen'
+
+
+def test_topic_debug_guide_url_is_the_topic_error_page(topic_guide: DebugGuide) -> None:
+    assert topic_guide.get_absolute_url() == '/fehler/python'
+
+
+def test_ai_content_urls_lie_under_ai_coding(ai_subtopic: Subtopic) -> None:
+    topic = ai_subtopic.topic
+    entry = Entry.objects.create(subtopic=ai_subtopic, slug='init', language='terminal')
+    concept = Concept.objects.create(subtopic=ai_subtopic, slug='kontext', language='python')
+    blueprint = Blueprint.objects.create(topic=topic, slug='einrichten')
+    error = ErrorMessage.objects.create(topic=topic, slug='kein-zugriff')
+    guide = DebugGuide.objects.create(topic=topic, slug='claude-debuggen')
+    assert entry.get_absolute_url() == '/ki-coding/befehle/claude-code/start/init'
+    assert concept.get_absolute_url() == '/ki-coding/grundlagen/claude-code/start/kontext'
+    assert blueprint.get_absolute_url() == '/ki-coding/anleitungen/claude-code/einrichten'
+    assert error.get_absolute_url() == '/ki-coding/fehler/claude-code/kein-zugriff'
+    assert guide.get_absolute_url() == '/ki-coding/fehler/claude-code'
+
+
+def test_url_is_the_same_in_every_language(entry: Entry) -> None:
+    with translation.override('en'):
+        assert entry.get_absolute_url() == '/befehle/python/schleifen/for-schleife'

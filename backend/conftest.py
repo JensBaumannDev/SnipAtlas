@@ -17,6 +17,7 @@ from app_content.models import (
     ErrorMessage,
     GlossaryTerm,
     Group,
+    GroupArea,
     News,
     Subtopic,
     Topic,
@@ -81,6 +82,13 @@ def subtopic(topic: Topic) -> Subtopic:
     return Subtopic.objects.create(
         topic=topic, slug='schleifen', name_de='Schleifen', name_en='Loops'
     )
+
+
+@pytest.fixture
+def ai_subtopic(db: None) -> Subtopic:
+    group = Group.objects.create(slug='ki', name_de='KI', area=GroupArea.AI)
+    topic = Topic.objects.create(group=group, slug='claude-code', name_de='Claude', color='#d97757')
+    return Subtopic.objects.create(topic=topic, slug='start', name_de='Start')
 
 
 @pytest.fixture

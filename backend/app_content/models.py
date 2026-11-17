@@ -9,6 +9,13 @@ from django.utils.translation import gettext_lazy as _
 
 RESERVED_TOPIC_SLUG = 'debuggen'
 
+# Frontend paths
+AI_PATH = '/ki-coding'
+COMMANDS_PATH = 'befehle'
+CONCEPTS_PATH = 'grundlagen'
+BLUEPRINTS_PATH = 'anleitungen'
+ERRORS_PATH = 'fehler'
+
 validate_hex_color = RegexValidator(r'^#[0-9a-fA-F]{6}$', code='invalid')
 validate_clean_slug = RegexValidator(r'^[a-z0-9]+(-[a-z0-9]+)*$', code='invalid')
 
@@ -80,6 +87,11 @@ class Topic(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def area_url(self, area: str) -> str:
+        """Return the URL of the topic page in an area, under AI coding for AI topics."""
+        prefix = AI_PATH if self.group.area == GroupArea.AI else ''
+        return f'{prefix}/{area}/{self.slug}'
+
 
 class Subtopic(models.Model):
     """Section within a topic that groups commands and concepts."""
@@ -103,6 +115,10 @@ class Subtopic(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    def area_url(self, area: str) -> str:
+        """Return the URL of the subtopic page in an area."""
+        return f'{self.topic.area_url(area)}/{self.slug}'
 
 
 # Entries and concepts
@@ -199,6 +215,8 @@ class ContentItem(models.Model):
     code = models.TextField(verbose_name=_('code'))
     position = models.IntegerField(default=0, verbose_name=_('position'))
 
+    url_area = ''
+
     objects = ContentItemQuerySet.as_manager()
 
     class Meta:
@@ -216,10 +234,15 @@ class ContentItem(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    def get_absolute_url(self) -> str:
+        """Return the URL of the detail page in the frontend."""
+        return f'{self.subtopic.area_url(self.url_area)}/{self.slug}'
+
 
 class Entry(ContentItem):
     """Command or snippet to copy, optionally with separate Unix code."""
 
+    url_area = COMMANDS_PATH
     description = models.TextField(verbose_name=_('description'))
     code_unix = models.TextField(blank=True, verbose_name=_('code for macOS/Linux'))
 
@@ -241,6 +264,7 @@ class Entry(ContentItem):
 class Concept(ContentItem):
     """Concept that explains the idea behind the code."""
 
+    url_area = CONCEPTS_PATH
     summary = models.TextField(verbose_name=_('summary'))
     explanation = models.TextField(verbose_name=_('explanation'))
     note = models.TextField(blank=True, verbose_name=_('note'))
@@ -295,6 +319,10 @@ class ErrorMessage(OptionalCode):
 
     def __str__(self) -> str:
         return self.message
+
+    def get_absolute_url(self) -> str:
+        """Return the URL of the error page in the frontend."""
+        return f'{self.topic.area_url(ERRORS_PATH)}/{self.slug}'
 
 
 class ErrorStep(models.Model):
@@ -352,6 +380,12 @@ class DebugGuide(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    def get_absolute_url(self) -> str:
+        """Return the page of a general guide, or the error page of its topic."""
+        if self.topic is None:
+            return f'/{ERRORS_PATH}/{RESERVED_TOPIC_SLUG}/{self.slug}'
+        return self.topic.area_url(ERRORS_PATH)
 
     def clean(self) -> None:
         """Require a label for general guides and forbid it for topic guides."""
@@ -420,6 +454,10 @@ class Blueprint(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    def get_absolute_url(self) -> str:
+        """Return the URL of the guide page in the frontend."""
+        return f'{self.topic.area_url(BLUEPRINTS_PATH)}/{self.slug}'
 
 
 class BlueprintStep(models.Model):

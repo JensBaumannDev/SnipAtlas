@@ -1,6 +1,7 @@
 """Admin for all content with tabs for German and English."""
 
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db.models import ForeignKey
@@ -89,7 +90,15 @@ class SubtopicChoicesMixin:
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class ContentItemAdmin(SubtopicChoicesMixin, TabbedTranslationAdmin):
+class FrontendLinkMixin:
+    """Admin mixin whose view on site button opens the page in the frontend."""
+
+    def view_on_site(self, obj: Blueprint | ContentItem | DebugGuide | ErrorMessage) -> str:
+        """Return the full frontend URL of the object."""
+        return f'{settings.FRONTEND_URL.rstrip("/")}{obj.get_absolute_url()}'
+
+
+class ContentItemAdmin(FrontendLinkMixin, SubtopicChoicesMixin, TabbedTranslationAdmin):
     """Shared admin for commands and concepts."""
 
     list_display = ('title', 'topic', 'subtopic', 'slug', 'position')
@@ -124,7 +133,7 @@ class ErrorStepInline(TranslationTabularInline):
 
 
 @admin.register(ErrorMessage)
-class ErrorMessageAdmin(TabbedTranslationAdmin):
+class ErrorMessageAdmin(FrontendLinkMixin, TabbedTranslationAdmin):
     """Admin for error messages with their steps."""
 
     fields = ('topic', 'slug', 'message', 'meaning', 'cause', 'language', 'code', 'position')
@@ -146,7 +155,7 @@ class DebugGuideStepInline(TranslationStackedInline):
 
 
 @admin.register(DebugGuide)
-class DebugGuideAdmin(TabbedTranslationAdmin):
+class DebugGuideAdmin(FrontendLinkMixin, TabbedTranslationAdmin):
     """Admin for debug guides with their steps."""
 
     fields = ('topic', 'label', 'slug', 'title', 'summary', 'position')
@@ -171,7 +180,7 @@ class BlueprintStepInline(TranslationStackedInline):
 
 
 @admin.register(Blueprint)
-class BlueprintAdmin(TabbedTranslationAdmin):
+class BlueprintAdmin(FrontendLinkMixin, TabbedTranslationAdmin):
     """Admin for blueprints with their steps."""
 
     fields = ('topic', 'slug', 'title', 'summary', 'position')
