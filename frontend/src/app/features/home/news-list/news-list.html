@@ -1,5 +1,5 @@
 <ul class="news-list__list" role="list">
-  @for (item of items(); track item.date + item.title) {
+  @for (item of rows(); track item.date + item.title) {
     <li>
       <a class="news-list__row" [routerLink]="item.link">
         <span class="news-list__topic">{{ item.topic }}</span>
