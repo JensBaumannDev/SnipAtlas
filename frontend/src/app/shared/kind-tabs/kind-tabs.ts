@@ -4,6 +4,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AreaContent } from '../../core/content/area-content';
 import { aiAreaPath } from '../../core/content/area-links';
 import { CONTENT_AREAS, ContentArea } from '../../core/content/content-index';
+import { KEEP_SCROLL } from '../../core/ui/scroll-restoration';
 
 const KIND_LABELS: Readonly<Record<ContentArea, string>> = {
   commands: 'nav.commands',
@@ -20,6 +21,8 @@ const KIND_LABELS: Readonly<Record<ContentArea, string>> = {
 })
 export class KindTabs {
   readonly topic = input.required<string>();
+
+  protected readonly keepScroll = KEEP_SCROLL;
 
   private readonly areaContent = inject(AreaContent);
   private readonly indexes = this.areaContent.kindIndexesSignal();
