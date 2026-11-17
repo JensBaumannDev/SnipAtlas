@@ -54,6 +54,32 @@
   margin: $space-xxl auto 0;
 }
 
+.home__news-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-md;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: $space-md;
+}
+
+.home__news-title {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.home__news-all {
+  font-weight: $font-weight-semibold;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 // Guide
 .home__guide {
   margin-top: $space-xxl;

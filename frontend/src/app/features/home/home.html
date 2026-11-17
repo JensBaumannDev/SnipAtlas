@@ -17,8 +17,13 @@
   </div>
   <app-area-cards />
   @if (news().length) {
-    <h3 class="visually-hidden">{{ 'home.news.title' | translate }}</h3>
-    <app-news-list class="home__news" [items]="news()" />
+    <div class="home__news">
+      <div class="home__news-head">
+        <h3 class="home__news-title">{{ 'home.news.title' | translate }}</h3>
+        <a class="home__news-all" routerLink="/neu">{{ 'home.news.all' | translate }} →</a>
+      </div>
+      <app-news-list [items]="news()" />
+    </div>
   }
   <app-guide-link class="home__guide" />
 </section>
