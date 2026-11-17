@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /profil
+Disallow: /einstellungen
+Disallow: /passwort-zuruecksetzen
+Disallow: /konto-aktivieren
+Disallow: /email-bestaetigen
+
+Sitemap: https://snipatlas.jensbaumann.com/sitemap.xml

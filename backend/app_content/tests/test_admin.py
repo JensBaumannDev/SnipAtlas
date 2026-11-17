@@ -5,6 +5,7 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.test import Client
 from django.urls import reverse
+from pytest_django import Settings
 
 from app_accounts.models import User
 from app_content.models import (
@@ -1644,3 +1645,71 @@ def test_staff_with_view_permission_cannot_change_glossary_or_news(
     assert staff_client.get(url).status_code == 200
     assert staff_client.post(url, {'title_de': 'Neu', 'term_de': 'Neu'}).status_code == 403
     assert model_to_dict(type(obj).objects.get(pk=obj.pk)) == before
+
+
+# View on site
+VIEW_ON_SITE = [
+    ('entry', '/befehle/python/schleifen/for-schleife'),
+    ('concept', '/grundlagen/python/schleifen/for-schleife'),
+    ('blueprint', '/anleitungen/python/django-projekt-anlegen'),
+    ('error_message', '/fehler/python/module-not-found'),
+    ('debug_guide', '/fehler/debuggen/vorgehen'),
+    ('topic_guide', '/fehler/python'),
+]
+
+
+def change_page(admin_client: Client, obj: Model) -> str:
+    url = reverse(f'admin:app_content_{obj._meta.model_name}_change', args=[obj.pk])
+    response = admin_client.get(url)
+    assert response.status_code == 200
+    return response.content.decode()
+
+
+@pytest.mark.parametrize(('fixture', 'path'), VIEW_ON_SITE)
+def test_change_page_links_to_the_frontend(
+    admin_client: Client,
+    request: pytest.FixtureRequest,
+    settings: Settings,
+    fixture: str,
+    path: str,
+) -> None:
+    settings.FRONTEND_URL = 'https://snipatlas.example.com'
+    content = change_page(admin_client, request.getfixturevalue(fixture))
+    assert f'href="https://snipatlas.example.com{path}"' in content
+    assert '/r/' not in content
+
+
+def test_change_page_links_ai_content_under_ai_coding(
+    admin_client: Client, settings: Settings, ai_subtopic: Subtopic
+) -> None:
+    settings.FRONTEND_URL = 'https://snipatlas.example.com'
+    entry = Entry.objects.create(subtopic=ai_subtopic, slug='init', language='terminal')
+    content = change_page(admin_client, entry)
+    assert (
+        'href="https://snipatlas.example.com/ki-coding/befehle/claude-code/start/init"' in content
+    )
+
+
+@pytest.mark.parametrize('fixture', ['group', 'topic', 'glossary_term', 'news', 'venv_step'])
+def test_change_page_without_own_page_has_no_frontend_link(
+    admin_client: Client, request: pytest.FixtureRequest, settings: Settings, fixture: str
+) -> None:
+    settings.FRONTEND_URL = 'https://snipatlas.example.com'
+    content = change_page(admin_client, request.getfixturevalue(fixture))
+    assert 'href="https://snipatlas.example.com' not in content
+    assert 'viewsitelink' not in content
+
+
+def test_add_page_has_no_frontend_link(admin_client: Client, settings: Settings) -> None:
+    settings.FRONTEND_URL = 'https://snipatlas.example.com'
+    response = admin_client.get(reverse('admin:app_content_entry_add'))
+    assert 'viewsitelink' not in response.content.decode()
+
+
+def test_view_only_staff_sees_the_frontend_link(
+    staff_client: Client, staff_user: User, settings: Settings, entry: Entry
+) -> None:
+    settings.FRONTEND_URL = 'https://snipatlas.example.com'
+    staff_user.user_permissions.add(Permission.objects.get(codename='view_entry'))
+    content = change_page(staff_client, entry)
+    assert 'href="https://snipatlas.example.com/befehle/python/schleifen/for-schleife"' in content
