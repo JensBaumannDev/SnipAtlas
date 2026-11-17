@@ -414,7 +414,8 @@
       "debugging": "Fehlermeldungen verstehen und lösen"
     },
     "news": {
-      "title": "Neu auf SnipAtlas"
+      "title": "Neu auf SnipAtlas",
+      "all": "Alle Neuigkeiten"
     },
     "areasTitle": "Vom ersten Befehl bis online",
     "intro": "SnipAtlas ist ein Nachschlagewerk für den Entwickleralltag. Befehle für Terminal, Git, npm und Docker stehen mit kurzer Erklärung und getrennt für Windows und Linux/Mac. Die Grundlagen erklären einzelne Funktionen und Konzepte wie Signals, Interceptoren oder Serializer mit einem kleinen Beispiel. Anleitungen gehen Schritt für Schritt durch den Aufbau eines Projekts, und zu häufigen Fehlermeldungen findest du Ursache und Lösung. Fachbegriffe sind direkt im Text erklärt.",

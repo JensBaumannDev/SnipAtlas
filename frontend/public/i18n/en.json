@@ -414,7 +414,8 @@
       "debugging": "Understand and fix error messages"
     },
     "news": {
-      "title": "New on SnipAtlas"
+      "title": "New on SnipAtlas",
+      "all": "All updates"
     },
     "areasTitle": "From your first command to going live",
     "intro": "SnipAtlas is a reference for everyday development work. Commands for the terminal, Git, npm and Docker come with a short explanation and separate versions for Windows and Linux/Mac. The concepts section explains individual functions and ideas such as signals, interceptors or serializers with a small example. Guides go step by step through setting up a project, and for common error messages you find the cause and the fix. Technical terms are explained right in the text.",

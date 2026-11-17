@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { map } from 'rxjs';
 import { NewsApi } from '../../core/api/news-api';
@@ -11,7 +12,7 @@ import { NewsList } from './news-list/news-list';
 const NEWS_LIMIT = 4;
 
 @Component({
-  imports: [AreaCards, GuideLink, NewsList, SearchBox, TranslatePipe],
+  imports: [AreaCards, GuideLink, NewsList, RouterLink, SearchBox, TranslatePipe],
   selector: 'app-home',
   styleUrl: './home.scss',
   templateUrl: './home.html',
