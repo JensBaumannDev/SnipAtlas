@@ -15,14 +15,18 @@ const BRAND_LOGOS: Readonly<Partial<Record<string, string>>> = {
   css: 'css',
   django: 'django',
   docker: 'docker',
+  express: 'express',
+  fastapi: 'fastapi',
   git: 'git',
   html: 'html5',
   javascript: 'javascript',
   npm: 'npm',
   postgresql: 'postgresql',
   python: 'python',
+  react: 'react',
   server: 'linux',
   typescript: 'typescript',
+  vue: 'vuedotjs',
 };
 
 const TOPIC_ICONS: Readonly<Partial<Record<string, LucideIconData>>> = {
