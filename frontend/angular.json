@@ -42,7 +42,7 @@
                 "input": "public"
               },
               {
-                "glob": "{angular,css,django,docker,git,html5,javascript,linux,npm,postgresql,python,typescript}.svg",
+                "glob": "{angular,css,django,docker,express,fastapi,git,html5,javascript,linux,npm,postgresql,python,react,typescript,vuedotjs}.svg",
                 "input": "node_modules/simple-icons/icons",
                 "output": "img/topics"
               }
