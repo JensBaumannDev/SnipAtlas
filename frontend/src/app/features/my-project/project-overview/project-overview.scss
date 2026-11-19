@@ -5,25 +5,40 @@
 }
 
 // Header
-.project-overview__next {
-  display: inline-flex;
+.project-overview__heading {
+  display: grid;
   gap: $space-sm;
-  align-items: center;
-  color: var(--ink);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  .icon {
-    flex: none;
-  }
 }
 
-.project-overview__stack {
+.project-overview__meta {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.project-overview__status {
   font-size: $font-size-lg;
   color: var(--muted);
+}
+
+.project-overview__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  justify-content: center;
+}
+
+.project-overview__continue {
+  font-weight: $font-weight-semibold;
+  color: var(--on-accent);
+  background: var(--accent);
+
+  &:hover {
+    color: var(--bg);
+    background: var(--ink);
+  }
 }
 
 .project-overview__progress {

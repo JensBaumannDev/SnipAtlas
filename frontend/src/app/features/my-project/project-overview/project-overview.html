@@ -1,18 +1,29 @@
 @if (roadmap(); as roadmap) {
   @let nextStep = next();
   <header class="stage" data-theme="dark">
-    <p>{{ (nextStep ? 'myProject.next' : 'myProject.title') | translate }}</p>
-    <h1>
+    <div class="project-overview__heading">
+      <p class="project-overview__meta">{{ meta() }}</p>
+      <h1>
+        @if (nextStep) {
+          {{ 'myProject.nextStep' | translate: { title: nextStep.step.title } }}
+        } @else {
+          {{ 'myProject.allDone' | translate }}
+        }
+      </h1>
+    </div>
+    <p class="project-overview__status">
+      {{ 'myProject.status' | translate: { done: doneCount(), total: state.refs().length, phase: phaseNumber(), phases: roadmap.phases.length } }}
+    </p>
+    <div class="project-overview__actions">
       @if (nextStep) {
-        <a class="project-overview__next" [routerLink]="['/mein-projekt', nextStep.phase.slug, nextStep.step.slug]">
-          {{ nextStep.step.title }}
-          <svg [lucideIcon]="chevronRightIcon" class="icon" aria-hidden="true"></svg>
+        <a class="btn project-overview__continue" [routerLink]="['/mein-projekt', nextStep.phase.slug, nextStep.step.slug]">
+          {{ 'myProject.home.continue' | translate }}
         </a>
-      } @else {
-        {{ 'myProject.allDone' | translate }}
       }
-    </h1>
-    <p class="project-overview__stack">{{ state.chosenNames().join(' · ') }}</p>
+      <a class="btn btn--ghost" routerLink="/mein-projekt/ordnerstruktur">
+        {{ 'myProject.showStructure' | translate }}
+      </a>
+    </div>
   </header>
 
   <app-project-navigation />
