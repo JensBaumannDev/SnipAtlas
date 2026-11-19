@@ -1,8 +1,11 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/api/blueprint-api';
 import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
+import { routeIcon } from '../../../core/ui/icons';
 import { syncOutline } from '../../../core/ui/page-outline';
 import { placeholderKeys } from '../../../core/user-data/project-values';
 import { injectTopic } from '../../../core/content/topic-resource';
@@ -13,13 +16,22 @@ import { TopicHeader } from '../../../shared/topic-header/topic-header';
 import { GuideStep } from '../guide-step/guide-step';
 
 @Component({
-  imports: [GuideStep, ProgressBar, ProjectForm, TopicHeader, TranslatePipe],
+  imports: [
+    GuideStep,
+    LucideDynamicIcon,
+    ProgressBar,
+    ProjectForm,
+    RouterLink,
+    TopicHeader,
+    TranslatePipe,
+  ],
   selector: 'app-guide-detail',
   styleUrl: './guide-detail.scss',
   templateUrl: './guide-detail.html',
 })
 export class GuideDetail {
   protected readonly paths = inject(ContentPaths);
+  protected readonly routeIcon = routeIcon;
   private readonly blueprintApi = inject(BlueprintApi);
   private readonly progress = inject(BlueprintProgress);
 

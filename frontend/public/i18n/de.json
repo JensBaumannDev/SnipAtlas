@@ -307,6 +307,8 @@
     "markDone": "Schritt {{number}} erledigt: {{title}}",
     "reset": "Zurücksetzen",
     "note": "Hinweis",
+    "roadmapHint": "Das ist ein Schritt von vielen. Mein Projekt führt dich vom leeren Ordner bis online, passend zu deinem Stack.",
+    "roadmapLink": "Zu Mein Projekt",
     "count": "{{count}} Anleitungen",
     "countOne": "1 Anleitung",
     "empty": "Zu diesem Thema gibt es noch keine Anleitungen.",
