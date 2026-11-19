@@ -2,12 +2,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SnipAtlas\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 20:06+0100\n"
+"POT-Creation-Date: 2026-11-19 20:17+0100\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "building blocks"
+msgstr "Bausteine"
+
+msgid "completed steps"
+msgstr "Erledigte Schritte"
+
+msgid "project notes"
+msgstr "Notizen"
 
 msgid "Settings"
 msgstr "Einstellungen"
@@ -102,8 +111,38 @@ msgstr "Anleitungsschritt"
 msgid "completed step"
 msgstr "Erledigter Schritt"
 
-msgid "completed steps"
-msgstr "Erledigte Schritte"
+msgid "updated at"
+msgstr "Geändert am"
+
+msgid "project"
+msgstr "Projekt"
+
+msgid "projects"
+msgstr "Projekte"
+
+msgid "building block"
+msgstr "Baustein"
+
+msgid "chosen building block"
+msgstr "Gewählter Baustein"
+
+msgid "chosen building blocks"
+msgstr "Gewählte Bausteine"
+
+msgid "roadmap step"
+msgstr "Fahrplan-Schritt"
+
+msgid "completed roadmap step"
+msgstr "Erledigter Fahrplan-Schritt"
+
+msgid "completed roadmap steps"
+msgstr "Erledigte Fahrplan-Schritte"
+
+msgid "text"
+msgstr "Text"
+
+msgid "project note"
+msgstr "Notiz"
 
 msgid "topic"
 msgstr "Thema"
@@ -209,9 +248,6 @@ msgstr "Fehlermeldung"
 
 msgid "error messages"
 msgstr "Fehlermeldungen"
-
-msgid "text"
-msgstr "Text"
 
 msgid "solution step"
 msgstr "Lösungsschritt"
@@ -357,11 +393,24 @@ msgstr "Voraussetzung"
 msgid "available"
 msgstr "verfügbar"
 
-msgid "building block"
-msgstr "Baustein"
+#, python-format
+msgid "%(block)s is not available yet."
+msgstr "%(block)s gibt es noch nicht."
 
-msgid "building blocks"
-msgstr "Bausteine"
+msgid "Choose a frontend, a backend or both."
+msgstr "Wähle ein Frontend, ein Backend oder beides."
+
+#, python-format
+msgid "Choose only one %(kind)s."
+msgstr "Wähle nur ein %(kind)s."
+
+#, python-format
+msgid "%(block)s needs a backend."
+msgstr "%(block)s braucht ein Backend."
+
+#, python-format
+msgid "%(block)s only works without a backend."
+msgstr "%(block)s geht nur ohne Backend."
 
 msgid "rule"
 msgstr "Regel"
@@ -386,9 +435,6 @@ msgstr "Umgebung"
 
 msgid "verification"
 msgstr "Prüfen"
-
-msgid "roadmap step"
-msgstr "Fahrplan-Schritt"
 
 msgid "roadmap steps"
 msgstr "Fahrplan-Schritte"

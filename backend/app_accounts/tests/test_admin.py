@@ -7,8 +7,8 @@ from django.test import Client
 from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 
-from app_accounts.models import CompletedStep, Favorite
-from app_content.models import Blueprint, BlueprintStep, Entry
+from app_accounts.models import CompletedStep, Favorite, Project
+from app_content.models import Blueprint, BlueprintStep, Entry, RoadmapBlock, RoadmapStep
 
 User = get_user_model()
 
@@ -17,7 +17,7 @@ pytestmark = pytest.mark.django_db
 PASSWORD = 'Kaffee-Tasse-2026!'
 INLINE_FORMS = {
     f'{prefix}-{field}': 0
-    for prefix in ('favorites', 'completed_steps')
+    for prefix in ('favorites', 'completed_steps', 'projects')
     for field in ('TOTAL_FORMS', 'INITIAL_FORMS')
 }
 
@@ -338,22 +338,43 @@ def test_staff_cannot_delete_superuser(staff_client: Client, admin_user: User) -
 
 
 # User data
+def add_project(user: User, blocks: dict[str, RoadmapBlock], step: RoadmapStep) -> Project:
+    project = Project.objects.create(user=user)
+    project.blocks.set([blocks['angular'], blocks['django']])
+    project.completed_steps.create(step=step)
+    project.notes.create(step=step, text='Geheime Notiz')
+    return project
+
+
 @pytest.fixture
-def user_data(user: User, entry: Entry, venv_step: BlueprintStep) -> User:
+def user_data(
+    user: User,
+    entry: Entry,
+    venv_step: BlueprintStep,
+    blocks: dict[str, RoadmapBlock],
+    roadmap_step: RoadmapStep,
+) -> User:
     Favorite.objects.create(user=user, entry=entry)
     CompletedStep.objects.create(user=user, step=venv_step)
+    add_project(user, blocks, roadmap_step)
     return user
 
 
 @pytest.fixture
-def other_data(entry: Entry, venv_step: BlueprintStep) -> User:
+def other_data(
+    entry: Entry,
+    venv_step: BlueprintStep,
+    blocks: dict[str, RoadmapBlock],
+    roadmap_step: RoadmapStep,
+) -> User:
     other = User.objects.create_user('grace@example.com', PASSWORD)
     Favorite.objects.create(user=other, entry=entry)
     CompletedStep.objects.create(user=other, step=venv_step)
+    add_project(other, blocks, roadmap_step)
     return other
 
 
-@pytest.mark.parametrize('model', ['Favorite', 'CompletedStep'])
+@pytest.mark.parametrize('model', ['Favorite', 'CompletedStep', 'Project'])
 def test_user_page_shows_only_own_data(
     admin_client: Client, user_data: User, other_data: User, model: str
 ) -> None:
@@ -361,7 +382,7 @@ def test_user_page_shows_only_own_data(
     assert [row.user for row in rows] == [user_data]
 
 
-@pytest.mark.parametrize('model', ['Favorite', 'CompletedStep'])
+@pytest.mark.parametrize('model', ['Favorite', 'CompletedStep', 'Project'])
 def test_user_data_is_read_only(admin_client: Client, user_data: User, model: str) -> None:
     formsets = change_page(admin_client, user_data).context['inline_admin_formsets']
     inline = next(item for item in formsets if item.formset.model.__name__ == model)
@@ -375,6 +396,7 @@ def test_user_change_keeps_user_data(admin_client: Client, user_data: User) -> N
     assert response.status_code == 302
     assert user_data.favorites.count() == 1
     assert user_data.completed_steps.count() == 1
+    assert user_data.projects.get().block_slugs() == {'angular', 'django'}
 
 
 def test_user_page_escapes_favorite_title(
@@ -389,7 +411,8 @@ def test_user_page_escapes_favorite_title(
 
 def user_data_snapshot(user: User) -> list[tuple]:
     favorites = list(user.favorites.values_list('pk', 'entry'))
-    return favorites + list(user.completed_steps.values_list('pk', 'step'))
+    projects = list(user.projects.values_list('pk', 'created_at'))
+    return favorites + list(user.completed_steps.values_list('pk', 'step')) + projects
 
 
 def inline_post(prefix: str, field: str, value: int, existing: int | None = None) -> dict:
@@ -442,6 +465,13 @@ def test_user_page_queries_do_not_grow_with_user_data(
         change_page(admin_client, user_data)
     Favorite.objects.create(user=user_data, entry=os_entry)
     CompletedStep.objects.create(user=user_data, step=blueprint.steps.get(slug='ordner-anlegen'))
+    project = user_data.projects.get()
+    second = project.completed_steps.get().step.phase.steps.create(
+        slug='zweiter', title_de='x', why_de='x', verification_de='x'
+    )
+    project.completed_steps.create(step=second)
+    project.notes.create(step=second, text='Noch eine')
+    project.blocks.add(RoadmapBlock.objects.get(slug='docker'))
     with CaptureQueriesContext(connection) as more:
         change_page(admin_client, user_data)
     assert len(more) == len(few)
@@ -454,3 +484,48 @@ def test_admin_delete_removes_user_data(
     admin_client.post(url, {'post': 'yes'})
     assert list(Favorite.objects.values_list('user', flat=True)) == [other_data.pk]
     assert list(CompletedStep.objects.values_list('user', flat=True)) == [other_data.pk]
+    assert list(Project.objects.values_list('user', flat=True)) == [other_data.pk]
+
+
+# Projects
+def test_user_page_shows_project_blocks_and_counts(admin_client: Client, user_data: User) -> None:
+    content = change_page(admin_client, user_data).content.decode()
+    assert 'Angular, Django' in content
+    assert 'Erledigte Schritte' in content
+
+
+def test_user_page_shows_project_counts(admin_client: Client, user_data: User) -> None:
+    inline = next(
+        item
+        for item in change_page(admin_client, user_data).context['inline_admin_formsets']
+        if item.formset.model is Project
+    )
+    project = inline.formset.forms[0].instance
+    assert (project.step_count, project.note_count) == (1, 1)
+
+
+def test_user_page_hides_note_text(admin_client: Client, user_data: User) -> None:
+    assert 'Geheime Notiz' not in change_page(admin_client, user_data).content.decode()
+
+
+def test_user_page_escapes_block_names(admin_client: Client, user_data: User) -> None:
+    RoadmapBlock.objects.filter(slug='angular').update(name_de='<script>alert(1)</script>')
+    content = change_page(admin_client, user_data).content.decode()
+    assert '<script>alert(1)</script>' not in content
+    assert '&lt;script&gt;alert(1)&lt;/script&gt;' in content
+
+
+def test_user_change_ignores_posted_project_rows(admin_client: Client, user_data: User) -> None:
+    before = user_data_snapshot(user_data)
+    project = user_data.projects.get().pk
+    change_user(admin_client, user_data, **inline_post('projects', 'user', user_data.pk, project))
+    assert user_data_snapshot(user_data) == before
+
+
+def test_staff_with_view_right_sees_project_read_only(
+    staff_client: Client, staff_user: User, user_data: User
+) -> None:
+    staff_user.user_permissions.add(Permission.objects.get(codename='view_project'))
+    formsets = change_page(staff_client, user_data).context['inline_admin_formsets']
+    assert [item.formset.model for item in formsets] == [Project]
+    assert not formsets[0].has_change_permission

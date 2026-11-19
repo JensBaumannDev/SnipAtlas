@@ -1,13 +1,16 @@
-"""User model with settings, favorites and completed blueprint steps."""
+"""User model with settings, favorites, guide progress and the roadmap project."""
 
 from datetime import date, timedelta
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.validators import MaxLengthValidator
 from django.db import models
+from django.db.models.functions import Length
+from django.db.models.lookups import LessThanOrEqual
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from app_content.models import BlueprintStep, Entry
+from app_content.models import BlueprintStep, Entry, RoadmapBlock, RoadmapStep
 
 
 class UserManager(BaseUserManager):
@@ -232,3 +235,122 @@ class CompletedStep(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user}: {self.step}'
+
+
+# Roadmap project
+NOTE_MAX_LENGTH = 2000
+ROADMAP_ORDER = ('step__phase__position', 'step__phase_id', 'step__position', 'step_id')
+
+
+class Project(models.Model):
+    """Project a user builds along the roadmap, with the chosen building blocks."""
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='projects', verbose_name=_('user')
+    )
+    blocks = models.ManyToManyField(
+        RoadmapBlock,
+        through='ProjectBlock',
+        related_name='+',
+        verbose_name=_('building blocks'),
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('updated at'))
+
+    class Meta:
+        verbose_name = _('project')
+        verbose_name_plural = _('projects')
+        ordering = ('created_at', 'pk')
+        constraints = [models.UniqueConstraint(fields=('user',), name='project_one_per_user')]
+
+    def __str__(self) -> str:
+        return str(self.user)
+
+    def block_slugs(self) -> set[str]:
+        """Return the slugs of the chosen building blocks."""
+        return set(self.blocks.values_list('slug', flat=True))
+
+    def set_blocks(self, blocks: list[RoadmapBlock]) -> None:
+        """Replace the chosen blocks if they make a possible project."""
+        RoadmapBlock.check_choice(blocks)
+        self.blocks.set(blocks)
+        self.save(update_fields=['updated_at'])
+
+
+class ProjectBlock(models.Model):
+    """Building block chosen for a project."""
+
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name='+', verbose_name=_('project')
+    )
+    block = models.ForeignKey(
+        RoadmapBlock, on_delete=models.PROTECT, related_name='+', verbose_name=_('building block')
+    )
+
+    class Meta:
+        verbose_name = _('chosen building block')
+        verbose_name_plural = _('chosen building blocks')
+        ordering = ('block__position', 'pk')
+        constraints = [
+            models.UniqueConstraint(fields=('project', 'block'), name='projectblock_unique'),
+        ]
+
+    def __str__(self) -> str:
+        return f'{self.project}: {self.block}'
+
+
+class ProjectStep(models.Model):
+    """Roadmap step a user has marked as done in a project."""
+
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name='completed_steps', verbose_name=_('project')
+    )
+    step = models.ForeignKey(
+        RoadmapStep, on_delete=models.CASCADE, related_name='+', verbose_name=_('roadmap step')
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+
+    class Meta:
+        verbose_name = _('completed roadmap step')
+        verbose_name_plural = _('completed roadmap steps')
+        ordering = ROADMAP_ORDER
+        constraints = [
+            models.UniqueConstraint(fields=('project', 'step'), name='projectstep_unique'),
+        ]
+
+    def __str__(self) -> str:
+        return f'{self.project}: {self.step}'
+
+
+class ProjectNote(models.Model):
+    """Note a user wrote on a roadmap step of a project."""
+
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name='notes', verbose_name=_('project')
+    )
+    step = models.ForeignKey(
+        RoadmapStep, on_delete=models.CASCADE, related_name='+', verbose_name=_('roadmap step')
+    )
+    text = models.TextField(
+        max_length=NOTE_MAX_LENGTH,
+        validators=[MaxLengthValidator(NOTE_MAX_LENGTH)],
+        verbose_name=_('text'),
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('updated at'))
+
+    class Meta:
+        verbose_name = _('project note')
+        verbose_name_plural = _('project notes')
+        ordering = ROADMAP_ORDER
+        constraints = [
+            models.UniqueConstraint(fields=('project', 'step'), name='projectnote_unique'),
+            models.CheckConstraint(condition=~models.Q(text=''), name='projectnote_text_required'),
+            models.CheckConstraint(
+                condition=LessThanOrEqual(Length('text'), NOTE_MAX_LENGTH),
+                name='projectnote_text_max_length',
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f'{self.project}: {self.step}'
