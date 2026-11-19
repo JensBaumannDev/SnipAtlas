@@ -47,11 +47,6 @@ export class ProjectOverview {
     const stack = this.state.chosenNames().join(' · ');
     return name ? `${name} · ${stack}` : stack;
   });
-  protected readonly phaseNumber = computed(() => {
-    const phases = this.roadmap()?.phases ?? [];
-    const next = this.next();
-    return next ? phases.findIndex((phase) => phase.slug === next.phase.slug) + 1 : phases.length;
-  });
 
   constructor() {
     redirectWithoutChoice(this.project);

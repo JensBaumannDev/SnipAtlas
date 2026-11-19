@@ -18,15 +18,23 @@
   letter-spacing: 0.06em;
 }
 
-.project-overview__status {
-  font-size: $font-size-lg;
-  color: var(--muted);
-}
-
-.project-overview__actions {
+// Progress
+.project-overview__progress {
+  position: sticky;
+  top: var(--topbar-actual-height, calc($topbar-height + 1px));
+  z-index: $z-sticky;
   display: flex;
   flex-wrap: wrap;
-  gap: $space-sm;
+  gap: $space-sm $space-md;
+  align-items: center;
+  width: 100%;
+  padding-block: $space-md;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.project-overview__bar {
+  flex: 1 1 rem(240);
   justify-content: center;
 }
 
@@ -39,17 +47,6 @@
     color: var(--bg);
     background: var(--ink);
   }
-}
-
-.project-overview__progress {
-  position: sticky;
-  top: var(--topbar-actual-height, calc($topbar-height + 1px));
-  z-index: $z-sticky;
-  justify-content: center;
-  width: 100%;
-  padding-block: $space-md;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
 }
 
 // Body
