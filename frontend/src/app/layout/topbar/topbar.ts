@@ -1,6 +1,7 @@
 import { ViewportScroller } from '@angular/common';
 import {
   Component,
+  DestroyRef,
   DOCUMENT,
   ElementRef,
   Injector,
@@ -13,7 +14,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
-import { messageSquareIcon, settingsIcon } from '../../core/ui/icons';
+import { settingsIcon } from '../../core/ui/icons';
 import { LoginDialog } from '../../core/auth/login-dialog';
 import { Session } from '../../core/auth/session';
 import { SearchBox } from '../../shared/search-box/search-box';
@@ -45,7 +46,6 @@ export class Topbar {
 
   protected readonly session = inject(Session);
   protected readonly settingsIcon = settingsIcon;
-  protected readonly requestIcon = messageSquareIcon;
   protected readonly isHome = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -57,6 +57,15 @@ export class Topbar {
   constructor() {
     const host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
     inject(ViewportScroller).setOffset(() => [0, host.offsetHeight + SCROLL_GAP]);
+    const destroyRef = inject(DestroyRef);
+    afterNextRender(() => {
+      const root = host.ownerDocument.documentElement;
+      const update = () => root.style.setProperty('--topbar-actual-height', `${host.offsetHeight}px`);
+      update();
+      const observer = new ResizeObserver(update);
+      observer.observe(host);
+      destroyRef.onDestroy(() => observer.disconnect());
+    });
   }
 
   protected async openLogin(): Promise<void> {

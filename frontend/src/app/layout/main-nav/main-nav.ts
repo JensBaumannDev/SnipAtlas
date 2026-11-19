@@ -5,7 +5,7 @@ import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { AREA_LINKS, NavArea, areaForUrl } from '../../core/content/area-links';
-import { chevronDownIcon, menuIcon, xIcon } from '../../core/ui/icons';
+import { chevronDownIcon, menuIcon, routeIcon, xIcon } from '../../core/ui/icons';
 import { AreaMenu } from '../area-menu/area-menu';
 
 const OPEN_DELAY = 150;
@@ -31,6 +31,7 @@ export class MainNav {
   protected readonly links = AREA_LINKS;
   protected readonly chevronDownIcon = chevronDownIcon;
   protected readonly menuIcon = menuIcon;
+  protected readonly routeIcon = routeIcon;
   protected readonly xIcon = xIcon;
   protected readonly openArea = signal<NavArea | undefined>(undefined);
   protected readonly menuOpen = signal(false);

@@ -3,17 +3,10 @@
     class="guide-link__link"
     [routerLink]="paths.link('blueprints', state.blueprint.topic, state.blueprint.slug)"
   >
-    {{
-      (state.started ? 'home.guide.continue' : 'home.guide.start')
-        | translate: { title: state.blueprint.title }
-    }}
+    {{ 'home.guide.continue' | translate: { title: state.blueprint.title } }}
     →
   </a>
-  @if (state.started) {
-    <span class="guide-link__progress">
-      {{
-        'home.guide.progress' | translate: { done: state.done, total: state.blueprint.steps.length }
-      }}
-    </span>
-  }
+  <span class="guide-link__progress">
+    {{ 'home.guide.progress' | translate: { done: state.done, total: state.blueprint.steps.length } }}
+  </span>
 }

@@ -38,7 +38,10 @@
     "resetPassword": "Reset password",
     "activateAccount": "Activate account",
     "confirmEmail": "Confirm email address",
-    "vscodeTheme": "SnipAtlas theme for VS Code"
+    "vscodeTheme": "SnipAtlas theme for VS Code",
+    "myProject": "My project",
+    "myProjectSetup": "Set up project",
+    "myProjectStructure": "Folder structure"
   },
   "meta": {
     "default": "From your first command to a finished project online: commands, basics, guides and error messages for beginners in web development.",
@@ -132,7 +135,7 @@
       "dataSubmit": "Download data",
       "logoutText": "Signs you out on this device.",
       "delete": "Delete account",
-      "deleteText": "Deletes your account with all favourites, your progress and your requests. You can still read all SnipAtlas content without an account.",
+      "deleteText": "Deletes your account with all favourites, your progress and your requests. You can still use the public reference.",
       "deleteConfirm": "Are you sure? This cannot be undone.",
       "deleteSubmit": "Yes, delete account",
       "cancel": "Cancel"
@@ -405,46 +408,23 @@
   },
   "home": {
     "title": "Reference for web development",
-    "lead": "Commands to copy, basics with examples, guides for whole projects and solutions for common error messages. Free and updated regularly.",
+    "lead": "Find the command you need, understand error messages and build your own project step by step.",
     "areas": {
       "label": "Areas at a glance",
-      "commands": "Terminal, Git, npm and Docker to copy",
-      "concepts": "Terms explained in plain words",
-      "blueprints": "Build projects step by step",
-      "debugging": "Understand and fix error messages"
+      "glossary": "Technical terms explained",
+      "ai": "Tools and guides for coding agents",
+      "commands": "Git, terminal and Docker",
+      "concepts": "Concepts with code examples",
+      "blueprints": "Projects step by step",
+      "debugging": "Causes and fixes"
     },
     "news": {
       "title": "New on SnipAtlas",
       "all": "All updates"
     },
-    "areasTitle": "From your first command to going live",
-    "intro": "SnipAtlas is a reference for everyday development work. Commands for the terminal, Git, npm and Docker come with a short explanation and separate versions for Windows and Linux/Mac. The concepts section explains individual functions and ideas such as signals, interceptors or serializers with a small example. Guides go step by step through setting up a project, and for common error messages you find the cause and the fix. Technical terms are explained right in the text.",
-    "cards": {
-      "commands": {
-        "text": "Terminal, Git, npm and Docker to copy, with separate versions for Windows and Linux/Mac where needed.",
-        "count": "{{count}} commands",
-        "open": "Go to commands"
-      },
-      "concepts": {
-        "text": "The ideas behind the code, explained briefly with a small example.",
-        "count": "{{count}} explanations",
-        "open": "Go to concepts"
-      },
-      "blueprints": {
-        "text": "Set up whole projects step by step, every step with its reason.",
-        "count": "{{count}} guides",
-        "open": "Go to guides"
-      },
-      "debugging": {
-        "text": "Common error messages with cause and fix, plus ways to find errors yourself.",
-        "count": "{{count}} error guides",
-        "open": "Go to errors"
-      }
-    },
     "guide": {
       "continue": "Continue: {{title}}",
-      "progress": "{{done}} of {{total}} steps",
-      "start": "New here? Start with: {{title}}"
+      "progress": "{{done}} of {{total}} steps"
     }
   },
   "footer": {
@@ -473,7 +453,7 @@
     "labels": {
       "project": "Project name",
       "githubUser": "GitHub user",
-      "repo": "Repository",
+      "repo": "GitHub repository name",
       "domain": "Domain",
       "serverUser": "Server user",
       "serverIp": "Server IP"
@@ -534,15 +514,19 @@
       "title": "Account",
       "needed": {
         "question": "Do I need an account?",
-        "answer": "No. You can read all content without an account, and checking off steps in the guides works too, your progress then stays in your browser. You need an account for favorites, color themes and to see your requests in your profile."
+        "answer": "The reference and guides are freely accessible. Without an account, guide progress stays in your browser. An account gives you access to My project, favorites, color themes and requests in your profile."
       },
       "stored": {
         "question": "What is stored with my account?",
-        "answer": "Your email address, your password only as a hash, your favorites, your guide progress, your settings and your requests. The details are in the privacy policy."
+        "answer": "Your email address, your password only as a hash, your favorites, your guide progress, your project with progress and notes, your settings and your requests. The details are in the privacy policy."
       },
       "delete": {
         "question": "How do I delete my account?",
         "answer": "Under Profile, Account. This deletes all data that belongs to your account. You can download your data there first."
+      },
+      "project": {
+        "question": "What is \"My project\"?",
+        "answer": "With an account you can create a personal roadmap. Choose your tools and follow steps with commands, files and the matching folder structure."
       }
     },
     "costs": {
@@ -622,14 +606,15 @@
       },
       "storageText": "This information stays on your device and is not sent to me. You can delete it at any time in your browser settings. If you are signed in, your settings are also stored in your account (see user account). Storing it in the browser is strictly necessary for the function you requested (§ 25 (2) no. 2 TDDDG), so no consent is required. The legal basis for processing is Art. 6 (1) (f) GDPR.",
       "account": "User account",
-      "accountText": "You can read all content on SnipAtlas without an account. You only need one for personal features. To register, you enter your email address and a password. The password is only stored as a hash, I cannot read it.",
+      "accountText": "You need an account for My project and other personal features. To register, you enter your email address and a password. The password is only stored as a hash, I cannot read it.",
       "accountIntro": "For your account, I store the following on the server:",
       "accountItems": {
         "login": "email address, password hash, whether the address is confirmed, a new address that is not confirmed yet, date of registration and of your last sign-in",
         "favorites": "your favourites",
         "progress": "your progress in the guides",
         "settings": "your settings (commands for Windows or Linux/Mac, email when a request is answered)",
-        "requests": "your requests with their status and my reply"
+        "requests": "your requests with their status and my reply",
+        "project": "your project in \"My project\": the chosen building blocks, the completed steps and your notes on the steps"
       },
       "accountBasis": "The legal basis is Art. 6 (1) (b) GDPR, because I cannot provide the features of your account without this data. Only you can see and change your data. In your account you can change your email address and password and download all your data.",
       "accountDeletion": "You can delete your account yourself at any time. All data belonging to your account is then deleted. If you do not confirm your email address within 7 days of registering, the account is deleted automatically.",
@@ -770,5 +755,118 @@
   "news": {
     "lead": "Everything recently added to SnipAtlas, newest first.",
     "fresh": "new"
+  },
+  "myProject": {
+    "title": "My project",
+    "home": {
+      "title": "From an empty folder to online",
+      "text": "Choose frontend, backend or both. You get your roadmap step by step, matched to your stack.",
+      "points": {
+        "why": "Every command with its reason",
+        "tree": "Folder tree after every step",
+        "progress": "Progress and notes saved"
+      },
+      "start": "Start your project",
+      "continue": "Continue"
+    },
+    "register": "Register for my roadmap",
+    "intro": {
+      "lead": "You have an idea for a web app. Which folders do you need first, and when does the database come in? Your roadmap follows the choices you make for your project.",
+      "title": "A task board with Angular and Django",
+      "example": "On your board, tasks move from “Open” to “Done”. You choose Angular for the interface and Django for the API. Choose PostgreSQL to store the tasks and your roadmap adds the database setup steps.",
+      "sample": "Inside a step: Create the Django project",
+      "command": "Django is installed and your terminal is in backend/. The dot at the end of the command creates the project in that folder. Look for manage.py to check that you ran it in the right place.",
+      "result": "Part of your project tree",
+      "phases": {
+        "title": "Your path in 9 phases",
+        "items": {
+          "prepare": "Prepare the project",
+          "backend": "Set up the backend with Django",
+          "frontend": "Set up the frontend with Angular",
+          "connect": "Connect frontend and backend",
+          "docker": "Run the backend in Docker",
+          "postgres": "PostgreSQL as the database",
+          "login": "Add login",
+          "server": "Prepare for the server",
+          "online": "Go online"
+        }
+      },
+      "resume": "Where did I leave off?",
+      "progress": "You set up Django and started your server on port 8000. Check off the step and leave yourself a note with the port number. When you return, your overview shows the next unfinished step and you can revisit your note."
+    },
+    "next": "Up next",
+    "allDone": "All done",
+    "overview": "Overview",
+    "changeChoice": "Change choice",
+    "phaseCount": "{{done}} of {{total}}",
+    "stepOf": "Step {{number}} of {{total}}",
+    "missing": "This step is not part of your roadmap. Set up your project or go back to the overview.",
+    "toStep": "To the step",
+    "untracked": "not in Git",
+    "pager": "Previous and next step",
+    "change": {
+      "new": "new",
+      "changed": "changed",
+      "removed": "removed"
+    },
+    "codeKind": {
+      "command": "Command",
+      "create": "Create file:",
+      "change": "Change file:"
+    },
+    "parts": {
+      "why": "Why",
+      "where": "Where",
+      "code": "Commands and files",
+      "tree": "This is your project now",
+      "check": "Check",
+      "errors": "If it gets stuck",
+      "concepts": "Learn more"
+    },
+    "note": {
+      "label": "Your note on this step",
+      "placeholder": "For example: used port 8020 because 8000 is taken.",
+      "save": "Save note",
+      "saved": "Saved"
+    },
+    "setup": {
+      "title": "Set up a new project",
+      "lead": "Four questions, then your roadmap is ready. You can change everything later.",
+      "kind": "What do you want to build?",
+      "kinds": {
+        "frontend": {
+          "title": "Frontend only",
+          "text": "A site or app in the browser, without its own server for data.",
+          "example": "e.g. portfolio, landing page"
+        },
+        "backend": {
+          "title": "Backend only",
+          "text": "An API with a database, without its own interface.",
+          "example": "e.g. REST API for an app"
+        },
+        "both": {
+          "title": "Both",
+          "text": "An interface in the browser that talks to your own API.",
+          "example": "e.g. recipe book with login"
+        }
+      },
+      "frameworks": "With what?",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "soon": "soon",
+      "extras": "What else?",
+      "hosting": "Online",
+      "noHosting": "Not yet",
+      "extrasHint": "PostgreSQL, Docker and login need a backend.",
+      "name": "What is it called?",
+      "nameHint": "Optional. SnipAtlas fills these values into every command and file.",
+      "summary": "Your roadmap: {{phases}} phases, {{steps}} steps",
+      "incomplete": "Choose a frontend, a backend or both.",
+      "submit": "Create roadmap"
+    },
+    "structurePage": {
+      "title": "Folder structure",
+      "lead": "This is your project once every step is done. Each path says what it is for and in which step it appears."
+    }
   }
 }

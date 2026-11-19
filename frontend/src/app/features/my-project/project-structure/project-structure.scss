@@ -1,0 +1,19 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Header
+.project-structure__lead {
+  max-width: rem(720);
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
+
+// Body
+.project-structure {
+  @include page-body;
+
+  align-items: flex-start;
+}

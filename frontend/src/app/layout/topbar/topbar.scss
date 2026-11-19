@@ -10,7 +10,7 @@
 .topbar {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: $space-lg;
   align-items: center;
   min-height: calc($topbar-height + 1px);
@@ -62,7 +62,7 @@
 // Search
 .topbar__search {
   flex: 0 1 $topbar-search-width;
-  min-width: 0;
+  min-width: rem(180);
   transition:
     opacity var(--duration) var(--ease),
     visibility var(--duration);

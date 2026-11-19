@@ -1,0 +1,39 @@
+<ul class="project-tree" role="list">
+  @for (node of nodes(); track node.path) {
+    <li class="project-tree__item">
+      <div
+        class="project-tree__row"
+        [class.project-tree__row--new]="node.change === 'new'"
+        [class.project-tree__row--changed]="node.change === 'changed'"
+        [class.project-tree__row--removed]="node.change === 'removed'"
+        [class.project-tree__row--untracked]="!node.tracked"
+      >
+        <svg
+          [lucideIcon]="node.folder ? folderIcon : fileIcon"
+          class="icon project-tree__icon"
+          aria-hidden="true"
+        ></svg>
+        <span class="project-tree__name">{{ node.name }}{{ node.folder ? '/' : '' }}</span>
+        @if (node.change) {
+          <span class="project-tree__badge">{{ 'myProject.change.' + node.change | translate }}</span>
+        }
+        @if (!node.tracked) {
+          <span class="project-tree__untracked">{{ 'myProject.untracked' | translate }}</span>
+        }
+      </div>
+      @if (showExplanations() && node.explanation) {
+        <p class="project-tree__explanation">
+          {{ node.explanation }}
+          @if (node.phase && node.step) {
+            <a class="project-tree__origin" [routerLink]="['/mein-projekt', node.phase, node.step]">
+              {{ 'myProject.toStep' | translate }}
+            </a>
+          }
+        </p>
+      }
+      @if (node.children?.length) {
+        <app-project-tree [nodes]="node.children ?? []" [showExplanations]="showExplanations()" />
+      }
+    </li>
+  }
+</ul>

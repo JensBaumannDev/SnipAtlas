@@ -48,6 +48,22 @@
     }
   }
 
+  &--project {
+    position: relative;
+    margin-left: $space-sm;
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: calc(($space-sm + $space-xs) / -2);
+      width: 1px;
+      height: rem(24);
+      content: '';
+      background: var(--line);
+      transform: translateY(-50%);
+    }
+  }
+
   &--extra {
     display: none;
   }
@@ -92,6 +108,16 @@
       right: $nav-link-padding-x;
     }
   }
+
+  &--project {
+    gap: $space-xs;
+    color: var(--accent);
+  }
+}
+
+.main-nav__project-icon {
+  width: rem(18);
+  height: rem(18);
 }
 
 .main-nav__expand {
@@ -155,6 +181,14 @@
 
     &:hover {
       background: none;
+    }
+
+    &--project {
+      margin-left: 0;
+
+      &::before {
+        display: none;
+      }
     }
 
     &--extra {

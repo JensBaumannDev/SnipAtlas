@@ -11,7 +11,7 @@ interface FaqGroup {
 
 const GROUPS: FaqGroup[] = [
   { id: 'content', questions: ['what', 'tested', 'os', 'wrong'] },
-  { id: 'account', questions: ['needed', 'stored', 'delete'] },
+  { id: 'account', questions: ['needed', 'project', 'stored', 'delete'] },
   { id: 'costs', questions: ['free'] },
   { id: 'requests', questions: ['suggest', 'answer'] },
 ];

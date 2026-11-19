@@ -1,0 +1,155 @@
+<app-topic-header
+  [heading]="'myProject.setup.title' | translate"
+  [parentLabel]="'myProject.title' | translate"
+  parentLink="/mein-projekt"
+>
+  <p class="project-setup__lead">{{ 'myProject.setup.lead' | translate }}</p>
+</app-topic-header>
+
+<form class="project-setup" (submit)="$event.preventDefault(); submit()">
+  <fieldset class="project-setup__question">
+    <legend class="project-setup__legend">
+      <span class="project-setup__number" aria-hidden="true">1</span>
+      {{ 'myProject.setup.kind' | translate }}
+    </legend>
+    <div class="project-setup__cards">
+      @for (kind of kinds; track kind) {
+        <label class="project-setup__card" [class.project-setup__card--active]="choice().kind === kind">
+          <span class="project-setup__card-top">
+            <span class="project-setup__card-title">{{ 'myProject.setup.kinds.' + kind + '.title' | translate }}</span>
+            <input
+              class="project-setup__radio"
+              type="radio"
+              name="kind"
+              [checked]="choice().kind === kind"
+              (change)="setKind(kind)"
+            />
+          </span>
+          <span>{{ 'myProject.setup.kinds.' + kind + '.text' | translate }}</span>
+          <span class="project-setup__example">{{ 'myProject.setup.kinds.' + kind + '.example' | translate }}</span>
+        </label>
+      }
+    </div>
+  </fieldset>
+
+  <fieldset class="project-setup__question">
+    <legend class="project-setup__legend">
+      <span class="project-setup__number" aria-hidden="true">2</span>
+      {{ 'myProject.setup.frameworks' | translate }}
+    </legend>
+    @if (choice().kind !== 'backend') {
+      <div class="project-setup__group" role="radiogroup" [attr.aria-label]="'myProject.setup.frontend' | translate">
+        <span class="project-setup__group-label" aria-hidden="true">{{ 'myProject.setup.frontend' | translate }}</span>
+        <div class="project-setup__options">
+          @for (block of blocksOf('frontend'); track block.slug) {
+            <label class="project-setup__option" [class.project-setup__option--off]="!block.available">
+              <input
+                type="radio"
+                name="frontend"
+                [checked]="choice().frontend === block.slug"
+                [disabled]="!block.available"
+                (change)="pick('frontend', block.slug)"
+              />
+              {{ block.name }}
+              @if (!block.available) {
+                <span class="project-setup__soon">{{ 'myProject.setup.soon' | translate }}</span>
+              }
+            </label>
+          }
+        </div>
+      </div>
+    }
+    @if (choice().kind !== 'frontend') {
+      <div class="project-setup__group" role="radiogroup" [attr.aria-label]="'myProject.setup.backend' | translate">
+        <span class="project-setup__group-label" aria-hidden="true">{{ 'myProject.setup.backend' | translate }}</span>
+        <div class="project-setup__options">
+          @for (block of blocksOf('backend'); track block.slug) {
+            <label class="project-setup__option" [class.project-setup__option--off]="!block.available">
+              <input
+                type="radio"
+                name="backend"
+                [checked]="choice().backend === block.slug"
+                [disabled]="!block.available"
+                (change)="pick('backend', block.slug)"
+              />
+              {{ block.name }}
+              @if (!block.available) {
+                <span class="project-setup__soon">{{ 'myProject.setup.soon' | translate }}</span>
+              }
+            </label>
+          }
+        </div>
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="project-setup__question">
+    <legend class="project-setup__legend">
+      <span class="project-setup__number" aria-hidden="true">3</span>
+      {{ 'myProject.setup.extras' | translate }}
+    </legend>
+    <div class="project-setup__options">
+      @for (block of blocksOf('extra'); track block.slug) {
+        <label class="project-setup__option" [class.project-setup__option--off]="!allowed(block)">
+          <input
+            type="checkbox"
+            [checked]="choice().extras.includes(block.slug)"
+            [disabled]="!allowed(block)"
+            (change)="toggleExtra(block.slug)"
+          />
+          {{ block.name }}
+          @if (!block.available) {
+            <span class="project-setup__soon">{{ 'myProject.setup.soon' | translate }}</span>
+          }
+        </label>
+      }
+    </div>
+    <div class="project-setup__group" role="radiogroup" [attr.aria-label]="'myProject.setup.hosting' | translate">
+      <span class="project-setup__group-label" aria-hidden="true">{{ 'myProject.setup.hosting' | translate }}</span>
+      <div class="project-setup__options">
+        <label class="project-setup__option">
+          <input type="radio" name="hosting" [checked]="!choice().hosting" (change)="pick('hosting', '')" />
+          {{ 'myProject.setup.noHosting' | translate }}
+        </label>
+        @for (block of blocksOf('hosting'); track block.slug) {
+          <label class="project-setup__option" [class.project-setup__option--off]="!allowed(block)">
+            <input
+              type="radio"
+              name="hosting"
+              [checked]="choice().hosting === block.slug"
+              [disabled]="!allowed(block)"
+              (change)="pick('hosting', block.slug)"
+            />
+            {{ block.name }}
+            @if (!block.available) {
+              <span class="project-setup__soon">{{ 'myProject.setup.soon' | translate }}</span>
+            }
+          </label>
+        }
+      </div>
+    </div>
+    <p class="project-setup__hint">{{ 'myProject.setup.extrasHint' | translate }}</p>
+  </fieldset>
+
+  <fieldset class="project-setup__question">
+    <legend class="project-setup__legend">
+      <span class="project-setup__number" aria-hidden="true">4</span>
+      {{ 'myProject.setup.name' | translate }}
+    </legend>
+    <p class="project-setup__hint">{{ 'myProject.setup.nameHint' | translate }}</p>
+    <app-project-form [keys]="projectKeys" />
+  </fieldset>
+
+  <div class="project-setup__summary">
+    <p class="project-setup__summary-text" aria-live="polite">
+      @if (summary(); as summary) {
+        {{ 'myProject.setup.summary' | translate: summary }}
+      } @else {
+        {{ 'myProject.setup.incomplete' | translate }}
+      }
+    </p>
+    <button class="btn btn--primary" type="submit" [disabled]="!complete() || saving()">
+      {{ 'myProject.setup.submit' | translate }}
+    </button>
+  </div>
+</form>

@@ -22,6 +22,8 @@
 
   // Status
   --danger: #f07a6e;
+  --success: #4cd682;
+  --success-soft: color-mix(in srgb, var(--success) 10%, transparent);
 
   // Code blocks and syntax colors
   --code-bg: #111;

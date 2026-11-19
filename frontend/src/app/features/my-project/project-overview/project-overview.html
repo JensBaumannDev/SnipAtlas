@@ -1,0 +1,92 @@
+@if (roadmap(); as roadmap) {
+  @let nextStep = next();
+  <header class="stage" data-theme="dark">
+    <p>{{ (nextStep ? 'myProject.next' : 'myProject.title') | translate }}</p>
+    <h1>
+      @if (nextStep) {
+        <a class="project-overview__next" [routerLink]="['/mein-projekt', nextStep.phase.slug, nextStep.step.slug]">
+          {{ nextStep.step.title }}
+          <svg [lucideIcon]="chevronRightIcon" class="icon" aria-hidden="true"></svg>
+        </a>
+      } @else {
+        {{ 'myProject.allDone' | translate }}
+      }
+    </h1>
+    <p class="project-overview__stack">{{ state.chosenNames().join(' · ') }}</p>
+  </header>
+
+  <app-project-navigation />
+
+  <div class="project-overview__body">
+    <app-progress-bar
+      class="project-overview__progress"
+      [done]="doneCount()"
+      [total]="state.refs().length"
+      [label]="'guides.progressLabel' | translate"
+    />
+
+    @for (phase of roadmap.phases; track phase.slug) {
+      @let done = phaseDone(phase);
+      <details class="project-overview__phase" [open]="phase.slug === nextStep?.phase?.slug">
+        <summary class="project-overview__summary">
+          <span
+            class="project-overview__number"
+            [class.project-overview__number--done]="done === phase.steps.length"
+            aria-hidden="true"
+          >
+            @if (done === phase.steps.length) {
+              <svg [lucideIcon]="checkIcon" class="icon project-overview__number-icon"></svg>
+            } @else {
+              {{ $index + 1 }}
+            }
+          </span>
+          <span class="project-overview__phase-title">{{ phase.title }}</span>
+          <span class="project-overview__count">
+            {{ 'myProject.phaseCount' | translate: { done, total: phase.steps.length } }}
+          </span>
+        </summary>
+
+        <p class="project-overview__phase-summary">{{ phase.summary }}</p>
+        <ol class="project-overview__steps" role="list">
+          @for (step of phase.steps; track step.slug) {
+            @let stepDone = project.isDone(phase.slug, step.slug);
+            <li class="project-overview__step" [class.project-overview__step--done]="stepDone">
+              <button
+                class="project-overview__check"
+                type="button"
+                [attr.aria-label]="step.title + ' – ' + ('guides.done' | translate)"
+                [attr.aria-pressed]="stepDone"
+                (click)="project.toggle(phase.slug, step.slug)"
+              >
+                @if (stepDone) {
+                  <svg [lucideIcon]="checkIcon" class="icon project-overview__check-icon" aria-hidden="true"></svg>
+                }
+              </button>
+              <a class="project-overview__step-link" [routerLink]="['/mein-projekt', phase.slug, step.slug]">
+                <span class="project-overview__step-text">
+                  <span class="project-overview__step-title">
+                    {{ step.title }}
+                    @if (stepDone) {
+                      <span class="visually-hidden">({{ 'guides.done' | translate }})</span>
+                    }
+                  </span>
+                  @if (command(step); as command) {
+                    <code class="project-overview__command">{{ command | projectText }}</code>
+                  }
+                </span>
+                @if (newPaths(step).length) {
+                  <span class="project-overview__paths">
+                    @for (path of newPaths(step).slice(0, 3); track path) {
+                      <span class="project-overview__path">{{ path }}</span>
+                    }
+                  </span>
+                }
+                <svg [lucideIcon]="chevronRightIcon" class="icon project-overview__arrow" aria-hidden="true"></svg>
+              </a>
+            </li>
+          }
+        </ol>
+      </details>
+    }
+  </div>
+}

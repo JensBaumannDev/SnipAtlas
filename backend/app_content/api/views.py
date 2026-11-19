@@ -2,7 +2,7 @@
 
 from django.http import QueryDict
 from rest_framework import generics, viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -143,13 +143,13 @@ class RoadmapBlockListView(generics.ListAPIView):
 
     queryset = RoadmapBlock.objects.select_related('topic')
     serializer_class = RoadmapBlockSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
 
 class RoadmapMixin:
-    """Mixin for public views that build the roadmap for the blocks in the query string."""
+    """Mixin for authenticated views that build the roadmap for the blocks in the query string."""
 
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get_roadmap(self) -> Roadmap:
         """Return the roadmap for the chosen blocks or raise a validation error."""

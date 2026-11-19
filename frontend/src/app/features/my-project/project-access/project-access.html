@@ -1,0 +1,65 @@
+@if (session.user()) {
+  <router-outlet />
+} @else {
+  <header class="stage" data-theme="dark">
+    <div class="project-access__heading">
+      <p class="project-access__eyebrow">{{ 'myProject.title' | translate }}</p>
+      <h1>{{ 'myProject.home.title' | translate }}</h1>
+    </div>
+    <p class="project-access__lead">{{ 'myProject.intro.lead' | translate }}</p>
+  </header>
+  <div class="project-access__form" [class.project-access__form--intro]="view() === 'intro'">
+    @switch (view()) {
+      @case ('intro') {
+        <section aria-labelledby="project-intro-title" class="project-access__intro">
+          <h2 id="project-intro-title">{{ 'myProject.intro.title' | translate }}</h2>
+          <p>{{ 'myProject.intro.example' | translate }}</p>
+          <section class="project-access__sample" aria-labelledby="sample-title">
+            <div>
+              <h3 id="sample-title">{{ 'myProject.intro.sample' | translate }}</h3>
+              <p>{{ 'myProject.intro.command' | translate }}</p>
+              <code class="project-access__command">django-admin startproject core .</code>
+            </div>
+            <figure>
+              <figcaption>{{ 'myProject.intro.result' | translate }}</figcaption>
+              <pre><code>taskboard/
+└── backend/
+    ├── manage.py
+    └── core/
+        └── settings.py</code></pre>
+            </figure>
+          </section>
+          <section class="project-access__phases" aria-labelledby="phases-title">
+            <h3 id="phases-title">{{ 'myProject.intro.phases.title' | translate }}</h3>
+            <ol class="project-access__phase-list">
+              @for (phase of phases; track phase) {
+                <li class="project-access__phase">
+                  {{ 'myProject.intro.phases.items.' + phase | translate }}
+                </li>
+              }
+            </ol>
+          </section>
+          <h3>{{ 'myProject.intro.resume' | translate }}</h3>
+          <p>{{ 'myProject.intro.progress' | translate }}</p>
+          <div class="project-access__actions">
+            <button class="btn project-access__register" type="button" (click)="show('register')">
+              {{ 'myProject.register' | translate }}
+            </button>
+            <button class="btn btn--ghost" type="button" (click)="show('login')">
+              {{ 'auth.login' | translate }}
+            </button>
+          </div>
+        </section>
+      }
+      @case ('register') {
+        <app-register (login)="show('login')" />
+      }
+      @case ('login') {
+        <app-login (forgot)="show('forgot')" (register)="show('register')" />
+      }
+      @case ('forgot') {
+        <app-forgot-password (login)="show('login')" />
+      }
+    }
+  </div>
+}
