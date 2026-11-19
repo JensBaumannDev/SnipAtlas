@@ -1,7 +1,9 @@
 """Serializers for the content in the form of the frontend interfaces."""
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from modeltranslation.utils import get_language
 from rest_framework import serializers
+from rest_framework.fields import get_error_detail
 
 from app_content.models import (
     Blueprint,
@@ -15,8 +17,14 @@ from app_content.models import (
     GlossaryTerm,
     Group,
     News,
+    RoadmapBlock,
+    RoadmapCode,
+    RoadmapPath,
+    RoadmapPhase,
+    RoadmapStep,
     Subtopic,
     Topic,
+    validate_clean_slug,
 )
 
 
@@ -215,3 +223,123 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = ('date', 'topic', 'title', 'link')
+
+
+# Roadmap
+class RoadmapBlockSerializer(OptionalFieldsSerializer):
+    """Building block with the topic slug for its logo."""
+
+    topic = serializers.SlugRelatedField(read_only=True, slug_field='slug')
+    optional_fields = ('topic',)
+
+    class Meta:
+        model = RoadmapBlock
+        fields = ('slug', 'name', 'kind', 'requirement', 'available', 'topic')
+
+
+class BlockChoiceSerializer(serializers.Serializer):
+    """Choice of building blocks from the query string, as slugs separated by commas."""
+
+    blocks = serializers.CharField(trim_whitespace=False)
+
+    def validate_blocks(self, value: str) -> list[RoadmapBlock]:
+        """Return the chosen blocks if they exist and make a possible project."""
+        slugs = {slug.strip() for slug in value.split(',')} - {''}
+        if not slugs:
+            raise serializers.ValidationError('Choose at least one block.', code='blank')
+        blocks = self.find_blocks(slugs)
+        try:
+            RoadmapBlock.check_choice(blocks)
+        except DjangoValidationError as error:
+            raise serializers.ValidationError(get_error_detail(error)) from error
+        return blocks
+
+    def find_blocks(self, slugs: set[str]) -> list[RoadmapBlock]:
+        """Return the blocks for the slugs in their order, or raise if one is unknown."""
+        valid = all(validate_clean_slug.regex.fullmatch(slug) for slug in slugs)
+        blocks = list(RoadmapBlock.objects.filter(slug__in=slugs)) if valid else []
+        if len(blocks) != len(slugs):
+            raise serializers.ValidationError('Unknown block.', code='does_not_exist')
+        return blocks
+
+
+class RoadmapCodeSerializer(OptionalFieldsSerializer):
+    """Command or file content of a roadmap step."""
+
+    code = serializers.JSONField(source='os_code', read_only=True)
+    optional_fields = ('path',)
+
+    class Meta:
+        model = RoadmapCode
+        fields = ('kind', 'path', 'language', 'code')
+
+
+class RoadmapPathSerializer(serializers.ModelSerializer):
+    """Path a roadmap step adds, changes or removes."""
+
+    class Meta:
+        model = RoadmapPath
+        fields = ('path', 'change', 'tracked', 'explanation')
+
+
+class ErrorLinkSerializer(serializers.ModelSerializer):
+    """Link to an error message."""
+
+    topic = serializers.CharField(source='topic.slug', read_only=True)
+
+    class Meta:
+        model = ErrorMessage
+        fields = ('topic', 'slug', 'message')
+
+
+class ConceptLinkSerializer(ContentItemSerializer):
+    """Link to a concept."""
+
+    class Meta:
+        model = Concept
+        fields = ('topic', 'subtopic', 'slug', 'title')
+
+
+class RoadmapStepSerializer(OptionalFieldsSerializer):
+    """Roadmap step with code, paths, tree part and links."""
+
+    code = RoadmapCodeSerializer(source='codes', many=True, read_only=True)
+    paths = RoadmapPathSerializer(many=True, read_only=True)
+    tree = serializers.ListField(read_only=True)
+    errors = ErrorLinkSerializer(many=True, read_only=True)
+    concepts = ConceptLinkSerializer(many=True, read_only=True)
+    optional_fields = ('folder', 'context', 'note')
+
+    class Meta:
+        model = RoadmapStep
+        fields = (
+            'slug',
+            'title',
+            'why',
+            'folder',
+            'context',
+            'verification',
+            'note',
+            'code',
+            'paths',
+            'tree',
+            'errors',
+            'concepts',
+        )
+
+
+class RoadmapPhaseSerializer(serializers.ModelSerializer):
+    """Roadmap phase with the steps that match the choice."""
+
+    steps = RoadmapStepSerializer(source='plan_steps', many=True, read_only=True)
+
+    class Meta:
+        model = RoadmapPhase
+        fields = ('slug', 'title', 'summary', 'steps')
+
+
+class RoadmapSerializer(serializers.Serializer):
+    """Roadmap for a choice of building blocks."""
+
+    blocks = serializers.ListField(child=serializers.CharField(), read_only=True)
+    phases = RoadmapPhaseSerializer(many=True, read_only=True)

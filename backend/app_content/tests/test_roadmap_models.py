@@ -464,7 +464,7 @@ def test_file_code_requires_path(command: RoadmapCode, kind: str) -> None:
 
 def test_command_rejects_path(command: RoadmapCode) -> None:
     command.path = 'backend/manage.py'
-    assert error_codes(command, 'path') == ['not-allowed']
+    assert error_codes(command, 'path') == ['not_allowed']
 
 
 @pytest.mark.parametrize(
@@ -659,10 +659,10 @@ def test_possible_choice_passes(blocks: Blocks, chosen: list[str]) -> None:
         ([], ['empty']),
         (['docker'], ['empty']),
         (['react'], ['unavailable']),
-        (['angular', 'react'], ['unavailable', 'duplicate-kind']),
-        (['angular', 'postgresql'], ['needs-backend']),
-        (['django', 'static-hosting'], ['no-backend']),
-        (['postgresql'], ['empty', 'needs-backend']),
+        (['angular', 'react'], ['unavailable', 'duplicate_kind']),
+        (['angular', 'postgresql'], ['needs_backend']),
+        (['django', 'static-hosting'], ['no_backend']),
+        (['postgresql'], ['empty', 'needs_backend']),
     ],
 )
 def test_impossible_choice_is_rejected(blocks: Blocks, chosen: list[str], codes: list[str]) -> None:
@@ -671,12 +671,12 @@ def test_impossible_choice_is_rejected(blocks: Blocks, chosen: list[str], codes:
 
 def test_second_block_of_same_kind_is_rejected(blocks: Blocks) -> None:
     vue = RoadmapBlock.objects.create(slug='vue', name_de='Vue', kind='frontend')
-    assert choice_codes([blocks['angular'], vue]) == ['duplicate-kind']
+    assert choice_codes([blocks['angular'], vue]) == ['duplicate_kind']
 
 
 def test_second_hosting_is_rejected(blocks: Blocks) -> None:
     server = RoadmapBlock.objects.create(slug='server', name_de='Server', kind='hosting')
-    assert choice_codes([blocks['angular'], blocks['static-hosting'], server]) == ['duplicate-kind']
+    assert choice_codes([blocks['angular'], blocks['static-hosting'], server]) == ['duplicate_kind']
 
 
 def test_several_extras_are_allowed(blocks: Blocks) -> None:
