@@ -1,4 +1,4 @@
-"""URLs for groups, topics and all content."""
+"""URLs for groups, topics, all content and the roadmap."""
 
 from django.urls import URLPattern, path
 from rest_framework.routers import SimpleRouter
@@ -12,6 +12,9 @@ from .views import (
     GlossaryListView,
     GroupListView,
     NewsListView,
+    RoadmapBlockListView,
+    RoadmapTreeView,
+    RoadmapView,
     TopicDetailView,
 )
 
@@ -27,5 +30,8 @@ urlpatterns: list[URLPattern] = [
     path('topics/<slug:slug>/', TopicDetailView.as_view(), name='topic-detail'),
     path('glossary/', GlossaryListView.as_view(), name='glossary-list'),
     path('news/', NewsListView.as_view(), name='news-list'),
+    path('roadmap/', RoadmapView.as_view(), name='roadmap'),
+    path('roadmap/blocks/', RoadmapBlockListView.as_view(), name='roadmap-block-list'),
+    path('roadmap/tree/', RoadmapTreeView.as_view(), name='roadmap-tree'),
     *router.urls,
 ]

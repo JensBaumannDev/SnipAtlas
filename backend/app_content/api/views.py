@@ -3,6 +3,8 @@
 from django.http import QueryDict
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from app_content.models import (
     Blueprint,
@@ -14,11 +16,14 @@ from app_content.models import (
     GlossaryTerm,
     Group,
     News,
+    RoadmapBlock,
     Topic,
     TopicQuerySet,
 )
+from app_content.roadmap import Roadmap
 
 from .serializers import (
+    BlockChoiceSerializer,
     BlueprintSerializer,
     ConceptSerializer,
     DebugGuideSerializer,
@@ -27,6 +32,8 @@ from .serializers import (
     GlossaryTermSerializer,
     GroupSerializer,
     NewsSerializer,
+    RoadmapBlockSerializer,
+    RoadmapSerializer,
     TopicSerializer,
 )
 
@@ -128,3 +135,42 @@ class NewsListView(generics.ListAPIView):
     queryset = News.objects.select_related('topic', 'subtopic')
     serializer_class = NewsSerializer
     permission_classes = (AllowAny,)
+
+
+# Roadmap
+class RoadmapBlockListView(generics.ListAPIView):
+    """List all building blocks, also the ones that are not available yet."""
+
+    queryset = RoadmapBlock.objects.select_related('topic')
+    serializer_class = RoadmapBlockSerializer
+    permission_classes = (AllowAny,)
+
+
+class RoadmapMixin:
+    """Mixin for public views that build the roadmap for the blocks in the query string."""
+
+    permission_classes = (AllowAny,)
+
+    def get_roadmap(self) -> Roadmap:
+        """Return the roadmap for the chosen blocks or raise a validation error."""
+        choice = BlockChoiceSerializer(data=self.request.query_params)
+        choice.is_valid(raise_exception=True)
+        return Roadmap.for_blocks(choice.validated_data['blocks'])
+
+
+class RoadmapView(RoadmapMixin, generics.GenericAPIView):
+    """Return the phases and steps for a choice of blocks."""
+
+    serializer_class = RoadmapSerializer
+
+    def get(self, request: Request) -> Response:
+        """Return the roadmap."""
+        return Response(self.get_serializer(self.get_roadmap()).data)
+
+
+class RoadmapTreeView(RoadmapMixin, generics.GenericAPIView):
+    """Return the folder tree of the finished project for a choice of blocks."""
+
+    def get(self, request: Request) -> Response:
+        """Return the tree after the last step."""
+        return Response(self.get_roadmap().tree.nodes())

@@ -780,7 +780,7 @@ def kind_errors(kinds: list[str]) -> list[ValidationError]:
         errors.append(ValidationError(_('Choose a frontend, a backend or both.'), code='empty'))
     message = _('Choose only one %(kind)s.')
     errors += [
-        ValidationError(message, code='duplicate-kind', params={'kind': kind.label})
+        ValidationError(message, code='duplicate_kind', params={'kind': kind.label})
         for kind in SINGLE_BLOCK_KINDS
         if kinds.count(kind) > 1
     ]
@@ -794,10 +794,10 @@ def requirement_errors(blocks: list[RoadmapBlock], *, has_backend: bool) -> list
         params = {'block': block.name}
         if block.requirement == BlockRequirement.BACKEND and not has_backend:
             message = _('%(block)s needs a backend.')
-            errors.append(ValidationError(message, code='needs-backend', params=params))
+            errors.append(ValidationError(message, code='needs_backend', params=params))
         if block.requirement == BlockRequirement.NO_BACKEND and has_backend:
             message = _('%(block)s only works without a backend.')
-            errors.append(ValidationError(message, code='no-backend', params=params))
+            errors.append(ValidationError(message, code='no_backend', params=params))
     return errors
 
 
@@ -989,7 +989,7 @@ class RoadmapCode(models.Model):
     def check_path(self) -> None:
         """Raise an error if the path does not fit the kind of code."""
         if self.kind == CodeKind.COMMAND and self.path:
-            raise field_error('path', 'not-allowed', _('Commands have no file path.'))
+            raise field_error('path', 'not_allowed', _('Commands have no file path.'))
         if self.kind in (CodeKind.CREATE, CodeKind.CHANGE) and not self.path:
             raise field_error('path', 'required', _('Enter the path of the file.'))
         if is_folder(self.path):

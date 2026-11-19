@@ -456,7 +456,7 @@ def test_admin_rejects_duplicate_step_slug(admin_client: Client, roadmap_step: R
         ({'codes-0-path': ''}, 'path', 'required'),
         ({'codes-0-path': 'backend/'}, 'path', 'folder'),
         ({'codes-0-path': '/backend/.env'}, 'path', 'invalid'),
-        ({'codes-0-kind': 'command'}, 'path', 'not-allowed'),
+        ({'codes-0-kind': 'command'}, 'path', 'not_allowed'),
         ({'codes-0-kind': ''}, 'kind', 'required'),
         ({'codes-0-language': ''}, 'language', 'required'),
         ({'codes-0-code_de': ''}, 'code_de', 'required'),
