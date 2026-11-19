@@ -1,4 +1,4 @@
-"""URLs for login, account, favorites, progress and settings."""
+"""URLs for login, account, favorites, progress, settings and the roadmap project."""
 
 from django.urls import URLPattern, path
 
@@ -20,6 +20,9 @@ from .views import (
     ProgressBlueprintView,
     ProgressListView,
     ProgressStepView,
+    ProjectNoteView,
+    ProjectStepView,
+    ProjectView,
     RegisterView,
     SettingsView,
 )
@@ -56,4 +59,15 @@ urlpatterns: list[URLPattern] = [
         name='progress-step',
     ),
     path('me/settings/', SettingsView.as_view(), name='settings'),
+    path('me/project/', ProjectView.as_view(), name='project'),
+    path(
+        'me/project/steps/<slug:phase>/<slug:step>/',
+        ProjectStepView.as_view(),
+        name='project-step',
+    ),
+    path(
+        'me/project/notes/<slug:phase>/<slug:step>/',
+        ProjectNoteView.as_view(),
+        name='project-note',
+    ),
 ]

@@ -237,6 +237,19 @@ class RoadmapBlockSerializer(OptionalFieldsSerializer):
         fields = ('slug', 'name', 'kind', 'requirement', 'available', 'topic')
 
 
+def chosen_blocks(slugs: set[str]) -> list[RoadmapBlock]:
+    """Return the blocks for the slugs if they all exist and make a possible project."""
+    valid = all(validate_clean_slug.regex.fullmatch(slug) for slug in slugs)
+    blocks = list(RoadmapBlock.objects.filter(slug__in=slugs)) if valid else []
+    if len(blocks) != len(slugs):
+        raise serializers.ValidationError('Unknown block.', code='does_not_exist')
+    try:
+        RoadmapBlock.check_choice(blocks)
+    except DjangoValidationError as error:
+        raise serializers.ValidationError(get_error_detail(error)) from error
+    return blocks
+
+
 class BlockChoiceSerializer(serializers.Serializer):
     """Choice of building blocks from the query string, as slugs separated by commas."""
 
@@ -247,20 +260,7 @@ class BlockChoiceSerializer(serializers.Serializer):
         slugs = {slug.strip() for slug in value.split(',')} - {''}
         if not slugs:
             raise serializers.ValidationError('Choose at least one block.', code='blank')
-        blocks = self.find_blocks(slugs)
-        try:
-            RoadmapBlock.check_choice(blocks)
-        except DjangoValidationError as error:
-            raise serializers.ValidationError(get_error_detail(error)) from error
-        return blocks
-
-    def find_blocks(self, slugs: set[str]) -> list[RoadmapBlock]:
-        """Return the blocks for the slugs in their order, or raise if one is unknown."""
-        valid = all(validate_clean_slug.regex.fullmatch(slug) for slug in slugs)
-        blocks = list(RoadmapBlock.objects.filter(slug__in=slugs)) if valid else []
-        if len(blocks) != len(slugs):
-            raise serializers.ValidationError('Unknown block.', code='does_not_exist')
-        return blocks
+        return chosen_blocks(slugs)
 
 
 class RoadmapCodeSerializer(OptionalFieldsSerializer):

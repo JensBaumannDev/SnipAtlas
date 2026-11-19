@@ -3,7 +3,9 @@
 from typing import Any
 
 from django.contrib.auth import login, logout, update_session_auth_hash
+from django.db import transaction
 from django.db.models import QuerySet
+from django.http import Http404
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
@@ -12,8 +14,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
-from app_accounts.models import User
-from app_content.models import Blueprint, BlueprintStep, Entry
+from app_accounts.models import Project, User
+from app_content.models import Blueprint, BlueprintStep, Entry, RoadmapStep
 from core.permissions import CsrfProtected
 from core.throttling import AuthRateThrottle, PasswordResetRateThrottle
 
@@ -28,6 +30,9 @@ from .serializers import (
     PasswordChangeSerializer,
     PasswordResetConfirmSerializer,
     PasswordResetSerializer,
+    ProjectBlocksSerializer,
+    ProjectNoteSerializer,
+    ProjectSerializer,
     RegisterSerializer,
     SettingsSerializer,
     UserSerializer,
@@ -283,3 +288,90 @@ class SettingsView(generics.RetrieveUpdateAPIView):
     def get_object(self) -> User:
         """Return the logged-in user."""
         return self.request.user
+
+
+# Roadmap project
+class ProjectView(generics.GenericAPIView):
+    """Read, choose the blocks of, or delete the project of the logged-in user."""
+
+    serializer_class = ProjectSerializer
+
+    def get_object(self) -> Project:
+        """Return the project of the logged-in user or raise 404."""
+        return get_object_or_404(Project, user=self.request.user)
+
+    def get(self, request: Request) -> Response:
+        """Return the project with its progress and notes."""
+        return Response(self.get_serializer(self.get_object()).data)
+
+    def put(self, request: Request) -> Response:
+        """Create the project or replace its blocks, keeping progress and notes."""
+        choice = ProjectBlocksSerializer(data=request.data)
+        choice.is_valid(raise_exception=True)
+        with transaction.atomic():
+            project, created = Project.objects.get_or_create(user=request.user)
+            project.set_blocks(choice.validated_data['blocks'])
+        code = status.HTTP_201_CREATED if created else status.HTTP_200_OK
+        return Response(self.get_serializer(project).data, status=code)
+
+    def delete(self, request: Request) -> Response:
+        """Delete the project with its progress and notes."""
+        Project.objects.filter(user=request.user).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProjectStepMixin:
+    """Mixin for views that work on a roadmap step of the own project."""
+
+    def get_project(self) -> Project:
+        """Return the project of the logged-in user or raise 404."""
+        return get_object_or_404(Project, user=self.request.user)
+
+    def get_step(self, project: Project, *, in_roadmap: bool) -> RoadmapStep:
+        """Return the step from the URL, optionally only if it is in the roadmap."""
+        step = get_object_or_404(
+            RoadmapStep.objects.select_related('phase'),
+            phase__slug=self.kwargs['phase'],
+            slug=self.kwargs['step'],
+        )
+        if in_roadmap and not project.includes(step):
+            raise Http404
+        return step
+
+
+class ProjectStepView(ProjectStepMixin, generics.GenericAPIView):
+    """Mark a roadmap step of the own project as done or not done."""
+
+    def put(self, request: Request, phase: str, step: str) -> Response:
+        """Mark the step as done."""
+        project = self.get_project()
+        project.completed_steps.get_or_create(step=self.get_step(project, in_roadmap=True))
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def delete(self, request: Request, phase: str, step: str) -> Response:
+        """Mark the step as not done."""
+        project = self.get_project()
+        project.completed_steps.filter(step=self.get_step(project, in_roadmap=False)).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProjectNoteView(ProjectStepMixin, generics.GenericAPIView):
+    """Write or delete the note on a roadmap step of the own project."""
+
+    serializer_class = ProjectNoteSerializer
+
+    def put(self, request: Request, phase: str, step: str) -> Response:
+        """Save the note, replacing an older one."""
+        project = self.get_project()
+        found = self.get_step(project, in_roadmap=True)
+        note = self.get_serializer(data=request.data)
+        note.is_valid(raise_exception=True)
+        text = note.validated_data['text']
+        project.notes.update_or_create(step=found, defaults={'text': text})
+        return Response({'text': text})
+
+    def delete(self, request: Request, phase: str, step: str) -> Response:
+        """Delete the note."""
+        project = self.get_project()
+        project.notes.filter(step=self.get_step(project, in_roadmap=False)).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

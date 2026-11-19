@@ -237,3 +237,52 @@ def test_deleting_step_deletes_its_progress_and_notes(
     assert [done.step for done in project.completed_steps.all()] == [second_step]
     assert [note.step for note in project.notes.all()] == [second_step]
     assert Project.objects.filter(pk=project.pk).exists()
+
+
+# Roadmap of the project
+def test_project_includes_steps_of_its_roadmap(
+    project: Project, blocks: Blocks, roadmap_step: RoadmapStep
+) -> None:
+    project.set_blocks([blocks['angular'], blocks['django']])
+    assert project.includes(roadmap_step)
+
+
+def test_project_excludes_step_whose_conditions_fail(
+    project: Project, roadmap_step: RoadmapStep
+) -> None:
+    assert project.block_slugs() == {'angular', 'django', 'docker'}
+    assert not project.includes(roadmap_step)
+
+
+def test_project_excludes_step_whose_phase_does_not_apply(
+    project: Project, blocks: Blocks, roadmap_step: RoadmapStep
+) -> None:
+    project.set_blocks([blocks['angular']])
+    assert not project.includes(roadmap_step)
+
+
+def test_completed_map_groups_steps_by_phase_in_roadmap_order(
+    project: Project, roadmap_step: RoadmapStep, second_step: RoadmapStep
+) -> None:
+    early = RoadmapPhase.objects.create(slug='vorbereiten', title_de='x', summary_de='x')
+    git = early.steps.create(slug='git', title_de='Git', why_de='x', verification_de='x')
+    for step in (second_step, git, roadmap_step):
+        project.completed_steps.create(step=step)
+    assert project.completed_map() == {
+        'vorbereiten': ['git'],
+        'backend-anlegen': ['app-anlegen', 'migrieren'],
+    }
+
+
+def test_notes_map_groups_texts_by_phase_and_step(
+    project: Project, roadmap_step: RoadmapStep, second_step: RoadmapStep
+) -> None:
+    project.notes.create(step=second_step, text='Später')
+    project.notes.create(step=roadmap_step, text='Zuerst')
+    assert project.notes_map() == {
+        'backend-anlegen': {'app-anlegen': 'Zuerst', 'migrieren': 'Später'}
+    }
+
+
+def test_maps_are_empty_without_progress_and_notes(project: Project) -> None:
+    assert (project.completed_map(), project.notes_map()) == ({}, {})
