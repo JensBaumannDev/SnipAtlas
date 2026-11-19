@@ -62,6 +62,10 @@
 
 .project-tree__name {
   overflow-wrap: anywhere;
+
+  .project-tree__row--untracked:is(.project-tree__row--new, .project-tree__row--changed) & {
+    color: var(--text);
+  }
 }
 
 .project-tree__badge {
@@ -84,6 +88,11 @@
 .project-tree__untracked {
   font-family: $font-sans;
   color: var(--muted);
+
+  .project-tree__row--new &,
+  .project-tree__row--changed & {
+    color: var(--text);
+  }
 }
 
 // Explanation
