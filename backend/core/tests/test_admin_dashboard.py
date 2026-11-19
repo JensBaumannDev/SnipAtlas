@@ -15,7 +15,7 @@ INDEX_URL = reverse('admin:index')
 SCRIPT = 'snipatlas/admin-sections.js'
 ACTION = 'class="snipatlas-section__action"'
 PRIMARY = 'class="snipatlas-section__action snipatlas-section__action--primary"'
-SECTION_KEYS = ['structure', 'commands', 'guides', 'errors', 'terms', 'people']
+SECTION_KEYS = ['structure', 'commands', 'guides', 'errors', 'terms', 'roadmap', 'people']
 
 
 @pytest.fixture

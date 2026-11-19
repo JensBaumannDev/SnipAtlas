@@ -66,6 +66,9 @@ CONTENT_ADMINS = [
     'blueprintstep',
     'glossaryterm',
     'news',
+    'roadmapblock',
+    'roadmapphase',
+    'roadmapstep',
 ]
 
 

@@ -12,6 +12,11 @@ SECTIONS = (
     ('errors', _('Errors'), ('app_content.errormessage', 'app_content.debugguide')),
     ('terms', _('Terms & news'), ('app_content.glossaryterm', 'app_content.news')),
     (
+        'roadmap',
+        _('My project'),
+        ('app_content.roadmapblock', 'app_content.roadmapphase', 'app_content.roadmapstep'),
+    ),
+    (
         'people',
         _('Users & requests'),
         ('app_accounts.user', 'app_feedback.suggestion', 'auth.group'),
