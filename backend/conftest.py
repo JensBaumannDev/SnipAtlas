@@ -19,6 +19,9 @@ from app_content.models import (
     Group,
     GroupArea,
     News,
+    RoadmapBlock,
+    RoadmapPhase,
+    RoadmapStep,
     Subtopic,
     Topic,
 )
@@ -254,6 +257,98 @@ def news(subtopic: Subtopic) -> News:
         topic=subtopic.topic,
         subtopic=subtopic,
     )
+
+
+# Roadmap
+@pytest.fixture
+def blocks(db: None) -> dict[str, RoadmapBlock]:
+    rows = [
+        ('angular', 'Angular', 'frontend', 'any', True),
+        ('react', 'React', 'frontend', 'any', False),
+        ('django', 'Django', 'backend', 'any', True),
+        ('docker', 'Docker', 'extra', 'any', True),
+        ('postgresql', 'PostgreSQL', 'extra', 'backend', True),
+        ('static-hosting', 'Netlify', 'hosting', 'no-backend', True),
+    ]
+    return {
+        slug: RoadmapBlock.objects.create(
+            slug=slug,
+            name_de=name,
+            kind=kind,
+            requirement=requirement,
+            available=available,
+            position=position,
+        )
+        for position, (slug, name, kind, requirement, available) in enumerate(rows)
+    }
+
+
+@pytest.fixture
+def roadmap_phase(blocks: dict[str, RoadmapBlock]) -> RoadmapPhase:
+    phase = RoadmapPhase.objects.create(
+        slug='backend-anlegen',
+        title_de='Backend anlegen',
+        title_en='Set up the backend',
+        summary_de='Vom leeren Ordner bis zum laufenden Server.',
+        summary_en='From an empty folder to a running server.',
+        position=2,
+    )
+    phase.conditions.create(block=blocks['django'], rule='requires')
+    return phase
+
+
+@pytest.fixture
+def roadmap_step(
+    roadmap_phase: RoadmapPhase,
+    blocks: dict[str, RoadmapBlock],
+    error_message: ErrorMessage,
+    concept: Concept,
+) -> RoadmapStep:
+    step = roadmap_phase.steps.create(
+        slug='app-anlegen',
+        title_de='Django-App anlegen',
+        title_en='Create a Django app',
+        why_de='Jede Aufgabe bekommt eine eigene App.',
+        why_en='Each task gets its own app.',
+        folder='backend/',
+        context_de='Umgebung aktiv',
+        context_en='Environment active',
+        verification_de='Neben core/ liegt app_recipes/.',
+        verification_en='app_recipes/ sits next to core/.',
+        note_de='Das Präfix app_ macht eigene Apps erkennbar.',
+        position=9,
+    )
+    step.conditions.create(block=blocks['docker'], rule='excludes')
+    step.codes.create(
+        kind='command',
+        language='terminal',
+        code_de='python manage.py startapp app_recipes',
+        code_unix_de='python3 manage.py startapp app_recipes',
+        position=1,
+    )
+    step.codes.create(
+        kind='change',
+        path='backend/core/settings.py',
+        language='python',
+        code_de="INSTALLED_APPS += ['app_recipes']",
+        position=2,
+    )
+    step.paths.create(
+        path='backend/app_recipes/',
+        change='new',
+        explanation_de='Die App für alles rund um Rezepte.',
+        explanation_en='The app for everything about recipes.',
+        position=1,
+    )
+    step.paths.create(
+        path='backend/core/settings.py',
+        change='changed',
+        explanation_de='Kennt jetzt die neue App.',
+        position=2,
+    )
+    step.errors.add(error_message)
+    step.concepts.add(concept)
+    return step
 
 
 # Feedback

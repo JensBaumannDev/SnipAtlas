@@ -19,6 +19,7 @@ SECTIONS = {
         ('Anleitungen', ['Anleitungen', 'Anleitungsschritte']),
         ('Fehler', ['Fehlermeldungen', 'Debug-Anleitungen']),
         ('Begriffe & Neues', ['Begriffe', 'Neuigkeiten']),
+        ('Mein Projekt', ['Bausteine', 'Fahrplan-Phasen', 'Fahrplan-Schritte']),
         ('Nutzer & Anfragen', ['Nutzer', 'Anfragen', 'Berechtigungsgruppen']),
     ],
     'en': [
@@ -27,6 +28,7 @@ SECTIONS = {
         ('Guides', ['Guides', 'Guide steps']),
         ('Errors', ['Error messages', 'Debug guides']),
         ('Terms & news', ['Terms', 'News']),
+        ('My project', ['Building blocks', 'Roadmap phases', 'Roadmap steps']),
         ('Users & requests', ['Users', 'Requests', 'Permission groups']),
     ],
 }
@@ -80,6 +82,37 @@ MODEL_NAMES = [
     ('app_content.glossaryterm', 'Begriff', 'Begriffe', 'term', 'terms'),
     ('app_content.glossaryalias', 'Anderer Name', 'Andere Namen', 'other name', 'other names'),
     ('app_content.news', 'Neuigkeit', 'Neuigkeiten', 'news item', 'news'),
+    ('app_content.roadmapblock', 'Baustein', 'Bausteine', 'building block', 'building blocks'),
+    (
+        'app_content.roadmapphase',
+        'Fahrplan-Phase',
+        'Fahrplan-Phasen',
+        'roadmap phase',
+        'roadmap phases',
+    ),
+    (
+        'app_content.roadmapphasecondition',
+        'Bedingung',
+        'Bedingungen',
+        'condition',
+        'conditions',
+    ),
+    (
+        'app_content.roadmapstep',
+        'Fahrplan-Schritt',
+        'Fahrplan-Schritte',
+        'roadmap step',
+        'roadmap steps',
+    ),
+    (
+        'app_content.roadmapstepcondition',
+        'Bedingung',
+        'Bedingungen',
+        'condition',
+        'conditions',
+    ),
+    ('app_content.roadmapcode', 'Code-Block', 'Code-Blöcke', 'code block', 'code blocks'),
+    ('app_content.roadmappath', 'Pfad', 'Pfade', 'path', 'paths'),
     ('app_feedback.suggestion', 'Anfrage', 'Anfragen', 'request', 'requests'),
 ]
 

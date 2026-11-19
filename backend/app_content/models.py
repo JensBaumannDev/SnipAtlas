@@ -636,3 +636,343 @@ class News(models.Model):
         """Return the URL parts of the area, topic and subtopic."""
         parts = [f'/{self.area}', self.topic.slug]
         return [*parts, self.subtopic.slug] if self.subtopic else parts
+
+
+# Roadmap
+RESERVED_PHASE_SLUGS = ('neu', 'ordnerstruktur')
+PATH_SEGMENT = r'\.?[A-Za-z0-9_@+-][A-Za-z0-9_.@+-]*'
+FILE_PATTERN = rf'\A{PATH_SEGMENT}(/{PATH_SEGMENT})*\Z'
+FOLDER_PATTERN = rf'\A{PATH_SEGMENT}(/{PATH_SEGMENT})*/\Z'
+PATH_PATTERN = rf'\A{PATH_SEGMENT}(/{PATH_SEGMENT})*/?\Z'
+PATH_MAX_LENGTH = 200
+
+validate_path = RegexValidator(PATH_PATTERN, code='invalid')
+validate_folder = RegexValidator(FOLDER_PATTERN, code='invalid')
+
+
+def validate_phase_slug(value: str) -> None:
+    """Reject the slugs used by the pages for a new project and the folder tree."""
+    if value in RESERVED_PHASE_SLUGS:
+        raise ValidationError(_('This slug is reserved.'), code='reserved')
+
+
+def is_folder(path: str) -> bool:
+    """Return whether a valid path points to a folder."""
+    return bool(validate_folder.regex.search(path))
+
+
+def choice_constraint(field: str, choices: type[models.TextChoices]) -> models.CheckConstraint:
+    """Return a database constraint that only allows the given choices."""
+    return models.CheckConstraint(
+        condition=models.Q(**{f'{field}__in': choices.values}),
+        name=f'%(class)s_{field}_valid',
+    )
+
+
+class BlockKind(models.TextChoices):
+    """Kinds of building blocks a project is made of."""
+
+    FRONTEND = 'frontend', _('Frontend')
+    BACKEND = 'backend', _('Backend')
+    EXTRA = 'extra', _('Extra')
+    HOSTING = 'hosting', _('Hosting')
+
+
+class BlockRequirement(models.TextChoices):
+    """What a project needs before a block can be chosen."""
+
+    ANY = 'any', _('No requirement')
+    BACKEND = 'backend', _('Only with a backend')
+    NO_BACKEND = 'no-backend', _('Only without a backend')
+
+
+class ConditionRule(models.TextChoices):
+    """How a condition uses its block."""
+
+    REQUIRES = 'requires', _('must be chosen')
+    EXCLUDES = 'excludes', _('must not be chosen')
+
+
+class CodeKind(models.TextChoices):
+    """What a code block of a roadmap step does."""
+
+    COMMAND = 'command', _('Command')
+    CREATE = 'create', _('Create file')
+    CHANGE = 'change', _('Change file')
+
+
+class PathChange(models.TextChoices):
+    """How a step changes a path in the project."""
+
+    NEW = 'new', _('new')
+    CHANGED = 'changed', _('changed')
+    REMOVED = 'removed', _('removed')
+
+
+class RoadmapBlock(models.Model):
+    """Building block a user can choose for a project, such as Angular or Docker."""
+
+    slug = models.SlugField(
+        max_length=40, unique=True, validators=[validate_clean_slug], verbose_name=_('slug')
+    )
+    name = models.CharField(max_length=60, verbose_name=_('name'))
+    kind = models.CharField(max_length=20, choices=BlockKind.choices, verbose_name=_('kind'))
+    requirement = models.CharField(
+        max_length=20,
+        choices=BlockRequirement.choices,
+        default=BlockRequirement.ANY,
+        verbose_name=_('requirement'),
+    )
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name='+',
+        verbose_name=_('topic'),
+    )
+    available = models.BooleanField(default=True, verbose_name=_('available'))
+    position = models.IntegerField(default=0, verbose_name=_('position'))
+
+    class Meta:
+        verbose_name = _('building block')
+        verbose_name_plural = _('building blocks')
+        ordering = ('position', 'pk')
+        constraints = [
+            slug_constraint(),
+            choice_constraint('kind', BlockKind),
+            choice_constraint('requirement', BlockRequirement),
+        ]
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class ConditionalMixin:
+    """Mixin for roadmap parts that only belong to plans with certain blocks."""
+
+    def applies_to(self, blocks: set[str]) -> bool:
+        """Return whether the part belongs to a plan with the given block slugs."""
+        return all(condition.is_met(blocks) for condition in self.conditions.all())
+
+
+class RoadmapCondition(models.Model):
+    """Rule that ties a roadmap part to a block that must or must not be chosen."""
+
+    block = models.ForeignKey(
+        RoadmapBlock, on_delete=models.PROTECT, related_name='+', verbose_name=_('building block')
+    )
+    rule = models.CharField(max_length=10, choices=ConditionRule.choices, verbose_name=_('rule'))
+
+    class Meta:
+        abstract = True
+        verbose_name = _('condition')
+        verbose_name_plural = _('conditions')
+        ordering = ('block__position', 'pk')
+
+    def __str__(self) -> str:
+        return f'{self.block}: {self.get_rule_display()}'
+
+    def is_met(self, blocks: set[str]) -> bool:
+        """Return whether the chosen block slugs fulfil the rule."""
+        return (self.block.slug in blocks) == (self.rule == ConditionRule.REQUIRES)
+
+
+class RoadmapPhase(ConditionalMixin, models.Model):
+    """Phase of the project roadmap, such as setting up the backend."""
+
+    slug = models.SlugField(
+        max_length=80,
+        unique=True,
+        validators=[validate_clean_slug, validate_phase_slug],
+        verbose_name=_('slug'),
+    )
+    title = models.CharField(max_length=120, verbose_name=_('title'))
+    summary = models.TextField(verbose_name=_('summary'))
+    position = models.IntegerField(default=0, verbose_name=_('position'))
+
+    class Meta:
+        verbose_name = _('roadmap phase')
+        verbose_name_plural = _('roadmap phases')
+        ordering = ('position', 'pk')
+        constraints = [
+            slug_constraint(),
+            models.CheckConstraint(
+                condition=~models.Q(slug__in=RESERVED_PHASE_SLUGS),
+                name='roadmapphase_slug_not_reserved',
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class RoadmapPhaseCondition(RoadmapCondition):
+    """Condition of a roadmap phase."""
+
+    phase = models.ForeignKey(
+        RoadmapPhase,
+        on_delete=models.CASCADE,
+        related_name='conditions',
+        verbose_name=_('roadmap phase'),
+    )
+
+    class Meta(RoadmapCondition.Meta):
+        constraints = [
+            models.UniqueConstraint(
+                fields=('phase', 'block'), name='roadmapphasecondition_block_unique'
+            ),
+            choice_constraint('rule', ConditionRule),
+        ]
+
+
+class RoadmapStep(ConditionalMixin, models.Model):
+    """Step of a roadmap phase with everything needed to do it."""
+
+    phase = models.ForeignKey(
+        RoadmapPhase,
+        on_delete=models.CASCADE,
+        related_name='steps',
+        verbose_name=_('roadmap phase'),
+    )
+    slug = models.SlugField(max_length=80, validators=[validate_clean_slug], verbose_name=_('slug'))
+    title = models.CharField(max_length=120, verbose_name=_('title'))
+    why = models.TextField(verbose_name=_('why'))
+    folder = models.CharField(
+        max_length=PATH_MAX_LENGTH,
+        blank=True,
+        validators=[validate_folder],
+        verbose_name=_('folder'),
+    )
+    context = models.CharField(max_length=120, blank=True, verbose_name=_('context'))
+    verification = models.TextField(verbose_name=_('verification'))
+    note = models.TextField(blank=True, verbose_name=_('note'))
+    errors = models.ManyToManyField(
+        ErrorMessage, blank=True, related_name='+', verbose_name=_('error messages')
+    )
+    concepts = models.ManyToManyField(
+        Concept, blank=True, related_name='+', verbose_name=_('concepts')
+    )
+    position = models.IntegerField(default=0, verbose_name=_('position'))
+
+    class Meta:
+        verbose_name = _('roadmap step')
+        verbose_name_plural = _('roadmap steps')
+        ordering = ('position', 'pk')
+        constraints = [
+            models.UniqueConstraint(fields=('phase', 'slug'), name='roadmapstep_slug_unique'),
+            slug_constraint(),
+            models.CheckConstraint(
+                condition=models.Q(folder='') | models.Q(folder__regex=FOLDER_PATTERN),
+                name='roadmapstep_folder_valid',
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class RoadmapStepCondition(RoadmapCondition):
+    """Condition of a roadmap step."""
+
+    step = models.ForeignKey(
+        RoadmapStep,
+        on_delete=models.CASCADE,
+        related_name='conditions',
+        verbose_name=_('roadmap step'),
+    )
+
+    class Meta(RoadmapCondition.Meta):
+        constraints = [
+            models.UniqueConstraint(
+                fields=('step', 'block'), name='roadmapstepcondition_block_unique'
+            ),
+            choice_constraint('rule', ConditionRule),
+        ]
+
+
+class RoadmapCode(models.Model):
+    """Command or file content of a roadmap step."""
+
+    step = models.ForeignKey(
+        RoadmapStep, on_delete=models.CASCADE, related_name='codes', verbose_name=_('roadmap step')
+    )
+    kind = models.CharField(max_length=10, choices=CodeKind.choices, verbose_name=_('kind'))
+    path = models.CharField(
+        max_length=PATH_MAX_LENGTH,
+        blank=True,
+        validators=[validate_path],
+        verbose_name=_('file path'),
+    )
+    language = models.CharField(
+        max_length=20, choices=CodeLanguage.choices, verbose_name=_('code language')
+    )
+    code = models.TextField(verbose_name=_('code'))
+    code_unix = models.TextField(blank=True, verbose_name=_('code for macOS/Linux'))
+    position = models.IntegerField(default=0, verbose_name=_('position'))
+
+    class Meta:
+        verbose_name = _('code block')
+        verbose_name_plural = _('code blocks')
+        ordering = ('position', 'pk')
+        constraints = [
+            language_constraint(),
+            models.CheckConstraint(
+                condition=models.Q(kind=CodeKind.COMMAND, path='')
+                | models.Q(kind__in=(CodeKind.CREATE, CodeKind.CHANGE), path__regex=FILE_PATTERN),
+                name='roadmapcode_path_matches_kind',
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return self.get_language_display()
+
+    def clean(self) -> None:
+        """Require a file path for files only and the German Unix code first."""
+        super().clean()
+        require_german(self, 'code_unix')
+        self.check_path()
+
+    def check_path(self) -> None:
+        """Raise an error if the path does not fit the kind of code."""
+        if self.kind == CodeKind.COMMAND and self.path:
+            raise field_error('path', 'not-allowed', _('Commands have no file path.'))
+        if self.kind in (CodeKind.CREATE, CodeKind.CHANGE) and not self.path:
+            raise field_error('path', 'required', _('Enter the path of the file.'))
+        if is_folder(self.path):
+            raise field_error('path', 'folder', _('Enter a file, not a folder.'))
+
+    @property
+    def os_code(self) -> str | dict[str, str]:
+        """Return the code, split by operating system if needed."""
+        return split_os_code(self.code, self.code_unix)
+
+
+class RoadmapPath(models.Model):
+    """File or folder a roadmap step adds, changes or removes."""
+
+    step = models.ForeignKey(
+        RoadmapStep, on_delete=models.CASCADE, related_name='paths', verbose_name=_('roadmap step')
+    )
+    path = models.CharField(
+        max_length=PATH_MAX_LENGTH, validators=[validate_path], verbose_name=_('path')
+    )
+    change = models.CharField(max_length=10, choices=PathChange.choices, verbose_name=_('change'))
+    tracked = models.BooleanField(default=True, verbose_name=_('in Git'))
+    explanation = models.TextField(verbose_name=_('explanation'))
+    position = models.IntegerField(default=0, verbose_name=_('position'))
+
+    class Meta:
+        verbose_name = _('path')
+        verbose_name_plural = _('paths')
+        ordering = ('position', 'pk')
+        constraints = [
+            models.UniqueConstraint(fields=('step', 'path'), name='roadmappath_path_unique'),
+            choice_constraint('change', PathChange),
+            models.CheckConstraint(
+                condition=models.Q(path__regex=PATH_PATTERN), name='roadmappath_path_valid'
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return self.path

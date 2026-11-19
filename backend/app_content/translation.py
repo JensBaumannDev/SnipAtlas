@@ -15,6 +15,11 @@ from .models import (
     GlossaryTerm,
     Group,
     News,
+    RoadmapBlock,
+    RoadmapCode,
+    RoadmapPath,
+    RoadmapPhase,
+    RoadmapStep,
     Subtopic,
     Topic,
 )
@@ -116,3 +121,38 @@ class NewsTranslation(TranslationOptions):
     """Translated fields of a news item."""
 
     fields = ('title',)
+
+
+@register(RoadmapBlock)
+class RoadmapBlockTranslation(TranslationOptions):
+    """Translated fields of a roadmap building block."""
+
+    fields = ('name',)
+
+
+@register(RoadmapPhase)
+class RoadmapPhaseTranslation(TranslationOptions):
+    """Translated fields of a roadmap phase."""
+
+    fields = ('title', 'summary')
+
+
+@register(RoadmapStep)
+class RoadmapStepTranslation(TranslationOptions):
+    """Translated fields of a roadmap step."""
+
+    fields = ('title', 'why', 'context', 'verification', 'note')
+
+
+@register(RoadmapCode)
+class RoadmapCodeTranslation(TranslationOptions):
+    """Translated fields of a roadmap code block."""
+
+    fields = ('code', 'code_unix')
+
+
+@register(RoadmapPath)
+class RoadmapPathTranslation(TranslationOptions):
+    """Translated fields of a roadmap path."""
+
+    fields = ('explanation',)

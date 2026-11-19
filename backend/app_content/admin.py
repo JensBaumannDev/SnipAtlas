@@ -29,6 +29,13 @@ from .models import (
     GlossaryTerm,
     Group,
     News,
+    RoadmapBlock,
+    RoadmapCode,
+    RoadmapPath,
+    RoadmapPhase,
+    RoadmapPhaseCondition,
+    RoadmapStep,
+    RoadmapStepCondition,
     Subtopic,
     Topic,
 )
@@ -262,3 +269,97 @@ class NewsAdmin(SubtopicChoicesMixin, TabbedTranslationAdmin):
     list_filter = ('area', 'topic')
     search_fields = ('title',)
     list_select_related = ('topic', 'subtopic')
+
+
+# Roadmap
+@admin.register(RoadmapBlock)
+class RoadmapBlockAdmin(TabbedTranslationAdmin):
+    """Admin for the building blocks users choose for a project."""
+
+    fields = ('slug', 'name', 'kind', 'requirement', 'topic', 'available', 'position')
+    list_display = ('name', 'kind', 'slug', 'requirement', 'available', 'position')
+    list_editable = ('available', 'position')
+    list_filter = ('kind', 'available')
+    search_fields = ('name', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
+
+
+class RoadmapPhaseConditionInline(admin.TabularInline):
+    """Conditions of a roadmap phase."""
+
+    model = RoadmapPhaseCondition
+    fields = ('block', 'rule')
+    extra = 1
+
+
+class RoadmapStepInline(TranslationStackedInline):
+    """Steps of a roadmap phase, with a link to edit all their parts."""
+
+    model = RoadmapStep
+    fields = ('title', 'slug', 'why', 'verification', 'position')
+    extra = 1
+    prepopulated_fields = {'slug': ('title',)}
+    show_change_link = True
+
+
+@admin.register(RoadmapPhase)
+class RoadmapPhaseAdmin(TabbedTranslationAdmin):
+    """Admin for roadmap phases with their conditions and steps."""
+
+    fields = ('slug', 'title', 'summary', 'position')
+    list_display = ('title', 'slug', 'position')
+    list_editable = ('position',)
+    search_fields = ('title', 'slug')
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = (RoadmapPhaseConditionInline, RoadmapStepInline)
+
+
+class RoadmapStepConditionInline(admin.TabularInline):
+    """Conditions of a roadmap step."""
+
+    model = RoadmapStepCondition
+    fields = ('block', 'rule')
+    extra = 1
+
+
+class RoadmapCodeInline(TranslationStackedInline):
+    """Commands and file contents of a roadmap step."""
+
+    model = RoadmapCode
+    fields = ('kind', 'path', 'language', 'code', 'code_unix', 'position')
+    extra = 1
+
+
+class RoadmapPathInline(TranslationTabularInline):
+    """Files and folders a roadmap step adds, changes or removes."""
+
+    model = RoadmapPath
+    fields = ('path', 'change', 'tracked', 'explanation', 'position')
+    extra = 1
+
+
+@admin.register(RoadmapStep)
+class RoadmapStepAdmin(TabbedTranslationAdmin):
+    """Admin for roadmap steps with conditions, code, paths and links."""
+
+    fields = (
+        'phase',
+        'slug',
+        'title',
+        'why',
+        'folder',
+        'context',
+        'verification',
+        'note',
+        'errors',
+        'concepts',
+        'position',
+    )
+    list_display = ('title', 'phase', 'slug', 'position')
+    list_editable = ('position',)
+    list_filter = ('phase',)
+    search_fields = ('title', 'slug')
+    list_select_related = ('phase',)
+    prepopulated_fields = {'slug': ('title',)}
+    autocomplete_fields = ('errors', 'concepts')
+    inlines = (RoadmapStepConditionInline, RoadmapCodeInline, RoadmapPathInline)
