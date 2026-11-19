@@ -1,0 +1,22 @@
+<nav class="project-navigation" [attr.aria-label]="'myProject.title' | translate">
+  <a
+    class="project-navigation__link"
+    routerLink="/mein-projekt"
+    routerLinkActive="project-navigation__link--active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    ariaCurrentWhenActive="page"
+  >
+    {{ 'myProject.overview' | translate }}
+  </a>
+  <a
+    class="project-navigation__link"
+    routerLink="/mein-projekt/ordnerstruktur"
+    routerLinkActive="project-navigation__link--active"
+    ariaCurrentWhenActive="page"
+  >
+    {{ 'myProject.structurePage.title' | translate }}
+  </a>
+  <a class="project-navigation__link" routerLink="/mein-projekt/neu">
+    {{ 'myProject.changeChoice' | translate }}
+  </a>
+</nav>

@@ -3,8 +3,8 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: rem(96);
-  padding-bottom: rem(96);
+  gap: $space-xxl;
+  padding-bottom: $space-xl;
 }
 
 // Hero
@@ -25,18 +25,27 @@
   text-align: left;
 }
 
-// Intro
-.home__intro {
-  display: flex;
-  flex-direction: column;
-  gap: $space-md;
-  align-items: center;
-  margin-bottom: $space-xxl;
+// Project
+.home__project {
+  @include card-surface;
+
+  display: grid;
+  gap: $space-sm;
+  justify-items: center;
+  padding: $space-xl $space-lg;
   text-align: center;
 }
 
+.home__eyebrow {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 .home__heading {
-  font-size: rem(44);
+  font-size: $font-size-xxl;
   line-height: $line-height-heading;
   text-wrap: balance;
 }
@@ -48,10 +57,49 @@
   text-wrap: pretty;
 }
 
+.home__points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm $space-lg;
+  justify-content: center;
+  padding: 0;
+  margin: $space-sm 0;
+  list-style: none;
+}
+
+.home__point {
+  display: flex;
+  gap: $space-xs;
+  align-items: center;
+  font-weight: $font-weight-medium;
+  text-align: left;
+}
+
+.home__point-icon {
+  flex: none;
+  width: rem(20);
+  height: rem(20);
+  color: var(--accent);
+}
+
+.home__project-button {
+  font-weight: $font-weight-semibold;
+  color: var(--on-accent);
+  background: var(--accent);
+
+  &:hover {
+    color: var(--bg);
+    background: var(--ink);
+  }
+}
+
 // News
+.home__project,
+app-area-links,
 .home__news {
-  max-width: rem(960);
-  margin: $space-xxl auto 0;
+  width: 100%;
+  max-width: rem(1080);
+  margin-inline: auto;
 }
 
 .home__news-head {
@@ -80,25 +128,19 @@
   }
 }
 
-// Guide
-.home__guide {
-  margin-top: $space-xxl;
-}
-
 /* #region RESPONSIVE */
 @include mobile {
   :host {
-    gap: rem(72);
+    gap: $space-xl;
   }
 
-  .home__heading {
-    font-size: rem(34);
+  .home__project {
+    padding: $space-lg $space-md;
   }
-}
 
-@include small {
-  .home__heading {
-    font-size: rem(28);
+  .home__points {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

@@ -1,0 +1,157 @@
+@if (current(); as ref) {
+  <app-topic-header [heading]="ref.step.title" [parentLabel]="ref.phase.title" parentLink="/mein-projekt">
+    <p class="project-step__meta">
+      {{ 'myProject.stepOf' | translate: { number: ref.number, total: state.refs().length } }}
+    </p>
+  </app-topic-header>
+
+  <app-project-navigation />
+
+  <div class="project-step">
+    <section class="project-step__part" aria-labelledby="step-why">
+      <h2 class="project-step__heading" id="step-why">{{ 'myProject.parts.why' | translate }}</h2>
+      <app-term-text [text]="ref.step.why | projectText" />
+    </section>
+
+    @if (ref.step.folder || ref.step.context) {
+      <section class="project-step__part" aria-labelledby="step-where">
+        <h2 class="project-step__heading" id="step-where">{{ 'myProject.parts.where' | translate }}</h2>
+        <p class="project-step__where">
+          @if (ref.step.folder; as folder) {
+            <code class="project-step__folder">{{ folder }}</code>
+          }
+          @if (ref.step.context; as context) {
+            <span>{{ context | projectText }}</span>
+          }
+        </p>
+      </section>
+    }
+
+    @if (codes().length) {
+      <section class="project-step__part" aria-labelledby="step-code">
+        <h2 class="project-step__heading" id="step-code">{{ 'myProject.parts.code' | translate }}</h2>
+        @for (block of codes(); track $index) {
+          @if (block.path; as path) {
+            <p class="project-step__file">
+              {{ 'myProject.codeKind.' + block.kind | translate }}
+              <code class="project-step__folder">{{ path }}</code>
+            </p>
+          }
+          <app-code-block [code]="block.code" [language]="block.language" [os]="block.os" />
+        }
+      </section>
+    }
+
+    @if (ref.step.tree.length) {
+      <section class="project-step__tree" aria-labelledby="step-tree">
+        <h2 class="project-step__heading" id="step-tree">{{ 'myProject.parts.tree' | translate }}</h2>
+        <div class="project-step__tree-grid">
+          <app-project-tree class="project-step__tree-view" [nodes]="ref.step.tree" />
+          <dl class="project-step__explanations">
+            @for (path of ref.step.paths; track path.path) {
+              <div class="project-step__explanation">
+                <dt class="project-step__path">
+                  {{ path.path }}
+                  <span class="project-step__change">
+                    {{ 'myProject.change.' + path.change | translate }}
+                    @if (!path.tracked) {
+                      · {{ 'myProject.untracked' | translate }}
+                    }
+                  </span>
+                </dt>
+                <dd>{{ path.explanation }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
+      </section>
+    }
+
+    <section class="project-step__part" aria-labelledby="step-check">
+      <h2 class="project-step__heading" id="step-check">{{ 'myProject.parts.check' | translate }}</h2>
+      <p>{{ ref.step.verification | projectText }}</p>
+    </section>
+
+    @if (ref.step.note; as note) {
+      <app-note [label]="'guides.note' | translate" [text]="note | projectText" />
+    }
+
+    @if (ref.step.errors.length) {
+      <section class="project-step__part" aria-labelledby="step-errors">
+        <h2 class="project-step__heading" id="step-errors">{{ 'myProject.parts.errors' | translate }}</h2>
+        <ul class="project-step__links" role="list">
+          @for (error of ref.step.errors; track error.slug) {
+            <li><a class="project-step__link" [routerLink]="errorLink(error)">{{ error.message }}</a></li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (ref.step.concepts.length) {
+      <section class="project-step__part" aria-labelledby="step-concepts">
+        <h2 class="project-step__heading" id="step-concepts">{{ 'myProject.parts.concepts' | translate }}</h2>
+        <ul class="project-step__links" role="list">
+          @for (concept of ref.step.concepts; track concept.slug) {
+            <li><a class="project-step__link" [routerLink]="conceptLink(concept)">{{ concept.title }}</a></li>
+          }
+        </ul>
+      </section>
+    }
+
+    <div class="project-step__actions">
+      <button
+        class="project-step__done"
+        type="button"
+        [class.project-step__done--active]="done()"
+        [attr.aria-pressed]="done()"
+        (click)="project.toggle(phase(), step())"
+      >
+        <svg [lucideIcon]="done() ? checkIcon : squareIcon" class="icon project-step__done-icon"></svg>
+        {{ 'guides.done' | translate }}
+      </button>
+    </div>
+
+    <form class="project-step__note" (submit)="$event.preventDefault(); saveNote()">
+      <label class="field__label" for="step-note">{{ 'myProject.note.label' | translate }}</label>
+      <textarea
+        class="input project-step__textarea"
+        id="step-note"
+        [formControl]="note"
+        [attr.maxlength]="noteMaxLength"
+        [placeholder]="'myProject.note.placeholder' | translate"
+        (input)="noteSaved.set(false)"
+      ></textarea>
+      <div class="project-step__note-actions">
+        <button class="btn btn--ghost" type="submit" [disabled]="note.invalid">
+          {{ 'myProject.note.save' | translate }}
+        </button>
+        @if (noteSaved()) {
+          <span class="project-step__saved" role="status">{{ 'myProject.note.saved' | translate }}</span>
+        }
+      </div>
+    </form>
+
+    <nav class="project-step__pager" [attr.aria-label]="'myProject.pager' | translate">
+      @if (previous(); as prev) {
+        <a class="project-step__pager-link" [routerLink]="['/mein-projekt', prev.phase.slug, prev.step.slug]">
+          ← {{ prev.step.title }}
+        </a>
+      } @else {
+        <a class="project-step__pager-link" routerLink="/mein-projekt">← {{ 'myProject.title' | translate }}</a>
+      }
+      @if (next(); as following) {
+        <a
+          class="project-step__pager-link project-step__pager-link--next"
+          [routerLink]="['/mein-projekt', following.phase.slug, following.step.slug]"
+        >
+          {{ following.step.title }} →
+        </a>
+      }
+    </nav>
+  </div>
+} @else if (missing()) {
+  <div class="project-step project-step--missing">
+    <p>{{ 'myProject.missing' | translate }}</p>
+    <a class="btn btn--primary" routerLink="/mein-projekt">{{ 'myProject.title' | translate }}</a>
+  </div>
+}

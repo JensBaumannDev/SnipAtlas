@@ -7,7 +7,7 @@
 // List
 .area-links__list {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: $space-lg;
 }
 
@@ -44,6 +44,31 @@
 
 .area-links__text {
   color: var(--muted);
+}
+
+// Home
+:host(.area-links--compact) {
+  .area-links__item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 $space-sm;
+    align-content: start;
+    padding: $space-md 0;
+    background: transparent;
+    border: 0;
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+
+    &:hover .area-links__label {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+  }
+
+  .area-links__icon {
+    grid-row: span 2;
+    margin: 0;
+  }
 }
 
 /* #region RESPONSIVE */

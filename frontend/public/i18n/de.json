@@ -38,7 +38,10 @@
     "resetPassword": "Passwort zurücksetzen",
     "activateAccount": "Konto aktivieren",
     "confirmEmail": "E-Mail-Adresse bestätigen",
-    "vscodeTheme": "SnipAtlas Theme für VS Code"
+    "vscodeTheme": "SnipAtlas Theme für VS Code",
+    "myProject": "Mein Projekt",
+    "myProjectSetup": "Projekt einrichten",
+    "myProjectStructure": "Ordnerstruktur"
   },
   "meta": {
     "default": "Vom ersten Befehl bis zum fertigen Projekt online: Befehle, Grundlagen, Anleitungen und Fehlermeldungen für Einsteiger in die Webentwicklung.",
@@ -132,7 +135,7 @@
       "dataSubmit": "Daten herunterladen",
       "logoutText": "Meldet dich auf diesem Gerät ab.",
       "delete": "Konto löschen",
-      "deleteText": "Löscht dein Konto mit allen Favoriten, deinem Fortschritt und deinen Anfragen. Die Inhalte von SnipAtlas kannst du danach weiter ohne Konto lesen.",
+      "deleteText": "Löscht dein Konto mit allen Favoriten, deinem Fortschritt und deinen Anfragen. Das öffentliche Nachschlagewerk kannst du weiterhin nutzen.",
       "deleteConfirm": "Bist du sicher? Das lässt sich nicht rückgängig machen.",
       "deleteSubmit": "Ja, Konto löschen",
       "cancel": "Abbrechen"
@@ -405,46 +408,23 @@
   },
   "home": {
     "title": "Nachschlagewerk für Webentwicklung",
-    "lead": "Befehle zum Kopieren, Grundlagen mit Beispielen, Anleitungen für ganze Projekte und Lösungen für häufige Fehlermeldungen. Kostenlos und laufend ergänzt.",
+    "lead": "Hier findest du den passenden Befehl, verstehst Fehlermeldungen und baust Schritt für Schritt dein eigenes Projekt.",
     "areas": {
       "label": "Bereiche im Überblick",
-      "commands": "Terminal, Git, npm und Docker zum Kopieren",
-      "concepts": "Begriffe in einfachen Worten erklärt",
-      "blueprints": "Projekte Schritt für Schritt bauen",
-      "debugging": "Fehlermeldungen verstehen und lösen"
+      "glossary": "Fachbegriffe kurz erklärt",
+      "ai": "Werkzeuge und Anleitungen für KI-Agenten",
+      "commands": "Git, Terminal und Docker",
+      "concepts": "Konzepte mit Codebeispielen",
+      "blueprints": "Projekte Schritt für Schritt",
+      "debugging": "Ursachen und Lösungen"
     },
     "news": {
       "title": "Neu auf SnipAtlas",
       "all": "Alle Neuigkeiten"
     },
-    "areasTitle": "Vom ersten Befehl bis online",
-    "intro": "SnipAtlas ist ein Nachschlagewerk für den Entwickleralltag. Befehle für Terminal, Git, npm und Docker stehen mit kurzer Erklärung und getrennt für Windows und Linux/Mac. Die Grundlagen erklären einzelne Funktionen und Konzepte wie Signals, Interceptoren oder Serializer mit einem kleinen Beispiel. Anleitungen gehen Schritt für Schritt durch den Aufbau eines Projekts, und zu häufigen Fehlermeldungen findest du Ursache und Lösung. Fachbegriffe sind direkt im Text erklärt.",
-    "cards": {
-      "commands": {
-        "text": "Terminal, Git, npm und Docker zum Kopieren, getrennt für Windows und Linux/Mac, wo es nötig ist.",
-        "count": "{{count}} Befehle",
-        "open": "Zu den Befehlen"
-      },
-      "concepts": {
-        "text": "Die Ideen hinter dem Code, kurz erklärt und mit einem kleinen Beispiel.",
-        "count": "{{count}} Erklärungen",
-        "open": "Zu den Grundlagen"
-      },
-      "blueprints": {
-        "text": "Ganze Projekte Schritt für Schritt aufsetzen, jeder Schritt mit Begründung.",
-        "count": "{{count}} Anleitungen",
-        "open": "Zu den Anleitungen"
-      },
-      "debugging": {
-        "text": "Häufige Fehlermeldungen mit Ursache und Lösung, dazu Wege, Fehler selbst zu finden.",
-        "count": "{{count}} Fehlerhilfen",
-        "open": "Zu den Fehlern"
-      }
-    },
     "guide": {
       "continue": "Weitermachen: {{title}}",
-      "progress": "{{done}} von {{total}} Schritten",
-      "start": "Neu hier? Starte mit: {{title}}"
+      "progress": "{{done}} von {{total}} Schritten"
     }
   },
   "footer": {
@@ -473,7 +453,7 @@
     "labels": {
       "project": "Projektname",
       "githubUser": "GitHub-Benutzer",
-      "repo": "Repository",
+      "repo": "Repository-Name auf GitHub",
       "domain": "Domain",
       "serverUser": "Server-Benutzer",
       "serverIp": "Server-IP"
@@ -534,15 +514,19 @@
       "title": "Konto",
       "needed": {
         "question": "Brauche ich ein Konto?",
-        "answer": "Nein. Alle Inhalte kannst du ohne Konto lesen, und auch das Abhaken in den Anleitungen funktioniert ohne Konto, der Fortschritt bleibt dann in deinem Browser. Ein Konto brauchst du für Favoriten, Farbthemen und um deine Anfragen im Profil zu sehen."
+        "answer": "Das Nachschlagewerk und die Anleitungen sind frei zugänglich. Ohne Konto speichert dein Browser den Fortschritt in Anleitungen. Für „Mein Projekt“, Favoriten, Farbthemen und deine Anfragen im Profil brauchst du ein Konto."
       },
       "stored": {
         "question": "Was wird zu meinem Konto gespeichert?",
-        "answer": "Deine E-Mail-Adresse, dein Passwort nur als Hash, deine Favoriten, dein Fortschritt in den Anleitungen, deine Einstellungen und deine Anfragen. Die Einzelheiten stehen in der Datenschutzerklärung."
+        "answer": "Deine E-Mail-Adresse, dein Passwort nur als Hash, deine Favoriten, dein Fortschritt in den Anleitungen, dein Projekt mit Fortschritt und Notizen, deine Einstellungen und deine Anfragen. Die Einzelheiten stehen in der Datenschutzerklärung."
       },
       "delete": {
         "question": "Wie lösche ich mein Konto?",
         "answer": "Unter Profil, Konto. Dabei werden alle Daten gelöscht, die zu deinem Konto gehören. Vorher kannst du deine Daten dort auch herunterladen."
+      },
+      "project": {
+        "question": "Was ist „Mein Projekt“?",
+        "answer": "Mit deinem Konto erstellst du einen persönlichen Fahrplan. Du wählst deine Werkzeuge und bekommst Schritte mit Befehlen, Dateien und der passenden Ordnerstruktur."
       }
     },
     "costs": {
@@ -622,14 +606,15 @@
       },
       "storageText": "Die Angaben bleiben auf deinem Gerät und werden nicht an mich übertragen. Du kannst sie jederzeit über die Einstellungen deines Browsers löschen. Bist du angemeldet, werden deine Einstellungen zusätzlich in deinem Konto gespeichert (siehe Benutzerkonto). Die Speicherung im Browser ist für die von dir gewünschte Funktion unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG), eine Einwilligung ist dafür nicht nötig. Rechtsgrundlage für die Verarbeitung ist Art. 6 Abs. 1 lit. f DSGVO.",
       "account": "Benutzerkonto",
-      "accountText": "Alle Inhalte von SnipAtlas kannst du ohne Konto lesen. Ein Konto brauchst du nur für persönliche Funktionen. Für die Registrierung gibst du deine E-Mail-Adresse und ein Passwort an. Das Passwort wird nur als Hash gespeichert, ich kann es nicht lesen.",
+      "accountText": "Für „Mein Projekt“ und weitere persönliche Funktionen brauchst du ein Konto. Für die Registrierung gibst du deine E-Mail-Adresse und ein Passwort an. Das Passwort wird nur als Hash gespeichert, ich kann es nicht lesen.",
       "accountIntro": "Zu deinem Konto speichere ich auf dem Server:",
       "accountItems": {
         "login": "E-Mail-Adresse, Passwort-Hash, ob die Adresse bestätigt ist, eine noch nicht bestätigte neue Adresse, Datum der Registrierung und der letzten Anmeldung",
         "favorites": "deine Favoriten",
         "progress": "deinen Fortschritt in den Anleitungen",
         "settings": "deine Einstellungen (Befehle für Windows oder Linux/Mac, E-Mail bei Antwort auf eine Anfrage)",
-        "requests": "deine Anfragen mit Status und meiner Antwort"
+        "requests": "deine Anfragen mit Status und meiner Antwort",
+        "project": "dein Projekt in „Mein Projekt“: die gewählten Bausteine, die erledigten Schritte und deine Notizen zu den Schritten"
       },
       "accountBasis": "Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, denn ohne diese Daten kann ich dir die Funktionen deines Kontos nicht bereitstellen. Nur du siehst und änderst deine Daten. In deinem Konto kannst du deine E-Mail-Adresse und dein Passwort ändern und alle deine Daten herunterladen.",
       "accountDeletion": "Du kannst dein Konto jederzeit selbst löschen. Dabei werden alle Daten gelöscht, die zu deinem Konto gehören. Bestätigst du deine E-Mail-Adresse nach der Registrierung nicht innerhalb von 7 Tagen, wird das Konto automatisch gelöscht.",
@@ -770,5 +755,118 @@
   "news": {
     "lead": "Alles, was zuletzt auf SnipAtlas dazugekommen ist, das Neueste zuerst.",
     "fresh": "neu"
+  },
+  "myProject": {
+    "title": "Mein Projekt",
+    "home": {
+      "title": "Vom leeren Ordner bis online",
+      "text": "Wähle Frontend, Backend oder beides. Du bekommst deinen Fahrplan Schritt für Schritt, passend zu deinem Stack.",
+      "points": {
+        "why": "Jeder Befehl mit Begründung",
+        "tree": "Ordnerbaum nach jedem Schritt",
+        "progress": "Fortschritt und Notizen gespeichert"
+      },
+      "start": "Projekt starten",
+      "continue": "Weitermachen"
+    },
+    "register": "Für meinen Fahrplan registrieren",
+    "intro": {
+      "lead": "Du hast eine Idee für eine Web-App. Welche Ordner brauchst du zuerst, und wann kommt die Datenbank dazu? Dein Fahrplan richtet sich danach, was du bauen willst.",
+      "title": "Ein Taskboard mit Angular und Django",
+      "example": "Auf deinem Board sollen Aufgaben von „Offen“ nach „Erledigt“ wandern. Für die Oberfläche wählst du Angular, für die API Django. Willst du die Aufgaben mit PostgreSQL speichern, kommen die Schritte für die Datenbank dazu. So kannst du den Aufbau an deinem eigenen Projekt nachvollziehen.",
+      "sample": "Ein Blick in den Schritt „Django-Projekt anlegen“",
+      "command": "Django ist installiert und dein Terminal ist im Ordner backend/. Der Punkt am Ende des Befehls legt das Projekt direkt dort an. Ob du im richtigen Ordner warst, erkennst du an der Datei manage.py.",
+      "result": "Ausschnitt aus deiner Ordnerstruktur",
+      "phases": {
+        "title": "Dein Weg in 9 Phasen",
+        "items": {
+          "prepare": "Projekt vorbereiten",
+          "backend": "Backend mit Django anlegen",
+          "frontend": "Frontend mit Angular anlegen",
+          "connect": "Frontend und Backend verbinden",
+          "docker": "Backend in Docker starten",
+          "postgres": "PostgreSQL als Datenbank",
+          "login": "Login einbauen",
+          "server": "Für den Server vorbereiten",
+          "online": "Online bringen"
+        }
+      },
+      "resume": "Wo war ich gestern?",
+      "progress": "Du hast Django eingerichtet und deinen Server auf Port 8000 gestartet. Hake den Schritt ab und notiere die Portnummer direkt dort. Beim nächsten Besuch siehst du den nächsten offenen Schritt und kannst deine Notiz wieder nachlesen."
+    },
+    "next": "Als Nächstes",
+    "allDone": "Alles erledigt",
+    "overview": "Übersicht",
+    "changeChoice": "Auswahl ändern",
+    "phaseCount": "{{done}} von {{total}}",
+    "stepOf": "Schritt {{number}} von {{total}}",
+    "missing": "Diesen Schritt gibt es in deinem Fahrplan nicht. Richte dein Projekt ein oder geh zurück zur Übersicht.",
+    "toStep": "Zum Schritt",
+    "untracked": "nicht im Git",
+    "pager": "Vorheriger und nächster Schritt",
+    "change": {
+      "new": "neu",
+      "changed": "geändert",
+      "removed": "entfernt"
+    },
+    "codeKind": {
+      "command": "Befehl",
+      "create": "Datei anlegen:",
+      "change": "Datei ändern:"
+    },
+    "parts": {
+      "why": "Warum",
+      "where": "Wo",
+      "code": "Befehle und Dateien",
+      "tree": "So sieht dein Projekt jetzt aus",
+      "check": "Prüfen",
+      "errors": "Wenn es klemmt",
+      "concepts": "Mehr dazu"
+    },
+    "note": {
+      "label": "Deine Notiz zu diesem Schritt",
+      "placeholder": "Zum Beispiel: Port 8020 genommen, weil 8000 belegt ist.",
+      "save": "Notiz speichern",
+      "saved": "Gespeichert"
+    },
+    "setup": {
+      "title": "Neues Projekt einrichten",
+      "lead": "Vier Fragen, danach steht dein Fahrplan. Du kannst alles später ändern.",
+      "kind": "Was willst du bauen?",
+      "kinds": {
+        "frontend": {
+          "title": "Nur Frontend",
+          "text": "Eine Seite oder App im Browser, ohne eigenen Server für Daten.",
+          "example": "z. B. Portfolio, Landingpage"
+        },
+        "backend": {
+          "title": "Nur Backend",
+          "text": "Eine API mit Datenbank, ohne eigene Oberfläche.",
+          "example": "z. B. REST-API für eine App"
+        },
+        "both": {
+          "title": "Beides",
+          "text": "Oberfläche im Browser, die mit deiner eigenen API spricht.",
+          "example": "z. B. Rezeptbuch mit Login"
+        }
+      },
+      "frameworks": "Womit?",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "soon": "bald",
+      "extras": "Was soll dazu?",
+      "hosting": "Online",
+      "noHosting": "Noch nicht",
+      "extrasHint": "PostgreSQL, Docker und Login gibt es nur mit Backend.",
+      "name": "Wie heißt es?",
+      "nameHint": "Freiwillig. Diese Werte setzt SnipAtlas in jeden Befehl und jede Datei ein.",
+      "summary": "Dein Fahrplan: {{phases}} Phasen, {{steps}} Schritte",
+      "incomplete": "Wähle ein Frontend, ein Backend oder beides.",
+      "submit": "Fahrplan erstellen"
+    },
+    "structurePage": {
+      "title": "Ordnerstruktur",
+      "lead": "So sieht dein Projekt aus, wenn alle Schritte erledigt sind. Zu jedem Pfad steht, wofür er da ist und in welchem Schritt er entsteht."
+    }
   }
 }

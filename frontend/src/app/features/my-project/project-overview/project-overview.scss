@@ -1,0 +1,259 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Header
+.project-overview__next {
+  display: inline-flex;
+  gap: $space-sm;
+  align-items: center;
+  color: var(--ink);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .icon {
+    flex: none;
+  }
+}
+
+.project-overview__stack {
+  font-size: $font-size-lg;
+  color: var(--muted);
+}
+
+.project-overview__progress {
+  position: sticky;
+  top: var(--topbar-actual-height, calc($topbar-height + 1px));
+  z-index: $z-sticky;
+  justify-content: center;
+  width: 100%;
+  padding-block: $space-md;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+// Body
+.project-overview__body {
+  @include page-body;
+}
+
+// Phase
+.project-overview__phase {
+  @include card-surface;
+
+  padding: $space-md $space-lg;
+}
+
+.project-overview__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-md;
+  align-items: center;
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.project-overview__number {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: rem(40);
+  height: rem(40);
+  font-weight: $font-weight-bold;
+  color: var(--bg);
+  background: var(--ink);
+  border-radius: 50%;
+
+  &--done {
+    color: var(--on-accent);
+    background: var(--accent);
+  }
+}
+
+.project-overview__number-icon {
+  width: rem(20);
+  height: rem(20);
+}
+
+.project-overview__phase-title {
+  flex: 1 1 rem(200);
+  min-width: 0;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: var(--ink);
+}
+
+.project-overview__count {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.project-overview__phase-summary {
+  max-width: rem(720);
+  margin-top: $space-sm;
+  color: var(--muted);
+}
+
+// Steps
+.project-overview__steps {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: $space-md 0 0;
+  list-style: none;
+}
+
+.project-overview__step {
+  display: grid;
+  grid-template-columns: rem(24) minmax(0, 1fr);
+  gap: $space-md;
+  align-items: center;
+  border-top: 1px solid var(--line);
+
+  &--done .project-overview__step-title {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+}
+
+.project-overview__step-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: $space-sm $space-md;
+  align-items: center;
+  min-height: rem(44);
+  padding-block: $space-sm;
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover .project-overview__step-title {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.project-overview__check {
+  display: grid;
+  place-items: center;
+  width: rem(24);
+  height: rem(24);
+  padding: 0;
+  color: var(--on-accent);
+  cursor: pointer;
+  background: transparent;
+  border: 1.5px solid var(--muted);
+  border-radius: $radius-xs;
+
+  &:enabled:hover {
+    border-color: var(--accent);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  .project-overview__step--done & {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+.project-overview__check-icon {
+  width: rem(16);
+  height: rem(16);
+}
+
+.project-overview__arrow {
+  grid-row: 1;
+  grid-column: -2;
+  color: var(--muted);
+}
+
+.project-overview__step-text {
+  display: flex;
+  flex-direction: column;
+  gap: rem(2);
+  min-width: 0;
+}
+
+.project-overview__step-title {
+  font-weight: $font-weight-semibold;
+  color: var(--ink);
+}
+
+.project-overview__command {
+  overflow: clip;
+  text-overflow: ellipsis;
+  font-family: $font-mono;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.project-overview__paths {
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(4);
+  justify-content: flex-end;
+  max-width: rem(260);
+}
+
+.project-overview__path {
+  padding: 0 rem(6);
+  font-family: $font-mono;
+  color: var(--success);
+  overflow-wrap: anywhere;
+  background: var(--success-soft);
+  border-radius: $radius-xs;
+}
+
+/* #region RESPONSIVE */
+@include desktop {
+  .project-overview__step-link:has(.project-overview__paths) {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+}
+
+@include mobile {
+  .project-overview__body {
+    gap: $space-sm;
+    padding-top: 0;
+  }
+
+  .project-overview__progress {
+    padding-block: $space-sm;
+  }
+
+  .project-overview__phase {
+    padding: $space-md;
+  }
+
+  .project-overview__paths {
+    grid-column: 1;
+    justify-content: flex-start;
+    max-width: none;
+  }
+}
+
+/* #endregion */

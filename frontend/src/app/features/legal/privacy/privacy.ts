@@ -11,7 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class Privacy {
   protected readonly logItems = ['ip', 'time', 'request', 'status', 'referrer', 'browser'];
   protected readonly storageItems = ['os', 'language'];
-  protected readonly accountItems = ['login', 'favorites', 'progress', 'settings', 'requests'];
+  protected readonly accountItems = ['login', 'favorites', 'progress', 'project', 'settings', 'requests'];
   protected readonly rightItems = [
     'access',
     'rectification',

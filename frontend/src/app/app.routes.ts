@@ -98,6 +98,14 @@ export const routes: Routes = [
     loadComponent: () => import('./features/settings/settings').then((m) => m.Settings),
   },
   {
+    path: 'mein-projekt',
+    title: 'pages.myProject',
+    loadComponent: () =>
+      import('./features/my-project/project-access/project-access').then((m) => m.ProjectAccess),
+    loadChildren: () =>
+      import('./features/my-project/my-project.routes').then((m) => m.MY_PROJECT_ROUTES),
+  },
+  {
     path: 'faq',
     title: 'pages.faq',
     data: { description: 'meta.faq' },

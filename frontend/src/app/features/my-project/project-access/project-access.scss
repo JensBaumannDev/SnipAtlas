@@ -1,0 +1,157 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+.project-access__form {
+  max-width: rem(480);
+  margin-inline: auto;
+
+  &--intro {
+    max-width: rem(960);
+  }
+}
+
+.project-access__heading {
+  display: grid;
+  gap: $space-sm;
+}
+
+.project-access__eyebrow {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.project-access__lead {
+  max-width: 58ch;
+  font-size: $font-size-lg;
+  color: var(--muted);
+  text-wrap: balance;
+}
+
+.project-access__intro {
+  display: grid;
+  gap: $space-md;
+  text-align: center;
+
+  p {
+    max-width: 72ch;
+    margin-inline: auto;
+  }
+}
+
+.project-access__sample {
+  @include card-surface;
+
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: $space-lg;
+  padding: $space-lg;
+  margin-block: $space-sm;
+
+  figure {
+    margin: 0;
+  }
+
+  figcaption {
+    font-weight: $font-weight-semibold;
+  }
+
+  pre {
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  p,
+  pre {
+    margin-top: $space-sm;
+  }
+}
+
+.project-access__command {
+  display: inline-block;
+  padding: $space-xs $space-sm;
+  margin-top: $space-md;
+  text-align: left;
+  overflow-wrap: anywhere;
+  background: var(--bg);
+  border-radius: $radius-xs;
+}
+
+// Phases
+.project-access__phases {
+  display: grid;
+  gap: $space-md;
+  margin-block: $space-sm;
+}
+
+.project-access__phase-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-sm $space-lg;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  list-style: none;
+  counter-reset: phase;
+}
+
+.project-access__phase {
+  display: flex;
+  gap: $space-sm;
+  align-items: baseline;
+  padding-top: $space-sm;
+  counter-increment: phase;
+  border-top: 1px solid var(--line);
+
+  &::before {
+    font-weight: $font-weight-semibold;
+    color: var(--muted);
+    content: counter(phase, decimal-leading-zero);
+  }
+}
+
+// Actions
+.project-access__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  justify-content: center;
+}
+
+.project-access__register {
+  font-weight: $font-weight-semibold;
+  color: var(--on-accent);
+  background: var(--accent);
+
+  &:hover {
+    color: var(--bg);
+    background: var(--ink);
+  }
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .project-access__sample {
+    grid-template-columns: minmax(0, 1fr);
+    padding: $space-md;
+  }
+
+  .project-access__phase-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include small {
+  .project-access__phase-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* #endregion */

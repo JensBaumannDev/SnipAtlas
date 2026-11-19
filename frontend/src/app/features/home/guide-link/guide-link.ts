@@ -9,7 +9,6 @@ import { ContentPaths } from '../../../core/content/content-paths';
 
 interface GuideState {
   blueprint: Blueprint;
-  started: boolean;
   done: number;
 }
 
@@ -27,16 +26,11 @@ export class GuideLink {
   protected readonly state = computed(() => this.pick(this.blueprints()));
 
   private pick(blueprints: Blueprint[]): GuideState | undefined {
-    const started = blueprints.find((blueprint) => this.isStarted(blueprint));
-    const blueprint = started ?? blueprints[0];
+    const blueprint = blueprints.find((candidate) => this.isStarted(candidate));
     if (!blueprint) {
       return undefined;
     }
-    return {
-      blueprint,
-      started: started !== undefined,
-      done: this.progress.doneCount(blueprint),
-    };
+    return { blueprint, done: this.progress.doneCount(blueprint) };
   }
 
   private isStarted(blueprint: Blueprint): boolean {

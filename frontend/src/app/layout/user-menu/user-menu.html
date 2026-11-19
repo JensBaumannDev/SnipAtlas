@@ -25,6 +25,12 @@
 
   <ul class="user-menu__list" role="list">
     <li>
+      <a class="user-menu__item" routerLink="/mein-projekt" (click)="close()">
+        <svg [lucideIcon]="routeIcon" class="icon user-menu__icon"></svg>
+        {{ 'myProject.title' | translate }}
+      </a>
+    </li>
+    <li>
       <a class="user-menu__item" routerLink="/profil" (click)="close()">
         <svg [lucideIcon]="userIcon" class="icon user-menu__icon"></svg>
         {{ 'account.profile' | translate }}

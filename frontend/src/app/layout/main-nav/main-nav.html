@@ -60,6 +60,17 @@
         }
       </li>
     }
+    <li class="main-nav__item main-nav__item--project">
+      <a
+        class="main-nav__link main-nav__link--project"
+        routerLink="/mein-projekt"
+        routerLinkActive="main-nav__link--active"
+        ariaCurrentWhenActive="page"
+      >
+        <svg [lucideIcon]="routeIcon" class="icon main-nav__project-icon"></svg>
+        {{ 'myProject.title' | translate }}
+      </a>
+    </li>
     <li class="main-nav__item main-nav__item--extra">
       <a
         class="main-nav__link"

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
 import { Favorites } from '../../../core/user-data/favorites';
+import { MyProject } from '../../../core/user-data/my-project';
 import { downloadJson } from '../../../core/browser/file-download';
 import { Session } from '../../../core/auth/session';
 import { Notifications } from '../../../core/ui/notifications';
@@ -27,6 +28,7 @@ export class ProfileAccount {
   private readonly notifications = inject(Notifications);
   private readonly progress = inject(BlueprintProgress);
   private readonly favorites = inject(Favorites);
+  private readonly project = inject(MyProject);
   private readonly requests = toSignal(inject(UserRequestApi).getMine(), { initialValue: [] });
 
   protected download(): void {
@@ -34,6 +36,7 @@ export class ProfileAccount {
       account: this.session.user(),
       favorites: this.favorites.list(),
       progress: this.progress.done(),
+      project: this.project.project() ?? null,
       requests: this.requests(),
     });
     this.notifications.show('notifications.downloaded');

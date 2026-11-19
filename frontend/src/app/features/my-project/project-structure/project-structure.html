@@ -1,0 +1,20 @@
+<app-topic-header
+  [heading]="'myProject.structurePage.title' | translate"
+  [parentLabel]="'myProject.title' | translate"
+  parentLink="/mein-projekt"
+>
+  <p class="project-structure__lead">{{ 'myProject.structurePage.lead' | translate }}</p>
+</app-topic-header>
+
+<app-project-navigation />
+
+<div class="project-structure">
+  @if (tree.hasValue()) {
+    <app-project-tree [nodes]="tree.value()" [showExplanations]="true" />
+  } @else if (project.ready() && !project.blocks().length) {
+    <p>{{ 'myProject.missing' | translate }}</p>
+    <a class="btn btn--primary" routerLink="/mein-projekt/neu">
+      {{ 'myProject.setup.title' | translate }}
+    </a>
+  }
+</div>

@@ -10,20 +10,32 @@
   />
 </header>
 
-<section aria-labelledby="home-areas">
-  <div class="home__intro">
-    <h2 class="home__heading" id="home-areas">{{ 'home.areasTitle' | translate }}</h2>
-    <p class="home__text">{{ 'home.intro' | translate }}</p>
-  </div>
-  <app-area-cards />
-  @if (news().length) {
-    <div class="home__news">
-      <div class="home__news-head">
-        <h3 class="home__news-title">{{ 'home.news.title' | translate }}</h3>
-        <a class="home__news-all" routerLink="/neu">{{ 'home.news.all' | translate }} →</a>
-      </div>
-      <app-news-list [items]="news()" />
-    </div>
-  }
-  <app-guide-link class="home__guide" />
+<section class="home__project" aria-labelledby="home-project">
+  <p class="home__eyebrow">{{ 'myProject.title' | translate }}</p>
+  <h2 class="home__heading" id="home-project">{{ 'myProject.home.title' | translate }}</h2>
+  <p class="home__text">{{ 'myProject.home.text' | translate }}</p>
+  <ul class="home__points" role="list">
+    @for (point of projectPoints; track point) {
+      <li class="home__point">
+        <svg [lucideIcon]="checkIcon" class="icon home__point-icon"></svg>
+        {{ point | translate }}
+      </li>
+    }
+  </ul>
+  <a class="btn home__project-button" routerLink="/mein-projekt">
+    {{ (myProject.project() ? 'myProject.home.continue' : 'myProject.home.start') | translate }}
+  </a>
 </section>
+
+<app-area-links class="area-links--compact" />
+
+@if (news().length) {
+  <section class="home__news" aria-labelledby="home-news">
+    <div class="home__news-head">
+      <h2 class="home__news-title" id="home-news">{{ 'home.news.title' | translate }}</h2>
+      <a class="home__news-all" routerLink="/neu">{{ 'home.news.all' | translate }}</a>
+    </div>
+    <app-news-list [items]="news()" />
+  </section>
+}
+<app-guide-link />

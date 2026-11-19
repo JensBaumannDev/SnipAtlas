@@ -1,0 +1,100 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// Tree
+.project-tree {
+  display: flex;
+  flex-direction: column;
+  gap: rem(2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  .project-tree {
+    padding-left: rem(20);
+    margin-top: rem(2);
+    border-left: 1px solid var(--line);
+  }
+}
+
+.project-tree__item {
+  min-width: 0;
+}
+
+// Row
+.project-tree__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(4) $space-xs;
+  align-items: center;
+  padding: rem(2) rem(6);
+  font-family: $font-mono;
+  color: var(--ink);
+  border-radius: $radius-sm;
+
+  &--new {
+    background: var(--success-soft);
+  }
+
+  &--changed {
+    background: var(--accent-soft);
+  }
+
+  &--removed .project-tree__name {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  &--untracked .project-tree__name {
+    color: var(--muted);
+  }
+}
+
+.project-tree__icon {
+  flex: none;
+  width: rem(18);
+  height: rem(18);
+  color: var(--muted);
+}
+
+.project-tree__name {
+  overflow-wrap: anywhere;
+}
+
+.project-tree__badge {
+  font-family: $font-sans;
+  font-weight: $font-weight-semibold;
+
+  .project-tree__row--new & {
+    color: var(--success);
+  }
+
+  .project-tree__row--changed & {
+    color: var(--accent);
+  }
+
+  .project-tree__row--removed & {
+    color: var(--muted);
+  }
+}
+
+.project-tree__untracked {
+  font-family: $font-sans;
+  color: var(--muted);
+}
+
+// Explanation
+.project-tree__explanation {
+  max-width: rem(720);
+  padding: 0 rem(6) rem(6) rem(30);
+  color: var(--muted);
+}
+
+.project-tree__origin {
+  margin-left: $space-xs;
+  color: var(--accent);
+  white-space: nowrap;
+}

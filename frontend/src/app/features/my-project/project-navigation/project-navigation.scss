@@ -1,0 +1,27 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+.project-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  justify-content: center;
+  padding-block: $space-lg;
+  border-bottom: 1px solid var(--line);
+}
+
+.project-navigation__link {
+  @include navigation-pill;
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .project-navigation {
+    padding-block: $space-sm;
+  }
+}
+
+/* #endregion */

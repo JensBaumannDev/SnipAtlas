@@ -2,7 +2,13 @@ import { Component, ElementRef, inject, output, signal, viewChild } from '@angul
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { logOutIcon, messageSquareIcon, settingsIcon, userIcon } from '../../core/ui/icons';
+import {
+  logOutIcon,
+  messageSquareIcon,
+  routeIcon,
+  settingsIcon,
+  userIcon,
+} from '../../core/ui/icons';
 import { Session } from '../../core/auth/session';
 import { Collection } from '../../shared/collection/collection';
 
@@ -25,6 +31,7 @@ export class UserMenu {
   protected readonly session = inject(Session);
   protected readonly logOutIcon = logOutIcon;
   protected readonly messageSquareIcon = messageSquareIcon;
+  protected readonly routeIcon = routeIcon;
   protected readonly settingsIcon = settingsIcon;
   protected readonly userIcon = userIcon;
   protected readonly open = signal(false);

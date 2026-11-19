@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon, LucideIconData } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { bookTextIcon, routeIcon, terminalIcon, triangleAlertIcon } from '../../core/ui/icons';
+import { bookAIcon, bookTextIcon, botIcon, routeIcon, terminalIcon, triangleAlertIcon } from '../../core/ui/icons';
 
 interface Area {
   path: string;
@@ -12,6 +12,12 @@ interface Area {
 }
 
 const AREAS: Area[] = [
+  {
+    path: '/begriffe',
+    label: 'nav.glossary',
+    description: 'home.areas.glossary',
+    icon: bookAIcon,
+  },
   {
     path: '/befehle',
     label: 'nav.commands',
@@ -35,6 +41,12 @@ const AREAS: Area[] = [
     label: 'nav.debugging',
     description: 'home.areas.debugging',
     icon: triangleAlertIcon,
+  },
+  {
+    path: '/ki-coding',
+    label: 'nav.ai',
+    description: 'home.areas.ai',
+    icon: botIcon,
   },
 ];
 

@@ -4,7 +4,7 @@ from django.urls import reverse
 from pytest_django import DjangoAssertNumQueries
 from rest_framework.response import Response
 from rest_framework.test import APIClient
-from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import UserRateThrottle
 
 from app_accounts.models import User
 from app_content.models import RoadmapBlock, RoadmapPhase, RoadmapStep, Topic
@@ -24,6 +24,19 @@ BROKEN_SLUGS = [
 ]
 ROADMAP_URLS = ['roadmap', 'roadmap-tree']
 ALL_URLS = ['roadmap-block-list', *ROADMAP_URLS]
+
+
+@pytest.fixture
+def member_client(api_client: APIClient, user: User) -> APIClient:
+    api_client.force_authenticate(user)
+    return api_client
+
+
+@pytest.mark.parametrize('name', ALL_URLS)
+def test_guest_cannot_read_roadmap(api_client: APIClient, name: str) -> None:
+    response = get(api_client, name)
+    assert response.status_code == 401
+    assert response.json()['code'] == 'not_authenticated'
 
 
 def node(path: str, **extra: object) -> dict:
@@ -92,54 +105,52 @@ BLOCKS_JSON = [
 ]
 
 
-def test_blocks_list_is_public_with_unavailable_blocks(
-    api_client: APIClient, blocks: Blocks
-) -> None:
-    response = get(api_client, 'roadmap-block-list', None)
+def test_blocks_list_includes_unavailable_blocks(member_client: APIClient, blocks: Blocks) -> None:
+    response = get(member_client, 'roadmap-block-list', None)
     expected = [item | {'available': item['slug'] != 'react'} for item in BLOCKS_JSON]
     assert response.status_code == 200
     assert response.json() == expected
 
 
 def test_blocks_list_names_topic_for_logo(
-    api_client: APIClient, blocks: Blocks, topic: Topic
+    member_client: APIClient, blocks: Blocks, topic: Topic
 ) -> None:
     RoadmapBlock.objects.filter(slug='django').update(topic=topic)
-    data = get(api_client, 'roadmap-block-list', None).json()
+    data = get(member_client, 'roadmap-block-list', None).json()
     assert data[2]['topic'] == 'python'
     assert all('topic' not in item for index, item in enumerate(data) if index != 2)
 
 
-def test_blocks_list_keeps_position_order(api_client: APIClient, blocks: Blocks) -> None:
+def test_blocks_list_keeps_position_order(member_client: APIClient, blocks: Blocks) -> None:
     RoadmapBlock.objects.filter(slug='docker').update(position=-1)
-    data = get(api_client, 'roadmap-block-list', None).json()
+    data = get(member_client, 'roadmap-block-list', None).json()
     assert [item['slug'] for item in data][:2] == ['docker', 'angular']
 
 
-def test_blocks_list_uses_accept_language(api_client: APIClient, blocks: Blocks) -> None:
+def test_blocks_list_uses_accept_language(member_client: APIClient, blocks: Blocks) -> None:
     RoadmapBlock.objects.filter(slug='static-hosting').update(name_en='Static hosting')
-    data = get(api_client, 'roadmap-block-list', None, HTTP_ACCEPT_LANGUAGE='en').json()
+    data = get(member_client, 'roadmap-block-list', None, HTTP_ACCEPT_LANGUAGE='en').json()
     assert [data[5]['name'], data[2]['name']] == ['Static hosting', 'Django']
 
 
-def test_blocks_list_is_empty_without_blocks(api_client: APIClient, db: None) -> None:
-    assert get(api_client, 'roadmap-block-list', None).json() == []
+def test_blocks_list_is_empty_without_blocks(member_client: APIClient, db: None) -> None:
+    assert get(member_client, 'roadmap-block-list', None).json() == []
 
 
 def test_blocks_list_loads_in_one_query(
-    api_client: APIClient,
+    member_client: APIClient,
     blocks: Blocks,
     topic: Topic,
     django_assert_num_queries: DjangoAssertNumQueries,
 ) -> None:
     RoadmapBlock.objects.update(topic=topic)
     with django_assert_num_queries(1):
-        get(api_client, 'roadmap-block-list', None)
+        get(member_client, 'roadmap-block-list', None)
 
 
 # Roadmap: answer
-def test_roadmap_for_backend_only(api_client: APIClient, plan: RoadmapPhase) -> None:
-    response = get(api_client, 'roadmap')
+def test_roadmap_for_backend_only(member_client: APIClient, plan: RoadmapPhase) -> None:
+    response = get(member_client, 'roadmap')
     assert response.status_code == 200
     data = response.json()
     assert data['blocks'] == ['django']
@@ -147,8 +158,8 @@ def test_roadmap_for_backend_only(api_client: APIClient, plan: RoadmapPhase) -> 
     assert [step['slug'] for step in data['phases'][1]['steps']] == ['projekt', 'app-anlegen']
 
 
-def test_roadmap_phase_has_exact_form(api_client: APIClient, plan: RoadmapPhase) -> None:
-    phase = get(api_client, 'roadmap').json()['phases'][0]
+def test_roadmap_phase_has_exact_form(member_client: APIClient, plan: RoadmapPhase) -> None:
+    phase = get(member_client, 'roadmap').json()['phases'][0]
     readme = {'path': 'README.md', 'change': 'new', 'tracked': True}
     gitignore = {'path': '.gitignore', 'change': 'new', 'tracked': True}
     assert phase == {
@@ -178,9 +189,9 @@ def test_roadmap_phase_has_exact_form(api_client: APIClient, plan: RoadmapPhase)
 
 
 def test_roadmap_step_has_exact_form_with_all_parts(
-    api_client: APIClient, plan: RoadmapPhase
+    member_client: APIClient, plan: RoadmapPhase
 ) -> None:
-    step = get(api_client, 'roadmap').json()['phases'][1]['steps'][1]
+    step = get(member_client, 'roadmap').json()['phases'][1]['steps'][1]
     del step['tree']
     assert step == {
         'slug': 'app-anlegen',
@@ -239,9 +250,9 @@ def test_roadmap_step_has_exact_form_with_all_parts(
 
 
 def test_roadmap_step_tree_builds_on_earlier_steps(
-    api_client: APIClient, plan: RoadmapPhase
+    member_client: APIClient, plan: RoadmapPhase
 ) -> None:
-    steps = get(api_client, 'roadmap').json()['phases'][1]['steps']
+    steps = get(member_client, 'roadmap').json()['phases'][1]['steps']
     venv = node('backend/.venv/', tracked=False, explanation='Pakete nur hier.')
     root_files = [
         node('.gitignore', explanation='Liste.'),
@@ -283,9 +294,9 @@ def test_roadmap_step_tree_builds_on_earlier_steps(
 
 
 def test_roadmap_leaves_out_empty_optional_fields(
-    api_client: APIClient, plan: RoadmapPhase
+    member_client: APIClient, plan: RoadmapPhase
 ) -> None:
-    step = get(api_client, 'roadmap').json()['phases'][1]['steps'][0]
+    step = get(member_client, 'roadmap').json()['phases'][1]['steps'][0]
     assert {'folder', 'context', 'note'} & set(step) == set()
 
 
@@ -300,16 +311,16 @@ def test_roadmap_leaves_out_empty_optional_fields(
     ],
 )
 def test_roadmap_shows_only_matching_phases(
-    api_client: APIClient, plan: RoadmapPhase, chosen: str, phases: list[str]
+    member_client: APIClient, plan: RoadmapPhase, chosen: str, phases: list[str]
 ) -> None:
-    data = get(api_client, 'roadmap', chosen).json()
+    data = get(member_client, 'roadmap', chosen).json()
     assert [phase['slug'] for phase in data['phases']] == phases
 
 
 def test_roadmap_takes_the_step_variant_for_the_choice(
-    api_client: APIClient, plan: RoadmapPhase
+    member_client: APIClient, plan: RoadmapPhase
 ) -> None:
-    data = get(api_client, 'roadmap', 'django,docker').json()
+    data = get(member_client, 'roadmap', 'django,docker').json()
     assert [step['slug'] for step in data['phases'][1]['steps']] == [
         'projekt',
         'app-anlegen-docker',
@@ -317,9 +328,9 @@ def test_roadmap_takes_the_step_variant_for_the_choice(
 
 
 def test_roadmap_leaves_out_phase_without_matching_steps(
-    api_client: APIClient, plan: RoadmapPhase
+    member_client: APIClient, plan: RoadmapPhase
 ) -> None:
-    data = get(api_client, 'roadmap', 'angular').json()
+    data = get(member_client, 'roadmap', 'angular').json()
     assert 'container' not in [phase['slug'] for phase in data['phases']]
 
 
@@ -327,22 +338,24 @@ def test_roadmap_leaves_out_phase_without_matching_steps(
     'value',
     ['docker,django', 'django,docker,django', ' docker , django ', 'django,,docker,'],
 )
-def test_roadmap_cleans_the_choice(api_client: APIClient, plan: RoadmapPhase, value: str) -> None:
-    assert get(api_client, 'roadmap', value).json()['blocks'] == ['django', 'docker']
+def test_roadmap_cleans_the_choice(
+    member_client: APIClient, plan: RoadmapPhase, value: str
+) -> None:
+    assert get(member_client, 'roadmap', value).json()['blocks'] == ['django', 'docker']
 
 
 def test_roadmap_orders_phases_and_steps_by_position(
-    api_client: APIClient, plan: RoadmapPhase
+    member_client: APIClient, plan: RoadmapPhase
 ) -> None:
     RoadmapPhase.objects.filter(slug='vorbereiten').update(position=9)
     RoadmapStep.objects.filter(slug='projekt').update(position=20)
-    data = get(api_client, 'roadmap').json()
+    data = get(member_client, 'roadmap').json()
     assert [phase['slug'] for phase in data['phases']] == ['backend-anlegen', 'vorbereiten']
     assert [step['slug'] for step in data['phases'][0]['steps']] == ['app-anlegen', 'projekt']
 
 
-def test_roadmap_ignores_unknown_params(api_client: APIClient, plan: RoadmapPhase) -> None:
-    response = api_client.get(reverse('roadmap'), {'blocks': 'django', 'page': '2', 'x': 'y'})
+def test_roadmap_ignores_unknown_params(member_client: APIClient, plan: RoadmapPhase) -> None:
+    response = member_client.get(reverse('roadmap'), {'blocks': 'django', 'page': '2', 'x': 'y'})
     assert response.status_code == 200
 
 
@@ -356,34 +369,34 @@ def error_fields(response: Response) -> dict:
 
 @pytest.mark.parametrize('name', ROADMAP_URLS)
 def test_roadmap_without_choice_is_rejected(
-    api_client: APIClient, plan: RoadmapPhase, name: str
+    member_client: APIClient, plan: RoadmapPhase, name: str
 ) -> None:
-    assert error_fields(get(api_client, name, None)) == {'blocks': ['required']}
+    assert error_fields(get(member_client, name, None)) == {'blocks': ['required']}
 
 
 @pytest.mark.parametrize('name', ROADMAP_URLS)
 @pytest.mark.parametrize('value', ['', ',', ' , ,'])
 def test_roadmap_with_empty_choice_is_rejected(
-    api_client: APIClient, plan: RoadmapPhase, name: str, value: str
+    member_client: APIClient, plan: RoadmapPhase, name: str, value: str
 ) -> None:
-    assert error_fields(get(api_client, name, value)) == {'blocks': ['blank']}
+    assert error_fields(get(member_client, name, value)) == {'blocks': ['blank']}
 
 
 @pytest.mark.parametrize('name', ROADMAP_URLS)
 @pytest.mark.parametrize('value', [*BROKEN_SLUGS, 'django,cobol', 'django,Docker'])
 def test_roadmap_with_unknown_block_is_rejected(
-    api_client: APIClient, plan: RoadmapPhase, name: str, value: str
+    member_client: APIClient, plan: RoadmapPhase, name: str, value: str
 ) -> None:
-    assert error_fields(get(api_client, name, value)) == {'blocks': ['does_not_exist']}
+    assert error_fields(get(member_client, name, value)) == {'blocks': ['does_not_exist']}
 
 
 @pytest.mark.parametrize('name', ROADMAP_URLS)
 @pytest.mark.parametrize('value', ['py\x00thon', 'django,py\x00thon'])
 def test_roadmap_with_null_character_is_rejected(
-    api_client: APIClient, plan: RoadmapPhase, name: str, value: str
+    member_client: APIClient, plan: RoadmapPhase, name: str, value: str
 ) -> None:
     expected = {'blocks': ['null_characters_not_allowed']}
-    assert error_fields(get(api_client, name, value)) == expected
+    assert error_fields(get(member_client, name, value)) == expected
 
 
 @pytest.mark.parametrize('name', ROADMAP_URLS)
@@ -399,14 +412,14 @@ def test_roadmap_with_null_character_is_rejected(
     ],
 )
 def test_roadmap_with_impossible_choice_is_rejected(
-    api_client: APIClient, plan: RoadmapPhase, name: str, value: str, codes: list[str]
+    member_client: APIClient, plan: RoadmapPhase, name: str, value: str, codes: list[str]
 ) -> None:
-    assert error_fields(get(api_client, name, value)) == {'blocks': codes}
+    assert error_fields(get(member_client, name, value)) == {'blocks': codes}
 
 
 # Roadmap: language
-def test_roadmap_uses_accept_language(api_client: APIClient, plan: RoadmapPhase) -> None:
-    data = get(api_client, 'roadmap', HTTP_ACCEPT_LANGUAGE='en').json()
+def test_roadmap_uses_accept_language(member_client: APIClient, plan: RoadmapPhase) -> None:
+    data = get(member_client, 'roadmap', HTTP_ACCEPT_LANGUAGE='en').json()
     phase = data['phases'][1]
     step = phase['steps'][1]
     assert [phase['title'], phase['summary']] == [
@@ -423,8 +436,8 @@ def test_roadmap_uses_accept_language(api_client: APIClient, plan: RoadmapPhase)
     assert step['tree'][0]['children'][1]['explanation'] == 'The app for everything about recipes.'
 
 
-def test_roadmap_falls_back_to_german(api_client: APIClient, plan: RoadmapPhase) -> None:
-    data = get(api_client, 'roadmap', HTTP_ACCEPT_LANGUAGE='en').json()
+def test_roadmap_falls_back_to_german(member_client: APIClient, plan: RoadmapPhase) -> None:
+    data = get(member_client, 'roadmap', HTTP_ACCEPT_LANGUAGE='en').json()
     step = data['phases'][1]['steps'][1]
     assert data['phases'][0]['title'] == 'Vorbereiten'
     assert step['note'] == 'Das Präfix app_ macht eigene Apps erkennbar.'
@@ -436,24 +449,26 @@ def test_roadmap_falls_back_to_german(api_client: APIClient, plan: RoadmapPhase)
     ('header', 'title'), [('en-US,en;q=0.9', 'Create a Django app'), ('fr', 'Django-App anlegen')]
 )
 def test_roadmap_understands_browser_language_header(
-    api_client: APIClient, plan: RoadmapPhase, header: str, title: str
+    member_client: APIClient, plan: RoadmapPhase, header: str, title: str
 ) -> None:
-    data = get(api_client, 'roadmap', HTTP_ACCEPT_LANGUAGE=header).json()
+    data = get(member_client, 'roadmap', HTTP_ACCEPT_LANGUAGE=header).json()
     assert data['phases'][1]['steps'][1]['title'] == title
 
 
-def test_tree_uses_accept_language(api_client: APIClient, plan: RoadmapPhase) -> None:
-    data = get(api_client, 'roadmap-tree', HTTP_ACCEPT_LANGUAGE='en').json()
+def test_tree_uses_accept_language(member_client: APIClient, plan: RoadmapPhase) -> None:
+    data = get(member_client, 'roadmap-tree', HTTP_ACCEPT_LANGUAGE='en').json()
     app = data[0]['children'][1]
     assert app['explanation'] == 'The app for everything about recipes.'
 
 
 # Roadmap: safety
-def test_roadmap_returns_text_unchanged_as_json(api_client: APIClient, plan: RoadmapPhase) -> None:
+def test_roadmap_returns_text_unchanged_as_json(
+    member_client: APIClient, plan: RoadmapPhase
+) -> None:
     script = '<script>alert(1)</script>'
     RoadmapStep.objects.filter(slug='app-anlegen').update(title_de=script)
     plan.steps.get(slug='projekt').paths.filter(path='backend/').update(explanation_de=script)
-    response = get(api_client, 'roadmap')
+    response = get(member_client, 'roadmap')
     assert response['Content-Type'] == 'application/json'
     steps = response.json()['phases'][1]['steps']
     assert steps[1]['title'] == script
@@ -461,13 +476,13 @@ def test_roadmap_returns_text_unchanged_as_json(api_client: APIClient, plan: Roa
 
 
 def test_roadmap_queries_do_not_grow_with_steps(
-    api_client: APIClient,
+    member_client: APIClient,
     plan: RoadmapPhase,
     blocks: Blocks,
     django_assert_num_queries: DjangoAssertNumQueries,
 ) -> None:
     with django_assert_num_queries(9):
-        get(api_client, 'roadmap', 'angular,django')
+        get(member_client, 'roadmap', 'angular,django')
     more = RoadmapPhase.objects.create(slug='mehr', title_de='x', summary_de='x', position=5)
     more.conditions.create(block=blocks['angular'], rule='requires')
     for index in range(3):
@@ -475,22 +490,22 @@ def test_roadmap_queries_do_not_grow_with_steps(
         step.conditions.create(block=blocks['docker'], rule='excludes')
         step.codes.create(kind='command', language='terminal', code_de='ls')
     with django_assert_num_queries(9):
-        get(api_client, 'roadmap', 'angular,django')
+        get(member_client, 'roadmap', 'angular,django')
 
 
 def test_tree_queries_do_not_grow_with_steps(
-    api_client: APIClient, plan: RoadmapPhase, django_assert_num_queries: DjangoAssertNumQueries
+    member_client: APIClient, plan: RoadmapPhase, django_assert_num_queries: DjangoAssertNumQueries
 ) -> None:
     with django_assert_num_queries(9):
-        get(api_client, 'roadmap-tree', 'angular,django')
+        get(member_client, 'roadmap-tree', 'angular,django')
     add_step(plan, 'extra', 30, ('backend/extra.py', 'Mehr.'))
     with django_assert_num_queries(9):
-        get(api_client, 'roadmap-tree', 'angular,django')
+        get(member_client, 'roadmap-tree', 'angular,django')
 
 
 # Tree
-def test_tree_shows_the_finished_project(api_client: APIClient, plan: RoadmapPhase) -> None:
-    response = get(api_client, 'roadmap-tree', 'angular,django')
+def test_tree_shows_the_finished_project(member_client: APIClient, plan: RoadmapPhase) -> None:
+    response = get(member_client, 'roadmap-tree', 'angular,django')
     origin = {'phase': 'backend-anlegen', 'step': 'projekt'}
     assert response.status_code == 200
     assert response.json() == [
@@ -536,13 +551,13 @@ def test_tree_shows_the_finished_project(api_client: APIClient, plan: RoadmapPha
     ]
 
 
-def test_tree_follows_the_choice(api_client: APIClient, plan: RoadmapPhase) -> None:
-    data = get(api_client, 'roadmap-tree', 'angular').json()
+def test_tree_follows_the_choice(member_client: APIClient, plan: RoadmapPhase) -> None:
+    data = get(member_client, 'roadmap-tree', 'angular').json()
     assert [item['path'] for item in data] == ['frontend/', '.gitignore', 'README.md']
 
 
-def test_tree_is_empty_without_paths(api_client: APIClient, blocks: Blocks) -> None:
-    assert get(api_client, 'roadmap-tree').json() == []
+def test_tree_is_empty_without_paths(member_client: APIClient, blocks: Blocks) -> None:
+    assert get(member_client, 'roadmap-tree').json() == []
 
 
 # Security
@@ -563,7 +578,7 @@ def test_roadmap_treats_unknown_session_as_guest(
     api_client: APIClient, plan: RoadmapPhase, name: str
 ) -> None:
     api_client.cookies['sessionid'] = 'invalid'
-    assert get(api_client, name).status_code == 200
+    assert get(api_client, name).status_code == 401
 
 
 @pytest.mark.parametrize('name', ALL_URLS)
@@ -572,34 +587,34 @@ def test_roadmap_treats_inactive_user_as_guest(
 ) -> None:
     api_client.force_login(user)
     User.objects.filter(pk=user.pk).update(is_active=False)
-    assert get(api_client, name).status_code == 200
+    assert get(api_client, name).status_code == 401
 
 
 @pytest.mark.parametrize('name', ALL_URLS)
 def test_roadmap_is_throttled(
-    api_client: APIClient, plan: RoadmapPhase, monkeypatch: pytest.MonkeyPatch, name: str
+    member_client: APIClient, plan: RoadmapPhase, monkeypatch: pytest.MonkeyPatch, name: str
 ) -> None:
-    monkeypatch.setitem(AnonRateThrottle.THROTTLE_RATES, 'anon', '1/hour')
-    get(api_client, name)
-    response = get(api_client, name)
+    monkeypatch.setitem(UserRateThrottle.THROTTLE_RATES, 'user', '1/hour')
+    get(member_client, name)
+    response = get(member_client, name)
     assert response.status_code == 429
     assert response.json()['code'] == 'throttled'
 
 
 @pytest.mark.parametrize('name', ROADMAP_URLS)
 def test_roadmap_errors_are_throttled_too(
-    api_client: APIClient, plan: RoadmapPhase, monkeypatch: pytest.MonkeyPatch, name: str
+    member_client: APIClient, plan: RoadmapPhase, monkeypatch: pytest.MonkeyPatch, name: str
 ) -> None:
-    monkeypatch.setitem(AnonRateThrottle.THROTTLE_RATES, 'anon', '1/hour')
-    get(api_client, name, 'cobol')
-    assert get(api_client, name, 'cobol').status_code == 429
+    monkeypatch.setitem(UserRateThrottle.THROTTLE_RATES, 'user', '1/hour')
+    get(member_client, name, 'cobol')
+    assert get(member_client, name, 'cobol').status_code == 429
 
 
 @pytest.mark.parametrize('name', ALL_URLS)
 @pytest.mark.parametrize('method', WRITE_METHODS)
 @pytest.mark.parametrize('admin', [False, True])
 def test_roadmap_rejects_writes(
-    api_client: APIClient,
+    member_client: APIClient,
     admin_user: User,
     plan: RoadmapPhase,
     blocks: Blocks,
@@ -608,10 +623,10 @@ def test_roadmap_rejects_writes(
     admin: bool,
 ) -> None:
     if admin:
-        api_client.force_login(admin_user)
+        member_client.force_authenticate(admin_user)
     before = [stored(blocks['django']), stored(plan)]
     hacked = {'slug': 'neu', 'name': 'Hacked', 'blocks': 'angular', 'title': 'Hacked'}
-    response = getattr(api_client, method)(f'{reverse(name)}?blocks=django', hacked)
+    response = getattr(member_client, method)(f'{reverse(name)}?blocks=django', hacked)
     assert response.status_code == 405
     assert response.json() == {'code': 'method_not_allowed'}
     assert [stored(blocks['django']), stored(plan)] == before
@@ -621,17 +636,17 @@ def test_roadmap_rejects_writes(
 @pytest.mark.parametrize('name', ALL_URLS)
 @pytest.mark.parametrize('method', ['get', 'head', 'options'])
 def test_roadmap_allows_only_reading_methods(
-    api_client: APIClient, plan: RoadmapPhase, name: str, method: str
+    member_client: APIClient, plan: RoadmapPhase, name: str, method: str
 ) -> None:
-    response = getattr(api_client, method)(f'{reverse(name)}?blocks=django')
+    response = getattr(member_client, method)(f'{reverse(name)}?blocks=django')
     assert response.status_code == 200
     assert response['Allow'] == 'GET, HEAD, OPTIONS'
 
 
 @pytest.mark.parametrize('path', ['roadmap/x/', 'roadmap/blocks/django/', 'roadmap/tree/x/'])
 def test_unknown_roadmap_paths_return_404(
-    api_client: APIClient, plan: RoadmapPhase, path: str
+    member_client: APIClient, plan: RoadmapPhase, path: str
 ) -> None:
-    response = api_client.get(f'/api/{path}?blocks=django')
+    response = member_client.get(f'/api/{path}?blocks=django')
     assert response.status_code == 404
     assert response.json() == {'code': 'not_found'}

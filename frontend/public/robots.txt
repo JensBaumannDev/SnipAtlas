@@ -1,6 +1,7 @@
 User-agent: *
 Disallow: /profil
 Disallow: /einstellungen
+Disallow: /mein-projekt
 Disallow: /passwort-zuruecksetzen
 Disallow: /konto-aktivieren
 Disallow: /email-bestaetigen

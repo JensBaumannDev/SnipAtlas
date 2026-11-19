@@ -9,10 +9,12 @@ import {
   Bug,
   Check,
   ChevronDown,
+  ChevronRight,
   CircleCheck,
   Copy,
   Eye,
   EyeOff,
+  File,
   FilePlus,
   Flag,
   FlaskConical,
@@ -46,6 +48,7 @@ export const botIcon: LucideIconData = { name: 'bot', node: Bot };
 export const bugIcon: LucideIconData = { name: 'bug', node: Bug };
 export const checkIcon: LucideIconData = { name: 'check', node: Check };
 export const chevronDownIcon: LucideIconData = { name: 'chevron-down', node: ChevronDown };
+export const chevronRightIcon: LucideIconData = { name: 'chevron-right', node: ChevronRight };
 export const circleCheckIcon: LucideIconData = { name: 'circle-check', node: CircleCheck };
 export const copyIcon: LucideIconData = { name: 'copy', node: Copy };
 export const eyeIcon: LucideIconData = { name: 'eye', node: Eye };
@@ -53,6 +56,7 @@ export const eyeOffIcon: LucideIconData = { name: 'eye-off', node: EyeOff };
 export const filePlusIcon: LucideIconData = { name: 'file-plus', node: FilePlus };
 export const flagIcon: LucideIconData = { name: 'flag', node: Flag };
 export const flaskConicalIcon: LucideIconData = { name: 'flask-conical', node: FlaskConical };
+export const fileIcon: LucideIconData = { name: 'file', node: File };
 export const folderIcon: LucideIconData = { name: 'folder', node: Folder };
 export const lightbulbIcon: LucideIconData = { name: 'lightbulb', node: Lightbulb };
 export const listOrderedIcon: LucideIconData = { name: 'list-ordered', node: ListOrdered };
