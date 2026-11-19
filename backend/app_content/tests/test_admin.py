@@ -1061,6 +1061,34 @@ def test_admin_adds_blueprint_with_steps(admin_client: Client, topic: Topic) -> 
     assert [step.slug for step in blueprint.steps.all()] == ['ordner-anlegen', 'cli-installieren']
 
 
+def test_admin_marks_blueprint_as_in_roadmap(admin_client: Client, topic: Topic) -> None:
+    add_blueprint(admin_client, topic, in_roadmap='on')
+    assert Blueprint.objects.get(slug='angular-projekt').in_roadmap is True
+
+
+def test_admin_removes_in_roadmap_from_blueprint(
+    admin_client: Client, blueprint: Blueprint
+) -> None:
+    Blueprint.objects.filter(pk=blueprint.pk).update(in_roadmap=True)
+    url = reverse('admin:app_content_blueprint_change', args=[blueprint.pk])
+    data = blueprint_data(blueprint.topic, slug=blueprint.slug)
+    data |= {'steps-TOTAL_FORMS': 0, 'steps-INITIAL_FORMS': 0}
+    response = admin_client.post(url, data)
+    blueprint.refresh_from_db()
+    assert response.status_code == 302
+    assert blueprint.in_roadmap is False
+
+
+def test_blueprint_list_shows_and_filters_in_roadmap(
+    admin_client: Client, blueprint: Blueprint
+) -> None:
+    short = Blueprint.objects.create(topic=blueprint.topic, slug='kurz', in_roadmap=True)
+    url = reverse('admin:app_content_blueprint_changelist')
+    response = admin_client.get(url, {'in_roadmap__exact': '1'})
+    assert 'in_roadmap' in response.context['cl'].list_display
+    assert list(response.context['cl'].result_list) == [short]
+
+
 @pytest.mark.parametrize(
     ('field', 'value', 'code'),
     [

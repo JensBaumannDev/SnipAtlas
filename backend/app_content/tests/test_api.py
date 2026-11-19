@@ -994,6 +994,7 @@ BLUEPRINT_JSON = {
     'topic': 'python',
     'title': 'Neues Django-Projekt anlegen',
     'summary': 'Vom leeren Ordner bis zum ersten Model.',
+    'inRoadmap': False,
     'steps': [
         {
             'slug': 'ordner-anlegen',
@@ -1035,6 +1036,16 @@ def test_blueprint_detail_is_public(api_client: APIClient, blueprint: Blueprint)
     response = api_client.get(reverse('blueprint-detail', args=['django-projekt-anlegen']))
     assert response.status_code == 200
     assert response.json() == BLUEPRINT_JSON
+
+
+def test_blueprint_in_roadmap_is_returned_in_list_and_detail(
+    api_client: APIClient, blueprint: Blueprint
+) -> None:
+    Blueprint.objects.filter(pk=blueprint.pk).update(in_roadmap=True)
+    listed = api_client.get(reverse('blueprint-list')).json()[0]
+    detail = api_client.get(reverse('blueprint-detail', args=['django-projekt-anlegen'])).json()
+    assert listed['inRoadmap'] is True
+    assert detail == BLUEPRINT_JSON | {'inRoadmap': True}
 
 
 def test_blueprint_step_without_code_and_note(api_client: APIClient, blueprint: Blueprint) -> None:

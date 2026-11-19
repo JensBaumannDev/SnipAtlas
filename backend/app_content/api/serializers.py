@@ -185,7 +185,7 @@ class BlueprintSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Blueprint
-        fields = ('slug', 'topic', 'title', 'summary', 'steps')
+        fields = ('slug', 'topic', 'title', 'summary', 'in_roadmap', 'steps')
 
 
 # Glossary

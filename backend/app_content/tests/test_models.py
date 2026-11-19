@@ -816,6 +816,10 @@ def test_blueprint_unix_code_in_english_needs_german(venv_code: BlueprintCode) -
     assert error_codes(venv_code, 'code_unix_de') == ['required']
 
 
+def test_blueprint_is_not_in_roadmap_by_default(blueprint: Blueprint) -> None:
+    assert blueprint.in_roadmap is False
+
+
 def test_blueprints_are_ordered_by_topic_and_position(group: Group, topic: Topic) -> None:
     git = Topic.objects.create(group=group, slug='git', name_de='Git', position=-1)
     late = Blueprint.objects.create(topic=topic, slug='spaet', position=2)
