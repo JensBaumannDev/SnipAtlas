@@ -678,6 +678,9 @@ class BlockKind(models.TextChoices):
     HOSTING = 'hosting', _('Hosting')
 
 
+SINGLE_BLOCK_KINDS = (BlockKind.FRONTEND, BlockKind.BACKEND, BlockKind.HOSTING)
+
+
 class BlockRequirement(models.TextChoices):
     """What a project needs before a block can be chosen."""
 
@@ -746,6 +749,56 @@ class RoadmapBlock(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    @classmethod
+    def check_choice(cls, blocks: list[RoadmapBlock]) -> None:
+        """Raise an error if the blocks do not make a possible project."""
+        kinds = [block.kind for block in blocks]
+        errors = [
+            *unavailable_errors(blocks),
+            *kind_errors(kinds),
+            *requirement_errors(blocks, has_backend=BlockKind.BACKEND in kinds),
+        ]
+        if errors:
+            raise ValidationError(errors)
+
+
+def unavailable_errors(blocks: list[RoadmapBlock]) -> list[ValidationError]:
+    """Return an error for each block that cannot be chosen yet."""
+    message = _('%(block)s is not available yet.')
+    return [
+        ValidationError(message, code='unavailable', params={'block': block.name})
+        for block in blocks
+        if not block.available
+    ]
+
+
+def kind_errors(kinds: list[str]) -> list[ValidationError]:
+    """Return errors for a missing frontend and backend or a kind chosen twice."""
+    errors = []
+    if BlockKind.FRONTEND not in kinds and BlockKind.BACKEND not in kinds:
+        errors.append(ValidationError(_('Choose a frontend, a backend or both.'), code='empty'))
+    message = _('Choose only one %(kind)s.')
+    errors += [
+        ValidationError(message, code='duplicate-kind', params={'kind': kind.label})
+        for kind in SINGLE_BLOCK_KINDS
+        if kinds.count(kind) > 1
+    ]
+    return errors
+
+
+def requirement_errors(blocks: list[RoadmapBlock], *, has_backend: bool) -> list[ValidationError]:
+    """Return an error for each block whose requirement on the backend is not met."""
+    errors = []
+    for block in blocks:
+        params = {'block': block.name}
+        if block.requirement == BlockRequirement.BACKEND and not has_backend:
+            message = _('%(block)s needs a backend.')
+            errors.append(ValidationError(message, code='needs-backend', params=params))
+        if block.requirement == BlockRequirement.NO_BACKEND and has_backend:
+            message = _('%(block)s only works without a backend.')
+            errors.append(ValidationError(message, code='no-backend', params=params))
+    return errors
 
 
 class ConditionalMixin:

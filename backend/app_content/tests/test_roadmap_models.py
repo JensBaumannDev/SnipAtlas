@@ -631,3 +631,60 @@ def test_topic_of_block_cannot_be_deleted(blocks: Blocks, topic: Topic) -> None:
     blocks['django'].save()
     with pytest.raises(ProtectedError):
         blocks['django'].topic.delete()
+
+
+# Choosing blocks
+def choice_codes(blocks: list[RoadmapBlock]) -> list[str]:
+    with pytest.raises(ValidationError) as error:
+        RoadmapBlock.check_choice(blocks)
+    return [item.code for item in error.value.error_list]
+
+
+@pytest.mark.parametrize(
+    'chosen',
+    [
+        ['angular'],
+        ['django'],
+        ['angular', 'django', 'docker', 'postgresql'],
+        ['angular', 'static-hosting'],
+    ],
+)
+def test_possible_choice_passes(blocks: Blocks, chosen: list[str]) -> None:
+    RoadmapBlock.check_choice([blocks[slug] for slug in chosen])
+
+
+@pytest.mark.parametrize(
+    ('chosen', 'codes'),
+    [
+        ([], ['empty']),
+        (['docker'], ['empty']),
+        (['react'], ['unavailable']),
+        (['angular', 'react'], ['unavailable', 'duplicate-kind']),
+        (['angular', 'postgresql'], ['needs-backend']),
+        (['django', 'static-hosting'], ['no-backend']),
+        (['postgresql'], ['empty', 'needs-backend']),
+    ],
+)
+def test_impossible_choice_is_rejected(blocks: Blocks, chosen: list[str], codes: list[str]) -> None:
+    assert choice_codes([blocks[slug] for slug in chosen]) == codes
+
+
+def test_second_block_of_same_kind_is_rejected(blocks: Blocks) -> None:
+    vue = RoadmapBlock.objects.create(slug='vue', name_de='Vue', kind='frontend')
+    assert choice_codes([blocks['angular'], vue]) == ['duplicate-kind']
+
+
+def test_second_hosting_is_rejected(blocks: Blocks) -> None:
+    server = RoadmapBlock.objects.create(slug='server', name_de='Server', kind='hosting')
+    assert choice_codes([blocks['angular'], blocks['static-hosting'], server]) == ['duplicate-kind']
+
+
+def test_several_extras_are_allowed(blocks: Blocks) -> None:
+    git = RoadmapBlock.objects.create(slug='git', name_de='Git', kind='extra')
+    RoadmapBlock.check_choice([blocks['django'], blocks['docker'], blocks['postgresql'], git])
+
+
+def test_choice_error_names_the_block(blocks: Blocks) -> None:
+    with pytest.raises(ValidationError) as error:
+        RoadmapBlock.check_choice([blocks['angular'], blocks['postgresql']])
+    assert error.value.messages == ['PostgreSQL braucht ein Backend.']

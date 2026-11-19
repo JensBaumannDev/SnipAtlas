@@ -7,7 +7,7 @@ from django.test import Client
 from pytest_django import Settings
 from rest_framework.test import APIClient
 
-from app_accounts.models import User
+from app_accounts.models import Project, User
 from app_content.models import (
     Blueprint,
     BlueprintStep,
@@ -349,6 +349,13 @@ def roadmap_step(
     step.errors.add(error_message)
     step.concepts.add(concept)
     return step
+
+
+@pytest.fixture
+def project(user: User, blocks: dict[str, RoadmapBlock]) -> Project:
+    project = Project.objects.create(user=user)
+    project.blocks.set([blocks['angular'], blocks['django'], blocks['docker']])
+    return project
 
 
 # Feedback

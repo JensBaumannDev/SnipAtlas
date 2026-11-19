@@ -1,13 +1,13 @@
-"""Admin for users with their favorites and progress."""
+"""Admin for users with their favorites, progress and roadmap project."""
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
-from django.db.models import QuerySet
+from django.db.models import Count, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from .models import CompletedStep, Favorite, User
+from .models import CompletedStep, Favorite, Project, User
 
 RIGHT_FIELDS = ('is_staff', 'is_superuser', 'groups', 'user_permissions')
 
@@ -56,6 +56,41 @@ class CompletedStepInline(UserDataInline):
     fields = readonly_fields = ('step', 'created_at')
 
 
+class ProjectInline(UserDataInline):
+    """Roadmap project of a user with blocks and counts, without the note texts."""
+
+    model = Project
+    related_field = 'user'
+    fields = readonly_fields = ('block_names', 'step_count', 'note_count', 'updated_at')
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        """Return the projects with their blocks and counts loaded."""
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related('blocks')
+            .annotate(
+                step_count=Count('completed_steps', distinct=True),
+                note_count=Count('notes', distinct=True),
+            )
+        )
+
+    @admin.display(description=_('building blocks'))
+    def block_names(self, obj: Project) -> str:
+        """Return the names of the chosen blocks."""
+        return ', '.join(block.name for block in obj.blocks.all())
+
+    @admin.display(description=_('completed steps'))
+    def step_count(self, obj: Project) -> int:
+        """Return how many steps are done."""
+        return obj.step_count
+
+    @admin.display(description=_('project notes'))
+    def note_count(self, obj: Project) -> int:
+        """Return how many notes the user wrote."""
+        return obj.note_count
+
+
 class UserCreateForm(AdminUserCreationForm):
     """Form for creating a user with email and password."""
 
@@ -90,7 +125,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('-date_joined',)
     readonly_fields = ('pending_email', 'last_login', 'date_joined')
-    inlines = (FavoriteInline, CompletedStepInline)
+    inlines = (FavoriteInline, CompletedStepInline, ProjectInline)
     fieldsets = (
         (None, {'fields': ('email', 'email_confirmed', 'pending_email', 'password')}),
         (_('Settings'), {'fields': ('notify_by_mail', 'accent', 'os', 'language')}),

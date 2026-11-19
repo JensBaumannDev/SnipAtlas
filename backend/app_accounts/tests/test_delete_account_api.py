@@ -3,8 +3,8 @@ from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.test import APIClient
 
-from app_accounts.models import CompletedStep, Favorite, User
-from app_content.models import BlueprintStep, Entry
+from app_accounts.models import CompletedStep, Favorite, Project, ProjectNote, ProjectStep, User
+from app_content.models import BlueprintStep, Entry, RoadmapBlock, RoadmapStep
 from app_feedback.models import Suggestion
 
 pytestmark = pytest.mark.django_db
@@ -266,3 +266,28 @@ def test_delete_account_rejects_other_methods(
     assert response.json() == {'code': 'method_not_allowed'}
     assert response['Allow'] == 'POST, OPTIONS'
     assert exists(user)
+
+
+# Roadmap project
+def add_project(user: User, block: RoadmapBlock, step: RoadmapStep) -> None:
+    project = Project.objects.create(user=user)
+    project.blocks.add(block)
+    project.completed_steps.create(step=step)
+    project.notes.create(step=step, text='Port 8020.')
+
+
+def test_delete_account_deletes_project_progress_and_notes(
+    logged_in: APIClient,
+    user: User,
+    other: User,
+    blocks: dict[str, RoadmapBlock],
+    roadmap_step: RoadmapStep,
+) -> None:
+    add_project(user, blocks['django'], roadmap_step)
+    add_project(other, blocks['django'], roadmap_step)
+    delete(logged_in)
+    assert list(Project.objects.values_list('user', flat=True)) == [other.pk]
+    assert ProjectStep.objects.get().project.user == other
+    assert ProjectNote.objects.get().project.user == other
+    assert RoadmapStep.objects.filter(pk=roadmap_step.pk).exists()
+    assert RoadmapBlock.objects.filter(slug='django').exists()
