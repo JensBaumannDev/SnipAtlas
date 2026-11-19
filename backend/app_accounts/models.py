@@ -276,6 +276,25 @@ class Project(models.Model):
         self.blocks.set(blocks)
         self.save(update_fields=['updated_at'])
 
+    def includes(self, step: RoadmapStep) -> bool:
+        """Return whether the step belongs to the roadmap of the chosen blocks."""
+        slugs = self.block_slugs()
+        return step.phase.applies_to(slugs) and step.applies_to(slugs)
+
+    def completed_map(self) -> dict[str, list[str]]:
+        """Return the completed step slugs grouped by phase slug."""
+        completed: dict[str, list[str]] = {}
+        for phase, step in self.completed_steps.values_list('step__phase__slug', 'step__slug'):
+            completed.setdefault(phase, []).append(step)
+        return completed
+
+    def notes_map(self) -> dict[str, dict[str, str]]:
+        """Return the note texts grouped by phase and step slug."""
+        notes: dict[str, dict[str, str]] = {}
+        for phase, step, text in self.notes.values_list('step__phase__slug', 'step__slug', 'text'):
+            notes.setdefault(phase, {})[step] = text
+        return notes
+
 
 class ProjectBlock(models.Model):
     """Building block chosen for a project."""

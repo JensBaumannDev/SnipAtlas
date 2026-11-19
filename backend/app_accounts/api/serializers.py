@@ -15,13 +15,17 @@ from app_accounts.emails import (
     send_reset_mail,
 )
 from app_accounts.models import (
+    NOTE_MAX_LENGTH,
     PROJECT_VALUE_FIELDS,
     PROJECT_VALUE_MAX_LENGTH,
     Favorite,
+    Project,
     User,
     UserManager,
 )
 from app_accounts.tokens import ACTIVATION, EMAIL_CHANGE, check_link_token
+from app_content.api.serializers import chosen_blocks
+from app_content.models import RoadmapBlock
 
 from .exceptions import InvalidCredentials, InvalidLink, NotActivated, WrongPassword
 
@@ -316,3 +320,32 @@ class SettingsSerializer(serializers.ModelSerializer):
         """Save the given project values and settings."""
         user.set_project_values(validated_data.pop('project_values', {}))
         return super().update(user, validated_data)
+
+
+# Roadmap project
+class ProjectSerializer(serializers.ModelSerializer):
+    """Project of the logged-in user with chosen blocks, progress and notes."""
+
+    blocks = serializers.SlugRelatedField(many=True, read_only=True, slug_field='slug')
+    completed = serializers.DictField(source='completed_map', read_only=True)
+    notes = serializers.DictField(source='notes_map', read_only=True)
+
+    class Meta:
+        model = Project
+        fields = ('blocks', 'completed', 'notes', 'created_at', 'updated_at')
+
+
+class ProjectBlocksSerializer(serializers.Serializer):
+    """New choice of building blocks for the project."""
+
+    blocks = serializers.ListField(child=serializers.CharField())
+
+    def validate_blocks(self, value: list[str]) -> list[RoadmapBlock]:
+        """Return the chosen blocks if they exist and make a possible project."""
+        return chosen_blocks(set(value))
+
+
+class ProjectNoteSerializer(serializers.Serializer):
+    """Text of a note on a roadmap step."""
+
+    text = serializers.CharField(max_length=NOTE_MAX_LENGTH)
