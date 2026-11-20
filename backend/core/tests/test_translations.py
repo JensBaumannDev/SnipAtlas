@@ -141,6 +141,12 @@ FIELD_NAMES = [
     ('app_content.blueprint', 'slug', 'Slug', 'slug'),
     ('app_content.blueprint', 'title', 'Titel', 'title'),
     ('app_content.blueprint', 'summary', 'Zusammenfassung', 'summary'),
+    (
+        'app_content.blueprint',
+        'in_roadmap',
+        'Kurzfassung von Mein Projekt',
+        'short version of my project',
+    ),
     ('app_content.blueprint', 'position', 'Position', 'position'),
     ('app_content.blueprintstep', 'blueprint', 'Anleitung', 'guide'),
     ('app_content.blueprintstep', 'slug', 'Slug', 'slug'),

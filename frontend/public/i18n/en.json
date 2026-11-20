@@ -307,6 +307,8 @@
     "markDone": "Step {{number}} done: {{title}}",
     "reset": "Reset",
     "note": "Note",
+    "roadmapHint": "This is one step of many. My project takes you from an empty folder to online, matched to your stack.",
+    "roadmapLink": "Go to My project",
     "count": "{{count}} guides",
     "countOne": "1 guide",
     "empty": "There are no guides for this topic yet.",

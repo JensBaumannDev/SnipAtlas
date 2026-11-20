@@ -9,6 +9,20 @@
   </app-topic-header>
 
   <div class="guide-detail__body">
+    @if (blueprint.inRoadmap) {
+      <aside class="guide-detail__roadmap" [attr.aria-label]="'myProject.title' | translate">
+        <svg
+          [lucideIcon]="routeIcon"
+          class="icon guide-detail__roadmap-icon"
+          aria-hidden="true"
+        ></svg>
+        <p class="guide-detail__roadmap-text">{{ 'guides.roadmapHint' | translate }}</p>
+        <a class="btn guide-detail__roadmap-link" routerLink="/mein-projekt">
+          {{ 'guides.roadmapLink' | translate }}
+        </a>
+      </aside>
+    }
+
     @if (projectKeys().length) {
       <section class="guide-detail__project" aria-labelledby="guide-project">
         <h2 class="guide-detail__project-title" id="guide-project">
@@ -33,19 +47,19 @@
           </button>
         }
       </div>
-  </div>
+    </div>
 
-  <ol class="guide-detail__steps" role="list">
-    @for (step of blueprint.steps; track step.slug) {
-      <li>
-        <app-guide-step
-          [step]="step"
-          [number]="$index + 1"
-          [done]="isDone(step.slug)"
-          (toggled)="toggle(step.slug)"
-        />
-      </li>
-    }
-  </ol>
+    <ol class="guide-detail__steps" role="list">
+      @for (step of blueprint.steps; track step.slug) {
+        <li>
+          <app-guide-step
+            [step]="step"
+            [number]="$index + 1"
+            [done]="isDone(step.slug)"
+            (toggled)="toggle(step.slug)"
+          />
+        </li>
+      }
+    </ol>
   </div>
 }

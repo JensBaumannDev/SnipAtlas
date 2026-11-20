@@ -16,6 +16,39 @@
   @include page-body(0);
 }
 
+// Roadmap hint
+.guide-detail__roadmap {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: $space-sm $space-md;
+  align-items: center;
+  padding: $space-lg;
+  margin-bottom: $space-lg;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-radius: $radius-card;
+}
+
+.guide-detail__roadmap-icon {
+  color: var(--accent);
+}
+
+.guide-detail__roadmap-text {
+  max-width: rem(640);
+  color: var(--ink);
+}
+
+.guide-detail__roadmap-link {
+  font-weight: $font-weight-semibold;
+  color: var(--on-accent);
+  background: var(--accent);
+
+  &:hover {
+    color: var(--bg);
+    background: var(--ink);
+  }
+}
+
 // Project
 .guide-detail__project {
   @include card-surface;
@@ -89,6 +122,16 @@
 
 /* #region RESPONSIVE */
 @include mobile {
+  .guide-detail__roadmap {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .guide-detail__roadmap-link {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
   .guide-detail__progress {
     position: static;
   }

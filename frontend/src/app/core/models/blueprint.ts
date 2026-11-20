@@ -18,5 +18,6 @@ export interface Blueprint {
   topic: string;
   title: string;
   summary: string;
+  inRoadmap: boolean;
   steps: BlueprintStep[];
 }

@@ -442,6 +442,7 @@ class Blueprint(models.Model):
     )
     title = models.CharField(max_length=120, verbose_name=_('title'))
     summary = models.TextField(verbose_name=_('summary'))
+    in_roadmap = models.BooleanField(default=False, verbose_name=_('short version of my project'))
     position = models.IntegerField(default=0, verbose_name=_('position'))
 
     objects = TopicQuerySet.as_manager()

@@ -190,10 +190,10 @@ class BlueprintStepInline(TranslationStackedInline):
 class BlueprintAdmin(FrontendLinkMixin, TabbedTranslationAdmin):
     """Admin for blueprints with their steps."""
 
-    fields = ('topic', 'slug', 'title', 'summary', 'position')
-    list_display = ('title', 'topic', 'slug', 'position')
+    fields = ('topic', 'slug', 'title', 'summary', 'in_roadmap', 'position')
+    list_display = ('title', 'topic', 'slug', 'in_roadmap', 'position')
     list_editable = ('position',)
-    list_filter = ('topic',)
+    list_filter = ('topic', 'in_roadmap')
     search_fields = ('title', 'slug')
     list_select_related = ('topic',)
     prepopulated_fields = {'slug': ('title',)}
