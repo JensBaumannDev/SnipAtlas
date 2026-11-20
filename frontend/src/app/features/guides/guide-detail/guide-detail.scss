@@ -20,22 +20,76 @@
 .guide-detail__roadmap {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: $space-sm $space-md;
+  gap: $space-md $space-lg;
   align-items: center;
-  padding: $space-lg;
+  padding: $space-xl;
   margin-bottom: $space-lg;
   background: var(--accent-soft);
   border: 1px solid var(--accent);
   border-radius: $radius-card;
 }
 
+.guide-detail__roadmap-badge {
+  display: grid;
+  place-items: center;
+  width: rem(56);
+  height: rem(56);
+  color: var(--on-accent);
+  background: var(--accent);
+  border-radius: $radius-pill;
+}
+
 .guide-detail__roadmap-icon {
+  width: rem(28);
+  height: rem(28);
+}
+
+.guide-detail__roadmap-body {
+  display: grid;
+  gap: $space-xs;
+}
+
+.guide-detail__roadmap-eyebrow {
+  font-weight: $font-weight-semibold;
   color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.guide-detail__roadmap-title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: var(--ink);
 }
 
 .guide-detail__roadmap-text {
   max-width: rem(640);
+  color: var(--text);
+}
+
+.guide-detail__roadmap-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs $space-lg;
+  padding: 0;
+  margin: $space-xs 0 0;
+  list-style: none;
+}
+
+.guide-detail__roadmap-point {
+  display: flex;
+  gap: $space-xs;
+  align-items: center;
+  font-weight: $font-weight-medium;
   color: var(--ink);
+}
+
+.guide-detail__roadmap-check {
+  flex: none;
+  width: rem(20);
+  height: rem(20);
+  color: var(--accent);
 }
 
 .guide-detail__roadmap-link {
@@ -123,12 +177,30 @@
 /* #region RESPONSIVE */
 @include mobile {
   .guide-detail__roadmap {
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     align-items: start;
+    padding: $space-lg;
+  }
+
+  .guide-detail__roadmap-badge {
+    width: rem(44);
+    height: rem(44);
+  }
+
+  .guide-detail__roadmap-icon {
+    width: rem(22);
+    height: rem(22);
+  }
+
+  .guide-detail__roadmap-point {
+    align-items: flex-start;
+  }
+
+  .guide-detail__roadmap-check {
+    margin-top: rem(3);
   }
 
   .guide-detail__roadmap-link {
-    grid-column: 1 / -1;
     justify-self: start;
   }
 
