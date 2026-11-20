@@ -11,30 +11,24 @@
         }
       </h1>
     </div>
-    <p class="project-overview__status">
-      {{ 'myProject.status' | translate: { done: doneCount(), total: state.refs().length, phase: phaseNumber(), phases: roadmap.phases.length } }}
-    </p>
-    <div class="project-overview__actions">
-      @if (nextStep) {
-        <a class="btn project-overview__continue" [routerLink]="['/mein-projekt', nextStep.phase.slug, nextStep.step.slug]">
-          {{ 'myProject.home.continue' | translate }}
-        </a>
-      }
-      <a class="btn btn--ghost" routerLink="/mein-projekt/ordnerstruktur">
-        {{ 'myProject.showStructure' | translate }}
-      </a>
-    </div>
   </header>
 
   <app-project-navigation />
 
   <div class="project-overview__body">
-    <app-progress-bar
-      class="project-overview__progress"
-      [done]="doneCount()"
-      [total]="state.refs().length"
-      [label]="'guides.progressLabel' | translate"
-    />
+    <div class="project-overview__progress">
+      <app-progress-bar
+        class="project-overview__bar"
+        [done]="doneCount()"
+        [total]="state.refs().length"
+        [label]="'guides.progressLabel' | translate"
+      />
+      @if (nextStep) {
+        <a class="btn project-overview__continue" [routerLink]="['/mein-projekt', nextStep.phase.slug, nextStep.step.slug]">
+          {{ 'myProject.home.continue' | translate }}
+        </a>
+      }
+    </div>
 
     @for (phase of roadmap.phases; track phase.slug) {
       @let done = phaseDone(phase);
