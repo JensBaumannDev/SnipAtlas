@@ -470,7 +470,7 @@
     },
     "examples": {
       "project": "taskboard",
-      "githubUser": "jensbaumann",
+      "githubUser": "octocat",
       "repo": "taskboard",
       "domain": "taskboard.de",
       "serverUser": "deploy",
