@@ -22,9 +22,14 @@
       </li>
     }
   </ul>
-  <a class="btn home__project-button" routerLink="/mein-projekt">
-    {{ (myProject.project() ? 'myProject.home.continue' : 'myProject.home.start') | translate }}
-  </a>
+  <div class="home__project-actions">
+    <a class="btn home__project-button" routerLink="/mein-projekt">
+      {{ (myProject.project() ? 'myProject.home.continue' : 'myProject.home.start') | translate }}
+    </a>
+    @if (myProject.project()) {
+      <app-project-delete />
+    }
+  </div>
 </section>
 
 <app-area-links class="area-links--compact" />

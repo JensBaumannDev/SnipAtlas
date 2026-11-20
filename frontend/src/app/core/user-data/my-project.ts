@@ -44,6 +44,10 @@ export class MyProject {
     );
   }
 
+  remove(): Observable<void> {
+    return this.http.delete<void>(URL).pipe(tap(() => this.project.set(null)));
+  }
+
   toggle(phase: string, step: string): void {
     const done = this.isDone(phase, step);
     this.updateCompleted(phase, step, !done);

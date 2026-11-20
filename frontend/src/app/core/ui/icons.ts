@@ -31,6 +31,7 @@ import {
   Square,
   Star,
   Terminal,
+  Trash2,
   TriangleAlert,
   User,
   X,
@@ -64,6 +65,7 @@ export const logOutIcon: LucideIconData = { name: 'log-out', node: LogOut };
 export const menuIcon: LucideIconData = { name: 'menu', node: Menu };
 export const messageSquareIcon: LucideIconData = { name: 'message-square', node: MessageSquare };
 export const routeIcon: LucideIconData = { name: 'route', node: Route };
+export const trashIcon: LucideIconData = { name: 'trash-2', node: Trash2 };
 export const searchIcon: LucideIconData = { name: 'search', node: Search };
 export const settingsIcon: LucideIconData = { name: 'settings', node: Settings };
 export const sparklesIcon: LucideIconData = { name: 'sparkles', node: Sparkles };

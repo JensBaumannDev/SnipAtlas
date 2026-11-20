@@ -82,6 +82,18 @@
   color: var(--accent);
 }
 
+.home__project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  align-items: flex-start;
+  justify-content: center;
+
+  &:has(.project-delete--open) .home__project-button {
+    display: none;
+  }
+}
+
 .home__project-button {
   font-weight: $font-weight-semibold;
   color: var(--on-accent);

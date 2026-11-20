@@ -759,6 +759,13 @@
     "fresh": "neu"
   },
   "myProject": {
+    "delete": {
+      "start": "Projekt löschen",
+      "confirm": "Projekt mit Auswahl, Fortschritt und Notizen löschen? Das lässt sich nicht rückgängig machen.",
+      "submit": "Endgültig löschen",
+      "cancel": "Abbrechen",
+      "error": "Das Projekt konnte nicht gelöscht werden. Versuche es noch einmal."
+    },
     "title": "Mein Projekt",
     "home": {
       "title": "Vom leeren Ordner bis online",
