@@ -5,7 +5,8 @@ import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BlueprintApi } from '../../../core/api/blueprint-api';
 import { BlueprintProgress } from '../../../core/user-data/blueprint-progress';
-import { routeIcon } from '../../../core/ui/icons';
+import { checkIcon, routeIcon } from '../../../core/ui/icons';
+import { MyProject } from '../../../core/user-data/my-project';
 import { syncOutline } from '../../../core/ui/page-outline';
 import { placeholderKeys } from '../../../core/user-data/project-values';
 import { injectTopic } from '../../../core/content/topic-resource';
@@ -32,6 +33,13 @@ import { GuideStep } from '../guide-step/guide-step';
 export class GuideDetail {
   protected readonly paths = inject(ContentPaths);
   protected readonly routeIcon = routeIcon;
+  protected readonly checkIcon = checkIcon;
+  protected readonly myProject = inject(MyProject);
+  protected readonly roadmapPoints = [
+    'myProject.home.points.why',
+    'myProject.home.points.tree',
+    'myProject.home.points.progress',
+  ];
   private readonly blueprintApi = inject(BlueprintApi);
   private readonly progress = inject(BlueprintProgress);
 

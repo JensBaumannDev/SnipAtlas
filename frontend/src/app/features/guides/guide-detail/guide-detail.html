@@ -10,15 +10,27 @@
 
   <div class="guide-detail__body">
     @if (blueprint.inRoadmap) {
-      <aside class="guide-detail__roadmap" [attr.aria-label]="'myProject.title' | translate">
-        <svg
-          [lucideIcon]="routeIcon"
-          class="icon guide-detail__roadmap-icon"
-          aria-hidden="true"
-        ></svg>
-        <p class="guide-detail__roadmap-text">{{ 'guides.roadmapHint' | translate }}</p>
+      <aside class="guide-detail__roadmap" aria-labelledby="guide-roadmap">
+        <span class="guide-detail__roadmap-badge" aria-hidden="true">
+          <svg [lucideIcon]="routeIcon" class="icon guide-detail__roadmap-icon"></svg>
+        </span>
+        <div class="guide-detail__roadmap-body">
+          <p class="guide-detail__roadmap-eyebrow">{{ 'myProject.title' | translate }}</p>
+          <h2 class="guide-detail__roadmap-title" id="guide-roadmap">
+            {{ 'guides.roadmapTitle' | translate }}
+          </h2>
+          <p class="guide-detail__roadmap-text">{{ 'guides.roadmapHint' | translate }}</p>
+          <ul class="guide-detail__roadmap-points" role="list">
+            @for (point of roadmapPoints; track point) {
+              <li class="guide-detail__roadmap-point">
+                <svg [lucideIcon]="checkIcon" class="icon guide-detail__roadmap-check" aria-hidden="true"></svg>
+                {{ point | translate }}
+              </li>
+            }
+          </ul>
+        </div>
         <a class="btn guide-detail__roadmap-link" routerLink="/mein-projekt">
-          {{ 'guides.roadmapLink' | translate }}
+          {{ (myProject.project() ? 'myProject.home.continue' : 'myProject.home.start') | translate }}
         </a>
       </aside>
     }
