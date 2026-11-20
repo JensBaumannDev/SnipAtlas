@@ -794,7 +794,9 @@
       "resume": "Where did I leave off?",
       "progress": "You set up Django and started your server on port 8000. Check off the step and leave yourself a note with the port number. When you return, your overview shows the next unfinished step and you can revisit your note."
     },
-    "next": "Up next",
+    "nextStep": "Up next: {{title}}",
+    "status": "{{done}} of {{total}} steps · Phase {{phase}} of {{phases}}",
+    "showStructure": "View folder structure",
     "allDone": "All done",
     "overview": "Overview",
     "changeChoice": "Change choice",

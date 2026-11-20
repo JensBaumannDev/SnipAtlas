@@ -794,7 +794,9 @@
       "resume": "Wo war ich gestern?",
       "progress": "Du hast Django eingerichtet und deinen Server auf Port 8000 gestartet. Hake den Schritt ab und notiere die Portnummer direkt dort. Beim nächsten Besuch siehst du den nächsten offenen Schritt und kannst deine Notiz wieder nachlesen."
     },
-    "next": "Als Nächstes",
+    "nextStep": "Als Nächstes: {{title}}",
+    "status": "{{done}} von {{total}} Schritten · Phase {{phase}} von {{phases}}",
+    "showStructure": "Ordnerstruktur ansehen",
     "allDone": "Alles erledigt",
     "overview": "Übersicht",
     "changeChoice": "Auswahl ändern",

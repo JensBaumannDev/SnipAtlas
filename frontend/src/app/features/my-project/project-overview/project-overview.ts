@@ -7,6 +7,7 @@ import { firstCommand, newPaths } from '../../../core/content/roadmap-steps';
 import { RoadmapPhase, RoadmapStep } from '../../../core/models/roadmap';
 import { checkIcon, chevronRightIcon } from '../../../core/ui/icons';
 import { Preferences } from '../../../core/user-data/preferences';
+import { ProjectValues } from '../../../core/user-data/project-values';
 import { ProgressBar } from '../../../shared/progress-bar/progress-bar';
 import { ProjectTextPipe } from '../../../shared/project-text/project-text';
 import { ProjectNavigation } from '../project-navigation/project-navigation';
@@ -27,6 +28,7 @@ import { injectRoadmap } from '../roadmap-state';
 })
 export class ProjectOverview {
   private readonly os = inject(Preferences).os;
+  private readonly projectValues = inject(ProjectValues).values;
   protected readonly state = injectRoadmap();
   protected readonly project = this.state.project;
   protected readonly roadmap = this.state.resource.value;
@@ -40,6 +42,16 @@ export class ProjectOverview {
   protected readonly next = computed(() =>
     this.state.refs().find((ref) => !this.project.isDone(ref.phase.slug, ref.step.slug)),
   );
+  protected readonly meta = computed(() => {
+    const name = this.projectValues().project?.trim();
+    const stack = this.state.chosenNames().join(' · ');
+    return name ? `${name} · ${stack}` : stack;
+  });
+  protected readonly phaseNumber = computed(() => {
+    const phases = this.roadmap()?.phases ?? [];
+    const next = this.next();
+    return next ? phases.findIndex((phase) => phase.slug === next.phase.slug) + 1 : phases.length;
+  });
 
   constructor() {
     redirectWithoutChoice(this.project);
