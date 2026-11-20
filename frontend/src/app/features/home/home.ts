@@ -7,6 +7,7 @@ import { map } from 'rxjs';
 import { NewsApi } from '../../core/api/news-api';
 import { checkIcon } from '../../core/ui/icons';
 import { MyProject } from '../../core/user-data/my-project';
+import { ProjectDelete } from '../my-project/project-delete/project-delete';
 import { SearchBox } from '../../shared/search-box/search-box';
 import { AreaLinks } from '../../shared/area-links/area-links';
 import { GuideLink } from './guide-link/guide-link';
@@ -15,7 +16,16 @@ import { NewsList } from './news-list/news-list';
 const NEWS_LIMIT = 4;
 
 @Component({
-  imports: [AreaLinks, GuideLink, LucideDynamicIcon, NewsList, RouterLink, SearchBox, TranslatePipe],
+  imports: [
+    AreaLinks,
+    GuideLink,
+    LucideDynamicIcon,
+    NewsList,
+    ProjectDelete,
+    RouterLink,
+    SearchBox,
+    TranslatePipe,
+  ],
   selector: 'app-home',
   styleUrl: './home.scss',
   templateUrl: './home.html',

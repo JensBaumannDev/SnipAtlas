@@ -1,0 +1,44 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+:host(.project-delete--open) {
+  flex-basis: 100%;
+}
+
+// Confirm
+.project-delete {
+  display: grid;
+  gap: $space-sm;
+  justify-items: center;
+}
+
+.project-delete__text {
+  display: flex;
+  gap: $space-sm;
+  align-items: flex-start;
+  max-width: rem(520);
+  font-weight: $font-weight-semibold;
+  color: var(--danger);
+  text-align: left;
+}
+
+.project-delete__alert {
+  flex: none;
+  width: rem(22);
+  height: rem(22);
+}
+
+.project-delete__icon {
+  width: rem(18);
+  height: rem(18);
+}
+
+.project-delete__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  justify-content: center;
+}

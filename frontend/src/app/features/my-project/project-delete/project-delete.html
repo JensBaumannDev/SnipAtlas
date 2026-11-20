@@ -1,0 +1,25 @@
+@if (confirming()) {
+  <div class="project-delete">
+    <p class="project-delete__text" role="alert">
+      <svg [lucideIcon]="alertIcon" class="icon project-delete__alert" aria-hidden="true"></svg>
+      {{ 'myProject.delete.confirm' | translate }}
+    </p>
+    <div class="project-delete__actions">
+      <button class="btn btn--danger" type="button" [disabled]="pending()" (click)="remove()">
+        <svg [lucideIcon]="trashIcon" class="icon project-delete__icon" aria-hidden="true"></svg>
+        {{ 'myProject.delete.submit' | translate }}
+      </button>
+      <button class="btn btn--ghost" type="button" (click)="cancel()">
+        {{ 'myProject.delete.cancel' | translate }}
+      </button>
+    </div>
+    @if (failed()) {
+      <p class="field__error" role="alert">{{ 'myProject.delete.error' | translate }}</p>
+    }
+  </div>
+} @else {
+  <button class="btn btn--danger" type="button" (click)="confirming.set(true)">
+    <svg [lucideIcon]="trashIcon" class="icon project-delete__icon" aria-hidden="true"></svg>
+    {{ 'myProject.delete.start' | translate }}
+  </button>
+}
