@@ -133,18 +133,29 @@
 
     <nav class="project-step__pager" [attr.aria-label]="'myProject.pager' | translate">
       @if (previous(); as prev) {
-        <a class="project-step__pager-link" [routerLink]="['/mein-projekt', prev.phase.slug, prev.step.slug]">
-          ← {{ prev.step.title }}
+        <a
+          class="project-step__pager-link text-link text-link--back"
+          [routerLink]="['/mein-projekt', prev.phase.slug, prev.step.slug]"
+        >
+          <svg [lucideIcon]="arrowLeftIcon" class="icon icon--inline" aria-hidden="true"></svg>
+          {{ prev.step.title }}
         </a>
       } @else {
-        <a class="project-step__pager-link" routerLink="/mein-projekt">← {{ 'myProject.title' | translate }}</a>
+        <a
+          class="project-step__pager-link text-link text-link--back"
+          routerLink="/mein-projekt"
+        >
+          <svg [lucideIcon]="arrowLeftIcon" class="icon icon--inline" aria-hidden="true"></svg>
+          {{ 'myProject.title' | translate }}
+        </a>
       }
       @if (next(); as following) {
         <a
-          class="project-step__pager-link project-step__pager-link--next"
+          class="project-step__pager-link project-step__pager-link--next text-link"
           [routerLink]="['/mein-projekt', following.phase.slug, following.step.slug]"
         >
-          {{ following.step.title }} →
+          {{ following.step.title }}
+          <svg [lucideIcon]="arrowRightIcon" class="icon icon--inline" aria-hidden="true"></svg>
         </a>
       }
     </nav>

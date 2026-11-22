@@ -111,6 +111,8 @@
 }
 
 .project-step__link {
+  @include text-link;
+
   color: var(--accent);
   overflow-wrap: anywhere;
 }

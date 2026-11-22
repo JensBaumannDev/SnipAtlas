@@ -43,5 +43,8 @@
   </div>
   <p class="area-menu__title">{{ link().label | translate }}</p>
   <p class="area-menu__lead">{{ link().lead | translate }}</p>
-  <a class="area-menu__more" [routerLink]="link().path">{{ 'nav.overview' | translate }} →</a>
+  <a class="area-menu__more text-link" [routerLink]="link().path">
+    {{ 'nav.overview' | translate }}
+    <svg [lucideIcon]="arrowRightIcon" class="icon icon--inline" aria-hidden="true"></svg>
+  </a>
 </aside>

@@ -38,12 +38,12 @@
 }
 
 .footer__link {
+  @include text-link;
+
   color: var(--muted);
-  text-decoration: none;
 
   &:hover {
     color: var(--accent);
-    text-decoration: underline;
   }
 }
 

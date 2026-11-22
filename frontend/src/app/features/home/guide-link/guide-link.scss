@@ -11,11 +11,6 @@
 // Link
 .guide-link__link {
   font-weight: $font-weight-semibold;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .guide-link__progress {

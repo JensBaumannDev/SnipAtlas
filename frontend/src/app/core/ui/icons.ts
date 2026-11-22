@@ -2,6 +2,7 @@ import { LucideIconData } from '@lucide/angular';
 import {
   AppWindow,
   ArrowLeft,
+  ArrowRight,
   ArrowRightLeft,
   BookA,
   BookText,
@@ -39,6 +40,7 @@ import {
 
 export const appWindowIcon: LucideIconData = { name: 'app-window', node: AppWindow };
 export const arrowLeftIcon: LucideIconData = { name: 'arrow-left', node: ArrowLeft };
+export const arrowRightIcon: LucideIconData = { name: 'arrow-right', node: ArrowRight };
 export const arrowRightLeftIcon: LucideIconData = {
   name: 'arrow-right-left',
   node: ArrowRightLeft,

@@ -1,8 +1,10 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { GlossaryTerm } from '../../core/models/glossary-term';
 import { TermLinker, TextPart } from '../../core/content/term-linker';
+import { arrowRightIcon } from '../../core/ui/icons';
 
 const PARAGRAPH_BREAK = /\n\s*\n/;
 
@@ -19,7 +21,7 @@ function toParagraphs(parts: readonly TextPart[]): TextPart[][] {
 }
 
 @Component({
-  imports: [RouterLink, TranslatePipe],
+  imports: [LucideDynamicIcon, RouterLink, TranslatePipe],
   selector: 'app-term-text',
   styleUrl: './term-text.scss',
   templateUrl: './term-text.html',
@@ -28,6 +30,8 @@ function toParagraphs(parts: readonly TextPart[]): TextPart[][] {
   },
 })
 export class TermText {
+  protected readonly arrowRightIcon = arrowRightIcon;
+
   private readonly linker = inject(TermLinker);
 
   readonly text = input.required<string>();

@@ -7,7 +7,7 @@ import { ContentPaths } from '../../../core/content/content-paths';
 import { resolveOsCode } from '../../../core/content/os-code';
 import { findStep } from '../../../core/content/roadmap-steps';
 import { ConceptLink, ErrorLink, StepRef } from '../../../core/models/roadmap';
-import { checkIcon, squareIcon } from '../../../core/ui/icons';
+import { arrowLeftIcon, arrowRightIcon, checkIcon, squareIcon } from '../../../core/ui/icons';
 import { Preferences } from '../../../core/user-data/preferences';
 import { CodeBlock } from '../../../shared/code-block/code-block';
 import { Note } from '../../../shared/note/note';
@@ -39,6 +39,9 @@ const NOTE_MAX_LENGTH = 2000;
   templateUrl: './project-step-page.html',
 })
 export class ProjectStepPage {
+  protected readonly arrowLeftIcon = arrowLeftIcon;
+  protected readonly arrowRightIcon = arrowRightIcon;
+
   private readonly os = inject(Preferences).os;
   private readonly paths = inject(ContentPaths);
 

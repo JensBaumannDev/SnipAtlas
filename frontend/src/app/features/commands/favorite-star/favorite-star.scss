@@ -70,15 +70,12 @@
 }
 
 .favorite-star__login {
-  padding: 0;
+  @include text-link;
+
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
   color: var(--accent);
   cursor: pointer;
   background: none;
   border: 0;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }

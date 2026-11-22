@@ -122,6 +122,30 @@
   }
 }
 
+// Links
+@mixin text-link {
+  padding: rem(4) $space-sm;
+  margin-inline: -$space-sm;
+  text-decoration: none;
+  border-radius: $radius-sm;
+  transition:
+    color var(--duration-fast),
+    background var(--duration-fast) var(--ease);
+  box-decoration-break: clone;
+
+  &:hover {
+    background: var(--accent-soft);
+  }
+
+  &:hover .icon--inline {
+    transform: translateX(3px);
+  }
+
+  .icon--inline {
+    transition: transform var(--duration-fast) var(--ease);
+  }
+}
+
 // Pages
 @mixin page-body($gap: $space-md) {
   display: flex;

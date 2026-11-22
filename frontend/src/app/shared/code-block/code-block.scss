@@ -121,18 +121,15 @@
 }
 
 .code-block__project-toggle {
+  @include text-link;
+
   align-self: flex-start;
   min-height: rem(36);
-  padding: 0;
   font-size: $font-size-base;
   color: var(--accent);
   cursor: pointer;
   background: none;
   border: 0;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .code-block__form {
