@@ -26,12 +26,12 @@
 }
 
 .topic-header__parent {
+  @include text-link;
+
   font-weight: $font-weight-medium;
   color: var(--muted);
-  text-decoration: none;
 
   &:hover {
     color: var(--accent);
-    text-decoration: underline;
   }
 }

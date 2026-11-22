@@ -9,12 +9,14 @@ import {
 } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AreaContent } from '../../core/content/area-content';
 import { AreaLink } from '../../core/content/area-links';
 import { filterGroups } from '../../core/content/content-index';
 import { NavGroup, navGroups } from '../../core/content/nav-groups';
 import { TopicApi } from '../../core/api/topic-api';
+import { arrowRightIcon } from '../../core/ui/icons';
 import { AiCodingNotice } from '../../core/user-data/ai-notice';
 import { TopicLogo } from '../../shared/topic-logo/topic-logo';
 import { AiNotice } from '../ai-notice/ai-notice';
@@ -31,12 +33,14 @@ function toColumn(group: NavGroup): MenuColumn {
 }
 
 @Component({
-  imports: [AiNotice, RouterLink, TopicLogo, TranslatePipe],
+  imports: [AiNotice, LucideDynamicIcon, RouterLink, TopicLogo, TranslatePipe],
   selector: 'app-area-menu',
   styleUrl: './area-menu.scss',
   templateUrl: './area-menu.html',
 })
 export class AreaMenu {
+  protected readonly arrowRightIcon = arrowRightIcon;
+
   private readonly areaContent = inject(AreaContent);
   private readonly notice = inject(AiCodingNotice);
   private readonly injector = inject(Injector);

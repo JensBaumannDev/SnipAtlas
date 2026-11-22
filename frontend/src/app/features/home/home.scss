@@ -132,12 +132,9 @@ app-area-links,
 }
 
 .home__news-all {
-  font-weight: $font-weight-semibold;
-  text-decoration: none;
+  @include text-link;
 
-  &:hover {
-    text-decoration: underline;
-  }
+  font-weight: $font-weight-semibold;
 }
 
 /* #region RESPONSIVE */

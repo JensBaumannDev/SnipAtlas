@@ -875,7 +875,12 @@
     },
     "structurePage": {
       "title": "Ordnerstruktur",
-      "lead": "So sieht dein Projekt aus, wenn alle Schritte erledigt sind. Zu jedem Pfad steht, wofür er da ist und in welchem Schritt er entsteht."
+      "lead": "So sieht dein Projekt aus, wenn alle Schritte erledigt sind.",
+      "info": "Links siehst du dein Projekt wie in VS Code: Klick auf einen Ordner, um ihn auf- oder zuzuklappen. Rechts steht, was im gewählten Ordner liegt und wofür es da ist. Der Pfeil führt zu dem Schritt, in dem die Datei entsteht.",
+      "root": "Projektordner",
+      "rootExplanation": "Der Hauptordner deines Projekts. Hier liegen nur Git, die beiden Seiten und ein paar Dateien für das ganze Projekt.",
+      "empty": "Dieser Ordner ist noch leer.",
+      "toStepFor": "Zum Schritt für {{name}}"
     }
   }
 }

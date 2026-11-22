@@ -21,18 +21,8 @@
           <span class="project-tree__untracked">{{ 'myProject.untracked' | translate }}</span>
         }
       </div>
-      @if (showExplanations() && node.explanation) {
-        <p class="project-tree__explanation">
-          {{ node.explanation }}
-          @if (node.phase && node.step) {
-            <a class="project-tree__origin" [routerLink]="['/mein-projekt', node.phase, node.step]">
-              {{ 'myProject.toStep' | translate }}
-            </a>
-          }
-        </p>
-      }
       @if (node.children?.length) {
-        <app-project-tree [nodes]="node.children ?? []" [showExplanations]="showExplanations()" />
+        <app-project-tree [nodes]="node.children ?? []" />
       }
     </li>
   }

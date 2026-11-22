@@ -6,13 +6,13 @@
 
 // Progress
 .profile-overview__link {
+  @include text-link;
+
   font-weight: $font-weight-medium;
   color: var(--ink);
-  text-decoration: none;
 
   &:hover {
     color: var(--accent);
-    text-decoration: underline;
   }
 }
 

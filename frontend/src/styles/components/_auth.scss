@@ -39,16 +39,13 @@
 }
 
 .auth-form__link {
-  padding: 0;
+  @include text-link;
+
   font-size: $font-size-base;
   color: var(--accent);
   cursor: pointer;
   background: none;
   border: 0;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .auth-form__note {

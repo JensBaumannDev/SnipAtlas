@@ -26,8 +26,9 @@
   <div class="term-text__definition" [id]="definitionId">
     <p class="term-text__name">{{ current.term }}</p>
     <p class="term-text__meaning">{{ current.definition }}</p>
-    <a class="term-text__more" routerLink="/begriffe" [fragment]="current.slug">
-      {{ 'glossary.all' | translate }} →
+    <a class="term-text__more text-link" routerLink="/begriffe" [fragment]="current.slug">
+      {{ 'glossary.all' | translate }}
+      <svg [lucideIcon]="arrowRightIcon" class="icon icon--inline" aria-hidden="true"></svg>
     </a>
   </div>
 }

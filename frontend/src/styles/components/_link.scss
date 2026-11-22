@@ -1,0 +1,9 @@
+@use 'abstracts' as *;
+
+.text-link {
+  @include text-link;
+
+  &--back:hover .icon--inline {
+    transform: translateX(-3px);
+  }
+}

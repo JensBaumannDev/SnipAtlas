@@ -10,7 +10,27 @@
 
 <div class="project-structure">
   @if (tree.hasValue()) {
-    <app-project-tree [nodes]="tree.value()" [showExplanations]="true" />
+    <p class="project-structure__info">
+      <svg
+        [lucideIcon]="lightbulbIcon"
+        class="project-structure__info-icon"
+        aria-hidden="true"
+      ></svg>
+      {{ 'myProject.structurePage.info' | translate }}
+    </p>
+    <div class="project-structure__layout">
+      <app-project-folder-tree
+        class="project-structure__tree"
+        [nodes]="tree.value()"
+        [(selected)]="selected"
+        [(open)]="open"
+      />
+      <app-project-folder-contents
+        [folder]="folder()"
+        [selected]="selected()"
+        (opened)="openFolder($event)"
+      />
+    </div>
   } @else if (project.ready() && !project.blocks().length) {
     <p>{{ 'myProject.missing' | translate }}</p>
     <a class="btn btn--primary" routerLink="/mein-projekt/neu">

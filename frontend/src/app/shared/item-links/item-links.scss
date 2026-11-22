@@ -9,11 +9,8 @@
 
 // Page link
 .item-links__page {
+  @include text-link;
+
   font-weight: $font-weight-medium;
   color: var(--accent);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }

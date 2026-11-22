@@ -12,3 +12,10 @@
   background: currentcolor;
   mask: var(--icon) center / contain no-repeat;
 }
+
+.icon--inline {
+  display: inline-block;
+  width: rem(18);
+  height: rem(18);
+  vertical-align: rem(-3);
+}

@@ -1,0 +1,80 @@
+<section class="folder-contents" aria-labelledby="folder-contents-heading">
+  <h2 class="folder-contents__path" id="folder-contents-heading" aria-live="polite">
+    @if (crumbs().length) {
+      <button type="button" class="folder-contents__crumb" (click)="opened.emit('')">
+        {{ 'myProject.structurePage.root' | translate }}
+      </button>
+      @for (crumb of crumbs(); track crumb.path; let last = $last) {
+        <span class="folder-contents__separator" aria-hidden="true">/</span>
+        @if (last) {
+          <span>{{ crumb.name }}</span>
+        } @else {
+          <button type="button" class="folder-contents__crumb" (click)="opened.emit(crumb.path)">
+            {{ crumb.name }}
+          </button>
+        }
+      }
+    } @else {
+      {{ 'myProject.structurePage.root' | translate }}
+    }
+  </h2>
+  <p class="folder-contents__lead">
+    {{ folder().explanation || ('myProject.structurePage.rootExplanation' | translate) }}
+    @if (folder().phase && folder().step) {
+      <a
+        class="folder-contents__origin"
+        [routerLink]="['/mein-projekt', folder().phase, folder().step]"
+      >
+        {{ 'myProject.toStep' | translate }}
+      </a>
+    }
+  </p>
+
+  <ul class="folder-contents__list" role="list">
+    @for (child of folder().children ?? []; track child.path) {
+      <li
+        class="folder-contents__item"
+        [class.folder-contents__item--selected]="child.path === selected()"
+      >
+        @if (child.folder) {
+          <button
+            type="button"
+            class="folder-contents__name folder-contents__name--folder"
+            (click)="opened.emit(child.path)"
+          >
+            <svg [lucideIcon]="folderIcon" class="folder-contents__icon" aria-hidden="true"></svg>
+            {{ child.name }}/
+          </button>
+        } @else {
+          <span class="folder-contents__name">
+            <svg [lucideIcon]="fileIcon" class="folder-contents__icon" aria-hidden="true"></svg>
+            {{ child.name }}
+          </span>
+        }
+        <p class="folder-contents__explanation">
+          @if (!child.tracked) {
+            <span class="folder-contents__untracked">{{ 'myProject.untracked' | translate }}.</span>
+          }
+          {{ child.explanation }}
+        </p>
+        @if (child.phase && child.step) {
+          <a
+            class="folder-contents__step"
+            [routerLink]="['/mein-projekt', child.phase, child.step]"
+            [attr.aria-label]="
+              'myProject.structurePage.toStepFor' | translate: { name: child.name }
+            "
+          >
+            <svg
+              [lucideIcon]="arrowRightIcon"
+              class="folder-contents__icon"
+              aria-hidden="true"
+            ></svg>
+          </a>
+        }
+      </li>
+    } @empty {
+      <li class="folder-contents__empty">{{ 'myProject.structurePage.empty' | translate }}</li>
+    }
+  </ul>
+</section>

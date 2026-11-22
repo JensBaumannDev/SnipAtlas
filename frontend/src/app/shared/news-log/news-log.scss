@@ -28,7 +28,7 @@
   text-decoration: none;
 
   &:hover .news-log__title {
-    text-decoration: underline;
+    color: var(--accent);
   }
 }
 

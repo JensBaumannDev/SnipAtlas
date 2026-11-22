@@ -13,7 +13,55 @@
 
 // Body
 .project-structure {
-  @include page-body;
+  @include page-body($space-xl);
 
   align-items: flex-start;
 }
+
+.project-structure__info {
+  display: flex;
+  gap: $space-sm;
+  align-items: flex-start;
+  align-self: center;
+  max-width: rem(720);
+  margin: $space-lg 0 $space-md;
+  color: var(--muted);
+  text-align: center;
+}
+
+.project-structure__info-icon {
+  flex: none;
+  width: rem(20);
+  height: rem(20);
+  margin-top: rem(2);
+  color: var(--accent);
+}
+
+.project-structure__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: $space-lg;
+  align-items: start;
+  width: 100%;
+}
+
+.project-structure__tree {
+  @include card-surface;
+
+  min-width: 0;
+  padding: $space-lg;
+  overflow-x: auto;
+}
+
+/* #region RESPONSIVE */
+@include mobile {
+  .project-structure__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-structure__tree {
+    padding: $space-md;
+  }
+}
+
+/* #endregion */

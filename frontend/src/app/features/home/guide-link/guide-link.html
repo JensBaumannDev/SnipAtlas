@@ -1,10 +1,10 @@
 @if (state(); as state) {
   <a
-    class="guide-link__link"
+    class="guide-link__link text-link"
     [routerLink]="paths.link('blueprints', state.blueprint.topic, state.blueprint.slug)"
   >
     {{ 'home.guide.continue' | translate: { title: state.blueprint.title } }}
-    →
+    <svg [lucideIcon]="arrowRightIcon" class="icon icon--inline" aria-hidden="true"></svg>
   </a>
   <span class="guide-link__progress">
     {{ 'home.guide.progress' | translate: { done: state.done, total: state.blueprint.steps.length } }}
