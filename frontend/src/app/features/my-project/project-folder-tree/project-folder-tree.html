@@ -1,0 +1,42 @@
+<ul class="folder-tree" role="list">
+  @for (node of nodes(); track node.path) {
+    <li>
+      <button
+        type="button"
+        class="folder-tree__row"
+        [class.folder-tree__row--selected]="selected() === node.path"
+        [class.folder-tree__row--untracked]="!node.tracked"
+        [attr.aria-current]="selected() === node.path || null"
+        [attr.aria-expanded]="node.folder ? open().has(node.path) : null"
+        (click)="choose(node)"
+      >
+        @if (node.folder) {
+          <svg
+            [lucideIcon]="open().has(node.path) ? chevronDownIcon : chevronRightIcon"
+            class="folder-tree__icon"
+            aria-hidden="true"
+          ></svg>
+        } @else {
+          <span class="folder-tree__icon"></span>
+        }
+        <svg
+          [lucideIcon]="node.folder ? folderIcon : fileIcon"
+          class="folder-tree__icon"
+          aria-hidden="true"
+        ></svg>
+        <span class="folder-tree__name">{{ node.name }}{{ node.folder ? '/' : '' }}</span>
+        @if (!node.tracked) {
+          <span class="folder-tree__untracked">{{ 'myProject.untracked' | translate }}</span>
+        }
+      </button>
+      @if (node.folder && open().has(node.path) && node.children?.length) {
+        <app-project-folder-tree
+          class="folder-tree__children"
+          [nodes]="node.children ?? []"
+          [(selected)]="selected"
+          [(open)]="open"
+        />
+      }
+    </li>
+  }
+</ul>

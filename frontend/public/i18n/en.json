@@ -875,7 +875,12 @@
     },
     "structurePage": {
       "title": "Folder structure",
-      "lead": "This is your project once every step is done. Each path says what it is for and in which step it appears."
+      "lead": "This is your project once every step is done.",
+      "info": "On the left you see your project like in VS Code: click a folder to open or close it. On the right you see what the chosen folder holds and what each part is for. The arrow leads to the step in which the file appears.",
+      "root": "Project folder",
+      "rootExplanation": "The main folder of your project. It only holds Git, both sides and a few files for the whole project.",
+      "empty": "This folder is still empty.",
+      "toStepFor": "Go to the step for {{name}}"
     }
   }
 }

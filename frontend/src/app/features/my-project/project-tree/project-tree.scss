@@ -94,16 +94,3 @@
     color: var(--text);
   }
 }
-
-// Explanation
-.project-tree__explanation {
-  max-width: rem(720);
-  padding: 0 rem(6) rem(6) rem(30);
-  color: var(--muted);
-}
-
-.project-tree__origin {
-  margin-left: $space-xs;
-  color: var(--accent);
-  white-space: nowrap;
-}
