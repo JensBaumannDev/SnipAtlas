@@ -59,6 +59,7 @@
 
 textarea.input {
   min-height: $textarea-min-height;
+  max-height: $textarea-max-height;
   resize: vertical;
 }
 

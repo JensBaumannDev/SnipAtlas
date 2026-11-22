@@ -165,15 +165,11 @@
   gap: $space-xs;
 }
 
-.project-step__textarea {
-  min-height: $textarea-min-height;
-  resize: vertical;
-}
-
 .project-step__note-actions {
   display: flex;
   gap: $space-md;
   align-items: center;
+  margin-top: $space-sm;
 }
 
 .project-step__saved {

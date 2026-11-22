@@ -114,7 +114,7 @@
     <form class="project-step__note" (submit)="$event.preventDefault(); saveNote()">
       <label class="field__label" for="step-note">{{ 'myProject.note.label' | translate }}</label>
       <textarea
-        class="input project-step__textarea"
+        class="input"
         id="step-note"
         [formControl]="note"
         [attr.maxlength]="noteMaxLength"
