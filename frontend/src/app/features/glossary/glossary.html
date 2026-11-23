@@ -1,60 +1,62 @@
 <app-area-intro
-  title="pages.glossary"
+  heading="pages.glossary"
   lead="glossary.lead"
   [summary]="'glossary.summary' | translate: { count: total() }"
   [icon]="icon"
 >
   <div class="glossary__content">
-    <div class="glossary__search" role="search">
-      <label class="visually-hidden" for="glossary-search">{{
-        'glossary.searchLabel' | translate
-      }}</label>
-      <svg [lucideIcon]="searchIcon" class="icon glossary__search-icon"></svg>
-      <input
-        class="input glossary__search-input"
-        id="glossary-search"
-        type="search"
-        autocomplete="off"
-        [placeholder]="'glossary.searchPlaceholder' | translate"
-        [formControl]="query"
-      />
-      @if (hasQuery()) {
-        <button
-          class="btn btn--icon glossary__clear"
-          type="button"
-          [attr.aria-label]="'glossary.clearSearch' | translate"
-          (click)="clearSearch()"
-        >
-          <svg [lucideIcon]="xIcon" class="icon"></svg>
-        </button>
+    <div class="glossary__toolbar">
+      <div class="glossary__search" role="search">
+        <label class="visually-hidden" for="glossary-search">{{
+          'glossary.searchLabel' | translate
+        }}</label>
+        <svg [lucideIcon]="searchIcon" class="icon glossary__search-icon"></svg>
+        <input
+          class="input glossary__search-input"
+          id="glossary-search"
+          type="search"
+          autocomplete="off"
+          [placeholder]="'glossary.searchPlaceholder' | translate"
+          [formControl]="query"
+        />
+        @if (hasQuery()) {
+          <button
+            class="btn btn--icon glossary__clear"
+            type="button"
+            [attr.aria-label]="'glossary.clearSearch' | translate"
+            (click)="clearSearch()"
+          >
+            <svg [lucideIcon]="xIcon" class="icon"></svg>
+          </button>
+        }
+      </div>
+      @if (groups().length) {
+        <nav class="glossary__letters" [attr.aria-label]="'glossary.letters' | translate">
+          <ul class="glossary__letter-list" role="list">
+            @for (link of letters(); track link.letter) {
+              <li>
+                @if (link.active) {
+                  <a class="glossary__jump" [routerLink]="[]" [fragment]="letterId(link.letter)">
+                    {{ link.letter }}
+                  </a>
+                } @else {
+                  <span class="glossary__jump glossary__jump--empty" aria-hidden="true">
+                    {{ link.letter }}
+                  </span>
+                }
+              </li>
+            }
+          </ul>
+        </nav>
       }
     </div>
+
     <p class="glossary__count" role="status">
       @if (hasQuery()) {
         @let count = filtered().length;
         {{ (count === 1 ? 'glossary.countOne' : 'glossary.count') | translate: { count: count } }}
       }
     </p>
-
-    @if (groups().length) {
-      <nav [attr.aria-label]="'glossary.letters' | translate">
-        <ul class="glossary__letter-list" role="list">
-          @for (link of letters(); track link.letter) {
-            <li>
-              @if (link.active) {
-                <a class="glossary__jump" [routerLink]="[]" [fragment]="letterId(link.letter)">
-                  {{ link.letter }}
-                </a>
-              } @else {
-                <span class="glossary__jump glossary__jump--empty" aria-hidden="true">
-                  {{ link.letter }}
-                </span>
-              }
-            </li>
-          }
-        </ul>
-      </nav>
-    }
 
     @for (group of groups(); track group.letter) {
       <section

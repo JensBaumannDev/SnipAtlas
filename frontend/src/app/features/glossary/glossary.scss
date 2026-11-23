@@ -1,5 +1,11 @@
 @use 'abstracts' as *;
 
+$toolbar-height: calc($space-md * 3 + $space-xs * 2 + $control-height + rem(40));
+$topbar-offset: var(--topbar-actual-height, calc($topbar-height + 1px));
+$jump-offset: calc($topbar-offset + $toolbar-height + $space-lg);
+$letters-height: calc(rem(40) + $space-xs * 4);
+$jump-offset-mobile: calc($topbar-offset + $letters-height + $space-lg);
+
 :host {
   display: block;
   width: 100%;
@@ -12,6 +18,19 @@
   display: flex;
   flex-direction: column;
   gap: $space-xl;
+}
+
+// Toolbar
+.glossary__toolbar {
+  position: sticky;
+  top: $topbar-offset;
+  z-index: $z-sticky;
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  padding-block: $space-md;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
 }
 
 // Search
@@ -78,9 +97,15 @@
 // Letters
 .glossary__letter-list {
   display: flex;
-  flex-wrap: wrap;
   gap: $space-xs;
-  justify-content: center;
+  justify-content: safe center;
+  padding: $space-xs;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.glossary__letter-list > li {
+  flex: none;
 }
 
 .glossary__jump {
@@ -115,7 +140,7 @@
   grid-template-columns: rem(120) minmax(0, 1fr);
   gap: $space-lg $space-xl;
   padding-top: $space-xl;
-  scroll-margin-top: calc($topbar-height + $space-lg);
+  scroll-margin-top: $jump-offset;
   border-top: 1px solid var(--line);
 }
 
@@ -138,7 +163,7 @@
   gap: $space-xs;
   align-items: flex-start;
   min-width: 0;
-  scroll-margin-top: calc($topbar-height + $space-lg);
+  scroll-margin-top: $jump-offset;
 
   &:target .glossary__name {
     color: var(--accent);
@@ -186,8 +211,26 @@
 }
 
 @include mobile {
+  .glossary__toolbar {
+    display: contents;
+  }
+
+  .glossary__letters {
+    position: sticky;
+    top: $topbar-offset;
+    z-index: $z-sticky;
+    padding-block: $space-xs;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+
   .glossary__group {
     grid-template-columns: minmax(0, 1fr);
+    scroll-margin-top: $jump-offset-mobile;
+  }
+
+  .glossary__term {
+    scroll-margin-top: $jump-offset-mobile;
   }
 
   .glossary__list {

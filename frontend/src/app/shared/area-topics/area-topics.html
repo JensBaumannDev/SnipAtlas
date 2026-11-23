@@ -1,0 +1,31 @@
+<section class="area-topics" [attr.aria-labelledby]="area() + '-topics'">
+  <h2 class="area-topics__title" [id]="area() + '-topics'">{{ 'nav.topics' | translate }}</h2>
+  <div class="area-topics__columns">
+    @for (group of columns(); track group.slug) {
+      <section [attr.aria-labelledby]="area() + '-topics-' + group.slug">
+        <h3 class="area-topics__heading" [id]="area() + '-topics-' + group.slug">
+          {{ group.translate ? (group.name | translate) : group.name }}
+        </h3>
+        <ul class="area-topics__list" role="list">
+          @for (topic of group.topics; track topic.slug; let i = $index) {
+            <li>
+              <a class="area-topics__topic" [routerLink]="[group.path, topic.slug]">
+                <span class="area-topics__name">
+                  <app-topic-logo class="area-topics__logo" [topic]="topic" />
+                  {{ topic.name }}
+                </span>
+                @if (group.summaries[i]; as summary) {
+                  <span class="area-topics__summary">{{ summary }}</span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+    } @empty {
+      @if (loaded()) {
+        <p class="area-topics__empty">{{ 'nav.empty' | translate }}</p>
+      }
+    }
+  </div>
+</section>

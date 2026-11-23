@@ -44,11 +44,12 @@
   </section>
 } @else {
   <app-area-intro
-    title="pages.blueprints"
+    heading="pages.blueprints"
     lead="guides.lead"
     [summary]="'guides.summary' | translate: summary()"
     [icon]="icon"
   >
     <app-area-info area="guides" [sections]="infoSections" />
+    <app-area-topics area="blueprints" />
   </app-area-intro>
 }

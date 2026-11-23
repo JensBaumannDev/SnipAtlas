@@ -3,7 +3,7 @@
 :host {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(rem(260), 1fr));
-  gap: $space-xl;
+  gap: $space-md;
   width: 100%;
   max-width: rem(1280);
   margin-inline: auto;
@@ -11,13 +11,14 @@
 
 // Section
 .area-info__section {
+  @include card-surface;
+
   display: flex;
   flex-direction: column;
   gap: $space-sm;
   min-width: 0;
-  padding-top: $space-md;
+  padding: $space-lg;
   overflow-wrap: anywhere;
-  border-top: 1px solid var(--line);
 }
 
 .area-info__title {

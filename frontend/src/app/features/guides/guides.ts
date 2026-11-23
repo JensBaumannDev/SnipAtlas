@@ -10,12 +10,22 @@ import { injectTopic } from '../../core/content/topic-resource';
 import { ContentPaths } from '../../core/content/content-paths';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
+import { AreaTopics } from '../../shared/area-topics/area-topics';
 import { ProgressBar } from '../../shared/progress-bar/progress-bar';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { KindTabs } from '../../shared/kind-tabs/kind-tabs';
 
 @Component({
-  imports: [AreaInfo, AreaIntro, KindTabs, ProgressBar, RouterLink, TopicHeader, TranslatePipe],
+  imports: [
+    AreaInfo,
+    AreaIntro,
+    AreaTopics,
+    KindTabs,
+    ProgressBar,
+    RouterLink,
+    TopicHeader,
+    TranslatePipe,
+  ],
   selector: 'app-guides',
   styleUrl: './guides.scss',
   templateUrl: './guides.html',

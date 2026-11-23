@@ -69,11 +69,12 @@
   }
 } @else {
   <app-area-intro
-    title="pages.commands"
+    heading="pages.commands"
     lead="commands.lead"
     [summary]="'commands.summary' | translate: summary()"
     [icon]="icon"
   >
     <app-area-info area="commands" [sections]="infoSections" />
+    <app-area-topics area="commands" />
   </app-area-intro>
 }
