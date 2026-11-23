@@ -46,11 +46,12 @@
   </section>
 } @else {
   <app-area-intro
-    title="pages.debugging"
+    heading="pages.debugging"
     lead="debugging.lead"
     [summary]="'debugging.summary' | translate: summary()"
     [icon]="icon"
   >
     <app-area-info area="debugging" [sections]="infoSections" />
+    <app-area-topics area="debugging" />
   </app-area-intro>
 }

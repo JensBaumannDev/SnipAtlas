@@ -7,30 +7,15 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { TranslatePipe } from '@ngx-translate/core';
-import { AreaContent } from '../../core/content/area-content';
+import { AreaColumns } from '../../core/content/area-columns';
 import { AreaLink } from '../../core/content/area-links';
-import { filterGroups } from '../../core/content/content-index';
-import { NavGroup, navGroups } from '../../core/content/nav-groups';
-import { TopicApi } from '../../core/api/topic-api';
 import { arrowRightIcon } from '../../core/ui/icons';
 import { AiCodingNotice } from '../../core/user-data/ai-notice';
 import { TopicLogo } from '../../shared/topic-logo/topic-logo';
 import { AiNotice } from '../ai-notice/ai-notice';
-
-interface MenuColumn extends NavGroup {
-  summaries: string[];
-}
-
-function toColumn(group: NavGroup): MenuColumn {
-  return {
-    ...group,
-    summaries: group.topics.map((topic) => topic.subtopics.map((sub) => sub.name).join(', ')),
-  };
-}
 
 @Component({
   imports: [AiNotice, LucideDynamicIcon, RouterLink, TopicLogo, TranslatePipe],
@@ -41,42 +26,22 @@ function toColumn(group: NavGroup): MenuColumn {
 export class AreaMenu {
   protected readonly arrowRightIcon = arrowRightIcon;
 
-  private readonly areaContent = inject(AreaContent);
   private readonly notice = inject(AiCodingNotice);
   private readonly injector = inject(Injector);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  private readonly groups = toSignal(inject(TopicApi).getGroups(), { initialValue: [] });
 
   readonly link = input.required<AreaLink>();
 
-  private readonly index = rxResource({
-    params: () => this.link().area,
-    stream: ({ params }) => this.areaContent.getIndex(params),
-  });
+  private readonly areaColumns = new AreaColumns(this.link);
 
-  private readonly debugWays = rxResource({
-    params: () => (this.link().area === 'debugging' ? true : undefined),
-    stream: () => this.areaContent.getDebugWays(),
-    defaultValue: [],
-  });
-
-  protected readonly loaded = computed(() => this.index.hasValue());
+  protected readonly loaded = this.areaColumns.loaded;
+  protected readonly columns = this.areaColumns.columns;
 
   protected readonly noticeOpen = computed(
     () => this.link().area === 'ai' && !this.notice.confirmed(),
   );
 
   protected readonly hasDebugColumn = computed(() => this.link().area === 'debugging');
-
-  protected readonly columns = computed(() => {
-    const index = this.index.value();
-    if (!index) {
-      return [];
-    }
-    const { area, path } = this.link();
-    const groups = filterGroups(this.groups(), index);
-    return navGroups(area, path, groups, this.debugWays.value()).map(toColumn);
-  });
 
   protected confirmNotice(): void {
     this.notice.confirm();

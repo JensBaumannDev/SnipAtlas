@@ -10,7 +10,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class AreaIntro {
   readonly icon = input.required<LucideIconData>();
-  readonly title = input.required<string>();
+  readonly heading = input.required<string>();
   readonly lead = input.required<string>();
   readonly summary = input<string>();
 }

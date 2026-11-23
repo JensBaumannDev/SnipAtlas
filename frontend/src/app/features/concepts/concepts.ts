@@ -8,6 +8,7 @@ import { TopicListing } from '../../core/content/topic-listing';
 import { ContentPaths } from '../../core/content/content-paths';
 import { AreaInfo } from '../../shared/area-info/area-info';
 import { AreaIntro } from '../../shared/area-intro/area-intro';
+import { AreaTopics } from '../../shared/area-topics/area-topics';
 import { SubtopicTabs } from '../../shared/subtopic-tabs/subtopic-tabs';
 import { TopicHeader } from '../../shared/topic-header/topic-header';
 import { KindTabs } from '../../shared/kind-tabs/kind-tabs';
@@ -17,6 +18,7 @@ import { ConceptCard } from './concept-card/concept-card';
   imports: [
     AreaInfo,
     AreaIntro,
+    AreaTopics,
     ConceptCard,
     KindTabs,
     RouterLink,

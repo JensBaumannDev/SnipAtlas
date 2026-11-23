@@ -3,9 +3,9 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: $space-xxl;
+  gap: $space-section;
   width: 100%;
-  padding-bottom: $space-xxl;
+  padding-bottom: $space-section;
 }
 
 // Header
@@ -38,3 +38,13 @@
 .area-intro__meta {
   color: var(--muted);
 }
+
+/* #region RESPONSIVE */
+@include mobile {
+  :host {
+    gap: $space-xxl;
+    padding-bottom: $space-xxl;
+  }
+}
+
+/* #endregion */
