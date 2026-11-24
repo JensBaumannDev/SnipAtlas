@@ -16,7 +16,8 @@
 5. [API](#api)
 6. [Project Structure](#project-structure)
 7. [Testing](#testing)
-8. [Deployment](#deployment)
+8. [Key Decisions](#key-decisions)
+9. [Deployment](#deployment)
 
 ---
 
@@ -24,7 +25,9 @@
 
 **SnipAtlas** is a reference for junior developers. Every beginner knows the moment: you know what you want to do, but not the exact command. The error message makes no sense. And somewhere between "it works on my machine" and "it's live", the next step is missing.
 
-SnipAtlas collects what you need again and again while learning and building: commands to copy, basics that explain the ideas behind the code, step-by-step guides, common error messages and a glossary. All content is readable without an account; an optional login saves favorites, progress and personal settings.
+SnipAtlas collects what you need again and again while learning and building: commands to copy, basics that explain the ideas behind the code, step-by-step guides, common error messages and a glossary. With an account, **My Project** adds a personal roadmap that leads from an empty folder to a project online.
+
+All reference content is readable without an account; an optional login saves favorites, progress, notes and personal settings.
 
 The project has its own frontend and backend: an **Angular** app with server-side rendering and a **Django REST** API with session login. The content is written in German and English, the API delivers the language the browser asks for.
 
@@ -32,15 +35,17 @@ The project has its own frontend and backend: an **Angular** app with server-sid
 
 ## Features
 
-* **Topics:** Frontend (HTML, CSS, JavaScript, TypeScript, Angular), backend (Python, Django, Django REST Framework), tools (Git & GitHub, Server & Linux, Docker) and a separate area for coding with AI agents.
+* **My Project:** A personal roadmap from an empty folder to a project online. You choose frontend, backend or both (Angular, React, Vue, Django, Express, FastAPI, with or without Docker), and SnipAtlas puts together the phases and steps for exactly that setup. Every step explains why, where, the command, how to check the result and what to do if it gets stuck. A folder tree shows which files each step adds or changes. Steps can be checked off and get personal notes.
+* **Project placeholders:** Enter your project name, GitHub user, repository, domain and server once, and every code block shows ready-to-copy commands for your own project.
+* **Topics:** Frontend (HTML, CSS, JavaScript, TypeScript, Angular, React, Vue), backend (Python, Django, PostgreSQL, Express, FastAPI), tools (Git, npm, Docker, Linux server) and a separate area for coding with AI agents (Claude Code, Codex CLI, GitHub Copilot, MCP servers and more). Every area page lists its topics, grouped like the navigation.
 * **Commands:** Grouped by topic and subtopic, ready to copy, with separate code for Windows and macOS/Linux where it differs.
 * **Basics:** The ideas behind the code, explained in plain words.
 * **Guides:** Projects step by step, with a progress bar and steps to check off.
 * **Error Messages & Debugging:** Common errors per topic with cause and solution, plus general debugging guides.
-* **Glossary:** Short definitions, linked automatically inside the content and to the matching basics.
+* **Glossary:** Short definitions with search and an A–Z bar, linked automatically inside the content and to the matching basics. Every term has its own link (e.g. `/begriffe#api`).
 * **News:** A log of new and updated content, also shown on the start page.
 * **Account:** Registration with email confirmation, login, password reset, changing email and password, deleting the account. Unconfirmed accounts are removed automatically.
-* **Personal Data:** Favorites, guide progress and settings (accent color, operating system for code, language).
+* **Personal Data:** Favorites, guide progress, My Project with progress and notes, and settings (accent color, operating system for code, language). All personal data can be downloaded as JSON from the profile.
 * **Requests:** Suggest a new entry, an improvement or report a bug; logged-in users see their requests as tickets with a status.
 * **Admin:** A Django admin with its own design and German translation to maintain all content.
 * **SEO:** Server-side rendering, readable URLs per entry (e.g. `/befehle/git/stash`), page titles and meta descriptions.
@@ -152,7 +157,7 @@ SnipAtlas/
 
 ## Testing
 
-The backend was developed test-first. The tests run inside the container against PostgreSQL:
+The backend was developed test-first and has about 1,600 tests. They cover every endpoint with success and each documented error, the admin, translations and database constraints. The tests run inside the container against PostgreSQL:
 ```bash
 docker compose exec backend pytest --cov
 ```
@@ -171,6 +176,19 @@ npm run lint:styles
 ```
 
 **Code style:** functions with at most 14 lines and one task each, type hints and docstrings in the backend, strict TypeScript without `any` in the frontend.
+
+---
+
+## Key Decisions
+
+Every larger decision is written down with its reason while I work on the project. A few of them:
+
+* **Session cookie instead of a token.** I first planned DRF's token authentication. A token never expires and would sit in browser storage, where any XSS bug can read it. Frontend and API run under one domain, so a Django session in an HttpOnly cookie with CSRF protection is simpler and safer.
+* **Server-side rendering on every request.** A reference lives from search engines, so they should get finished HTML. Prerendering at build time would freeze the content, and changes made in the admin would only appear after the next deployment.
+* **Commands and basics as separate models.** Commands are snippets to copy, basics explain the idea behind the code, and their fields differ (description and Unix code against summary, explanation and note). Both share an abstract base model, so there are two tables but no duplicated code.
+* **The folder tree in My Project is calculated in the backend.** The frontend has no tests on purpose, but the tree logic (folders created along the way, removed paths, sorting like VS Code) is exactly the kind of code that needs them. In the backend it is covered by pytest, and the frontend only displays it.
+* **Shorter guides instead of duplicate content.** Guides that My Project covers stay public with steps and code, so they can still be found on Google. The explanations, checks and help when something goes wrong are part of My Project.
+* **Dark mode removed.** After the redesign every page starts with a black hero, which blends into a dark page. Four attempts looked worse than no dark mode, so I removed it instead of shipping a half-finished mode.
 
 ---
 
